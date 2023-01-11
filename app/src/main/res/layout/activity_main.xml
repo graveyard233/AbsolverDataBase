@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="vm"
+            type="com.lyd.absolverdatabase.bridge.state.MainActivityViewModel" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -32,8 +36,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/fab_margin"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="100dp"
             app:srcCompat="@android:drawable/ic_dialog_email" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            app:menu="@menu/menu_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
