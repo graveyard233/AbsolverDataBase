@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_learn"
+    app:startDestination="@id/learnFragment">
+
+    <fragment
+        android:id="@+id/learnFragment"
+        android:name="com.lyd.absolverdatabase.ui.page.LearnFragment"
+        android:label="LearnFragment"
+        tools:layout="@layout/fragment_learn"/>
+    <fragment
+        android:id="@+id/test1Fragment"
+        android:name="com.lyd.absolverdatabase.test.Test1Fragment"
+        android:label="Test1Fragment"
+        tools:layout="@layout/fragment_test1"/>
+</navigation>

@@ -1,18 +1,35 @@
 package com.lyd.absolverdatabase
 
 import android.os.Bundle
+import android.util.Log
 
 import androidx.core.view.WindowCompat
 
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.lyd.absolverdatabase.bridge.state.MainActivityViewModel
 import com.lyd.absolverdatabase.databinding.ActivityMainBinding
 import com.lyd.absolverdatabase.ui.base.BaseActivity
+import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
 
+    companion object{
+        private const val TAG = "MainActivity"
+
+        @JvmStatic
+        private val rootList = listOf("com.lyd.absolverdatabase:id/learnFragment","com.lyd.absolverdatabase:id/dataFragment",
+        "com.lyd.absolverdatabase:id/deckFragment","com.lyd.absolverdatabase:id/settingFragment")
+    }
+
     private var mainBinding : ActivityMainBinding ? = null
     var mainActivityViewModel: MainActivityViewModel? = null
+
+    private var backTime : Long = 0
+
+    private var navController : NavController ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -28,6 +45,10 @@ class MainActivity : BaseActivity() {
         mSharedViewModel.activityCanBeClosedDirectly.observe(this, {
             // 先不写，作用不大
         })
+
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_fragment_nav_host) as NavHostFragment
+        navController = navHostFragment.navController
+        mainBinding?.mainBottomNav?.setupWithNavController(navController!!)
 
     }
 
@@ -46,9 +67,26 @@ class MainActivity : BaseActivity() {
 //        }
     }
 
+    // 接管返回键，回到栈底时第二次才退出
     override fun onBackPressed() {
-         super.onBackPressed()
-//        mSharedViewModel.closeSlidePanelIfExpanded.value = true // 触发改变
+        if (rootList.contains(navController!!.currentDestination!!.displayName)){
+            // 已经回退到每一个栈的根部fragment了
+            if (this.backTime != 0L && TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - this.backTime) <= 1.5.toLong()){
+//                Log.i(TAG, "onBackPressed: 这里应该退出了")
+                super.onBackPressed()
+                return
+            } else {
+//                Log.i(TAG, "onBackPressed: ${navController!!.currentDestination!!.displayName}")
+                showShortToast(getString(R.string.press_one_more_time_for_finish))
+                this.backTime = System.currentTimeMillis()
+                return
+            }
+        }
+
+        if (!navController!!.popBackStack()){
+            finish()
+        }
+
     }
 
 }

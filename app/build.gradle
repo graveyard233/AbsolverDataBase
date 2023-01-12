@@ -2,11 +2,12 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id("com.google.devtools.ksp").version("1.6.10-1.0.4") // Or latest version of KSP 给moshi用的
 }
 
 android {
     namespace 'com.lyd.absolverdatabase'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.lyd.absolverdatabase"
@@ -64,5 +65,21 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     // Saved state module for ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version")
+
+    // 代替gson的，在kotlin中性能更好的json解析工具
+    String moshi_version = "1.14.0"
+    implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+
+    // retrofit
+    String retrofit_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+
+    // okhttp日志支持
+    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+
+    // 更加强大的recycleAdapter
+    implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta04"
 
 }

@@ -6,4 +6,6 @@
     <string name="deck">卡组</string>
     <string name="setting">设置</string>
 
+    <string name="press_one_more_time_for_finish">再按一次退出</string>
+
 </resources>

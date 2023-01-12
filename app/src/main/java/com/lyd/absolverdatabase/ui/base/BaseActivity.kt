@@ -23,7 +23,7 @@ open class BaseActivity :AppCompatActivity() {
 
         // 给工具类初始化
         BarUtils.setStatusBarColor(this, Color.TRANSPARENT)
-        BarUtils.setStatusBarLightMode(this, true)
+//        BarUtils.setStatusBarLightMode(this, true)
         mSharedViewModel = getAppViewModelProvider().get<SharedViewModel>(SharedViewModel::class.java)
 
         // 准备：lifecycle
