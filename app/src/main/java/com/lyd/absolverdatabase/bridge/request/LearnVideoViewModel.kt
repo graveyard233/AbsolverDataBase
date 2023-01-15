@@ -1,4 +1,4 @@
-package com.lyd.absolverdatabase.bridge.repository
+package com.lyd.absolverdatabase.bridge.request
 
 import androidx.lifecycle.ViewModel
 
