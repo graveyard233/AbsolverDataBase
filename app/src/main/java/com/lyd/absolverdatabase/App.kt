@@ -6,19 +6,26 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
+import com.lyd.absolverdatabase.bridge.data.repository.BilibiliRepository
 import com.lyd.architecture.utils.Utils
+import com.tencent.mmkv.MMKV
 
 class App : Application(), ViewModelStoreOwner {
 
     private var mAppViewModelStore: ViewModelStore? = null
     private var mFactory: ViewModelProvider.Factory? = null
 
+    val bilibiliRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        BilibiliRepository()
+    }
 
     override fun onCreate() {
         super.onCreate()
 
         Utils.init(this)
         mAppViewModelStore = ViewModelStore()
+
+        val path = MMKV.initialize(this)
 
 //        // 这里必须初始化一下，是为了保证播放音乐管理类（PlayerManager.java） 不会为null，从而不引发空指针异常
 //        PlayerManager.instance.init(this)

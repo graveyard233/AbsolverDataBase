@@ -73,7 +73,8 @@ class MainActivity : BaseActivity() {
             // 已经回退到每一个栈的根部fragment了
             if (this.backTime != 0L && TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - this.backTime) <= 1.5.toLong()){
 //                Log.i(TAG, "onBackPressed: 这里应该退出了")
-                super.onBackPressed()
+//                super.onBackPressed()
+                moveTaskToBack(true)
                 return
             } else {
 //                Log.i(TAG, "onBackPressed: ${navController!!.currentDestination!!.displayName}")

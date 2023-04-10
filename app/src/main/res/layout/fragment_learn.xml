@@ -5,7 +5,7 @@
 
         <variable
             name="vm"
-            type="com.lyd.absolverdatabase.bridge.state.LearnViewModel" />
+            type="com.lyd.absolverdatabase.bridge.state.LearnState" />
 
         <variable
             name="click"
