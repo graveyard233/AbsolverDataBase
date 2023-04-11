@@ -67,8 +67,8 @@ class LearnFragment : BaseFragment() {
 
         // 在这里进行liveData的监听
         lifecycleScope.launchWhenStarted {
-//            learnState.getCookie()
-            learnState.getVideoList(pageMap)
+            learnState.getCookie()
+//            learnState.getVideoList(pageMap)
             learnState.videoSharedFlow.collect(){
                 Log.i(TAG, "onViewCreated: $it")
             }

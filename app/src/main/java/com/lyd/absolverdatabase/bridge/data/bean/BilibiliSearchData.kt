@@ -1,5 +1,8 @@
 package com.lyd.absolverdatabase.bridge.data.bean
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 data class VideoSearchData<T>(
     val page :Int,
     val pagesize :Int,
@@ -8,7 +11,9 @@ data class VideoSearchData<T>(
     val rqt_type :String,
     val result :List<out T>
 )
-
+@Entity(
+    tableName = "bilibili_video"
+)
 data class BilibiliVideo(
     val type :String,
     val id :Int,
@@ -17,6 +22,7 @@ data class BilibiliVideo(
     val typename :String,
     val arcurl :String,
     val aid :Int,
+    @PrimaryKey
     val bvid :String,
     val title :String,
     val description :String,

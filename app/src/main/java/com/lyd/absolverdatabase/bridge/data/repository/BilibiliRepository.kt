@@ -5,13 +5,14 @@ import com.lyd.absolverdatabase.bridge.data.bean.BilibiliVideo
 import com.lyd.absolverdatabase.bridge.data.bean.DataResult
 import com.lyd.absolverdatabase.bridge.data.bean.VideoSearchData
 import com.lyd.absolverdatabase.bridge.data.repository.clients.RetrofitClient
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.BilibiliVideoDAO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class BilibiliRepository {
+class BilibiliRepository(private val videoDAO: BilibiliVideoDAO) {
 
     private val TAG :String = "${javaClass.simpleName}-${javaClass.hashCode()}"
 
@@ -36,7 +37,7 @@ class BilibiliRepository {
 
     suspend fun getBaseCookie(): Flow<String> {// 这里先获取一次cookie
         return flow {
-            val body = RetrofitClient.cookieService.getCookie("https://bilibili.com/")
+            val body = RetrofitClient.cookieService.getCookie("https://www.bilibili.com/")
             emit("ok")
         }.catch {
             Log.e(TAG, "getRetrofitCookie: ${it.message}")
