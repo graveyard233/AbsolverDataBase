@@ -45,7 +45,7 @@ object OkHttpClient {
             addInterceptor(Interceptor { chain: Interceptor.Chain ->
                 val request = chain.request()
                     .newBuilder()
-                    .removeHeader("User-Agent")
+                    .removeHeader("User-Agent")// 移除默认的UA，使用桌面浏览器的UA
                     .addHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36")
                     .build()
 

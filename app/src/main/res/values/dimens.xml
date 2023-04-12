@@ -1,3 +1,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="item_learn_img_width">220dp</dimen> <!--范围控制在130dp * 1.6 ~ 1.77之内就行-->
+    <dimen name="item_learn_img_height">130dp</dimen>
+    <dimen name="item_learn_title">15.5sp</dimen>
+    <dimen name="item_learn_other_message">13sp</dimen>
 </resources>

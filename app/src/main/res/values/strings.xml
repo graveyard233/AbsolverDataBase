@@ -7,5 +7,8 @@
     <string name="setting">设置</string>
 
     <string name="press_one_more_time_for_finish">再按一次退出</string>
+    
+    <string name="item_learn_author">up: %1$s</string>
+    <string name="item_learn_videoMsg">播放量: %1$d · %2$s</string>
 
 </resources>

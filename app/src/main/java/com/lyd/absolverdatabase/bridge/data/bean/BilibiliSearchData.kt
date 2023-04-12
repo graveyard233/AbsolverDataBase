@@ -24,7 +24,7 @@ data class BilibiliVideo(
     val aid :Int,
     @PrimaryKey
     val bvid :String,
-    val title :String,
+    var title :String,// 需要是var，因为title有可能包含keyword标签
     val description :String,
     val pic :String,
     val play :Int,
@@ -33,7 +33,7 @@ data class BilibiliVideo(
     val tag :String,
     val review :Int,
     val pubdate :Long,
-    val senddate :Long,
+    val senddate :Long,// 这个是秒级的时间戳
     val duration :String,
     val like :Int,
     val upic :String,

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.lyd.absolverdatabase.bridge.data.bean.BilibiliVideo
 import com.lyd.absolverdatabase.bridge.data.bean.DataResult
 import com.lyd.absolverdatabase.bridge.data.repository.BilibiliRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -15,12 +16,15 @@ class LearnState(private val repository: BilibiliRepository, private val state :
     private val TAG = "${javaClass.simpleName}-${javaClass.hashCode()}"
 
     val videoSharedFlow : MutableSharedFlow<List<BilibiliVideo>> = MutableSharedFlow(replay = 1/*, extraBufferCapacity = 1*/)
-    suspend fun getVideoList(map: MutableMap<String,String>){
+    /**
+     * @param isManualRefresh 是否手动刷新，默认为 false
+     * */
+    suspend fun getVideoList(map: MutableMap<String,String>,isManualRefresh :Boolean = false){
         viewModelScope.launch {
-            repository.getListFlow(map).collectLatest {
+            repository.getListFlow(map,isManualRefresh).collectLatest {
                 when(it){
                     is DataResult.Success ->{
-                        videoSharedFlow.emit(it.data.result)
+                        videoSharedFlow.emit(it.data)
                     }
                     is DataResult.Error ->{
                         Log.e(TAG, "getVideoList: ${it.error}")
@@ -30,12 +34,8 @@ class LearnState(private val repository: BilibiliRepository, private val state :
         }
     }
 
-    suspend fun getCookie(){
-        viewModelScope.launch{
-            repository.getBaseCookie().collect{
-                Log.i(TAG, "getCookie: $it")
-            }
-        }
+    suspend fun getCookie() :Flow<String>{
+        return repository.getBaseCookie()
     }
 
 }

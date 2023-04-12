@@ -1,6 +1,7 @@
 package com.lyd.absolverdatabase.bridge.data.repository.database.db
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -28,6 +29,7 @@ abstract class BilibiliDatabase :RoomDatabase(){
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         // 在这里进行初始化工作
+                        Log.i("BilibiliDatabase", "database onCreate: ")
                     }
                 }).build()
                 INSTANCE = instant
