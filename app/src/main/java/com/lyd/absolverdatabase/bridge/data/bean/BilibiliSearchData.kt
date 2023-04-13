@@ -9,7 +9,7 @@ data class VideoSearchData<T>(
     val numResult :Int,
     val numPages :Int,
     val rqt_type :String,
-    val result :List<out T>
+    var result :List<out T>
 )
 @Entity(
     tableName = "bilibili_video"

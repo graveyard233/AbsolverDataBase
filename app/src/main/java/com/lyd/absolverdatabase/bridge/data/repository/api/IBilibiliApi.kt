@@ -14,7 +14,6 @@ interface IBilibiliApi {
     }
 
     // 使用协程来主力开发
-    @FormUrlEncoded
     @GET("polymer/space/seasons_archives_list")
     suspend fun getArchivesList(@QueryMap map: Map<String,String>)
     : BilibiliMsg<ArchiveData> // 这玩意是返回值

@@ -89,5 +89,32 @@ class MainActivity : BaseActivity() {
         }
 
     }
+    /**
+     * @param action 隐藏:0 显示:1
+     * */
+    fun hideOrShowBottomNav(action :Int){
+        when(action){
+            0 ->{
+                hideBottomNav()
+            }
+            1 ->{
+                showBottomNav()
+            }
+        }
+    }
+
+    private fun hideBottomNav(){
+        mainBinding?.mainBottomNav?.apply {
+            clearAnimation()
+            animate().translationY(this.height.toFloat()).duration = 200
+        }
+    }
+
+    private fun showBottomNav(){
+        mainBinding?.mainBottomNav?.apply {
+            clearAnimation()
+            animate().translationY(0f).duration = 200
+        }
+    }
 
 }

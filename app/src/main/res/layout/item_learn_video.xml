@@ -45,7 +45,7 @@
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="@+id/item_learn_guideline_vertical"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.225"
+        app:layout_constraintVertical_bias="0.761"
         tools:text="绝对的高技术力工作，求个一键三连不过分吧！后面我会继续定期发一些开发爆料，大家别忘了点一波关注" />
 
     <LinearLayout
