@@ -12,17 +12,24 @@
         app:shapeAppearance="@style/RoundedStyle"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/item_learn_guideline_vertical"
+        app:layout_constraintEnd_toStartOf="@+id/item_learn_guideline_vertical_60"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/item_learn_guideline_vertical"
+        android:id="@+id/item_learn_guideline_vertical_60"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.6" />
+        app:layout_constraintGuide_percent="0.58" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/item_learn_guideline_vertical_90"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.98" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/item_learn_guideline_horizontal"
@@ -33,50 +40,56 @@
 
     <TextView
         android:id="@+id/item_learn_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/item_learn_title"
-        android:textColor="?colorOnSurface"
-        android:maxEms="9"
-        android:maxLines="3"
+        app:layout_constraintWidth_max="wrap"
         android:ellipsize="end"
+        android:maxLines="3"
+        android:textColor="?colorOnSurface"
+        android:textSize="@dimen/item_learn_title"
         app:layout_constraintBottom_toTopOf="@+id/item_learn_guideline_horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="@+id/item_learn_guideline_vertical"
+        app:layout_constraintEnd_toStartOf="@+id/item_learn_guideline_vertical_90"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/item_learn_guideline_vertical_60"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.761"
         tools:text="绝对的高技术力工作，求个一键三连不过分吧！后面我会继续定期发一些开发爆料，大家别忘了点一波关注" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/item_learn_guideline_vertical_90"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/item_learn_guideline_vertical"
+        app:layout_constraintStart_toStartOf="@+id/item_learn_guideline_vertical_60"
         app:layout_constraintTop_toTopOf="@+id/item_learn_guideline_horizontal"
-        app:layout_constraintVertical_bias="0.545">
+        app:layout_constraintVertical_bias="0.545"
+        app:layout_constraintWidth_max="wrap">
 
 
         <TextView
             android:id="@+id/item_learn_author"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/item_learn_other_message"
             android:textColor="?colorSecondary"
+            android:textSize="@dimen/item_learn_other_message"
             tools:text="无语怨东风" />
 
         <TextView
             android:id="@+id/item_learn_videoMsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/item_learn_other_message"
             android:textColor="?colorSecondary"
-            tools:text="播放量:158 · 4月1日" />
+            android:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="@dimen/item_learn_other_message"
+            android:autoSizeMinTextSize="6sp"
+            android:maxLines="1"
+            tools:text="播放量: 33937 · 2018/09/29" />
 
 
     </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,19 +5,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.state.DataViewModel
 import com.lyd.absolverdatabase.databinding.FragmentDataBinding
+import com.lyd.absolverdatabase.ui.adapter.DataPagerAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 
 class DataFragment : BaseFragment() {
 
-    companion object{
-        private const val TAG :String = "DataFragment"
-    }
-
     private var dataBinding : FragmentDataBinding ? = null
     private var dataViewModel : DataViewModel ?= null
+
+    private lateinit var viewPagerAdapter: DataPagerAdapter
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout :TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +41,22 @@ class DataFragment : BaseFragment() {
         dataBinding?.click = ClickProxy()
         dataBinding?.lifecycleOwner = viewLifecycleOwner
 
+        viewPager = view.findViewById(R.id.data_pager)
+        tabLayout = view.findViewById(R.id.data_tab)
+
+        viewPagerAdapter = DataPagerAdapter(this)
+        viewPager.adapter = viewPagerAdapter
+        TabLayoutMediator(tabLayout,viewPager){tab, position ->
+            tab.text = "Tab $position"
+        }.attach()
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
 
         // 在这里进行liveData的监听
     }
@@ -49,7 +64,6 @@ class DataFragment : BaseFragment() {
     inner class ClickProxy {
         fun doMyJob(){
             Log.i(TAG, "doMyJob: ")
-            nav().navigate(R.id.action_dataFragment_to_test1Fragment2)
         }
     }
 

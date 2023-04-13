@@ -12,10 +12,6 @@ import com.lyd.absolverdatabase.ui.base.BaseFragment
 
 class DeckFragment :BaseFragment() {
 
-    companion object{
-        private const val TAG :String = "DeckFragment"
-    }
-
     private var deckBinding : FragmentDeckBinding? = null
     private var deckViewModel : DeckViewModel?= null
 

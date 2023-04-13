@@ -11,9 +11,6 @@ import com.lyd.absolverdatabase.databinding.FragmentSettingBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 
 class SettingFragment : BaseFragment() {
-    companion object{
-        private const val TAG :String = "SettingFragment"
-    }
 
     private var settingBinding : FragmentSettingBinding? = null
     private var settingViewModel : SettingViewModel?= null

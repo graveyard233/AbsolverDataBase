@@ -16,9 +16,9 @@ open class BaseDialogBuilder constructor(
     override fun create(): AlertDialog {
         return super.create().also { dialog ->
             dialog.window?.let {
-                it.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-                it.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
                 if (Build.VERSION.SDK_INT >= 31){
+                    it.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+                    it.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
                     it.attributes.blurBehindRadius = 32
                 }
             }

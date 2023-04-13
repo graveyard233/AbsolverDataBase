@@ -27,10 +27,6 @@ import com.lyd.absolverdatabase.utils.FirstUtil
 
 class LearnFragment : BaseFragment() {
 
-    companion object{
-        private const val TAG :String = "LearnFragment"
-    }
-
     private var learnBinding : FragmentLearnBinding ? = null
     private val learnState : LearnState by viewModels{
         LearnViewModelFactory((mActivity?.application as App).bilibiliRepository)

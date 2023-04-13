@@ -9,14 +9,5 @@
         android:id="@+id/dataFragment"
         android:name="com.lyd.absolverdatabase.ui.page.DataFragment"
         android:label="DataFragment"
-        tools:layout="@layout/fragment_data">
-        <action
-            android:id="@+id/action_dataFragment_to_test1Fragment2"
-            app:destination="@id/test1Fragment2" />
-    </fragment>
-    <fragment
-        android:id="@+id/test1Fragment2"
-        android:name="com.lyd.absolverdatabase.test.Test1Fragment"
-        android:label="Test1Fragment"
-        tools:layout="@layout/fragment_test1"/>
+        tools:layout="@layout/fragment_data"/>
 </navigation>

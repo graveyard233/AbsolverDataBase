@@ -1,6 +1,7 @@
 package com.lyd.absolverdatabase.ui.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +28,8 @@ class LearnVideoAdapter : BaseQuickAdapter<Archive, LearnVideoAdapter.VH>() {
             holder.title.text = title
             holder.author.text = context.resources.getString(R.string.item_learn_author,"Ghost-O")
 
-            holder.videoMsg.text = context.resources.getString(R.string.item_learn_videoMsg,stat.view,(pubdate * 1000).toDateStr())
+            holder.videoMsg.text = context.resources.getString(R.string.item_learn_videoMsg,stat.view,(pubdate * 1000).toDateStr("yyyy/MM/dd"))
+            Log.i("TAG", "onBindViewHolder: ${holder.videoMsg.text}")
         }
     }
 
