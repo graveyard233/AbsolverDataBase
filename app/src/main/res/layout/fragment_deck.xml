@@ -19,13 +19,92 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_80_forRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/deck"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_80_forLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintWidth_max="wrap"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_80_forLeft"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintWidth_max="wrap"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/guideline_80_forRight"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="?colorSurfaceVariant"
+                android:textColor="?colorOnSurface"
+                android:text="@string/bare_handed"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="?colorPrimaryContainer"
+                android:textColor="?colorOnPrimaryContainer"
+                android:text="@string/knuckle"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="?colorTertiaryContainer"
+                android:textColor="?colorOnTertiaryContainer"
+                android:text="@string/sword"
+                />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"/>
+
+
+
+        </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

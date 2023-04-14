@@ -101,4 +101,7 @@ dependencies {
 
     // 下拉刷新
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    // 大图加载+图片查看
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
 }

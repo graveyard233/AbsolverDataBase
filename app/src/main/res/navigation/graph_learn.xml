@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_learn"/>
     <fragment
         android:id="@+id/test1Fragment"
-        android:name="com.lyd.absolverdatabase.test.Test1Fragment"
+        android:name="com.lyd.absolverdatabase.test.TodoFragment"
         android:label="Test1Fragment"
-        tools:layout="@layout/fragment_test1"/>
+        tools:layout="@layout/fragment_todo"/>
 </navigation>

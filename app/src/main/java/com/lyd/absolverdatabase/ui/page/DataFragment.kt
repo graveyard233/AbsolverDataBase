@@ -46,8 +46,11 @@ class DataFragment : BaseFragment() {
 
         viewPagerAdapter = DataPagerAdapter(this)
         viewPager.adapter = viewPagerAdapter
+        val tabList = listOf(getString(R.string.tab_map),"其他")
+        val iconList = listOf<Int>(R.drawable.ic_map,R.drawable.ic_tag)
         TabLayoutMediator(tabLayout,viewPager){tab, position ->
-            tab.text = "Tab $position"
+            tab.setIcon(iconList[position])
+            tab.text = tabList[position]
         }.attach()
 
         return view

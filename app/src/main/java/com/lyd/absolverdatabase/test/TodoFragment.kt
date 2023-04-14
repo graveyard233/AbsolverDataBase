@@ -5,21 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.lyd.absolverdatabase.R
-import com.lyd.absolverdatabase.databinding.FragmentTest1Binding
+import com.lyd.absolverdatabase.databinding.FragmentTodoBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 
-class Test1Fragment : BaseFragment() {
+class TodoFragment : BaseFragment() {
 
-    private var test1Binding : FragmentTest1Binding ?= null
+    private var test1Binding : FragmentTodoBinding ?= null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View = inflater.inflate(R.layout.fragment_test1,container,false)
+        val view: View = inflater.inflate(R.layout.fragment_todo,container,false)
 
-        test1Binding = FragmentTest1Binding.bind(view)
+        test1Binding = FragmentTodoBinding.bind(view)
 
         return view
     }

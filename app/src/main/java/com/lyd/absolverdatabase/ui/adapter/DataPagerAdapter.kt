@@ -2,7 +2,7 @@ package com.lyd.absolverdatabase.ui.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.lyd.absolverdatabase.test.Test1Fragment
+import com.lyd.absolverdatabase.test.TodoFragment
 import com.lyd.absolverdatabase.ui.page.MapFragment
 
 class DataPagerAdapter(val fragment :Fragment) :FragmentStateAdapter(fragment) {
@@ -21,9 +21,9 @@ class DataPagerAdapter(val fragment :Fragment) :FragmentStateAdapter(fragment) {
                 MapFragment()
             }
             PAGE_OTHER ->{
-                Test1Fragment()
+                TodoFragment()
             }
-            else -> Test1Fragment()
+            else -> TodoFragment()
         }
     }
 }
