@@ -4,7 +4,6 @@ import android.util.Log
 import com.lyd.absolverdatabase.bridge.data.bean.Archive
 import com.lyd.absolverdatabase.bridge.data.bean.BilibiliVideo
 import com.lyd.absolverdatabase.bridge.data.bean.DataResult
-import com.lyd.absolverdatabase.bridge.data.bean.VideoSearchData
 import com.lyd.absolverdatabase.bridge.data.repository.clients.RetrofitClient
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.BilibiliVideoDAO
 import com.lyd.absolverdatabase.utils.MMKVUtils
@@ -57,7 +56,7 @@ class BilibiliRepository(private val videoDAO: BilibiliVideoDAO) {
                                 it.title = it.title.replace("<em class=\"keyword\">","").replace("</em>","")
                             }
                         }
-                        videoDAO.insertAll(data.result)
+                        videoDAO.upsertAll(data.result)
 
                     }
                     when(response.code){

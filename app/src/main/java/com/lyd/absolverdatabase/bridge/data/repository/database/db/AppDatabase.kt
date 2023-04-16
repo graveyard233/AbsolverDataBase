@@ -10,26 +10,26 @@ import com.lyd.absolverdatabase.bridge.data.bean.BilibiliVideo
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.BilibiliVideoDAO
 
 @Database(entities = [BilibiliVideo::class], version = 1, exportSchema = false)
-abstract class BilibiliDatabase :RoomDatabase(){
+abstract class AppDatabase :RoomDatabase(){
 
     abstract fun videoDao() : BilibiliVideoDAO
 
     companion object{
 
         @Volatile
-        private var INSTANCE : BilibiliDatabase ?= null
+        private var INSTANCE : AppDatabase ?= null
 
-        fun getDatabase(context: Context) : BilibiliDatabase {
+        fun getDatabase(context: Context) : AppDatabase {
             return INSTANCE ?: synchronized(this){
                 val instant = Room.databaseBuilder(
                     context.applicationContext,
-                    BilibiliDatabase::class.java,
-                    "bilibili_database"
+                    AppDatabase::class.java,
+                    "absolver_database"
                 ).addCallback(object :Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)
                         // 在这里进行初始化工作
-                        Log.i("BilibiliDatabase", "database onCreate: ")
+                        Log.i("AppDatabase", "database onCreate: ")
                     }
                 }).build()
                 INSTANCE = instant

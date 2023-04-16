@@ -7,7 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.lyd.absolverdatabase.bridge.data.repository.BilibiliRepository
-import com.lyd.absolverdatabase.bridge.data.repository.database.db.BilibiliDatabase
+import com.lyd.absolverdatabase.bridge.data.repository.DeckRepository
+import com.lyd.absolverdatabase.bridge.data.repository.database.db.AppDatabase
 import com.lyd.architecture.utils.Utils
 import com.tencent.mmkv.MMKV
 
@@ -16,12 +17,16 @@ class App : Application(), ViewModelStoreOwner {
     private var mAppViewModelStore: ViewModelStore? = null
     private var mFactory: ViewModelProvider.Factory? = null
 
-    private val videoDB by lazy {
-        BilibiliDatabase.getDatabase(this)
+    private val database by lazy {
+        AppDatabase.getDatabase(this)
     }
 
     val bilibiliRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
-        BilibiliRepository(videoDB.videoDao())
+        BilibiliRepository(database.videoDao())
+    }
+
+    val deckRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        DeckRepository()
     }
 
     override fun onCreate() {

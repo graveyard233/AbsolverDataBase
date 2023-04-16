@@ -19,7 +19,7 @@
     
     
     <string name="bare_handed">徒手</string>
-    <string name="knuckle">拳套</string>
+    <string name="glove">拳套</string>
     <string name="sword">剑</string>
 
 </resources>

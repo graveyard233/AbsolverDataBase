@@ -6,7 +6,7 @@
     <data>
         <variable
             name="vm"
-            type="com.lyd.absolverdatabase.bridge.state.DataViewModel" />
+            type="com.lyd.absolverdatabase.bridge.state.DataState" />
 
         <variable
             name="click"
