@@ -1,9 +1,6 @@
 package com.lyd.absolverdatabase.bridge.data.bean
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.lyd.absolverdatabase.utils.GsonUtils
 
 // TODO: 进行多对多测试
@@ -20,8 +17,32 @@ data class TestB(
     @PrimaryKey
     val bid :Int,
     val listInt :MutableList<Int>,
-//    val listString :MutableList<String>,
     val listTestSmall :MutableList<TestSmall>
+)
+
+// 首先，为您的两个实体分别创建一个类。
+// 多对多关系与其他关系类型均不同的一点在于，子实体中通常不存在对父实体的引用。
+// 因此，需要创建第三个类来表示两个实体之间的关联实体（即交叉引用表）。
+// 交叉引用表中必须包含表中表示的多对多关系中每个实体的主键列。
+
+// add这个实例就能实现
+@Entity(tableName = "a_with_b",primaryKeys = ["aid","bid"])
+data class TestABCrossRef(
+    val aid: Int,
+    val bid: Int,
+    val attackType: String,
+    val startSide :String
+)
+
+data class TestAWithBs(
+    @Embedded
+    val testA: TestA,
+    @Relation(
+        parentColumn = "aid",
+        entityColumn = "bid",
+        associateBy = Junction(TestABCrossRef::class)
+    )
+    val listB :List<TestB>
 )
 
 data class TestSmall(
@@ -34,6 +55,15 @@ enum class TestEnum{
 }
 
 object TestDataGenerate{
+
+    fun generateTestA():List<TestA>{
+        val tempList = mutableListOf<TestA>()
+        for (i in 0..5)
+            tempList.add(TestA(i,(0..100).random()))
+        return tempList
+    }
+
+
     fun generateTestB():List<TestB>{
         val tempList = mutableListOf<TestB>()
         for (i in 0..10){
