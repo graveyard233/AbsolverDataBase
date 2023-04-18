@@ -8,8 +8,13 @@ enum class DeckType {
 }
 /**流派*/
 // TODO: 完善流派类别
-enum class MoveSchool {
-    WIND_FULL
+enum class Style {
+    WINDFALL,// 落风
+    FORSAKEN,// 遗忘
+    KAHLT_METHOD,// 卡尔特流
+    STAGGER_STYLE,// 醉拳
+    FAEJIN,// 截拳道
+    SIFU// 师父，白眉拳 Pak Mei
 }
 /**站架朝向*/
 enum class StandSide {
