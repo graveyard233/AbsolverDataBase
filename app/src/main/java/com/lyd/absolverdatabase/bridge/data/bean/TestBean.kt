@@ -1,6 +1,7 @@
 package com.lyd.absolverdatabase.bridge.data.bean
 
 import androidx.room.*
+import com.google.gson.reflect.TypeToken
 import com.lyd.absolverdatabase.utils.GsonUtils
 
 // TODO: 进行多对多测试
@@ -103,6 +104,9 @@ class TestIntConverter{// 注意这里的类型不能写成list，必须和原�
     fun listIntToJson(list: MutableList<Int>):String = GsonUtils.toJson(list)
 
     @TypeConverter
-    fun jsonToListInt(json :String):MutableList<Int> = GsonUtils.fromJson(json,GsonUtils.getListType(Int::class.java))
+    fun jsonToListInt(json :String):MutableList<Int> {
+        val type = object :TypeToken<MutableList<Int>>() {}.type
+        return GsonUtils.fromJson(json,type/*GsonUtils.getListType(Int::class.java)*/)
+    }
 
 }

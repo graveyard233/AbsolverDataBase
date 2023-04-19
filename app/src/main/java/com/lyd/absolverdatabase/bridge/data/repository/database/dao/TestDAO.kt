@@ -25,6 +25,9 @@ interface TestDAO {
     @Query("delete from test_b")
     suspend fun deleteAllB()
 
+    @Query("delete from test_b where bid = :bid")
+    suspend fun deleteOneB(bid :Int)
+
     @Upsert
     suspend fun upsertAllB(list: List<TestB>)
 

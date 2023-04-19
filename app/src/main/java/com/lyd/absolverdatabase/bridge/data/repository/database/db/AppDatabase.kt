@@ -39,26 +39,7 @@ abstract class AppDatabase :RoomDatabase(){
                         Log.i("AppDatabase", "database onCreate: start")
 
                         INSTANCE?.apply {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try {
-                                    testDao().deleteAWithB()
-                                    Log.i("AppDatabase", "onCreate: delete aWithB")
-                                    testDao().deleteAllA()
-                                    testDao().upsertAllA(TestDataGenerate.generateTestA())
-                                    Log.i("AppDatabase", "onCreate: A")
-                                    testDao().deleteAllB()
-                                    testDao().upsertAllB(TestDataGenerate.generateTestB())
-                                    Log.i("AppDatabase", "onCreate: B")
 
-                                    testDao().upsetAAndB(listOf(TestABCrossRef(aid = 0, bid = 1, attackType = "序列攻击","左上")))
-
-                                    delay(500)
-                                    val temp = testDao().getAWithBs()
-                                    Log.i("AppDatabase", "onCreate result: $temp")
-                                } catch (e: Exception) {
-                                    Log.e("AppDatabase", "onDBCreate: ", e)
-                                }
-                            }
                         }
                     }
                 }).build()
