@@ -8,30 +8,41 @@ object MoveGenerate{
 
     private val TAG = javaClass.simpleName
 
+    fun generateMoveJsons():MutableList<MoveJson> {
+        val tempList = mutableListOf<MoveJson>()
+        val moveList = generateMoves()
+        (0..10).onEachIndexed { index, i ->
+            tempList.add(
+                MoveJson(
+                    i,
+                    GsonUtils.toJson(moveList[i])
+                )
+            )
+        }
+        return tempList
+    }
     fun generateMoves() :MutableList<Move>{
         val tempList = mutableListOf<Move>()
         for( i in 0 .. 10){
             tempList.add(
-                Move(i,
-                    StringUtils.getRandomString((5..15).random()),
-                    Style.values().random(),
-                    StandSide.values().random(),
-                    StandSide.values().random(),
-//                    if (i % 2 == 0) Style.WINDFALL else Style.FORSAKEN,
-//                    if (i % 2 == 0) StandSide.LOWER_LEFT else StandSide.UPPER_RIGHT,
-//                    if (i % 3 == 0) StandSide.LOWER_RIGHT else StandSide.UPPER_LEFT,
-                    (20..100).random(),
-                    AttackToward.values().random(),
-                    AttackAltitude.values().random(),
-                    AttackDirection.values().random(),
-//                    if (i % 3 == 1) AttackToward.LEFT else AttackToward.RIGHT,
-//                    if (i % 3 == 2) AttackAltitude.HEIGHT else AttackAltitude.LOW,
-//                    if (i % 2 == 0) AttackDirection.HORIZONTAL else AttackDirection.VERTICAL,
-                    (i+5..i+20).random().toFloat(),
-                    (10..50).random().toFloat(),
-                    (i..15).random().toFloat(),
-                    MoveEffect.values().random()
-//                    if (i % 4 == 1) MoveEffect.BREAK_DEFENCES else MoveEffect.NULL
+                Move(
+                    name = StringUtils.getRandomString((5..15).random()),
+                    name_en = StringUtils.getRandomString((5..15).random()),
+                    school = Style.values().random(),
+                    startSide = StandSide.values().random(),
+                    endSide = StandSide.values().random(),
+                    strength = (20..100).random(),
+                    attackToward = AttackToward.values().random(),
+                    attackAltitude = AttackAltitude.values().random(),
+                    attackDirection = AttackDirection.values().random(),
+                    startFrame = (i+5..i+20).random(),
+                    physicalWeakness = (10..50).random(),
+                    physicalOutput = (10..50).random(),
+                    hitAdvantageFrame = (i..15).random(),
+                    defenseAdvantageFrame = (i..15).random(),
+                    effect = MoveEffect.values().random(),
+                    canHand = i % 3 == 0,
+                    canSword = i % 4 == 0
                 )
             )
         }
@@ -44,9 +55,9 @@ object MoveGenerate{
 object DeckGenerate{
     private val TAG = javaClass.simpleName
 
-    fun generateDeck() :List<Deck>{
+    fun generateDeck(count :Int = 5) :List<Deck>{
         val tempList = mutableListOf<Deck>()
-        (0 until 20).onEachIndexed { _, i ->
+        (0 until count).onEachIndexed { _, i ->
             tempList.add(
                 Deck(
                     StringUtils.getRandomString((i+5..i+10).random()),

@@ -3,7 +3,7 @@ package com.lyd.absolverdatabase.bridge.data.repository
 import android.util.Log
 import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.DeckDAO
-import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveDAO
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveJsDAO
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import com.lyd.absolverdatabase.utils.GsonUtils
 import com.lyd.absolverdatabase.utils.MoveGenerate
@@ -12,18 +12,29 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class DeckRepository(private val deckDao: DeckDAO,private val moveDao: MoveDAO) {
+class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsDAO) {
 
     private val TAG = javaClass.simpleName
 
+    // TODO: 实现初始化时查询数据库并将json转成实体类，之后都靠这个查询
+    private val moveList = mutableListOf<Move>()
+
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            moveDao.deleteAll()
+            moveJsDao.deleteAll()
             deckDao.deleteAll()
 
-            moveDao.upsertAll(MoveGenerate.generateMoves())
 
-            Log.i(TAG, "moves: ${GsonUtils.toJson(moveDao.getAllMove())}")
+
+            moveJsDao.upsertAll(MoveGenerate.generateMoveJsons())
+
+            val tempList = moveJsDao.getAllMove()
+            tempList.forEachIndexed { index, moveJson ->
+                Log.i(TAG, "$index: moveJson -> ${moveJson.json}")
+            }
+
+            val move = GsonUtils.fromJson<Move>(tempList[0].json,GsonUtils.getType(Move::class.java))
+            Log.i(TAG, "move_0: $move")
 
             deckDao.upsertAll(DeckGenerate.generateDeck())
 
