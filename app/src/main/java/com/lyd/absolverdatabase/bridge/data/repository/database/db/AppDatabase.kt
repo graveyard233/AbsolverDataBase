@@ -8,18 +8,17 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.BilibiliVideoDAO
-import com.lyd.absolverdatabase.bridge.data.repository.database.dao.TestDAO
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.DeckDAO
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveDAO
 
-@Database(entities = [BilibiliVideo::class,TestA::class,TestB::class,TestABCrossRef::class], version = 1, exportSchema = false)
+@Database(entities = [BilibiliVideo::class,Deck::class,Move::class], version = 1, exportSchema = false)
 abstract class AppDatabase :RoomDatabase(){
 
     abstract fun videoDao() : BilibiliVideoDAO
 
-    abstract fun testDao() : TestDAO
+    abstract fun deckDao() :DeckDAO
+
+    abstract fun moveDao() :MoveDAO
 
     companion object{
 

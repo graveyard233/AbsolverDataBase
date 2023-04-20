@@ -1,12 +1,13 @@
 package com.lyd.absolverdatabase.utils
 
 import androidx.room.TypeConverter
-import com.lyd.absolverdatabase.bridge.data.bean.Move
+import com.google.gson.reflect.TypeToken
 
-class MoveListConverter{
+class IntMutableListConverter{
+    private val type = object : TypeToken<MutableList<Int>>() {}.type
     @TypeConverter
-    fun moveListToJson(moveList: List<Move>) :String = GsonUtils.toJson(moveList)
+    fun intMutableListToJson(intList: MutableList<Int>) :String = GsonUtils.toJson(intList)
 
     @TypeConverter
-    fun jsonToMoveList(json :String) :List<Move> = GsonUtils.fromJson(json,GsonUtils.getListType(Move::class.java))
+    fun jsonToIntMutableList(json: String) :MutableList<Int> = GsonUtils.fromJson(json,type)
 }

@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.color.MaterialColors
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
+import com.lyd.absolverdatabase.bridge.data.bean.DeckType
 import com.lyd.absolverdatabase.bridge.state.DeckState
 import com.lyd.absolverdatabase.bridge.state.DeckViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentDeckBinding
@@ -65,12 +66,27 @@ class DeckFragment :BaseFragment() {
 
         // 在这里进行liveData的监听
         lifecycleScope.launchWhenStarted {
-            deckState.choiceFlow.collectLatest {
+            deckState.choiceFlow.collectLatest {position ->
                 // 这里要和动画分开，因为动画在这里启动会直接崩溃
                 // 因为onViewCreated的时候还没有attach到fragment，没坐标，解决方案是post启动
                 // 因为可以防止重复，所以可以在这里进行颜色变化和数据请求与筛选
-                Log.i(TAG, "choiceFlow collect: ")
-                doColorChange(it,lastBgColor)
+                Log.i(TAG, "choiceFlow collect: $position -> ${getDeckTypeByPosition(position)}")
+                doColorChange(position,lastBgColor)
+                deckState.queryDecksByDeckType(
+                    getDeckTypeByPosition(position),
+                    ifEmpty = {
+                        Log.w(TAG, "queryDecksByDeckType is empty")
+                    },
+                    ifError = {
+                        Log.e(TAG, "queryDecksByDeckType: $it")
+                    }
+                )
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            deckState.deckSharedFlow.collectLatest {
+                Log.i(TAG, "onViewCreated: $it")
             }
         }
 
@@ -84,6 +100,13 @@ class DeckFragment :BaseFragment() {
             deckState.setChoice(position)
             doRevealAnimation(view)
         }
+    }
+
+    private fun getDeckTypeByPosition(position: Int) :DeckType= when(position){
+        0 ->{ DeckType.HAND }
+        1 ->{ DeckType.GLOVE }
+        2 ->{ DeckType.SWORD }
+        else -> {DeckType.HAND}
     }
 
     private fun doRevealAnimation(view: View){
@@ -135,9 +158,7 @@ class DeckFragment :BaseFragment() {
                 return getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
                     com.google.android.material.R.attr.colorTertiaryContainer)
             }
-            else ->{
-                return Color.TRANSPARENT
-            }
+            else ->{ return Color.TRANSPARENT }
         }
     }
 

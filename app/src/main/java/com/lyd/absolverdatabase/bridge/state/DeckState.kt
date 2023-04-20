@@ -3,7 +3,11 @@ package com.lyd.absolverdatabase.bridge.state
 import android.graphics.Color
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.DeckRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class DeckState(private val repository: DeckRepository,private val state : SavedStateHandle) : ViewModel() {
 
@@ -11,6 +15,29 @@ class DeckState(private val repository: DeckRepository,private val state : Saved
 
     fun setChoice(position :Int){
         state["choiceWhat"] = position
+    }
+
+    val deckSharedFlow :MutableSharedFlow<List<Deck>> = MutableSharedFlow<List<Deck>>()
+    suspend fun queryDecksByDeckType(
+        deckType: DeckType,
+        ifEmpty: () ->Any? = {  },
+        ifError: (errorMsg: String) -> Any? = {  }
+    ){
+        viewModelScope.launch{
+            repository.queryDecksByDeckType(deckType).collectLatest {
+                when(it){
+                    is RpEmpty -> {
+                        ifEmpty.invoke()
+                    }
+                    is RpError -> {
+                        ifError.invoke(it.error)
+                    }
+                    is RpSuccess -> {
+                        deckSharedFlow.emit(it.data)
+                    }
+                }
+            }
+        }
     }
 }
 

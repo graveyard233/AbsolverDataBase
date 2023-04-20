@@ -26,7 +26,7 @@ class App : Application(), ViewModelStoreOwner {
     }
 
     val deckRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        DeckRepository(database.testDao())
+        DeckRepository(database.deckDao(),database.moveDao())
     }
 
     override fun onCreate() {
