@@ -11,8 +11,8 @@ enum class DeckType {
 enum class Style {
     WINDFALL,// 落风
     FORSAKEN,// 遗忘
-    KAHLT_METHOD,// 卡尔特流
-    STAGGER_STYLE,// 醉拳
+    KAHLT,// 卡尔特流
+    STAGGER,// 醉拳
     FAEJIN,// 截拳道
     SIFU// 师父，白眉拳 Pak Mei
 }
