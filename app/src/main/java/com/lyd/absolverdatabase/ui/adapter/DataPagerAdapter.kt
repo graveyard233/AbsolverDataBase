@@ -2,15 +2,17 @@ package com.lyd.absolverdatabase.ui.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.lyd.absolverdatabase.test.ColorBoardFragment
 import com.lyd.absolverdatabase.test.TodoFragment
 import com.lyd.absolverdatabase.ui.page.MapFragment
 
 class DataPagerAdapter(val fragment :Fragment) :FragmentStateAdapter(fragment) {
 
     companion object{
-        const val PAGE_COUNT = 2
+        const val PAGE_COUNT = 3
         const val PAGE_MAP = 0
-        const val PAGE_OTHER = 1
+        const val PAGE_COLOR = 1
+        const val PAGE_OTHER = 2
     }
 
     override fun getItemCount(): Int = PAGE_COUNT
@@ -19,6 +21,9 @@ class DataPagerAdapter(val fragment :Fragment) :FragmentStateAdapter(fragment) {
         return when(position){
             PAGE_MAP ->{
                 MapFragment()
+            }
+            PAGE_COLOR ->{
+                ColorBoardFragment()
             }
             PAGE_OTHER ->{
                 TodoFragment()

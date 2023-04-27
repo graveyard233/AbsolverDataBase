@@ -22,4 +22,31 @@
     <string name="glove">拳套</string>
     <string name="sword">剑</string>
 
+<!--    这些是用于展示Material3颜色的，用于fragment_color_board.xml-->
+    <string name="colors.item_background.description">Background</string>
+    <string name="colors.item_error.description">Error</string>
+    <string name="colors.item_error_container.description">Error Container</string>
+    <string name="colors.item_on_background.description">On Background</string>
+    <string name="colors.item_on_error.description">On Error</string>
+    <string name="colors.item_on_error_container.description">On Error Container</string>
+    <string name="colors.item_on_primary.description">On Primary</string>
+    <string name="colors.item_on_primary_container.description">On Primary Container</string>
+    <string name="colors.item_on_secondary.description">On Secondary</string>
+    <string name="colors.item_on_secondary_container.description">On Secondary Container</string>
+    <string name="colors.item_on_surface.description">On Surface</string>
+    <string name="colors.item_on_surface_inverse.description">On Surface Inverse</string>
+    <string name="colors.item_on_surface_variant.description">On Surface Variant</string>
+    <string name="colors.item_on_tertiary.description">On Tertiary</string>
+    <string name="colors.item_on_tertiary_container.description">On Tertiary Container</string>
+    <string name="colors.item_outline.description">Outline</string>
+    <string name="colors.item_primary.description">Primary</string>
+    <string name="colors.item_primary_container.description">Primary Container</string>
+    <string name="colors.item_secondary.description">Secondary</string>
+    <string name="colors.item_secondary_container.description">Secondary Container</string>
+    <string name="colors.item_surface.description">Surface</string>
+    <string name="colors.item_surface_inverse.description">Surface Inverse</string>
+    <string name="colors.item_surface_variant.description">Surface Variant</string>
+    <string name="colors.item_tertiary.description">Tertiary</string>
+    <string name="colors.item_tertiary_container.description">Tertiary Container</string>
+
 </resources>

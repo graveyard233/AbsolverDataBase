@@ -104,4 +104,11 @@ dependencies {
 
     // 大图加载+图片查看
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+
+    // 侧滑菜单 https://github.com/aitsuki/SwipeMenuRecyclerView
+    implementation 'com.github.aitsuki:SwipeMenuRecyclerView:2.1.5'
+
+    // 排版layout，用于展示
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
 }

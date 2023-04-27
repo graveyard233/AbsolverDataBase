@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.aitsuki.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="125dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:autoClose="true"
+    app:preview="right"
+    app:designer="@string/classic_designer">
+
+
+<!--    todo 准备完善icon的颜色和item的布局-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_delete"
+        android:layout_gravity="end"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="165499843212312156494656465465" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.aitsuki.swipe.SwipeLayout>

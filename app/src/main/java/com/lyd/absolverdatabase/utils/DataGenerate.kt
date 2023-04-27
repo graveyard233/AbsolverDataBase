@@ -1,7 +1,5 @@
 package com.lyd.absolverdatabase.utils
 
-import androidx.collection.ArrayMap
-import androidx.collection.arrayMapOf
 import com.lyd.absolverdatabase.bridge.data.bean.*
 import java.util.Date
 
@@ -14,7 +12,7 @@ object MoveGenerate{
 
     fun generateMoveJsons():MutableList<MoveJson> {
         val tempList = mutableListOf<MoveJson>()
-        val moveList = generateMoves()
+        val moveList = generateMoveOrigins()
         (0..10).onEachIndexed { index, i ->
             tempList.add(
                 MoveJson(
@@ -25,11 +23,11 @@ object MoveGenerate{
         }
         return tempList
     }
-    private fun generateMoves() :MutableList<Move>{
-        val tempList = mutableListOf<Move>()
+    fun generateMoveOrigins() :MutableList<MoveOrigin>{
+        val tempList = mutableListOf<MoveOrigin>()
         for( i in 0 .. 10){
             tempList.add(
-                Move(
+                MoveOrigin(
                     id = i,
                     name = StringUtils.getRandomString((5..15).random()),
                     name_en = StringUtils.getRandomString((5..15).random()),
@@ -37,15 +35,15 @@ object MoveGenerate{
                     startSide = StandSide.values().random(),
                     endSide = StandSide.values().random(),
                     strength = (1..3).random(),
-                    attackRange = getFloatMapForMoveData(start = 75, end = 300),
+                    attackRange = ((75..300).random() / 10).toFloat(),
                     attackToward = AttackToward.values().random(),
                     attackAltitude = AttackAltitude.values().random(),
                     attackDirection = AttackDirection.values().random(),
-                    startFrame = getIntMapForMoveData(start = i+5, end = i + 20),
-                    physicalWeakness =  getFloatMapForMoveData(),
-                    physicalOutput =  getFloatMapForMoveData(),
-                    hitAdvantageFrame = getIntMapForMoveData(start = i, end = 50),
-                    defenseAdvantageFrame = getIntMapForMoveData(start = i, end = 15),
+                    startFrame = (i + 5..i + 20).random(),
+                    physicalWeakness =  ((30..150).random() / 10).toFloat(),
+                    physicalOutput = ((30..150).random() / 10).toFloat(),
+                    hitAdvantageFrame = (i..20).random(),
+                    defenseAdvantageFrame = (i..15).random(),
                     effect = MoveEffect.values().random(),
                     canHand = i % 3 == 0,
                     canSword = i % 4 == 0
@@ -55,18 +53,34 @@ object MoveGenerate{
         return tempList
     }
 
-    private fun getIntMapForMoveData(start :Int = 0, end :Int = 20) : ArrayMap<String,Int>{
-        return arrayMapOf<String,Int>(
-            ORIGIN to (start..end).random(),
-            GP to (start..end - 5).random()
-        )
-    }
-
-    private fun getFloatMapForMoveData(start :Int = 30, end :Int = 150) : ArrayMap<String,Float>{
-        return arrayMapOf<String,Float>(
-            ORIGIN to ((start..end).random() / 10).toFloat() ,
-            GP to ((start..end - 5).random() / 10).toFloat()
-        )
+    fun generateMoveGPs() :MutableList<MoveGP>{
+        val tempList = mutableListOf<MoveGP>()
+        for( i in 0 .. 10){
+            tempList.add(
+                MoveGP(
+                    id = i,
+                    name = StringUtils.getRandomString((5..15).random()),
+                    name_en = StringUtils.getRandomString((5..15).random()),
+                    school = Style.values().random(),
+                    startSide = StandSide.values().random(),
+                    endSide = StandSide.values().random(),
+                    strength = (1..3).random(),
+                    attackRange = ((75..300).random() / 10).toFloat(),
+                    attackToward = AttackToward.values().random(),
+                    attackAltitude = AttackAltitude.values().random(),
+                    attackDirection = AttackDirection.values().random(),
+                    startFrame = (i + 5..i + 20).random(),
+                    physicalWeakness =  ((30..150).random() / 10).toFloat(),
+                    physicalOutput = ((30..150).random() / 10).toFloat(),
+                    hitAdvantageFrame = (i..20).random(),
+                    defenseAdvantageFrame = (i..15).random(),
+                    effect = MoveEffect.values().random(),
+                    canHand = i % 3 == 0,
+                    canSword = i % 4 == 0
+                )
+            )
+        }
+        return tempList
     }
 }
 
@@ -79,19 +93,20 @@ object DeckGenerate{
         (0 until count).onEachIndexed { _, i ->
             tempList.add(
                 Deck(
-                    StringUtils.getRandomString((i+5..i+10).random()),
-                    DeckType.values().random(),
+                    name = StringUtils.getRandomString((i+5..i+10).random()),
+                    deckType = DeckType.values().random(),
 //                    if (i % 2 == 0) DeckType.HAND else DeckType.SWORD,
-                    Date().time,
-                    Date().time + (0..10000).random(),
-                    mutableListOf((0..i).random(),(0..i).random()),
-                    mutableListOf((0..i).random(),(0..i).random()),
-                    mutableListOf((0..i).random(),(0..i).random()),
-                    mutableListOf((0..i).random(),(0..i).random()),
-                    (0..i).random(),
-                    (0..i).random(),
-                    (0..i).random(),
-                    (0..i).random()
+                    createTime = Date().time,
+                    updateTime = Date().time + (0..10000).random(),
+                    note = StringUtils.getRandomString((10..20).random()),
+                    sequenceUpperRight = mutableListOf((0..i).random(),(0..i).random()),
+                    sequenceLowerRight = mutableListOf((0..i).random(),(0..i).random()),
+                    sequenceUpperLeft = mutableListOf((0..i).random(),(0..i).random()),
+                    sequenceLowerLeft = mutableListOf((0..i).random(),(0..i).random()),
+                    optionalUpperRight = (0..i).random(),
+                    optionalLowerRight = (0..i).random(),
+                    optionalUpperLeft = (0..i).random(),
+                    optionalLowerLeft = (0..i).random()
                 )
             )
         }

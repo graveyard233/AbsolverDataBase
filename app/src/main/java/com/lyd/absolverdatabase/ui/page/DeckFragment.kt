@@ -78,7 +78,7 @@ class DeckFragment :BaseFragment() {
                         Log.w(TAG, "queryDecksByDeckType is empty")
                     },
                     ifError = {
-                        Log.e(TAG, "queryDecksByDeckType: $it")
+                        Log.e(TAG, "queryDecksByDeckType error: $it")
                     }
                 )
             }

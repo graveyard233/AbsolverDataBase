@@ -28,7 +28,10 @@ class DataFragment : BaseFragment() {
         object :ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (position != 0){// 滑到其他页面的时候要显示tab和nav
+                if (position == 1){
+                    hideTab()
+                    (mActivity as MainActivity).hideOrShowBottomNav(0)
+                } else {// 滑到其他页面的时候要显示tab和nav
                     showTab()
                     (mActivity as MainActivity).hideOrShowBottomNav(1)
                 }
@@ -60,8 +63,8 @@ class DataFragment : BaseFragment() {
 
         viewPagerAdapter = DataPagerAdapter(this)
         viewPager.adapter = viewPagerAdapter
-        val tabList = listOf(getString(R.string.tab_map),"其他")
-        val iconList = listOf<Int>(R.drawable.ic_map,R.drawable.ic_tag)
+        val tabList = listOf(getString(R.string.tab_map),"调色板","其他")
+        val iconList = listOf<Int>(R.drawable.ic_map,R.drawable.ic_color_broard,R.drawable.ic_tag)
         TabLayoutMediator(tabLayout,viewPager){tab, position ->
             tab.setIcon(iconList[position])
             tab.text = tabList[position]

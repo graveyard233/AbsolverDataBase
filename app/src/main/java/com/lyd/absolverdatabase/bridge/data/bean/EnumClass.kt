@@ -1,5 +1,9 @@
 package com.lyd.absolverdatabase.bridge.data.bean
 
+enum class AbsolverVersion{
+    ORIGIN,GhostPro
+}
+
 /**卡组类型*/
 enum class DeckType {
     HAND,

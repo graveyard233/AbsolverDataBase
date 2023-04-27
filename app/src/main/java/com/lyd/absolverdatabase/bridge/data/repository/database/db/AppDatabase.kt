@@ -9,16 +9,22 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.BilibiliVideoDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.DeckDAO
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveGPDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveJsDAO
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveOriginDAO
 
-@Database(entities = [BilibiliVideo::class,Deck::class,MoveJson::class], version = 1, exportSchema = false)
+@Database(entities = [BilibiliVideo::class,Deck::class,MoveJson::class,MoveOrigin::class,MoveGP::class], version = 1, exportSchema = false)
 abstract class AppDatabase :RoomDatabase(){
 
     abstract fun videoDao() : BilibiliVideoDAO
 
     abstract fun deckDao() :DeckDAO
 
-    abstract fun moveDao() :MoveJsDAO
+    abstract fun moveJsDao() :MoveJsDAO
+
+    abstract fun moveOriginDao() :MoveOriginDAO
+
+    abstract fun moveGPDao() :MoveGPDAO
 
     companion object{
 

@@ -3,41 +3,68 @@ package com.lyd.absolverdatabase.bridge.data.repository
 import android.util.Log
 import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.DeckDAO
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveGPDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveJsDAO
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveOriginDAO
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import com.lyd.absolverdatabase.utils.GsonUtils
 import com.lyd.absolverdatabase.utils.MoveGenerate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsDAO) {
+class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsDAO,
+                     private val moveOriginDAO: MoveOriginDAO,private val moveGPDAO: MoveGPDAO)
+{
 
     private val TAG = javaClass.simpleName
-
-    // TODO: 实现初始化时查询数据库并将json转成实体类，之后都靠这个查询
-    private var moveList = listOf<Move>()
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
             moveJsDao.deleteAll()
             deckDao.deleteAll()
-
+            moveOriginDAO.deleteAll()
+            moveGPDAO.deleteAll()
 
 
             moveJsDao.upsertAll(MoveGenerate.generateMoveJsons())
+            val r1 = async {
+                moveOriginDAO.upsertAll(MoveGenerate.generateMoveOrigins())
+            }
+            val r2 = async {
+                moveGPDAO.upsertAll(MoveGenerate.generateMoveGPs())
+            }
+            val r3 = async {
+                deckDao.upsertAll(DeckGenerate.generateDeck())
+            }
+            r1.await()
+            r2.await()
+            r3.await()
 
-            initMoveList()
-
-            deckDao.upsertAll(DeckGenerate.generateDeck())
 
             Log.i(TAG, "decksJson -> ${GsonUtils.toJson(deckDao.getAllDeck())}")
 
-            Log.i(TAG, "moveJson -> ${GsonUtils.toJson(moveList.dropLast(5))}")
 
-            getMoveListByIdList(listOf(0,6,4,2)).forEachIndexed { index, move ->
+//            Log.i(TAG, "moveJson -> ${GsonUtils.toJson(moveOriginDAO.allMoves().dropLast(5))}")
+
+            getOriginListByIdList(listOf(0,6,4,2)).forEachIndexed { index, move ->
                 Log.i(TAG, "No.$index-> ${move}")
+            }
+
+//            moveOriginDAO.getMovesByStartSide(StandSide.values().random())
+//                .forEach { move->
+//                    Log.i(TAG, "move: ${move}")
+//                }
+            try {
+                val tempMap = moveOriginDAO.getMoveMapByIds(listOf(1,3,0))
+                tempMap.forEach { origin, gp ->
+                    Log.i(TAG, "map: $origin <-> $gp")
+                }
+                tempMap.keys
+            } catch (e: Exception) {
+                Log.e(TAG, "error: ", e)
             }
 
         }
@@ -61,12 +88,10 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
 
 
     /**根据Id列表获取招式列表，按idList顺序输出*/
-    suspend fun getMoveListByIdList(idList: List<Int>):MutableList<Move>{
-        if (moveList.isEmpty())
-            initMoveList()
+    suspend fun getOriginListByIdList(idList: List<Int>):MutableList<MoveOrigin>{
         val tempMap = idList.associateWith { it }
-        val result = moveList.filter { it.id in tempMap }
-        val finalResult = mutableListOf<Move>()
+        val result = moveOriginDAO.getMovesByIds(idList)
+        val finalResult = mutableListOf<MoveOrigin>()
         // 筛出来之后重排
         idList.onEachIndexed { idIndex, id ->
             flag@for (move in result){
@@ -80,60 +105,40 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
     }
 
     /**根据Id获取单个招式*/
-    suspend fun getMoveById(id :Int):Move{
-        if (moveList.isEmpty())
-            initMoveList()
-        return moveList[id]
+    suspend fun getMoveById(id :Int):MoveOrigin{
+        return moveOriginDAO.getMoveById(id)
     }
 
     /**起始站架筛选招式*/
-    suspend fun getMoveListByStartSide(start :StandSide) :List<Move>{
-        if (moveList.isEmpty())
-            initMoveList()
-        return moveList.filter { it.startSide == start }
+    suspend fun getMoveListByStartSide(start :StandSide) :List<MoveOrigin>{
+        return moveOriginDAO.getMovesByStartSide(start)
     }
 
     /**结束站架筛选招式*/
-    suspend fun getMoveListByEndSide(end :StandSide) :List<Move>{
-        if (moveList.isEmpty())
-            initMoveList()
-        return moveList.filter { it.endSide == end }
+    suspend fun getOriginListByEndSide(end :StandSide) :List<MoveOrigin>{
+        return moveOriginDAO.getMovesByEndSide(end)
     }
 
     /**攻击朝向筛选*/
-    suspend fun getMoveListByAttackToward(toward: AttackToward) :List<Move>{
-        if (moveList.isEmpty())
-            initMoveList()
-        return moveList.filter { it.attackToward == toward }
+    suspend fun getOriginListByAttackToward(toward: AttackToward) :List<MoveOrigin>{
+        return moveOriginDAO.getMovesByAttackToward(toward)
     }
 
     /**攻击高度筛选*/
-    suspend fun getMoveListByAttackAltitude(altitude: AttackAltitude) :List<Move>{
-        if (moveList.isEmpty())
-            initMoveList()
-        return moveList.filter { it.attackAltitude == altitude }
+    suspend fun getOriginListByAttackAltitude(altitude: AttackAltitude) :List<MoveOrigin>{
+        return moveOriginDAO.getMovesByAttackAltitude(altitude)
     }
 
     /**攻击走向筛选*/
-    suspend fun getMoveListByAttackDirection(direction: AttackDirection) :List<Move>{
-        if (moveList.isEmpty())
-            initMoveList()
-        return moveList.filter { it.attackDirection == direction }
+    suspend fun getOriginListByAttackDirection(direction: AttackDirection) :List<MoveOrigin>{
+        return moveOriginDAO.getMovesByAttackDirection(direction)
     }
 
     /**招式特效筛选*/
-    suspend fun getMoveListByMoveEffect(effect: MoveEffect) :List<Move>{
-        if (moveList.isEmpty())
-            initMoveList()
-        return moveList.filter { it.effect == effect }
+    suspend fun getOriginListByMoveEffect(effect: MoveEffect) :List<MoveOrigin>{
+        return moveOriginDAO.getMovesByEffect(effect)
     }
 
-    /**初始化招式列表*/
-    private suspend fun initMoveList(){
-        // 重新在数据库里面拿一次数据并保存在DeckRepository里面
-        moveList = moveJsDao.getAllMove().map {
-            GsonUtils.fromJson<Move>(it.json,GsonUtils.getType(Move::class.java))
-        }
-    }
+
 
 }
