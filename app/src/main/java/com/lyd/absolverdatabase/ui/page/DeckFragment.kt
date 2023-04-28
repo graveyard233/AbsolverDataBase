@@ -15,6 +15,7 @@ import androidx.annotation.StyleRes
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.material.color.MaterialColors
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
@@ -22,6 +23,7 @@ import com.lyd.absolverdatabase.bridge.data.bean.DeckType
 import com.lyd.absolverdatabase.bridge.state.DeckState
 import com.lyd.absolverdatabase.bridge.state.DeckViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentDeckBinding
+import com.lyd.absolverdatabase.ui.adapter.DeckAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.views.ColorShades
 import kotlinx.coroutines.delay
@@ -35,6 +37,17 @@ class DeckFragment :BaseFragment() {
     }
 
     private var lastBgColor = Color.TRANSPARENT
+
+    private val deckAdapter : DeckAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        DeckAdapter().apply {
+            addOnItemChildClickListener(R.id.item_deck_img_delete){adapter,view,position ->
+                Log.i(TAG, "应该删除这个卡组: ${getItem(position)}")
+            }
+            animationEnable = true
+            setItemAnimation(BaseQuickAdapter.AnimationType.ScaleIn)
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +71,8 @@ class DeckFragment :BaseFragment() {
         deckBinding?.apply {
 
         }
+
+        initRecycler()
         return view
     }
 
@@ -71,7 +86,7 @@ class DeckFragment :BaseFragment() {
                 // 因为onViewCreated的时候还没有attach到fragment，没坐标，解决方案是post启动
                 // 因为可以防止重复，所以可以在这里进行颜色变化和数据请求与筛选
                 Log.i(TAG, "choiceFlow collect: $position -> ${getDeckTypeByPosition(position)}")
-                doColorChange(position,lastBgColor)
+                doColorChange(position,lastBgColor) // 暂时不要做颜色渐变，因为有时候会抽风，闪的厉害
                 deckState.queryDecksByDeckType(
                     getDeckTypeByPosition(position),
                     ifEmpty = {
@@ -87,10 +102,17 @@ class DeckFragment :BaseFragment() {
         lifecycleScope.launchWhenStarted {
             deckState.deckSharedFlow.collectLatest {
                 Log.i(TAG, "onViewCreated: $it")
+                deckAdapter.submitList(it)
             }
         }
 
 
+    }
+
+    private fun initRecycler(){
+        deckBinding?.deckRecycle!!.apply {
+            adapter = deckAdapter
+        }
     }
 
     inner class ClickProxy {
@@ -128,19 +150,21 @@ class DeckFragment :BaseFragment() {
     }
 
     private fun doColorChange(position :Int,lastColor :Int){
-        val shades = ColorShades()
+//        val shades = ColorShades()
         val endColor :Int = getColorByPosition(position)
-        lifecycleScope.launchWhenStarted {
-            for (i in 0..500){
-                delay(1)
-                shades.setFromColor(lastColor)
-                    .setToColor(endColor)
-                    .setShade((i.toFloat()/500F).toFloat())
-                val bgView :View = deckBinding!!.deckBg
-                bgView.setBackgroundColor(shades.generate())
-            }
-            lastBgColor = endColor
-        }
+//        lifecycleScope.launchWhenStarted {
+//            for (i in 0..500){
+//                delay(1)
+//                shades.setFromColor(lastColor)
+//                    .setToColor(endColor)
+//                    .setShade((i.toFloat()/500F).toFloat())
+//                val bgView :View = deckBinding!!.deckBg
+//                bgView.setBackgroundColor(shades.generate())
+//            }
+//            lastBgColor = endColor
+//        }
+        val bgView :View = deckBinding!!.deckBg
+        bgView.setBackgroundColor(endColor)
     }
 
     @ColorInt

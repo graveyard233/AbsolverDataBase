@@ -93,12 +93,13 @@ object DeckGenerate{
         (0 until count).onEachIndexed { _, i ->
             tempList.add(
                 Deck(
-                    name = StringUtils.getRandomString((i+5..i+10).random()),
+                    name = StringUtils.getRandomString((5..15).random()),
                     deckType = DeckType.values().random(),
+                    deckStyle = Style.values().random(),
 //                    if (i % 2 == 0) DeckType.HAND else DeckType.SWORD,
                     createTime = Date().time,
                     updateTime = Date().time + (0..10000).random(),
-                    note = StringUtils.getRandomString((10..20).random()),
+                    note = StringUtils.getRandomString((10..60).random()),
                     sequenceUpperRight = mutableListOf((0..i).random(),(0..i).random()),
                     sequenceLowerRight = mutableListOf((0..i).random(),(0..i).random()),
                     sequenceUpperLeft = mutableListOf((0..i).random(),(0..i).random()),

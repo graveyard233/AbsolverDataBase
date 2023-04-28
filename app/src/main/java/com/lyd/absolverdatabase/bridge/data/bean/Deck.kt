@@ -13,6 +13,7 @@ data class Deck(
     var name :String,
 
     var deckType :DeckType,
+    var deckStyle: Style,
     var createTime :Long,
     var updateTime :Long,
 

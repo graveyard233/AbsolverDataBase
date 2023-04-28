@@ -22,6 +22,8 @@
     <string name="glove">拳套</string>
     <string name="sword">剑</string>
 
+    <string name="item_deck_aboutTime">更新时间:%1$s</string>
+
 <!--    这些是用于展示Material3颜色的，用于fragment_color_board.xml-->
     <string name="colors.item_background.description">Background</string>
     <string name="colors.item_error.description">Error</string>

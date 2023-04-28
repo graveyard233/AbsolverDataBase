@@ -37,7 +37,7 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
                 moveGPDAO.upsertAll(MoveGenerate.generateMoveGPs())
             }
             val r3 = async {
-                deckDao.upsertAll(DeckGenerate.generateDeck())
+                deckDao.upsertAll(DeckGenerate.generateDeck(100))
             }
             r1.await()
             r2.await()
