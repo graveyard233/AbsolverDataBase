@@ -13,9 +13,12 @@ import androidx.annotation.ColorInt
 import androidx.annotation.NonNull
 import androidx.annotation.StyleRes
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.navGraphViewModels
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.QuickAdapterHelper
 import com.google.android.material.color.MaterialColors
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
@@ -24,30 +27,69 @@ import com.lyd.absolverdatabase.bridge.state.DeckState
 import com.lyd.absolverdatabase.bridge.state.DeckViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentDeckBinding
 import com.lyd.absolverdatabase.ui.adapter.DeckAdapter
+import com.lyd.absolverdatabase.ui.adapter.DeckHeaderAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
-import com.lyd.absolverdatabase.ui.views.ColorShades
+import com.lyd.absolverdatabase.ui.widgets.ColorShades
+import com.lyd.absolverdatabase.ui.widgets.SpacesItemDecoration
+import com.lyd.absolverdatabase.utils.GsonUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 class DeckFragment :BaseFragment() {
 
     private var deckBinding : FragmentDeckBinding? = null
-    private val deckState : DeckState by viewModels {
+    private val deckState : DeckState by navGraphViewModels(navGraphId = R.id.nav_deck, factoryProducer = {
         DeckViewModelFactory((mActivity?.application as App).deckRepository)
-    }
+    })
 
     private var lastBgColor = Color.TRANSPARENT
 
     private val deckAdapter : DeckAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         DeckAdapter().apply {
+            addOnItemChildClickListener(R.id.item_deck_constraint){adapter, view, position ->
+                Log.i(TAG, "onclick: ${getItem(position)}")
+                nav().navigate(DeckFragmentDirections.actionDeckFragmentToDeckEditFragment(getItem(position)!!))
+            }
+            addOnItemChildLongClickListener(R.id.item_deck_constraint){adapter, view, position ->
+                Log.i(TAG, "onLongClick: ${GsonUtils.toJson(getItem(position))}")
+                return@addOnItemChildLongClickListener true// 返回true就不会出发onclick
+            }
             addOnItemChildClickListener(R.id.item_deck_img_delete){adapter,view,position ->
                 Log.i(TAG, "应该删除这个卡组: ${getItem(position)}")
+                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                    deckState.deleteOneDeck(
+                        getItem(position)!!,
+                        ifSuccess = {
+                            adapter.removeAt(position)
+                        },
+                        ifError = {
+                            showShortToast(it)
+                        })
+                }
             }
+            isEmptyViewEnable = true
+            setEmptyViewLayout(requireContext(),R.layout.item_deck_empty)
+
             animationEnable = true
-            setItemAnimation(BaseQuickAdapter.AnimationType.ScaleIn)
+            isAnimationFirstOnly = false
+            setItemAnimation(BaseQuickAdapter.AnimationType.SlideInRight)
         }
     }
 
+    private val helper :QuickAdapterHelper by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        QuickAdapterHelper.Builder(deckAdapter)
+            .build()
+    }
+
+    private val deckHeaderAdapter :DeckHeaderAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        DeckHeaderAdapter().apply {
+            setOnItemClickListener(){_,_,_ ->
+                Log.i(TAG, "head: on click")
+                val bundle = bundleOf("choiceType" to deckState.choiceFlow.value)
+                nav().navigate(R.id.action_deckFragment_to_buildDeckFragment,bundle)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,7 +122,7 @@ class DeckFragment :BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 在这里进行liveData的监听
-        lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             deckState.choiceFlow.collectLatest {position ->
                 // 这里要和动画分开，因为动画在这里启动会直接崩溃
                 // 因为onViewCreated的时候还没有attach到fragment，没坐标，解决方案是post启动
@@ -99,9 +141,11 @@ class DeckFragment :BaseFragment() {
             }
         }
 
-        lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            // TODO: 这里的接收方式有问题，我得换一种接收方式，因为没切换一次界面，我就会收到一次
+            // tmd居然解决了，通过把appcompat从1.5.1升级到1.6.1，然后给lifecycleScope前面加上viewLifecycleOwner就搞定了
             deckState.deckSharedFlow.collectLatest {
-                Log.i(TAG, "onViewCreated: $it")
+                Log.i(TAG, "receive: ${it.size}")
                 deckAdapter.submitList(it)
             }
         }
@@ -111,8 +155,12 @@ class DeckFragment :BaseFragment() {
 
     private fun initRecycler(){
         deckBinding?.deckRecycle!!.apply {
-            adapter = deckAdapter
+            adapter = helper.adapter
+            addItemDecoration(SpacesItemDecoration(requireContext(),SpacesItemDecoration.VERTICAL,0,1)
+                .setParam(R.color.grey_split_line,3,30F,30F))
         }
+        if (helper.beforeAdapterList.isEmpty())
+            helper.addBeforeAdapter(0,deckHeaderAdapter)
     }
 
     inner class ClickProxy {
@@ -169,20 +217,25 @@ class DeckFragment :BaseFragment() {
 
     @ColorInt
     private fun getColorByPosition(position: Int) : Int{
-        when(position){
+        return when(position){
             0 ->{
-                return getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
-                    com.google.android.material.R.attr.colorSurfaceVariant)
-            }
-            1 ->{
-                return getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
+                getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
                     com.google.android.material.R.attr.colorPrimaryContainer)
             }
+
+            1 ->{
+                getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
+                    com.google.android.material.R.attr.colorSecondaryContainer)
+            }
+
             2 ->{
-                return getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
+                getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
                     com.google.android.material.R.attr.colorTertiaryContainer)
             }
-            else ->{ return Color.TRANSPARENT }
+
+            else ->{
+                Color.TRANSPARENT
+            }
         }
     }
 

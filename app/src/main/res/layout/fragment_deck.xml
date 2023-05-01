@@ -88,9 +88,10 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:background="?colorSurfaceVariant"
-                android:textColor="?colorOnSurface"
+                android:background="?colorPrimaryContainer"
+                android:textColor="?colorOnPrimaryContainer"
                 android:text="@string/bare_handed"
+                android:textAppearance="?textAppearanceTitleLarge"
                 android:onClick="@{(theView)->click.showBg(theView,0)}"
                 />
 
@@ -100,9 +101,10 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:background="?colorPrimaryContainer"
-                android:textColor="?colorOnPrimaryContainer"
+                android:background="?colorSecondaryContainer"
+                android:textColor="?colorOnSecondaryContainer"
                 android:text="@string/glove"
+                android:textAppearance="?textAppearanceTitleLarge"
                 android:onClick="@{(theView)->click.showBg(theView,1)}"
                 />
 
@@ -115,6 +117,7 @@
                 android:background="?colorTertiaryContainer"
                 android:textColor="?colorOnTertiaryContainer"
                 android:text="@string/sword"
+                android:textAppearance="?textAppearanceTitleLarge"
                 android:onClick="@{(theView)->click.showBg(theView,2)}"
                 />
 

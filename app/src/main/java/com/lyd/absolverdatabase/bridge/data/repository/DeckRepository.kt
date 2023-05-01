@@ -37,7 +37,7 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
                 moveGPDAO.upsertAll(MoveGenerate.generateMoveGPs())
             }
             val r3 = async {
-                deckDao.upsertAll(DeckGenerate.generateDeck(100))
+                deckDao.upsertAll(DeckGenerate.generateDeck(15))
             }
             r1.await()
             r2.await()
@@ -70,22 +70,38 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
         }
     }
 
+    /*-------------------------------这里写卡组操作方法------------------------------------*/
+
     suspend fun queryDecksByDeckType(type :DeckType) :Flow<RepoResult<List<Deck>>> {
         return flow<RepoResult<List<Deck>>> {
             Log.i(TAG, "queryDecksByDeckType: 现在开始查询")
             val list = deckDao.getDecksByDeckType(type)
             if (list.isNotEmpty()){
-                emit(RpSuccess(list))
+                emit(RepoResult.RpSuccess(list))
             } else {
-                emit(RpEmpty("list is empty"))
+                emit(RepoResult.RpEmpty("list is empty"))
             }
         }.conflate()// 它的特性是，只接收处理最新的数据，如果有新数据到来了而前一个数据还没有处理完，则会将前一个数据剩余的处理逻辑全部取消。
             .catch {
-                emit(RpError(it.message!!))
+                emit(RepoResult.RpError(it.message!!))
             }
             .flowOn(Dispatchers.IO)
     }
 
+    suspend fun deleteOneDeck(deckToDelete :Deck) :Flow<DataResult<Int>>{
+        return flow {
+            when(val deleteLine = deckDao.deleteOneDeck(deckToDelete)){
+                1 -> emit(DataResult.Success(deleteLine))// 只有1是正常删除
+                else ->emit(DataResult.Error("删除失败，实际删除了${deleteLine}行"))
+            }
+        }.catch {
+            emit(DataResult.Error(it.message!!))
+        }.flowOn(Dispatchers.IO)
+    }
+
+    /*-------------------------------------卡组操作方法结束--------------------------------------------------*/
+
+    /*------------------------------------这里写OriginMove操作方法---------------------------------------*/
 
     /**根据Id列表获取招式列表，按idList顺序输出*/
     suspend fun getOriginListByIdList(idList: List<Int>):MutableList<MoveOrigin>{
@@ -139,6 +155,6 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
         return moveOriginDAO.getMovesByEffect(effect)
     }
 
-
+    /*------------------------------------OriginMove操作方法结束---------------------------------------*/
 
 }

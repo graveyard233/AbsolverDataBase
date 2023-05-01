@@ -1,6 +1,5 @@
 package com.lyd.absolverdatabase.bridge.state
 
-import android.graphics.Color
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.lyd.absolverdatabase.bridge.data.bean.*
@@ -22,18 +21,39 @@ class DeckState(private val repository: DeckRepository,private val state : Saved
         deckType: DeckType,
         ifEmpty: () ->Any? = {  },
         ifError: (errorMsg: String) -> Any? = {  }
-    ){
+    ) {
         viewModelScope.launch{
             repository.queryDecksByDeckType(deckType).collectLatest {
                 when(it){
-                    is RpEmpty -> {
+                    is RepoResult.RpEmpty -> {
                         ifEmpty.invoke()
+                        deckSharedFlow.emit(listOf())
                     }
-                    is RpError -> {
+                    is RepoResult.RpError -> {
                         ifError.invoke(it.error)
                     }
-                    is RpSuccess -> {
+                    is RepoResult.RpSuccess -> {
                         deckSharedFlow.emit(it.data)
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun deleteOneDeck(
+        deck: Deck,
+        ifSuccess: ()->Unit = {  },
+        ifError: (errorMsg: String) -> Any? = {  }
+    )
+    {
+        viewModelScope.launch {
+            repository.deleteOneDeck(deckToDelete = deck).collectLatest {
+                when(it){
+                    is DataResult.Success ->{
+                        ifSuccess.invoke()
+                    }
+                    is DataResult.Error ->{
+                        ifError.invoke(it.error)
                     }
                 }
             }

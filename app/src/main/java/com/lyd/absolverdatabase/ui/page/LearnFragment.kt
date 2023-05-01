@@ -22,8 +22,9 @@ import com.lyd.absolverdatabase.databinding.FragmentLearnBinding
 import com.lyd.absolverdatabase.ui.adapter.LearnVideoAdapter
 import com.lyd.absolverdatabase.ui.adapter.SearchVideoAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
-import com.lyd.absolverdatabase.ui.views.BaseDialogBuilder
+import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.utils.FirstUtil
+import kotlinx.coroutines.flow.collectLatest
 
 class LearnFragment : BaseFragment() {
 
@@ -112,7 +113,7 @@ class LearnFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 初始化列表
-        lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             Log.i(TAG, "我先拿cookie: ${learnState.getCookie()}")// 依靠协程，按序执行
 
             if (checkItem == 1){
@@ -130,19 +131,19 @@ class LearnFragment : BaseFragment() {
 
         /**------------------------------下面是flow的监听---------------------------**/
 
-        lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             learnState.searchSelect.collect(){
                 checkItem = it
 //                Log.i(TAG, "checkItem变化了，现在是 $checkItem")
             }
         }
 
-        lifecycleScope.launchWhenStarted {
-            learnState.searchVideoSharedFlow.collect(){
-
-                it.forEach {video ->
-                    Log.i(TAG, "onViewCreated: ${video.title}")
-                }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            learnState.searchVideoSharedFlow.collectLatest{
+                Log.i(TAG, "onViewCreated: receive searchVideoSharedFlow 数量${it.size}")
+//                it.forEach {video ->
+//                    Log.i(TAG, "onViewCreated: ${video.title}")
+//                }
                 if (checkItem == 1){
                     learnBinding?.learnRecycle?.adapter = latestVideoAdapter
                     latestVideoAdapter.submitList(it)
@@ -152,8 +153,8 @@ class LearnFragment : BaseFragment() {
             }
         }
 
-        lifecycleScope.launchWhenStarted {
-            learnState.learnVideoSharedFlow.collect(){
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            learnState.learnVideoSharedFlow.collectLatest{
                 if (checkItem == 0){
                     learnBinding?.learnRecycle?.adapter = learnVideoAdapter
                     learnVideoAdapter.submitList(it)

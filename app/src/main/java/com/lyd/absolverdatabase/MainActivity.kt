@@ -49,6 +49,7 @@ class MainActivity : BaseActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_fragment_nav_host) as NavHostFragment
         navController = navHostFragment.navController
         mainBinding?.mainBottomNav?.setupWithNavController(navController!!)
+        mainBinding?.mainRailNav?.setupWithNavController(navController!!)// 横向布局
 
     }
 

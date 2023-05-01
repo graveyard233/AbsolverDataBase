@@ -1,10 +1,13 @@
 package com.lyd.absolverdatabase.bridge.data.bean
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.lyd.absolverdatabase.utils.IntMutableListConverter
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = "deck_tb")
 @TypeConverters(IntMutableListConverter::class)
 data class Deck(
@@ -31,7 +34,8 @@ data class Deck(
     var optionalLowerRight :Int,
     var optionalUpperLeft :Int,
     var optionalLowerLeft :Int
-)
+) : Parcelable
+
 /**专门存数据库的招式类*/
 @Entity(tableName = "moveJs_tb")
 data class MoveJson(

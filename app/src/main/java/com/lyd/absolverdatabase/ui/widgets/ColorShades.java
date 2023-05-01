@@ -1,4 +1,4 @@
-package com.lyd.absolverdatabase.ui.views;
+package com.lyd.absolverdatabase.ui.widgets;
 
 import android.graphics.Color;
 

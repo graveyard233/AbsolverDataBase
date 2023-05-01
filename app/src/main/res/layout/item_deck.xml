@@ -9,15 +9,15 @@
 
     <com.aitsuki.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="100dp"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         app:autoClose="true"
         app:preview="right"
-        app:designer="@string/parallax_designer">
+        app:designer="@string/classic_designer">
 
 
-        <!--    todo 准备完善icon的颜色和item的布局-->7
+        <!--    todo 准备完善icon的颜色和item的布局-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -28,20 +28,24 @@
                 android:layout_width="75dp"
                 android:layout_height="match_parent"
                 app:srcCompat="@drawable/ic_delete"
-                android:background="?colorErrorContainer" />
+                android:background="?colorErrorContainer"
+                android:clickable="true"
+                android:foreground="?selectableItemBackgroundBorderless"/>
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="75dp"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_setting" />
+<!--            <ImageView-->
+<!--                android:layout_width="75dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                app:srcCompat="@drawable/ic_setting" />-->
 
 
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_deck_constraint"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:background="?selectableItemBackground">
 
             <ImageView
                 android:id="@+id/item_deck_img_style"
@@ -107,9 +111,9 @@
                 android:ellipsize="end"
                 android:lines="1"
                 android:textAppearance="?textAppearanceBodySmall"
-                app:layout_constraintBottom_toTopOf="@+id/item_deck_aboutTime"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="@+id/guideline4"
+                app:layout_constraintTop_toTopOf="@+id/guideline3"
                 tools:text="卡组说明说明文档沙发好舒服的课时费斯蒂芬斯蒂芬库里" />
 
             <TextView
