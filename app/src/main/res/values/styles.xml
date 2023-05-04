@@ -11,6 +11,16 @@
 		<item name="layout_flexGrow">1</item>
 	</style>
 
+	<style name="MaterialButtonToggleGroup.IconOnlyButton"
+		parent="Widget.Material3.Button.OutlinedButton">
+		<item name="iconPadding">0dp</item>
+		<item name="android:minWidth">30dp</item>
+		<item name="iconGravity">textStart</item>
+		<item name="android:minHeight">30dp</item>
+		<item name="iconSize">37dp</item>
+		<item name="android:layout_weight">1</item>
+	</style>
+
 <!--	<style name="WidgetsSectionItem">-->
 <!--		<item name="android:textAppearance">?textAppearanceTitleSmall</item>-->
 <!--		<item name="android:textColor">?android:textColorSecondary</item>-->

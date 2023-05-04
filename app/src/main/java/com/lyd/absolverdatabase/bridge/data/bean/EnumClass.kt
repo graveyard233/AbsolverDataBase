@@ -44,5 +44,9 @@ enum class MoveEffect {
     DODGE_SIDE,// 侧闪
     BREAK_DEFENCES,// 破防
     SUPER_ARMOR,// 霸体
+    BLOCK_COUNTER,// 格挡反击
+    DOUBLE_ATTACK,// 二段
+    MID_LINE,// 中线
+    MENTAL_BLOW,// 精神打击
     NULL// 无效果
 }

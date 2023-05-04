@@ -31,8 +31,8 @@ import com.lyd.absolverdatabase.ui.adapter.DeckHeaderAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.widgets.ColorShades
 import com.lyd.absolverdatabase.ui.widgets.SpacesItemDecoration
+import com.lyd.absolverdatabase.utils.DeckGenerate
 import com.lyd.absolverdatabase.utils.GsonUtils
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 class DeckFragment :BaseFragment() {
@@ -85,8 +85,9 @@ class DeckFragment :BaseFragment() {
         DeckHeaderAdapter().apply {
             setOnItemClickListener(){_,_,_ ->
                 Log.i(TAG, "head: on click")
-                val bundle = bundleOf("choiceType" to deckState.choiceFlow.value)
-                nav().navigate(R.id.action_deckFragment_to_buildDeckFragment,bundle)
+                nav().navigate(DeckFragmentDirections.actionDeckFragmentToDeckEditFragment(
+                    DeckGenerate.generateEmptyDeck(deckType = getDeckTypeByPosition(deckState.choiceFlow.value)))
+                )
             }
         }
     }

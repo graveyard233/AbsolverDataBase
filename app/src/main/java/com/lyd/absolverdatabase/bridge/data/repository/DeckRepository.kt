@@ -30,16 +30,16 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
 
 
             moveJsDao.upsertAll(MoveGenerate.generateMoveJsons())
-            val r1 = async {
-                moveOriginDAO.upsertAll(MoveGenerate.generateMoveOrigins())
-            }
+//            val r1 = async {
+//                moveOriginDAO.upsertAll(MoveGenerate.generateMoveOrigins())
+//            }
             val r2 = async {
                 moveGPDAO.upsertAll(MoveGenerate.generateMoveGPs())
             }
             val r3 = async {
                 deckDao.upsertAll(DeckGenerate.generateDeck(15))
             }
-            r1.await()
+//            r1.await()
             r2.await()
             r3.await()
 
@@ -47,25 +47,29 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
             Log.i(TAG, "decksJson -> ${GsonUtils.toJson(deckDao.getAllDeck())}")
 
 
+
+
 //            Log.i(TAG, "moveJson -> ${GsonUtils.toJson(moveOriginDAO.allMoves().dropLast(5))}")
 
             getOriginListByIdList(listOf(0,6,4,2)).forEachIndexed { index, move ->
-                Log.i(TAG, "No.$index-> ${move}")
+                Log.i(TAG, "No.$index-> ${GsonUtils.toJson(move)}")
             }
 
 //            moveOriginDAO.getMovesByStartSide(StandSide.values().random())
 //                .forEach { move->
 //                    Log.i(TAG, "move: ${move}")
 //                }
-            try {
-                val tempMap = moveOriginDAO.getMoveMapByIds(listOf(1,3,0))
-                tempMap.forEach { origin, gp ->
-                    Log.i(TAG, "map: $origin <-> $gp")
-                }
-                tempMap.keys
-            } catch (e: Exception) {
-                Log.e(TAG, "error: ", e)
-            }
+
+//            try {
+//                val tempMap = moveOriginDAO.getMoveMapByIds(listOf(1,3,0))
+//                tempMap.forEach { origin, gp ->
+//                    Log.i(TAG, "map: $origin <-> $gp")
+//                }
+//                tempMap.keys
+//            } catch (e: Exception) {
+//                Log.e(TAG, "error: ", e)
+//            }
+
 
         }
     }
@@ -151,8 +155,8 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
     }
 
     /**招式特效筛选*/
-    suspend fun getOriginListByMoveEffect(effect: MoveEffect) :List<MoveOrigin>{
-        return moveOriginDAO.getMovesByEffect(effect)
+    suspend fun getOriginListByMoveEffect(effects: List<MoveEffect>) :List<MoveOrigin>{
+        return moveOriginDAO.getMovesByEffect(effects)
     }
 
     /*------------------------------------OriginMove操作方法结束---------------------------------------*/

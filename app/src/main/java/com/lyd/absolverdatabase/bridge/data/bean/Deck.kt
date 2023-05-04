@@ -69,7 +69,7 @@ data class MoveOrigin(
     val physicalOutput :Float,// 自身体力消耗，这个GP有修改
     val hitAdvantageFrame :Int,// 击中优势帧，这个GP有修改
     val defenseAdvantageFrame :Int,// 防御优势帧，这个GP有修改
-    val effect :MoveEffect,// 招式效果
+    val effect :String,// 招式效果，用于整合多个招式效果，但注意这个只是string，不是枚举
     val canHand :Boolean,// 徒手是否可用
     val canSword :Boolean,// 剑卡是否可用
 )
@@ -93,7 +93,7 @@ data class MoveGP(
     val physicalOutput :Float,// 自身体力消耗，这个GP有修改
     val hitAdvantageFrame :Int,// 击中优势帧，这个GP有修改
     val defenseAdvantageFrame :Int,// 防御优势帧，这个GP有修改
-    val effect :MoveEffect,// 招式效果
+    val effect :String,// 招式效果，用于整合多个招式效果，但注意这个只是string，不是枚举
     val canHand :Boolean,// 徒手是否可用
     val canSword :Boolean// 剑卡是否可用
 )

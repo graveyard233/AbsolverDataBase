@@ -53,6 +53,11 @@ class MainActivity : BaseActivity() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mainBinding = null
+    }
+
     /**
      * 详情看：https://www.cnblogs.com/lijunamneg/archive/2013/01/19/2867532.html
      * 这个onWindowFocusChanged指的是这个Activity得到或者失去焦点的时候 就会call。。

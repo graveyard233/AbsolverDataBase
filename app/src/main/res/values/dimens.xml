@@ -5,4 +5,8 @@
     <dimen name="item_learn_img_height">130dp</dimen>
     <dimen name="item_learn_title">15.5sp</dimen>
     <dimen name="item_learn_other_message">13sp</dimen>
+
+    <dimen name="deck_edit_add_move_img_margin">10dp</dimen>
+
+    <dimen name="bottom_sheet_width">0dp</dimen>
 </resources>

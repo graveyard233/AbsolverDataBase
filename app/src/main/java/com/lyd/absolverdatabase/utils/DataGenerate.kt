@@ -44,7 +44,7 @@ object MoveGenerate{
                     physicalOutput = ((30..150).random() / 10).toFloat(),
                     hitAdvantageFrame = (i..20).random(),
                     defenseAdvantageFrame = (i..15).random(),
-                    effect = MoveEffect.values().random(),
+                    effect = MoveEffectGenerate.generateString(),
                     canHand = i % 3 == 0,
                     canSword = i % 4 == 0
                 )
@@ -74,7 +74,7 @@ object MoveGenerate{
                     physicalOutput = ((30..150).random() / 10).toFloat(),
                     hitAdvantageFrame = (i..20).random(),
                     defenseAdvantageFrame = (i..15).random(),
-                    effect = MoveEffect.values().random(),
+                    effect = MoveEffectGenerate.generateString(),
                     canHand = i % 3 == 0,
                     canSword = i % 4 == 0
                 )
@@ -88,6 +88,22 @@ object MoveGenerate{
 object DeckGenerate{
     private val TAG = javaClass.simpleName
 
+    fun generateEmptyDeck(deckType :DeckType = DeckType.HAND):Deck = Deck(
+        name = "",
+        deckType = deckType,
+        deckStyle = Style.WINDFALL,
+        updateTime = 0L,
+        createTime = 0L,
+        note = "",
+        sequenceUpperRight = mutableListOf(),
+        sequenceLowerRight = mutableListOf(),
+        sequenceUpperLeft = mutableListOf(),
+        sequenceLowerLeft = mutableListOf(),
+        optionalUpperRight = -1,
+        optionalLowerRight = -1,
+        optionalUpperLeft = -1,
+        optionalLowerLeft = -1
+    )
     fun generateDeck(count :Int = 5) :List<Deck>{
         val tempList = mutableListOf<Deck>()
         (0 until count).onEachIndexed { _, i ->
@@ -112,5 +128,32 @@ object DeckGenerate{
             )
         }
         return tempList
+    }
+}
+
+object MoveEffectGenerate{
+    private val TAG = javaClass.simpleName
+    private val sb = StringBuilder()
+
+    private fun generateList():List<MoveEffect>{
+        val tempList = mutableListOf<MoveEffect>()
+        for (i in 0..(0..1).random()){
+            tempList.add(MoveEffect.values().random())
+        }
+        return tempList
+    }
+
+
+    fun generateString():String{
+        sb.clear()
+        val tempList = generateList()
+        tempList.forEachIndexed { index, moveEffect ->
+            if (index != tempList.size - 1){
+                sb.append("$moveEffect,")
+            } else{
+                sb.append(moveEffect)
+            }
+        }
+        return sb.toString()
     }
 }

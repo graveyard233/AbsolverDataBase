@@ -14,6 +14,7 @@ import com.lyd.absolverdatabase.bridge.state.DeckState
 import com.lyd.absolverdatabase.bridge.state.DeckViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentDeckEditBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
+import com.lyd.absolverdatabase.ui.widgets.DeckDetailDialog
 
 class DeckEditFragment :BaseFragment() {
 
@@ -23,7 +24,13 @@ class DeckEditFragment :BaseFragment() {
 
     private val args :DeckEditFragmentArgs by navArgs()
 
+    private val deckDetailDialog :DeckDetailDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        DeckDetailDialog(requireActivity())
+    }
+
     private var dataBinding :FragmentDeckEditBinding ?= null
+
+    private lateinit var deckForEdit :Deck
 
 
     override fun onCreateView(
@@ -37,11 +44,17 @@ class DeckEditFragment :BaseFragment() {
         dataBinding?.lifecycleOwner = viewLifecycleOwner
 
         Log.i(TAG, "onCreateView: ${args.deckForEdit}")
+        deckForEdit = args.deckForEdit
+        if (deckForEdit.createTime == 0L){
+            // 是创建流程
+        } else {
+            // 编辑卡组
+        }
 
         dataBinding?.apply {
-            fragmentDeckEditText1.text = args.deckForEdit.toString()
-            fragmentDeckEditText1.setOnClickListener {
-                nav().popBackStack()
+            deckEditConstrainBg?.setOnLongClickListener {view ->
+                deckDetailDialog.apply { mDeck = args.deckForEdit }.show()
+                return@setOnLongClickListener true
             }
         }
 

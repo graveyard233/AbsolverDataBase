@@ -24,6 +24,12 @@
 
     <string name="item_deck_aboutTime">更新时间:%1$s</string>
 
+    <string name="deck_name">卡组名称</string>
+    <string name="deck_note">卡组说明</string>
+
+    <string name="deckDetail_createTime">创建时间:\n%1$s</string>
+    <string name="deckDetail_updateTime">更新时间:\n%1$s</string>
+
 <!--    这些是用于展示Material3颜色的，用于fragment_color_board.xml-->
     <string name="colors.item_background.description">Background</string>
     <string name="colors.item_error.description">Error</string>

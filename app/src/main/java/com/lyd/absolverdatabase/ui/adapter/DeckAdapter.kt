@@ -12,6 +12,7 @@ import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
 import com.lyd.absolverdatabase.bridge.data.bean.Style
+import com.lyd.absolverdatabase.utils.StyleUtil
 import com.lyd.absolverdatabase.utils.TimeUtils.getDateYear
 import com.lyd.absolverdatabase.utils.TimeUtils.toDateStr
 
@@ -22,26 +23,7 @@ class DeckAdapter :BaseQuickAdapter<Deck,DeckAdapter.VH>()  {
     override fun onBindViewHolder(holder: VH, position: Int, item: Deck?) {
         item?.apply {
             GlideApp.with(holder.imgStyle)
-                .load(when(deckStyle){
-                    Style.KAHLT ->{
-                        R.drawable.ic_kahlt
-                    }
-                    Style.FORSAKEN ->{
-                        R.drawable.ic_forsaken
-                    }
-                    Style.WINDFALL ->{
-                        R.drawable.ic_windfall
-                    }
-                    Style.STAGGER ->{
-                        R.drawable.ic_stagger
-                    }
-                    Style.FAEJIN ->{
-                        R.drawable.ic_faejin
-                    }
-                    Style.SIFU ->{
-                        R.drawable.sifu
-                    }
-                })
+                .load(StyleUtil.styleId(deckStyle))
                 .error(R.drawable.ic_video_load_error)
                 .into(holder.imgStyle)
             holder.deckName.text = name

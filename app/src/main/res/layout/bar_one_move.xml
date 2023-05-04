@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/bar_oneMove_side_start"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_upper_right"/>
+
+    <ImageView
+        android:id="@+id/bar_oneMove_img"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        app:srcCompat="@drawable/ic_add_move"
+        android:background="@color/img_add_move_bg"
+        android:clickable="true"
+        android:foreground="?selectableItemBackground"
+        />
+
+    <ImageView
+        android:id="@+id/bar_oneMove_side_end"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/ic_upper_right"/>
+
+</LinearLayout>

@@ -44,8 +44,8 @@ interface MoveOriginDAO {
     @Query("select * from moveOrigin_tb where attackDirection = :attackDirection")
     suspend fun getMovesByAttackDirection(attackDirection: AttackDirection) :List<MoveOrigin>
 
-    @Query("select * from moveOrigin_tb where effect = :effect")
-    suspend fun getMovesByEffect(effect: MoveEffect) :List<MoveOrigin>
+    @Query("select * from moveOrigin_tb where effect = :effects")
+    suspend fun getMovesByEffect(effects: List<MoveEffect>) :List<MoveOrigin>
 
     /**
      * 查询的这种join可以获取到map，然后根据map的各种的操作符来检索move，eg keys 和 values

@@ -11,20 +11,8 @@
         android:label="DeckFragment"
         tools:layout="@layout/fragment_deck">
         <action
-            android:id="@+id/action_deckFragment_to_buildDeckFragment"
-            app:destination="@id/buildDeckFragment" />
-        <action
             android:id="@+id/action_deckFragment_to_deckEditFragment"
             app:destination="@id/deckEditFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/buildDeckFragment"
-        android:name="com.lyd.absolverdatabase.ui.page.DeckBuildFragment"
-        android:label="BuildDeckFragment"
-        tools:layout="@layout/fragment_deck_build">
-        <argument
-            android:name="choiceType"
-            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/deckEditFragment"
