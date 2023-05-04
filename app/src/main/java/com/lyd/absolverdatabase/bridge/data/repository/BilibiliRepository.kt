@@ -7,7 +7,7 @@ import com.lyd.absolverdatabase.bridge.data.bean.DataResult
 import com.lyd.absolverdatabase.bridge.data.repository.clients.RetrofitClient
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.BilibiliVideoDAO
 import com.lyd.absolverdatabase.utils.MMKVUtils
-import com.lyd.architecture.utils.TimeUtils
+import com.lyd.absolverdatabase.utils.TimeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

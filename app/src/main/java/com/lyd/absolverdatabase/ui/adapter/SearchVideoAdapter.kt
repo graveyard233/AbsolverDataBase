@@ -11,7 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.BilibiliVideo
-import com.lyd.architecture.utils.TimeUtils.toDateStr
+import com.lyd.absolverdatabase.utils.TimeUtils.toDateStr
 
 class SearchVideoAdapter : BaseQuickAdapter<BilibiliVideo, SearchVideoAdapter.VH>() {
 

@@ -1,7 +1,6 @@
 package com.lyd.absolverdatabase.ui.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,8 @@ import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
 import com.lyd.absolverdatabase.bridge.data.bean.Style
-import com.lyd.architecture.utils.TimeUtils.getDateYear
-import com.lyd.architecture.utils.TimeUtils.toDateStr
+import com.lyd.absolverdatabase.utils.TimeUtils.getDateYear
+import com.lyd.absolverdatabase.utils.TimeUtils.toDateStr
 
 class DeckAdapter :BaseQuickAdapter<Deck,DeckAdapter.VH>()  {
 

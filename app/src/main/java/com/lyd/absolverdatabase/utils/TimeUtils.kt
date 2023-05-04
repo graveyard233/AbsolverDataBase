@@ -1,9 +1,8 @@
-package com.lyd.architecture.utils
+package com.lyd.absolverdatabase.utils
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * 时间工具
