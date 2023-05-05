@@ -25,7 +25,7 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
         CoroutineScope(Dispatchers.IO).launch {
             moveJsDao.deleteAll()
             deckDao.deleteAll()
-            moveOriginDAO.deleteAll()
+//            moveOriginDAO.deleteAll()// 现在已经不需要自己生成原版招式了，在数据库创建的时候就已经搞定了数据生成
             moveGPDAO.deleteAll()
 
 

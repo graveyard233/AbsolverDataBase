@@ -82,6 +82,29 @@ object MoveGenerate{
         }
         return tempList
     }
+
+    /**生成空招式，用于占位。假如发现id为-1，则这个招式用空招式替换*/
+    fun generateEmptyOriginMove():MoveOrigin = MoveOrigin(
+        id = -1,
+        name = "",
+        name_en = "",
+        school = Style.WINDFALL,
+        startSide = StandSide.UPPER_RIGHT,
+        endSide = StandSide.UPPER_RIGHT,
+        strength = 0,
+        attackRange = 0F,
+        attackToward = AttackToward.RIGHT,
+        attackAltitude = AttackAltitude.HEIGHT,
+        attackDirection = AttackDirection.POKE,
+        startFrame = 0,
+        physicalWeakness = 0F,
+        physicalOutput = 0F,
+        hitAdvantageFrame = 0,
+        defenseAdvantageFrame = 0,
+        effect = MoveEffect.NULL.name,
+        canHand = false,
+        canSword = false
+    )
 }
 
 
@@ -95,10 +118,10 @@ object DeckGenerate{
         updateTime = 0L,
         createTime = 0L,
         note = "",
-        sequenceUpperRight = mutableListOf(),
-        sequenceLowerRight = mutableListOf(),
-        sequenceUpperLeft = mutableListOf(),
-        sequenceLowerLeft = mutableListOf(),
+        sequenceUpperRight = mutableListOf(-1,-1,-1),
+        sequenceLowerRight = mutableListOf(-1,-1,-1),
+        sequenceUpperLeft = mutableListOf(-1,-1,-1),
+        sequenceLowerLeft = mutableListOf(-1,-1,-1),
         optionalUpperRight = -1,
         optionalLowerRight = -1,
         optionalUpperLeft = -1,

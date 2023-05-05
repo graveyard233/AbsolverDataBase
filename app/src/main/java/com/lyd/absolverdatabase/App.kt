@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.lyd.absolverdatabase.bridge.data.repository.BilibiliRepository
+import com.lyd.absolverdatabase.bridge.data.repository.DeckEditRepository
 import com.lyd.absolverdatabase.bridge.data.repository.DeckRepository
 import com.lyd.absolverdatabase.bridge.data.repository.database.db.AppDatabase
 import com.lyd.architecture.utils.Utils
@@ -27,6 +28,10 @@ class App : Application(), ViewModelStoreOwner {
 
     val deckRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         DeckRepository(database.deckDao(),database.moveJsDao(),database.moveOriginDao(),database.moveGPDao())
+    }
+
+    val deckEditRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        DeckEditRepository(database.deckDao(),database.moveOriginDao(),database.moveGPDao())
     }
 
     override fun onCreate() {

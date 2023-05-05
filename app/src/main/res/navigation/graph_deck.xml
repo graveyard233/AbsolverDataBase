@@ -22,5 +22,13 @@
         <argument
             android:name="deckForEdit"
             app:argType="com.lyd.absolverdatabase.bridge.data.bean.Deck" />
+        <action
+            android:id="@+id/action_deckEditFragment_to_moveSelectFragment"
+            app:destination="@id/moveSelectFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/moveSelectFragment"
+        android:name="com.lyd.absolverdatabase.ui.page.MoveSelectFragment"
+        android:label="MoveSelectFragment"
+        tools:layout="@layout/fragment_move_select"/>
 </navigation>

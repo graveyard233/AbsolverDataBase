@@ -3,6 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     
+    <color name="transparent">#00FFFFFF</color>
+    
     <color name="grey_split_line">#80CCCCCC</color>
 
     <color name="img_add_move_bg">#2C3438</color>
