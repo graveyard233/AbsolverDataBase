@@ -1,9 +1,11 @@
 package com.lyd.absolverdatabase.ui.page
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
@@ -11,6 +13,7 @@ import com.lyd.absolverdatabase.bridge.state.DeckEditState
 import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentMoveSelectBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
+import kotlinx.coroutines.flow.collectLatest
 
 class MoveSelectFragment :BaseFragment(){
 
@@ -36,6 +39,11 @@ class MoveSelectFragment :BaseFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            editState.editEventState.emit(2)// 发射数据，告诉EditFragment等会是从这里回退
+        }
+
     }
 
     override fun onDestroyView() {

@@ -86,9 +86,7 @@ class MovesBar : ConstraintLayout {
 
     }
 
-    fun initClick(){
-        Log.i(TAG, "initClick: ")
-    }
+
 
     // TODO: 未完成，待完善
     private fun setSideImg(startView: ImageView?,endView: ImageView?,move: MoveOrigin){

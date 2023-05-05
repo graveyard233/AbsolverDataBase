@@ -13,12 +13,10 @@ import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
 import com.lyd.absolverdatabase.bridge.state.DeckEditState
 import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
-import com.lyd.absolverdatabase.bridge.state.DeckState
-import com.lyd.absolverdatabase.bridge.state.DeckViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentDeckEditBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.widgets.DeckDetailDialog
-import kotlinx.coroutines.async
+import com.lyd.absolverdatabase.utils.DeckGenerate
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -36,7 +34,7 @@ class DeckEditFragment :BaseFragment() {
 
     private var dataBinding :FragmentDeckEditBinding ?= null
 
-    private lateinit var deckForEdit :Deck
+    private lateinit var _deckForEdit :Deck /*= DeckGenerate.generateEmptyDeck()*/
 
 
     override fun onCreateView(
@@ -50,16 +48,25 @@ class DeckEditFragment :BaseFragment() {
         dataBinding?.lifecycleOwner = viewLifecycleOwner
 
         Log.i(TAG, "onCreateView: ${args.deckForEdit}")
-        deckForEdit = args.deckForEdit
-        if (deckForEdit.createTime == 0L){
+        _deckForEdit= args.deckForEdit
+
+
+        if (_deckForEdit.createTime == 0L){// 这个deck是个空壳
             // 是创建流程
-            viewLifecycleOwner.lifecycleScope.launch {
-                editState.getOriginListByIdsTest(listOf(0,1,2)).apply {
-                    dataBinding?.deckEditBarUpperRight?.initOriginMoves(this)
-                }
-            }
+
+//            viewLifecycleOwner.lifecycleScope.launch {
+//                editState.getOriginListByIdsTest(listOf(0,1,2)).apply {
+//                    dataBinding?.deckEditBarUpperRight?.initOriginMoves(this)
+//                }
+//            }
         } else {
             // 编辑卡组
+        }
+
+        dataBinding?.apply {
+            deckEditBarUpperRight.setOnClickListener {
+                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment())
+            }
         }
 
         dataBinding?.apply {
@@ -74,6 +81,25 @@ class DeckEditFragment :BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            editState.editEventState.collectLatest { event->
+                when(event){
+                    1 ->{
+                        Log.i(TAG, "editEventState: 从deckFragment点进来的")
+                    }
+                    2 ->{
+                        Log.i(TAG, "editEventState: 从moveSelect那回退来的")
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            editState.sequenceUpperRight.collectLatest {
+
+            }
+        }
 
 
 

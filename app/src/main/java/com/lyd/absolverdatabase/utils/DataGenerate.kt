@@ -111,6 +111,9 @@ object MoveGenerate{
 object DeckGenerate{
     private val TAG = javaClass.simpleName
 
+    /**
+     * 序列全为-1，size为3；自选攻击全为-1
+     * */
     fun generateEmptyDeck(deckType :DeckType = DeckType.HAND):Deck = Deck(
         name = "",
         deckType = deckType,
