@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.lyd.absolverdatabase.GlideApp
@@ -84,6 +85,18 @@ class MovesBar : ConstraintLayout {
 //            .into(move0)
 
 
+    }
+
+    fun initClick(clickProxy :(view:View)->Unit = {}){
+        move0.setOnClickListener { view ->
+            clickProxy.invoke(view)
+        }
+        move1.setOnClickListener { view ->
+            clickProxy.invoke(view)
+        }
+        move2.setOnClickListener { view ->
+            clickProxy.invoke(view)
+        }
     }
 
 

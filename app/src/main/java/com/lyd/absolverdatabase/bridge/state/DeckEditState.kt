@@ -27,7 +27,7 @@ class DeckEditState(private val repository: DeckEditRepository,
      * 状态是1的话，说明是从卡组列表界面点进来的
      * 状态是2的话，是从moveSelect中退回来的
      * */
-    val editEventState = MutableStateFlow<Int>(1)
+    val editEventState = MutableSharedFlow<Int>(replay = 1)
 
     fun getDeckInSaved() : Deck? = savedState.get<Deck>("deckInSaved")
 

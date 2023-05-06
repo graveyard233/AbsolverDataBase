@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
@@ -21,7 +23,11 @@ class MoveSelectFragment :BaseFragment(){
         DeckEditViewModelFactory((mActivity?.application as App).deckEditRepository)
     })
 
+    private val argMsg :MoveSelectFragmentArgs by navArgs()
+
     private var dataBinding : FragmentMoveSelectBinding ?= null
+
+    private var barLazy :View ?=null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +40,21 @@ class MoveSelectFragment :BaseFragment(){
         dataBinding?.lifecycleOwner = viewLifecycleOwner
         dataBinding?.vm = editState
 
+        when (argMsg.toSelectMsg.whatBarToEdit){
+            in 0..3 ->{// 应该加载带3个按钮的MovesBar
+                dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_moves
+                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.35F)
+            }
+            in 4..7 ->{// 应该加载oneMoveBar
+                dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_one_move
+                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.4F)
+            }
+        }
+
+        dataBinding?.moveSelectViewStub?.viewStub?.inflate()
+        // viewStub加载完成之后，要在onViewCreate那里才能找到加载的view
+
+
         return view
     }
 
@@ -43,6 +64,18 @@ class MoveSelectFragment :BaseFragment(){
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             editState.editEventState.emit(2)// 发射数据，告诉EditFragment等会是从这里回退
         }
+
+        barLazy = requireView().findViewById(R.id.moveSelect_bar)
+        // 在这里可以找到加载布局的控件
+
+//        try {
+//            barLazy = requireView().findViewById(R.id.moveSelect_bar)
+////            val tempBar :MovesBar = barLazy as MovesBar // 做不到强制转换，因为这不是一个view，而是一个layout，所以要靠
+//            val tempImg = barLazy?.findViewById<ImageView>(R.id.bar_move_0)
+//            tempImg!!.setImageResource(R.drawable.ic_faejin)
+//        } catch (e :Exception){
+//            Log.e(TAG, "onCreateView: ", e)
+//        }
 
     }
 

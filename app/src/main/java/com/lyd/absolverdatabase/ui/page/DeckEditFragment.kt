@@ -11,14 +11,13 @@ import androidx.navigation.navGraphViewModels
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
+import com.lyd.absolverdatabase.bridge.data.bean.EditToSelectMsg
 import com.lyd.absolverdatabase.bridge.state.DeckEditState
 import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentDeckEditBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.widgets.DeckDetailDialog
-import com.lyd.absolverdatabase.utils.DeckGenerate
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class DeckEditFragment :BaseFragment() {
 
@@ -64,9 +63,49 @@ class DeckEditFragment :BaseFragment() {
         }
 
         dataBinding?.apply {
-            deckEditBarUpperRight.setOnClickListener {
-                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment())
-            }
+            deckEditBarUpperRight.initClick(clickProxy = { view: View ->
+                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
+                    EditToSelectMsg(EditToSelectMsg.SEQ_UPPER_RIGHT)
+                ))
+            })
+            deckEditBarUpperLeft.initClick(clickProxy = {
+                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
+                    EditToSelectMsg(EditToSelectMsg.SEQ_UPPER_LEFT)
+                ))
+            })
+            deckEditBarLowerLeft.initClick(clickProxy = {
+                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
+                    EditToSelectMsg(EditToSelectMsg.SEQ_LOWER_LEFT)
+                ))
+            })
+            deckEditBarLowerRight.initClick(clickProxy = {
+                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
+                    EditToSelectMsg(EditToSelectMsg.SEQ_LOWER_RIGHT)
+                ))
+            })
+
+
+            deckEditOptionalUpperRight.initClick(clickProxy = {view: View ->
+                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
+                    EditToSelectMsg(EditToSelectMsg.OPT_UPPER_RIGHT)
+                ))
+            })
+            deckEditOptionalUpperLeft.initClick(clickProxy = {
+                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
+                    EditToSelectMsg(EditToSelectMsg.OPT_UPPER_LEFT)
+                ))
+            })
+            deckEditOptionalLowerLeft.initClick(clickProxy = {
+                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
+                    EditToSelectMsg(EditToSelectMsg.OPT_LOWER_LEFT)
+                ))
+            })
+            deckEditOptionalLowerRight.initClick(clickProxy = {
+                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
+                    EditToSelectMsg(EditToSelectMsg.OPT_LOWER_RIGHT)
+                ))
+            })
+
         }
 
         dataBinding?.apply {
@@ -90,6 +129,9 @@ class DeckEditFragment :BaseFragment() {
                     }
                     2 ->{
                         Log.i(TAG, "editEventState: 从moveSelect那回退来的")
+                    }
+                    else ->{
+                        Log.i(TAG, "onViewCreated: 不知道，就当从从deckFragment点进来的")
                     }
                 }
             }

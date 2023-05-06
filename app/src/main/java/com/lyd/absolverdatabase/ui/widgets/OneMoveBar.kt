@@ -3,6 +3,7 @@ package com.lyd.absolverdatabase.ui.widgets
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.lyd.absolverdatabase.R
@@ -28,6 +29,13 @@ class OneMoveBar :LinearLayout{
 
         startSide.setImageResource(SideUtil.imgId(initStartSide))
         endSide.setImageResource(SideUtil.imgId(initEndSide))
+    }
+
+
+    fun initClick(clickProxy :(view:View)->Unit = {}){
+        img.setOnClickListener {
+            clickProxy.invoke(it)
+        }
     }
 
     private fun findViews(){
