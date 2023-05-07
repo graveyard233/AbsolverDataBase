@@ -49,9 +49,9 @@
 
     <ImageView
         android:id="@+id/bar_move_side_0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_upper_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:srcCompat="@drawable/upper_right_bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bar_move_line_10"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,9 +72,9 @@
 
     <ImageView
         android:id="@+id/bar_move_side_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_upper_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:srcCompat="@drawable/upper_right_bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bar_move_line_40"
         app:layout_constraintStart_toStartOf="@+id/bar_move_line_30"
@@ -95,9 +95,9 @@
 
     <ImageView
         android:id="@+id/bar_move_side_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_upper_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:srcCompat="@drawable/upper_right_bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/bar_move_line_70"
         app:layout_constraintStart_toStartOf="@+id/bar_move_line_60"
@@ -118,9 +118,9 @@
 
     <ImageView
         android:id="@+id/bar_move_side_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_upper_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:srcCompat="@drawable/upper_right_bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/bar_move_line_90"
