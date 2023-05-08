@@ -10,8 +10,8 @@ import com.lyd.absolverdatabase.ui.page.DeckEditFragment
 import com.lyd.absolverdatabase.ui.page.MoveSelectFragment
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 /**用于[DeckEditFragment]和[MoveSelectFragment]，在这里写的函数要标注好给哪个fragment用*/
@@ -20,30 +20,80 @@ class DeckEditState(private val repository: DeckEditRepository,
 {
     private val TAG = "${javaClass.simpleName}-${hashCode()}"
 
-    init {
-        savedState["deckInSaved"] = DeckGenerate.generateEmptyDeck()
+    fun fromDeckToEdit(){
+        savedState["deckInSaved"] = DeckGenerate.generateEmptyDeck(isFromDeckToEdit = true)
     }
-    /**
-     * 状态是1的话，说明是从卡组列表界面点进来的
-     * 状态是2的话，是从moveSelect中退回来的
-     * */
-    val editEventState = MutableSharedFlow<Int>(replay = 1)
 
     fun getDeckInSaved() : Deck? = savedState.get<Deck>("deckInSaved")
+    fun saveDeckInSaved(deck: Deck) {
+        savedState.set("deckInSaved", deck)
+        // 保存的时候应该还要触发序列sharedFlow的变化
+    }
 
-    fun saveDeckInSaved(deck: Deck) = savedState.set("deckInSaved",deck)
+    val deckInSaved = savedState.getStateFlow("deckInSaved",DeckGenerate.generateEmptyDeck())
+        .shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            replay = 0
+        )
 
-    // 我可以用stateFlow来说明现在的状态，比如
-    // 1，说明是从卡组列表界面点进来的
-    // 2，从moveSelect中退回来的，这时候需要获取
-    // 这里用saveState存一个deck，等保存的时候用，而上面的状态改变都应该触发这个deck的保存变更
-    // 剩下的用没有缓存的sharedFlow来避免倒灌，只要这些sharedFlow变化就保存那个deck
 
-    val sequenceUpperRight :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
-    val sequenceUpperLeft :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
-    val sequenceLowerLeft :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
-    val sequenceLowerRight :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
 
+
+
+    val optUpperRight :MutableSharedFlow<Int> = MutableSharedFlow()
+    val optUpperLeft :MutableSharedFlow<Int> = MutableSharedFlow()
+    val optLowerLift :MutableSharedFlow<Int> = MutableSharedFlow()
+    val optLowerRight :MutableSharedFlow<Int> = MutableSharedFlow()
+
+    private val _sequenceUpperRight :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
+    private val _sequenceUpperLeft :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
+    private val _sequenceLowerLeft :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
+    private val _sequenceLowerRight :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
+
+    val sequenceUpperRight = _sequenceUpperRight.asSharedFlow()
+    val sequenceUpperLeft  = _sequenceUpperLeft .asSharedFlow()
+    val sequenceLowerLeft  = _sequenceLowerLeft .asSharedFlow()
+    val sequenceLowerRight = _sequenceLowerRight.asSharedFlow()
+
+    suspend fun updateSeqUpperRight(list :MutableList<Int>) = _sequenceUpperRight.emit(list)
+    suspend fun updateSeqUpperLeft(list :MutableList<Int>) = _sequenceUpperLeft.emit(list)
+    suspend fun updateSeqLowerLeft(list :MutableList<Int>) = _sequenceLowerLeft.emit(list)
+    suspend fun updateSeqLowerRight(list :MutableList<Int>) = _sequenceLowerRight.emit(list)
+
+    fun updateAllOption(deck: Deck){
+        viewModelScope.launch(Dispatchers.IO){
+            launch {
+                optUpperRight.emit(deck.optionalUpperRight)
+            }
+            launch {
+                optUpperLeft.emit(deck.optionalUpperLeft)
+            }
+            launch {
+                optLowerLift.emit(deck.optionalLowerLeft)
+            }
+            launch {
+                optLowerRight.emit(deck.optionalLowerRight)
+            }
+        }
+    }
+
+    fun updateAllSequence(deck: Deck){// 千万不要修改这个deck的属性
+        viewModelScope.launch/*(Dispatchers.IO)*/{
+            launch {
+                updateSeqUpperRight(deck.sequenceUpperRight)
+            }
+            launch {
+                updateSeqUpperLeft(deck.sequenceUpperLeft)
+            }
+            launch {
+                updateSeqLowerLeft(deck.sequenceLowerLeft)
+            }
+            launch {
+                updateSeqLowerRight(deck.sequenceLowerRight)
+            }
+        }
+    }
 
     suspend fun getOriginListByIdsTest(idList: List<Int>):List<MoveOrigin>{
         val list = repository.getOriginListByIds(idList)

@@ -17,7 +17,10 @@ import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentDeckEditBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.widgets.DeckDetailDialog
+import com.lyd.absolverdatabase.utils.DeckGenerate
+import com.lyd.absolverdatabase.utils.TimeUtils
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class DeckEditFragment :BaseFragment() {
 
@@ -47,20 +50,6 @@ class DeckEditFragment :BaseFragment() {
         dataBinding?.lifecycleOwner = viewLifecycleOwner
 
         Log.i(TAG, "onCreateView: ${args.deckForEdit}")
-        _deckForEdit= args.deckForEdit
-
-
-        if (_deckForEdit.createTime == 0L){// 这个deck是个空壳
-            // 是创建流程
-
-//            viewLifecycleOwner.lifecycleScope.launch {
-//                editState.getOriginListByIdsTest(listOf(0,1,2)).apply {
-//                    dataBinding?.deckEditBarUpperRight?.initOriginMoves(this)
-//                }
-//            }
-        } else {
-            // 编辑卡组
-        }
 
         dataBinding?.apply {
             deckEditBarUpperRight.initClick(clickProxy = { view: View ->
@@ -106,6 +95,11 @@ class DeckEditFragment :BaseFragment() {
                 ))
             })
 
+            deckEditeFabSave.setOnClickListener { view ->
+                showShortToast("保存卡组")
+                editState.saveDeckInSaved(_deckForEdit.copy(updateTime = TimeUtils.curTime))
+            }
+
         }
 
         dataBinding?.apply {
@@ -122,24 +116,74 @@ class DeckEditFragment :BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            editState.editEventState.collectLatest { event->
-                when(event){
-                    1 ->{
-                        Log.i(TAG, "editEventState: 从deckFragment点进来的")
-                    }
-                    2 ->{
-                        Log.i(TAG, "editEventState: 从moveSelect那回退来的")
-                    }
-                    else ->{
-                        Log.i(TAG, "onViewCreated: 不知道，就当从从deckFragment点进来的")
-                    }
-                }
+            editState.sequenceUpperRight.collectLatest {
+                Log.i(TAG, "接收sequenceUpperRight: $it")
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            editState.sequenceUpperLeft.collectLatest {
+                Log.i(TAG, "sequenceUpperLeft: $it")
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            editState.sequenceLowerLeft.collectLatest {
+                Log.i(TAG, "sequenceLowerLeft: $it")
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            editState.sequenceLowerRight.collectLatest {
+                Log.i(TAG, "sequenceLowerRight: $it")
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            editState.sequenceUpperRight.collectLatest {
+            launch {
+                editState.optUpperRight.collectLatest {
+                    Log.i(TAG, "optUpperRight-> $it")
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            launch {
+                editState.optUpperLeft.collectLatest {
+                    Log.i(TAG, "optUpperLeft-> $it")
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            launch {
+                editState.optLowerLift.collectLatest {
+                    Log.i(TAG, "optLowerLift-> $it")
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            launch {
+                editState.optLowerRight.collectLatest {
+                    Log.i(TAG, "optLowerRight-> $it")
+                }
+            }
+        }
 
+        // 注意，这个必须放在最后，免得发射的时间比建立监听的时间还快
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            editState.deckInSaved.collectLatest { deckInSave ->
+                // 这里能够获取到最新的编辑卡组的数据
+                // 不论怎么样，都是需要变更布局的
+                if (deckInSave == DeckGenerate.generateEmptyDeck(isFromDeckToEdit = true)){
+                    // 可以判断为是空卡组，是从deckFragment跳转进来的
+                    _deckForEdit = args.deckForEdit
+                    Log.i(TAG, "deckInSaved: 从deckFragment跳转进来的，进行数据存储，然后返回")
+                    editState.saveDeckInSaved(_deckForEdit.also { if (it.updateTime == 1L) it.updateTime = 0L})
+                    return@collectLatest
+                } else {
+                    // 不相等，是从其他界面切回来的，因为假如是从deckFragment跳转，则会将其设置为空卡组且isFromDeckToEdit = true
+                    _deckForEdit = deckInSave
+                    Log.i(TAG, "deckInSaved: 不相等，是从其他界面切回来的")
+                }
+                // 这里应该触发招式序列list的变化，进行初始化，让bar自己判断需不需要变更bg
+                editState.updateAllSequence(_deckForEdit)
+                editState.updateAllOption(_deckForEdit)
             }
         }
 

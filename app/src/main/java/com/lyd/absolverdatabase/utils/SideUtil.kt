@@ -11,7 +11,7 @@ object SideUtil {
     val LOWER_RIGHT = 3
 
     @DrawableRes
-    fun imgId(sideInt: Int):Int{
+    fun imgIdForOneMove(sideInt: Int):Int{
         return when(sideInt){
             UPPER_RIGHT -> R.drawable.ic_upper_right
             UPPER_LEFT ->R.drawable.ic_upper_left
@@ -21,13 +21,12 @@ object SideUtil {
         }
     }
     @DrawableRes
-    fun imgIdBySide(side: StandSide):Int{
+    fun imgIdForMoves(side: StandSide):Int{
         return when(side){
-            StandSide.UPPER_RIGHT -> R.drawable.upper_right_bold
-            StandSide.UPPER_LEFT ->R.drawable.upper_left_bold
-            StandSide.LOWER_LEFT ->R.drawable.lower_left_bold
-            StandSide.LOWER_RIGHT ->R.drawable.lower_right_bold
-            else ->R.drawable.upper_right_bold
+            StandSide.UPPER_RIGHT -> R.drawable.ic_upper_right_bold
+            StandSide.UPPER_LEFT ->R.drawable.ic_upper_left_bold
+            StandSide.LOWER_LEFT ->R.drawable.ic_lower_left_bold
+            StandSide.LOWER_RIGHT ->R.drawable.ic_lower_right_bold
         }
     }
 }

@@ -23,6 +23,8 @@ import com.google.android.material.color.MaterialColors
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.DeckType
+import com.lyd.absolverdatabase.bridge.state.DeckEditState
+import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.bridge.state.DeckState
 import com.lyd.absolverdatabase.bridge.state.DeckViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentDeckBinding
@@ -41,6 +43,10 @@ class DeckFragment :BaseFragment() {
     private val deckState : DeckState by navGraphViewModels(navGraphId = R.id.nav_deck, factoryProducer = {
         DeckViewModelFactory((mActivity?.application as App).deckRepository)
     })
+    private val editState : DeckEditState by navGraphViewModels(navGraphId = R.id.nav_deck, factoryProducer = {
+        DeckEditViewModelFactory((mActivity?.application as App).deckEditRepository)
+    })
+
 
     private var lastBgColor = Color.TRANSPARENT
 
@@ -48,6 +54,8 @@ class DeckFragment :BaseFragment() {
         DeckAdapter().apply {
             addOnItemChildClickListener(R.id.item_deck_constraint){adapter, view, position ->
                 Log.i(TAG, "onclick: ${getItem(position)}")
+                // 前往编辑界面，注意一定要把editState的forEdit的卡组置空
+                editState.fromDeckToEdit()
                 nav().navigate(DeckFragmentDirections.actionDeckFragmentToDeckEditFragment(getItem(position)!!))
             }
             addOnItemChildLongClickListener(R.id.item_deck_constraint){adapter, view, position ->
@@ -84,7 +92,7 @@ class DeckFragment :BaseFragment() {
     private val deckHeaderAdapter :DeckHeaderAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         DeckHeaderAdapter().apply {
             setOnItemClickListener(){_,_,_ ->
-                Log.i(TAG, "head: on click")
+                editState.fromDeckToEdit()
                 nav().navigate(DeckFragmentDirections.actionDeckFragmentToDeckEditFragment(
                     DeckGenerate.generateEmptyDeck(deckType = getDeckTypeByPosition(deckState.choiceFlow.value)))
                 )

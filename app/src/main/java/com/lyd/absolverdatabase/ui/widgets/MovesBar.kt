@@ -105,12 +105,12 @@ class MovesBar : ConstraintLayout {
     private fun setSideImg(startView: ImageView?,endView: ImageView?,move: MoveOrigin){
         startView?.apply {
             GlideApp.with(this)
-                .load(SideUtil.imgIdBySide(move.startSide))
+                .load(SideUtil.imgIdForMoves(move.startSide))
                 .into(this)
         }
         endView?.apply {
             GlideApp.with(this)
-                .load(SideUtil.imgIdBySide(move.endSide))
+                .load(SideUtil.imgIdForMoves(move.endSide))
                 .into(this)
         }
     }

@@ -27,8 +27,8 @@ class OneMoveBar :LinearLayout{
 
         findViews()
 
-        startSide.setImageResource(SideUtil.imgId(initStartSide))
-        endSide.setImageResource(SideUtil.imgId(initEndSide))
+        startSide.setImageResource(SideUtil.imgIdForOneMove(initStartSide))
+        endSide.setImageResource(SideUtil.imgIdForOneMove(initEndSide))
     }
 
 

@@ -9,11 +9,13 @@ import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.tabs.TabLayoutMediator
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.state.DeckEditState
 import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentMoveSelectBinding
+import com.lyd.absolverdatabase.ui.adapter.MovePagerAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import kotlinx.coroutines.flow.collectLatest
 
@@ -53,7 +55,19 @@ class MoveSelectFragment :BaseFragment(){
 
         dataBinding?.moveSelectViewStub?.viewStub?.inflate()
         // viewStub加载完成之后，要在onViewCreate那里才能找到加载的view
-
+        dataBinding?.apply {
+            val movePagerAdapter = MovePagerAdapter(this@MoveSelectFragment)
+            moveSelectPager?.adapter = movePagerAdapter
+            val iconList = listOf<Int>(R.drawable.ic_upper_right_bold,R.drawable.ic_upper_left_bold,
+            R.drawable.ic_lower_left_bold,R.drawable.ic_lower_right_bold)
+            if (moveSelectTab != null) {
+                if (moveSelectPager != null) {
+                    TabLayoutMediator(moveSelectTab,moveSelectPager){tab, position ->
+                        tab.setIcon(iconList[position])
+                    }.attach()
+                }
+            }
+        }
 
         return view
     }
@@ -61,9 +75,6 @@ class MoveSelectFragment :BaseFragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            editState.editEventState.emit(2)// 发射数据，告诉EditFragment等会是从这里回退
-        }
 
         barLazy = requireView().findViewById(R.id.moveSelect_bar)
         // 在这里可以找到加载布局的控件

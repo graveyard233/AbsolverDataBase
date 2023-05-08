@@ -114,11 +114,11 @@ object DeckGenerate{
     /**
      * 序列全为-1，size为3；自选攻击全为-1
      * */
-    fun generateEmptyDeck(deckType :DeckType = DeckType.HAND):Deck = Deck(
+    fun generateEmptyDeck(isFromDeckToEdit :Boolean = false,deckType :DeckType = DeckType.HAND):Deck = Deck(
         name = "",
         deckType = deckType,
         deckStyle = Style.WINDFALL,
-        updateTime = 0L,
+        updateTime = if (isFromDeckToEdit) 1L else 0L,
         createTime = 0L,
         note = "",
         sequenceUpperRight = mutableListOf(-1,-1,-1),

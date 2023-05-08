@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/deck_edit_constrainBg"
+            android:id="@+id/deckEdit_constrainBg"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -46,56 +46,56 @@
                 app:layout_constraintGuide_percent="0.05" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/deck_edit_horizontal_line_5"
+                android:id="@+id/deckEdit_horizontal_line_5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.05" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/deck_edit_horizontal_line_15"
+                android:id="@+id/deckEdit_horizontal_line_15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.15" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/deck_edit_horizontal_line_20"
+                android:id="@+id/deckEdit_horizontal_line_20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.2" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/deck_edit_horizontal_line_30"
+                android:id="@+id/deckEdit_horizontal_line_30"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.3" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/deck_edit_horizontal_line_35"
+                android:id="@+id/deckEdit_horizontal_line_35"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.35" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/deck_edit_horizontal_line_45"
+                android:id="@+id/deckEdit_horizontal_line_45"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.45" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/deck_edit_horizontal_line_50"
+                android:id="@+id/deckEdit_horizontal_line_50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.5" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/deck_edit_horizontal_line_60"
+                android:id="@+id/deckEdit_horizontal_line_60"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -103,44 +103,44 @@
 
 
             <com.lyd.absolverdatabase.ui.widgets.MovesBar
-                android:id="@+id/deck_edit_bar_upperRight"
+                android:id="@+id/deckEdit_bar_upperRight"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:startStandSide="@drawable/upper_right_bold"
-                app:layout_constraintBottom_toTopOf="@+id/deck_edit_horizontal_line_15"
+                app:startStandSide="@drawable/ic_upper_right_bold"
+                app:layout_constraintBottom_toTopOf="@+id/deckEdit_horizontal_line_15"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/deck_edit_horizontal_line_5" />
+                app:layout_constraintTop_toTopOf="@+id/deckEdit_horizontal_line_5" />
 
             <com.lyd.absolverdatabase.ui.widgets.MovesBar
-                android:id="@+id/deck_edit_bar_upperLeft"
+                android:id="@+id/deckEdit_bar_upperLeft"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:startStandSide="@drawable/upper_left_bold"
-                app:layout_constraintBottom_toTopOf="@+id/deck_edit_horizontal_line_30"
+                app:startStandSide="@drawable/ic_upper_left_bold"
+                app:layout_constraintBottom_toTopOf="@+id/deckEdit_horizontal_line_30"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/deck_edit_horizontal_line_20" />
+                app:layout_constraintTop_toTopOf="@+id/deckEdit_horizontal_line_20" />
 
             <com.lyd.absolverdatabase.ui.widgets.MovesBar
-                android:id="@+id/deck_edit_bar_lowerLeft"
+                android:id="@+id/deckEdit_bar_lowerLeft"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:startStandSide="@drawable/lower_left_bold"
-                app:layout_constraintBottom_toTopOf="@+id/deck_edit_horizontal_line_45"
+                app:startStandSide="@drawable/ic_lower_left_bold"
+                app:layout_constraintBottom_toTopOf="@+id/deckEdit_horizontal_line_45"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/deck_edit_horizontal_line_35" />
+                app:layout_constraintTop_toTopOf="@+id/deckEdit_horizontal_line_35" />
 
             <com.lyd.absolverdatabase.ui.widgets.MovesBar
-                android:id="@+id/deck_edit_bar_lowerRight"
+                android:id="@+id/deckEdit_bar_lowerRight"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:startStandSide="@drawable/lower_right_bold"
-                app:layout_constraintBottom_toTopOf="@+id/deck_edit_horizontal_line_60"
+                app:startStandSide="@drawable/ic_lower_right_bold"
+                app:layout_constraintBottom_toTopOf="@+id/deckEdit_horizontal_line_60"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/deck_edit_horizontal_line_50" />
+                app:layout_constraintTop_toTopOf="@+id/deckEdit_horizontal_line_50" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline6"
@@ -171,7 +171,7 @@
                 app:layout_constraintGuide_percent="0.87" />
 
             <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
-                android:id="@+id/deck_edit_optional_upperRight"
+                android:id="@+id/deckEdit_optional_upperRight"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:startSide="upperRight"
@@ -182,7 +182,7 @@
                 app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
             <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
-                android:id="@+id/deck_edit_optional_upperLeft"
+                android:id="@+id/deckEdit_optional_upperLeft"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:startSide="upperLeft"
@@ -193,7 +193,7 @@
                 app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
             <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
-                android:id="@+id/deck_edit_optional_lowerLeft"
+                android:id="@+id/deckEdit_optional_lowerLeft"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:endSide="lowerLeft"
@@ -204,7 +204,7 @@
                 app:layout_constraintTop_toTopOf="@+id/guideline13" />
 
             <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
-                android:id="@+id/deck_edit_optional_lowerRight"
+                android:id="@+id/deckEdit_optional_lowerRight"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:endSide="lowerRight"
@@ -213,6 +213,18 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline22"
                 app:layout_constraintStart_toStartOf="@+id/guideline21"
                 app:layout_constraintTop_toTopOf="@+id/guideline13" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/deckEdite_fab_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?attr/floatingActionButtonStyle"
+                app:srcCompat="@drawable/ic_save_deck"
+                app:layout_constraintBottom_toTopOf="@+id/guideline6"
+                app:layout_constraintEnd_toStartOf="@+id/guideline21"
+                app:layout_constraintStart_toStartOf="@+id/guideline16"
+                app:layout_constraintTop_toTopOf="@+id/guideline6"
+                 />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
