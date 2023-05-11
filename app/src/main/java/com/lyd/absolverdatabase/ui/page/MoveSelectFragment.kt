@@ -56,7 +56,9 @@ class MoveSelectFragment :BaseFragment(){
         dataBinding?.moveSelectViewStub?.viewStub?.inflate()
         // viewStub加载完成之后，要在onViewCreate那里才能找到加载的view
         dataBinding?.apply {
-            val movePagerAdapter = MovePagerAdapter(this@MoveSelectFragment)
+            val movePagerAdapter = MovePagerAdapter(this@MoveSelectFragment, forOnSelect = {
+                Log.i(TAG, "onCreateView: get ForOnSelect $it")
+            })
             moveSelectPager?.adapter = movePagerAdapter
             val iconList = listOf<Int>(R.drawable.ic_upper_right_bold,R.drawable.ic_upper_left_bold,
             R.drawable.ic_lower_left_bold,R.drawable.ic_lower_right_bold)

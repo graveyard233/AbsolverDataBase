@@ -29,4 +29,14 @@ object SideUtil {
             StandSide.LOWER_RIGHT ->R.drawable.ic_lower_right_bold
         }
     }
+
+    fun getSideByInt(@androidx.annotation.IntRange(0,3) sideInt: Int):StandSide {
+        return when(sideInt){
+            UPPER_RIGHT -> StandSide.UPPER_RIGHT
+            UPPER_LEFT -> StandSide.UPPER_LEFT
+            LOWER_LEFT -> StandSide.LOWER_LEFT
+            LOWER_RIGHT -> StandSide.LOWER_RIGHT
+            else -> StandSide.UPPER_RIGHT
+        }
+    }
 }
