@@ -29,13 +29,13 @@ class ColorBoardFragment :BaseFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        scroll.setOnScrollChangeListener { _, l, t, oldl, oldt ->
-            if (oldt < t && ((t - oldt) > 15)) {// 向上滑动
-                (mActivity as MainActivity).hideOrShowBottomNav(0)
-                (parentFragment as DataFragment).hideOrShowTab(0)
-            } else if (oldt > t && (oldt - t) > 15){// 向下滑动
-                (mActivity as MainActivity).hideOrShowBottomNav(1)
-            }
-        }
+//        scroll.setOnScrollChangeListener { _, l, t, oldl, oldt ->
+//            if (oldt < t && ((t - oldt) > 15)) {// 向上滑动
+//                (mActivity as MainActivity).hideOrShowBottomNav(0)
+//                (parentFragment as DataFragment).hideOrShowTab(0)
+//            } else if (oldt > t && (oldt - t) > 15){// 向下滑动
+//                (mActivity as MainActivity).hideOrShowBottomNav(1)
+//            }
+//        }
     }
 }

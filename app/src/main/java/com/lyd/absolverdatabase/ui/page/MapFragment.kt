@@ -41,7 +41,7 @@ class MapFragment :BaseFragment(){
 
                 override fun onScaleChanged(newScale: Float, origin: Int) {
                     // 应该判断newScale和上一次比较来判断是缩小还是放大
-                    (mActivity as MainActivity).hideOrShowBottomNav(if (newScale > oldScale) 0 else 1)
+//                    (mActivity as MainActivity).hideOrShowBottomNav(if (newScale > oldScale) 0 else 1)
                     (parentFragment as DataFragment).hideOrShowTab(if (newScale > oldScale) 0 else 1)
                     oldScale = newScale
                 }

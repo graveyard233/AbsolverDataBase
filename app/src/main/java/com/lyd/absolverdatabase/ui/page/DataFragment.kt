@@ -30,10 +30,10 @@ class DataFragment : BaseFragment() {
                 super.onPageSelected(position)
                 if (position == 1){
                     hideTab()
-                    (mActivity as MainActivity).hideOrShowBottomNav(0)
+//                    (mActivity as MainActivity).hideOrShowBottomNav(0)
                 } else {// 滑到其他页面的时候要显示tab和nav
                     showTab()
-                    (mActivity as MainActivity).hideOrShowBottomNav(1)
+//                    (mActivity as MainActivity).hideOrShowBottomNav(1)
                 }
 
             }

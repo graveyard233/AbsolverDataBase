@@ -197,11 +197,11 @@ class LearnFragment : BaseFragment() {
                     super.onScrolled(recyclerView, dx, dy)
                     if (dy < 0){// 当前处于上滑状态
                         // 显示navigation
-                        (mActivity as MainActivity).hideOrShowBottomNav(1)
+//                        (mActivity as MainActivity).hideOrShowBottomNav(1)
 
                     } else if (dy > 0){// 当前处于下滑状态
                         // 藏起navigation
-                        (mActivity as MainActivity).hideOrShowBottomNav(0)
+//                        (mActivity as MainActivity).hideOrShowBottomNav(0)
                     }
                 }
             })
