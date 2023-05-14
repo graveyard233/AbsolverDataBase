@@ -3,7 +3,9 @@ package com.lyd.absolverdatabase.bridge.state
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.lyd.absolverdatabase.bridge.data.bean.AttackTowardOption
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
+import com.lyd.absolverdatabase.bridge.data.bean.FilterOption
 import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
 import com.lyd.absolverdatabase.bridge.data.repository.DeckEditRepository
 import com.lyd.absolverdatabase.ui.page.DeckEditFragment
@@ -102,6 +104,22 @@ class DeckEditState(private val repository: DeckEditRepository,
 //        }
         return list
 
+    }
+
+
+    /**给moveSelectFragment用的筛选类*/
+    private val _filterOptionFlow :MutableSharedFlow<FilterOption> = MutableSharedFlow(replay = 1)
+    val filterOptionFlow = _filterOptionFlow.asSharedFlow()
+
+    fun initFilterOption(){
+        viewModelScope.launch(Dispatchers.IO){
+            _filterOptionFlow.emit(FilterOption(AttackTowardOption.all()))
+        }
+    }
+    fun changeFilter(){
+        viewModelScope.launch(Dispatchers.IO){
+            _filterOptionFlow.emit(FilterOption(AttackTowardOption.getRandomOption()))
+        }
     }
 
 }

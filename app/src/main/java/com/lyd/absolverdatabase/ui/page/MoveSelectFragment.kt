@@ -79,6 +79,7 @@ class MoveSelectFragment :BaseFragment(){
 
 
         barLazy = requireView().findViewById(R.id.moveSelect_bar)
+        Log.i(TAG, "onViewCreated: editState->${editState.hashCode()}")
         // 在这里可以找到加载布局的控件
 
 //        try {

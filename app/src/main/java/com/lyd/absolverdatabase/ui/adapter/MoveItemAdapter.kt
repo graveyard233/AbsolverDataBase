@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.constraintlayout.widget.Guideline
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.lyd.absolverdatabase.GlideApp
@@ -21,6 +23,8 @@ class MoveItemAdapter :BaseQuickAdapter<MoveForSelect,MoveItemAdapter.VH>() {
                 .load(AssetsUtil.getBitmapByMoveId(context, moveId = item.moveOrigin.id))
                 .error(R.drawable.ic_video_load_error)
                 .into(holder.img)
+            holder.moveName.text = moveOrigin.name
+            holder.imgSelect.visibility = if (item.isSelected) View.VISIBLE else View.GONE
         }
     }
 
@@ -31,6 +35,8 @@ class MoveItemAdapter :BaseQuickAdapter<MoveForSelect,MoveItemAdapter.VH>() {
 
     inner class VH(item :View) :RecyclerView.ViewHolder(item){
         val img = item.findViewById<ImageView>(R.id.item_move_img)
+        val moveName = item.findViewById<TextView>(R.id.item_move_name)
+        val imgSelect = item.findViewById<ImageView>(R.id.item_move_isSelect)
     }
 
 }

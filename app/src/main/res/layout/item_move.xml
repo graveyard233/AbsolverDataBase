@@ -3,16 +3,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="125dp">
 
     <ImageView
         android:id="@+id/item_move_img"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/item_move_guideLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:src="@drawable/move_example_0" />
+
+    <ImageView
+        android:id="@+id/item_move_isSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/item_move_guideLine"
+        app:layout_constraintEnd_toEndOf="@+id/item_move_img"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_is_select" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/item_move_guideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <LinearLayout
+        android:id="@+id/item_move_msgLinear"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/move_example_0" />
+        app:layout_constraintTop_toBottomOf="@+id/item_move_guideLine">
+
+        <TextView
+            android:id="@+id/item_move_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textAppearance="?textAppearanceTitleMedium"
+            tools:text="回旋吸顶"/>
+
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

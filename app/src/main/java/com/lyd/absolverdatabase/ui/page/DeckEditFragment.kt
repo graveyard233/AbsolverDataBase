@@ -53,6 +53,7 @@ class DeckEditFragment :BaseFragment() {
 
         dataBinding?.apply {
             deckEditBarUpperRight.initClick(clickProxy = { view: View ->
+                editState.initFilterOption()
                 nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
                     EditToSelectMsg(EditToSelectMsg.SEQ_UPPER_RIGHT)
                 ))
