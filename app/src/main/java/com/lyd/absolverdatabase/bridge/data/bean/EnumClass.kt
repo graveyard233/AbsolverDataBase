@@ -37,16 +37,16 @@ enum class AttackAltitude {
 enum class AttackDirection {
     HORIZONTAL, VERTICAL, POKE
 }
-enum class MoveEffect {
-    STOP,// 停止
-    DODGE_UP,// 上闪
-    DODGE_LOW,// 下闪
-    DODGE_SIDE,// 侧闪
-    BREAK_DEFENCES,// 破防
-    SUPER_ARMOR,// 霸体
-    BLOCK_COUNTER,// 格挡反击
-    DOUBLE_ATTACK,// 二段
-    MID_LINE,// 中线
-    MENTAL_BLOW,// 精神打击
-    NULL// 无效果
+enum class MoveEffect(val str: String) {
+    STOP("停止"),// 停止
+    DODGE_UP("上闪"),// 上闪
+    DODGE_LOW("下闪"),// 下闪
+    DODGE_SIDE("侧闪"),// 侧闪
+    BREAK_DEFENCES("破防"),// 破防
+    SUPER_ARMOR("霸体"),// 霸体
+    BLOCK_COUNTER("格挡反击"),// 格挡反击
+    DOUBLE_ATTACK("二段"),// 二段
+    MID_LINE("中线"),// 中线
+    MENTAL_BLOW("精神打击"),// 精神打击
+    NULL("无效果")// 无效果
 }

@@ -3,16 +3,12 @@ package com.lyd.absolverdatabase.bridge.state
 import android.util.Log
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.lyd.absolverdatabase.bridge.data.bean.AttackTowardOption
-import com.lyd.absolverdatabase.bridge.data.bean.Deck
-import com.lyd.absolverdatabase.bridge.data.bean.FilterOption
-import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
+import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.DeckEditRepository
 import com.lyd.absolverdatabase.ui.page.DeckEditFragment
 import com.lyd.absolverdatabase.ui.page.MoveSelectFragment
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -97,28 +93,34 @@ class DeckEditState(private val repository: DeckEditRepository,
         }
     }
 
-    suspend fun getOriginListByIdsTest(idList: List<Int>):List<MoveOrigin>{
-        val list = repository.getOriginListByIds(idList)
-//        list.forEach {
-//            Log.i(TAG, "getOriginListByIdsTest: $it")
-//        }
-        return list
-
-    }
-
-
     /**给moveSelectFragment用的筛选类*/
-    private val _filterOptionFlow :MutableSharedFlow<FilterOption> = MutableSharedFlow(replay = 1)
-    val filterOptionFlow = _filterOptionFlow.asSharedFlow()
-
-    fun initFilterOption(){
+    private val _filterOptionFlow :MutableStateFlow<FilterOption> = MutableStateFlow(FilterOption(AttackTowardOption.all(),
+        AttackAltitudeOption.all(), AttackDirectionOption.all()))
+    val filterOptionFlow = _filterOptionFlow.asStateFlow()
+    fun changeFilter(filter :FilterOption){
         viewModelScope.launch(Dispatchers.IO){
-            _filterOptionFlow.emit(FilterOption(AttackTowardOption.all()))
+            Log.i(TAG, "changeFilter: 发射filter")
+            _filterOptionFlow.update { filter.copy() }// 注意，这里要发copy，不然stateFlow会看是同一个引用然后不更新
         }
     }
-    fun changeFilter(){
+    fun initFilterOption(){
         viewModelScope.launch(Dispatchers.IO){
-            _filterOptionFlow.emit(FilterOption(AttackTowardOption.getRandomOption()))
+            _filterOptionFlow.update { FilterOption(AttackTowardOption.all(),
+                AttackAltitudeOption.all(), AttackDirectionOption.all()) }
+        }
+    }
+
+    /**给moveRecycleFragment用的，传递选择的招式*/
+    private val _moveForSelectFlow :MutableStateFlow<MoveSelectFragment.MoveMsgState> = MutableStateFlow(value = MoveSelectFragment.MoveMsgState.SelectNull)
+    val moveForSelectFlow = _moveForSelectFlow.asStateFlow()
+    fun selectMove(moveForSelect: MoveForSelect){
+        viewModelScope.launch(Dispatchers.IO){
+            _moveForSelectFlow.emit(MoveSelectFragment.MoveMsgState.SelectOne(moveForSelect = moveForSelect))
+        }
+    }
+    fun initSelectMove(){
+        viewModelScope.launch(Dispatchers.IO){
+            _moveForSelectFlow.update { MoveSelectFragment.MoveMsgState.SelectNull }
         }
     }
 

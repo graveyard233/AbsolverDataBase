@@ -3,13 +3,7 @@ package com.lyd.absolverdatabase.bridge.data.repository.database.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.lyd.absolverdatabase.bridge.data.bean.AttackAltitude
-import com.lyd.absolverdatabase.bridge.data.bean.AttackDirection
-import com.lyd.absolverdatabase.bridge.data.bean.AttackToward
-import com.lyd.absolverdatabase.bridge.data.bean.MoveEffect
-import com.lyd.absolverdatabase.bridge.data.bean.MoveGP
-import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
-import com.lyd.absolverdatabase.bridge.data.bean.StandSide
+import com.lyd.absolverdatabase.bridge.data.bean.*
 
 @Dao
 interface MoveOriginDAO {
@@ -57,4 +51,9 @@ interface MoveOriginDAO {
             "where moveOrigin_tb.id in (:ids) ")
     suspend fun getMoveMapByIds(ids: List<Int>) :Map<MoveOrigin,MoveGP>
 
+    @Query("select * from moveOrigin_tb where startSide = :startSide and canHand = 1")// 注意，true在sql中是1和0
+    suspend fun getHandMoveByStartSide(startSide: StandSide) :List<MoveOrigin>
+
+    @Query("select * from moveOrigin_tb where startSide = :startSide and canSword = 1")
+    suspend fun getSwordMoveByStartSide(startSide: StandSide) :List<MoveOrigin>
 }

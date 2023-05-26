@@ -1,70 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            android:orientation="horizontal"
-            tools:background="?colorPrimaryContainer">
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                tools:srcCompat="@drawable/ic_upper_right"/>
 
-            <ImageView
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/ic_become"/>
+                android:orientation="vertical"
+                tools:background="?colorSecondaryContainer">
 
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                tools:srcCompat="@drawable/ic_upper_left"/>
+
+                <ImageView
+                    android:id="@+id/msg_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scaleType="fitXY"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:srcCompat="@drawable/move_example_0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
+
+        <TableLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TableRow android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/msg_startSideImg"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    tools:srcCompat="@drawable/ic_upper_right" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_become" />
+
+                <ImageView
+                    android:id="@+id/msg_endSideImg"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    tools:srcCompat="@drawable/ic_upper_left" />
+
+
+            </TableRow>
+
+            <TableRow android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/msg_name"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textAppearance="?textAppearanceTitleMedium"
+                    android:gravity="center"
+                    tools:text="直拳" />
+
+            </TableRow>
+
+            <TableRow android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/msg_strength"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textAppearance="?textAppearanceBodyMedium"
+                    android:gravity="center"
+                    tools:text="力度:轻" />
+
+                <TextView
+                    android:id="@+id/msg_range"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.3"
+                    android:textAppearance="?textAppearanceBodyMedium"
+                    android:gravity="center"
+                    tools:text="范围:2.01" />
+
+            </TableRow>
+
+            <TableRow android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/msg_attackTowardDetail"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    android:gravity="center"
+                    tools:text="左中位纵向" />
+
+            </TableRow>
+
+            <TableRow android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/msg_effect"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textAppearance="?textAppearanceBodyMedium"
+                    android:gravity="center"
+                    tools:text="特效:侧闪" />
+
+
+            </TableRow>
+
+        </TableLayout>
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            tools:background="?colorSecondaryContainer">
+            android:paddingStart="10dp">
 
-
-            <ImageView
+            <TextView
+                android:id="@+id/msg_startFrame"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/move_example_0" />
+                android:gravity="start|center"
+                tools:text="起手帧数:12" />
+
+            <TextView
+                android:id="@+id/msg_phyOutput"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="start|center"
+                tools:text="自身体力消耗:12" />
+
+            <TextView
+                android:id="@+id/msg_phyWeakness"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="start|center"
+                tools:text="敌人体力削弱:12" />
+
+            <TextView
+                android:id="@+id/msg_hitAdvantage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="start|center"
+                tools:text="命中优势帧:12" />
+
+            <TextView
+                android:id="@+id/msg_defenseAdvantage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="start|center"
+                tools:text="防御优势帧:12" />
+
+
         </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-
-
-    </LinearLayout>
-
-</LinearLayout>
+</layout>

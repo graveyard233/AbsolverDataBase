@@ -14,7 +14,7 @@ import com.lyd.absolverdatabase.bridge.callback.SharedViewModel
 
 open class BaseFragment : Fragment() {
 
-    protected open val TAG = javaClass.simpleName
+    protected val TAG = javaClass.simpleName
 
     protected var mActivity: AppCompatActivity? = null // 为了 让所有的子类 持有 Activity
     // private var _sharedViewModel: SharedViewModel

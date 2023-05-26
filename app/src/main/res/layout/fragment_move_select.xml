@@ -40,10 +40,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.1"/>
+                app:layout_constraintGuide_percent="0.05"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_bar_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.3"/>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_moveMsg_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -56,9 +63,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guideline_bar_bottom">
+                app:layout_constraintTop_toTopOf="@+id/guideline_moveMsg_top">
 
                 <include
+                    android:id="@+id/moveSelect_include"
                     layout="@layout/bar_move_msg"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
@@ -70,7 +78,26 @@
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
+                    <Spinner
+                        android:id="@+id/moveSelect_spinnerToward"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:dropDownWidth="wrap_content" />
 
+                    <Spinner
+                        android:id="@+id/moveSelect_spinnerAltitude"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:dropDownWidth="wrap_content"/>
+
+                    <Spinner
+                        android:id="@+id/moveSelect_spinnerDirection"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:dropDownWidth="wrap_content"/>
 
                 </LinearLayout>
 

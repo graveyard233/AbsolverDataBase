@@ -30,6 +30,15 @@
     <string name="deckDetail_createTime">创建时间:\n%1$s</string>
     <string name="deckDetail_updateTime">更新时间:\n%1$s</string>
 
+    <string name="moveMsg_strength">力度:%1$s</string>
+    <string name="moveMsg_range">范围:%1$1.2f</string>
+    <string name="moveMsg_effect">特效:%1$s</string>
+    <string name="moveMsg_startFrame">起手帧数:%1$d</string>
+    <string name="moveMsg_phyOutput">耗体:%1$1.2f</string>
+    <string name="moveMsg_phyWeakness">削体:%1$1.2f</string>
+    <string name="moveMsg_hitAdvantage">命中优势帧:%1$d</string>
+    <string name="moveMsg_defenseAdvantage">防御优势帧:%1$d</string>
+
 <!--    这些是用于展示Material3颜色的，用于fragment_color_board.xml-->
     <string name="colors.item_background.description">Background</string>
     <string name="colors.item_error.description">Error</string>

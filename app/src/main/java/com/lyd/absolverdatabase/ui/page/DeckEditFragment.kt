@@ -53,47 +53,30 @@ class DeckEditFragment :BaseFragment() {
 
         dataBinding?.apply {
             deckEditBarUpperRight.initClick(clickProxy = { view: View ->
-                editState.initFilterOption()
-                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
-                    EditToSelectMsg(EditToSelectMsg.SEQ_UPPER_RIGHT)
-                ))
+                beforeMoveToSelect(EditToSelectMsg.SEQ_UPPER_RIGHT)
             })
             deckEditBarUpperLeft.initClick(clickProxy = {
-                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
-                    EditToSelectMsg(EditToSelectMsg.SEQ_UPPER_LEFT)
-                ))
+                beforeMoveToSelect(EditToSelectMsg.SEQ_UPPER_LEFT)
             })
             deckEditBarLowerLeft.initClick(clickProxy = {
-                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
-                    EditToSelectMsg(EditToSelectMsg.SEQ_LOWER_LEFT)
-                ))
+                beforeMoveToSelect(EditToSelectMsg.SEQ_LOWER_LEFT)
             })
             deckEditBarLowerRight.initClick(clickProxy = {
-                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
-                    EditToSelectMsg(EditToSelectMsg.SEQ_LOWER_RIGHT)
-                ))
+                beforeMoveToSelect(EditToSelectMsg.SEQ_LOWER_RIGHT)
             })
 
 
             deckEditOptionalUpperRight.initClick(clickProxy = {view: View ->
-                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
-                    EditToSelectMsg(EditToSelectMsg.OPT_UPPER_RIGHT)
-                ))
+                beforeMoveToSelect(EditToSelectMsg.OPT_UPPER_RIGHT)
             })
             deckEditOptionalUpperLeft.initClick(clickProxy = {
-                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
-                    EditToSelectMsg(EditToSelectMsg.OPT_UPPER_LEFT)
-                ))
+                beforeMoveToSelect(EditToSelectMsg.OPT_UPPER_LEFT)
             })
             deckEditOptionalLowerLeft.initClick(clickProxy = {
-                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
-                    EditToSelectMsg(EditToSelectMsg.OPT_LOWER_LEFT)
-                ))
+                beforeMoveToSelect(EditToSelectMsg.OPT_LOWER_LEFT)
             })
             deckEditOptionalLowerRight.initClick(clickProxy = {
-                nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
-                    EditToSelectMsg(EditToSelectMsg.OPT_LOWER_RIGHT)
-                ))
+                beforeMoveToSelect(EditToSelectMsg.OPT_LOWER_RIGHT)
             })
 
             deckEditeFabSave.setOnClickListener { view ->
@@ -192,10 +175,17 @@ class DeckEditFragment :BaseFragment() {
 
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         // dataBinding要释放掉
         dataBinding = null
+    }
+
+    private fun beforeMoveToSelect(@androidx.annotation.IntRange(0,7) whatForEdit: Int){
+        editState.initFilterOption()
+        editState.initSelectMove()
+        nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
+            EditToSelectMsg(whatForEdit/*,_deckForEdit.deckType*/)
+        ))
     }
 }
