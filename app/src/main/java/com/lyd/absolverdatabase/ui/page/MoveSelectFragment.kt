@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -64,6 +65,20 @@ class MoveSelectFragment :BaseFragment(){
         MovePagerAdapter(this@MoveSelectFragment)
     }
 
+    private var sequenceAs :MutableList<Int> ?= null
+    private var optionA :Int ?= null
+
+    private var sideStart :ImageView ?= null// 公共使用的side
+    private var sideEnd :ImageView ?= null
+
+    private var side1 :ImageView ?= null
+    private var side2 :ImageView ?= null
+
+    private var move0 :ImageView ?= null// 公共img
+    private var move1 :ImageView ?= null
+    private var move2 :ImageView ?= null
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -79,10 +94,22 @@ class MoveSelectFragment :BaseFragment(){
             in 0..3 ->{// 应该加载带3个按钮的MovesBar
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_moves
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.35F)
+                when(argMsg.toSelectMsg.whatBarToEdit){
+                    0 -> sequenceAs = editState.getDeckInSaved()!!.sequenceUpperRight
+                    1 -> sequenceAs = editState.getDeckInSaved()!!.sequenceUpperLeft
+                    2 -> sequenceAs = editState.getDeckInSaved()!!.sequenceLowerLeft
+                    3 -> sequenceAs = editState.getDeckInSaved()!!.sequenceLowerRight
+                }
             }
             in 4..7 ->{// 应该加载oneMoveBar
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_one_move
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.4F)
+                when(argMsg.toSelectMsg.whatBarToEdit){
+                    4 -> optionA = editState.getDeckInSaved()!!.optionalUpperRight
+                    5 -> optionA = editState.getDeckInSaved()!!.optionalUpperLeft
+                    6 -> optionA = editState.getDeckInSaved()!!.optionalLowerLeft
+                    7 -> optionA = editState.getDeckInSaved()!!.optionalLowerRight
+                }
             }
         }
 
@@ -159,6 +186,32 @@ class MoveSelectFragment :BaseFragment(){
 //        } catch (e :Exception){
 //            Log.e(TAG, "onCreateView: ", e)
 //        }
+
+        try {
+            barLazy = requireView().findViewById(R.id.moveSelect_bar) as ViewGroup// 拿到布局
+            // TODO: 在这里要给move的img加点击事件，告诉下面的recycleFragment startSide是什么，用flow传递过去
+            if (sequenceAs != null){
+                barLazy?.apply {
+                    sideStart = findViewById(R.id.bar_move_side_0)
+                    side1 = findViewById(R.id.bar_move_side_1)
+                    side2 = findViewById(R.id.bar_move_side_2)
+                    sideEnd = findViewById(R.id.bar_move_side_3)
+
+                    move0 = findViewById(R.id.bar_move_0)
+                    move1 = findViewById(R.id.bar_move_1)
+                    move2 = findViewById(R.id.bar_move_2)
+                }
+            } else if (optionA != null){
+                barLazy?.apply {
+                    sideStart = findViewById(R.id.bar_oneMove_side_start)
+                    sideEnd = findViewById(R.id.bar_oneMove_side_end)
+                    move0 = findViewById(R.id.bar_oneMove_img)
+                }
+            }
+
+        } catch (e :Exception){
+            Log.e(TAG, "onViewCreated: ", e)
+        }
 
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){

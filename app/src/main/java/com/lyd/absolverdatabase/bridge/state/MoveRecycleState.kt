@@ -1,6 +1,5 @@
 package com.lyd.absolverdatabase.bridge.state
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -17,11 +16,11 @@ class MoveRecycleState(private val repository: MoveRepository,
 
     private val TAG = "${javaClass.simpleName}-${javaClass.hashCode()}"
 
-    suspend fun originListByStartSideAndType(sideInt: Int, canHand :Boolean = false, canSword :Boolean = false):List<MoveOrigin>{
+    suspend fun originListByEndSideAndType(sideInt: Int, canHand :Boolean = false, canSword :Boolean = false):List<MoveOrigin>{
         val result = if (canHand){
-            repository.getOriginHandListByStartSide(sideInt)
+            repository.getOriginHandListByEndSide(sideInt)
         } else if (canSword){
-            repository.getOriginSwordListByStartSide(sideInt)
+            repository.getOriginSwordListByEndSide(sideInt)
         } else {
             repository.getOriginListByStartSide(sideInt)
         }
@@ -36,6 +35,12 @@ class MoveRecycleState(private val repository: MoveRepository,
                 return emptyList()
             }
         }
+    }
+
+
+    suspend fun originListWithMirror(sideInt: Int,endInt: Int,canHand: Boolean = false,canSword: Boolean = false)
+    {
+
     }
 }
 

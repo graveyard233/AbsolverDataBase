@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -111,7 +109,15 @@ class MoveRecycleFragment :BaseFragment()
                 null -> true
             }
             // TODO: 准备改成结束在，别人依靠的是在editFragment或者其他数据拿到起始占位，然后这里找的是结束站位的招式
-            _sideList.addAll(moveRecycleState.originListByStartSideAndType(whatSide, canHand = tempCanHand, canSword = !tempCanHand).map { MoveForSelect(it) })// 先获取招式列表，再进行监听
+            // TODO: 现在的问题是我也需要按起始站架来筛选招式，tab只是限制了结束站架，然而选择的框是限制起始站架
+            // TODO: 招式是可以镜像的（只适用于徒手卡组，剑卡除外），以直拳为例，可以右上->左上,也可以左上->右上，然后左右也是有镜像的，同样是根据是否启用镜像来确认是否反转显示的
+            // 又因为我要根据每个序列的招式进行筛选，起始站架和结束站架都是不一样的，所以我需要在这里持有徒手或剑卡的所有数据，然后在这里进行筛选
+            // whatSide 还是当成结束站架
+            // 外面会传入一个flow，是起始站架，然后根据这个进行筛选招式
+            // TODO: 首先判断是不是找剑卡，假如不是，那就是找徒手卡组
+            // TODO: 如果是徒手卡组，则判断起始站架，寻找所有和原本站架和镜像站架相关的招式，找到之后将不和原本站架相同的招式的结束站架和左右全部转成镜像的数据
+            // TODO: 最后再根据结束站架分发list
+            _sideList.addAll(moveRecycleState.originListByEndSideAndType(whatSide, canHand = tempCanHand, canSword = !tempCanHand).map { MoveForSelect(it) })// 先获取招式列表，再进行监听
             editState.filterOptionFlow.collectLatest {
                 Log.i(TAG, "side->${SideUtil.getSideByInt(whatSide)} 接受到筛选数据: Toward->${it.attackToward.name}" +
                         " Altitude->${it.attackAltitude.name} Direction->${it.attackDirection.name}")

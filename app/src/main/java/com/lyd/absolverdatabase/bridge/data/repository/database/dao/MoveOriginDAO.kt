@@ -51,9 +51,15 @@ interface MoveOriginDAO {
             "where moveOrigin_tb.id in (:ids) ")
     suspend fun getMoveMapByIds(ids: List<Int>) :Map<MoveOrigin,MoveGP>
 
-    @Query("select * from moveOrigin_tb where startSide = :startSide and canHand = 1")// 注意，true在sql中是1和0
-    suspend fun getHandMoveByStartSide(startSide: StandSide) :List<MoveOrigin>
+    @Query("select * from moveOrigin_tb where endSide = :endSide and canHand = 1")// 注意，true在sql中是1和0
+    suspend fun getHandMoveByEndSide(endSide: StandSide) :List<MoveOrigin>
 
-    @Query("select * from moveOrigin_tb where startSide = :startSide and canSword = 1")
-    suspend fun getSwordMoveByStartSide(startSide: StandSide) :List<MoveOrigin>
+    @Query("select * from moveOrigin_tb where endSide = :endSide and canSword = 1")
+    suspend fun getSwordMoveByEndSide(endSide: StandSide) :List<MoveOrigin>
+
+    @Query("select * from moveOrigin_tb where startSide = :startSide and endSide = :endSide and canHand = 1")
+    suspend fun getHandMoveBySide(startSide: StandSide, endSide: StandSide) :List<MoveOrigin>
+
+    @Query("select * from moveOrigin_tb where startSide = :startSide and endSide = :endSide and canSword = 1")
+    suspend fun getSwordMoveBySide(startSide: StandSide, endSide: StandSide) :List<MoveOrigin>
 }

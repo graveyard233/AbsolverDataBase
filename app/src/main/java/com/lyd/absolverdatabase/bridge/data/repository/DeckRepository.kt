@@ -38,6 +38,18 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
             }
             val r3 = async {
                 deckDao.upsertAll(DeckGenerate.generateDeck(15))
+                // TODO: 准备做一个专门来测试的卡组
+//                deckDao.upsertAll(listOf(
+//                    Deck(
+//                        name = "测试卡组_1",
+//                        deckType = DeckType.HAND,
+//                        deckStyle = Style.FORSAKEN,
+//                        createTime = System.currentTimeMillis(),
+//                        updateTime = System.currentTimeMillis(),
+//                        note = "这是测试的卡组",
+//                        sequenceUpperRight =
+//                    )
+//                ))
             }
 //            r1.await()
             r2.await()
