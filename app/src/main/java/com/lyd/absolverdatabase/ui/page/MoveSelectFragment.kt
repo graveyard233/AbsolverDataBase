@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.GlideApp
@@ -74,9 +75,10 @@ class MoveSelectFragment :BaseFragment(){
     private var side1 :ImageView ?= null
     private var side2 :ImageView ?= null
 
-    private var move0 :ImageView ?= null// 公共img
-    private var move1 :ImageView ?= null
-    private var move2 :ImageView ?= null
+    private var move0 :ShapeableImageView ?= null// 公共img
+    private var move1 :ShapeableImageView ?= null
+    private var move2 :ShapeableImageView ?= null
+    private val moveList :MutableList<ShapeableImageView?> = mutableListOf<ShapeableImageView?>()
 
 
     override fun onCreateView(
@@ -168,6 +170,8 @@ class MoveSelectFragment :BaseFragment(){
 
         }
 
+
+
         return view
     }
 
@@ -186,9 +190,8 @@ class MoveSelectFragment :BaseFragment(){
 //        } catch (e :Exception){
 //            Log.e(TAG, "onCreateView: ", e)
 //        }
-
         try {
-            barLazy = requireView().findViewById(R.id.moveSelect_bar) as ViewGroup// 拿到布局
+            barLazy = requireView().findViewById(R.id.moveSelect_bar) as ViewGroup// 拿到布局 这个流程必须再onViewCreated这里进行
             // TODO: 在这里要给move的img加点击事件，告诉下面的recycleFragment startSide是什么，用flow传递过去
             if (sequenceAs != null){
                 barLazy?.apply {
@@ -200,6 +203,15 @@ class MoveSelectFragment :BaseFragment(){
                     move0 = findViewById(R.id.bar_move_0)
                     move1 = findViewById(R.id.bar_move_1)
                     move2 = findViewById(R.id.bar_move_2)
+
+                    moveList.clear()
+                    moveList.addAll(listOf(move0,move1,move2))
+                    moveList.forEachIndexed { index, img ->// 设置每一个move的点击事件
+                        img?.setOnClickListener {
+                            whenClickMoveInBar(index)
+                        }
+
+                    }
                 }
             } else if (optionA != null){
                 barLazy?.apply {
@@ -207,10 +219,23 @@ class MoveSelectFragment :BaseFragment(){
                     sideEnd = findViewById(R.id.bar_oneMove_side_end)
                     move0 = findViewById(R.id.bar_oneMove_img)
                 }
+
+                move0?.strokeWidth = resources.getDimension(R.dimen.moveShapeableImgStrokeWidth)
             }
 
         } catch (e :Exception){
             Log.e(TAG, "onViewCreated: ", e)
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                editState.moveBeClickFlow.collectLatest {
+                    if (sequenceAs != null){// 只有序列攻击才要设置选择边框
+                        Log.i(TAG, "onViewCreated: 接受到选择边框变化->$it")
+                        setMoveInBarBeSelect(it)
+                    }
+                }
+            }
         }
 
         lifecycleScope.launch {
@@ -246,6 +271,26 @@ class MoveSelectFragment :BaseFragment(){
     override fun onDestroyView() {
         super.onDestroyView()
         dataBinding = null
+    }
+
+    private fun setMoveInBarBeSelect(moveIndex :Int){
+        moveList.forEachIndexed { index, img ->
+            if (index == moveIndex){
+                img?.strokeWidth = resources.getDimension(R.dimen.moveShapeableImgStrokeWidth)
+            } else {
+                img?.strokeWidth = 0F
+            }
+        }
+    }
+
+    // 当bar里面的moveImg被选中的时候，应该向recycle发送一个信号（用flow），告诉它结束站架是什么，
+    // 假如结束站架已经被约束（后面有已经选好的招式，然后后面的起始站架限定了这次你选的这个招式的结束站架）这时候就得滑到那个站架的tab，然后锁定住ViewPager，最后给recycle传递一个结束站架的约束
+    // 假如起始站架被约束（前面限定了起始站架）则给recycle传一个起始站架的约束
+    // 假如起始结束都被限定死了，那就两个都传递过去
+    // 假如都没限定，则传递all就行
+    private fun whenClickMoveInBar(moveIndex: Int){
+        editState.selectWhatMoveInSeq(moveIndex)
+        // 在这里判断是否有限制，然后分发sideLimit
     }
 
     private fun setMoveMsg(moveForSelect: MoveForSelect) {

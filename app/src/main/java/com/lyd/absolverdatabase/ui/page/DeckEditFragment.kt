@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IntRange
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -52,31 +53,31 @@ class DeckEditFragment :BaseFragment() {
         Log.i(TAG, "onCreateView: ${args.deckForEdit}")
 
         dataBinding?.apply {
-            deckEditBarUpperRight.initClick(clickProxy = { view: View ->
-                beforeMoveToSelect(EditToSelectMsg.SEQ_UPPER_RIGHT)
+            deckEditBarUpperRight.initClick(clickProxy = { view: View,clickWhatMove :Int ->
+                beforeMoveToSelect(EditToSelectMsg.SEQ_UPPER_RIGHT,clickWhatMove)
             })
-            deckEditBarUpperLeft.initClick(clickProxy = {
-                beforeMoveToSelect(EditToSelectMsg.SEQ_UPPER_LEFT)
+            deckEditBarUpperLeft.initClick(clickProxy = { view: View,clickWhatMove :Int ->
+                beforeMoveToSelect(EditToSelectMsg.SEQ_UPPER_LEFT, clickWhatMove)
             })
-            deckEditBarLowerLeft.initClick(clickProxy = {
-                beforeMoveToSelect(EditToSelectMsg.SEQ_LOWER_LEFT)
+            deckEditBarLowerLeft.initClick(clickProxy = { view: View,clickWhatMove :Int ->
+                beforeMoveToSelect(EditToSelectMsg.SEQ_LOWER_LEFT, clickWhatMove)
             })
-            deckEditBarLowerRight.initClick(clickProxy = {
-                beforeMoveToSelect(EditToSelectMsg.SEQ_LOWER_RIGHT)
+            deckEditBarLowerRight.initClick(clickProxy = {view: View,clickWhatMove :Int ->
+                beforeMoveToSelect(EditToSelectMsg.SEQ_LOWER_RIGHT, clickWhatMove)
             })
 
 
             deckEditOptionalUpperRight.initClick(clickProxy = {view: View ->
-                beforeMoveToSelect(EditToSelectMsg.OPT_UPPER_RIGHT)
+                beforeMoveToSelect(EditToSelectMsg.OPT_UPPER_RIGHT, 0)
             })
             deckEditOptionalUpperLeft.initClick(clickProxy = {
-                beforeMoveToSelect(EditToSelectMsg.OPT_UPPER_LEFT)
+                beforeMoveToSelect(EditToSelectMsg.OPT_UPPER_LEFT, 0)
             })
             deckEditOptionalLowerLeft.initClick(clickProxy = {
-                beforeMoveToSelect(EditToSelectMsg.OPT_LOWER_LEFT)
+                beforeMoveToSelect(EditToSelectMsg.OPT_LOWER_LEFT, 0)
             })
             deckEditOptionalLowerRight.initClick(clickProxy = {
-                beforeMoveToSelect(EditToSelectMsg.OPT_LOWER_RIGHT)
+                beforeMoveToSelect(EditToSelectMsg.OPT_LOWER_RIGHT, 0)
             })
 
             deckEditeFabSave.setOnClickListener { view ->
@@ -181,11 +182,12 @@ class DeckEditFragment :BaseFragment() {
         dataBinding = null
     }
 
-    private fun beforeMoveToSelect(@androidx.annotation.IntRange(0,7) whatForEdit: Int){
+    private fun beforeMoveToSelect(@IntRange(0, 7) whatForEdit: Int, clickWhatMove: Int){
         editState.initFilterOption()
         editState.initSelectMove()
+        editState.selectWhatMoveInSeq(clickWhatMove)
         nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
-            EditToSelectMsg(whatForEdit/*,_deckForEdit.deckType*/)
+            EditToSelectMsg(whatForEdit, whatMoveBeClicked = clickWhatMove/*,_deckForEdit.deckType*/)
         ))
     }
 }

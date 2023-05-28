@@ -87,15 +87,15 @@ class MovesBar : ConstraintLayout {
 
     }
 
-    fun initClick(clickProxy :(view:View)->Unit = {}){
+    fun initClick(clickProxy :(view:View,clickWhatMove :Int)->Unit = { view: View, clickWhatMove: Int -> }){
         move0.setOnClickListener { view ->
-            clickProxy.invoke(view)
+            clickProxy.invoke(view,0)
         }
         move1.setOnClickListener { view ->
-            clickProxy.invoke(view)
+            clickProxy.invoke(view,1)
         }
         move2.setOnClickListener { view ->
-            clickProxy.invoke(view)
+            clickProxy.invoke(view,2)
         }
     }
 

@@ -4,9 +4,10 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 /**
  * @param whatBarToEdit 0~3 序列攻击 4~7 自选攻击
+ * @param whatMoveBeClicked 标记序列中哪个招式被选中，但貌似没有任何作用，以后可以删掉
  * */
 @Parcelize
-class EditToSelectMsg(@androidx.annotation.IntRange(0,7) val whatBarToEdit:Int) : Parcelable
+class EditToSelectMsg(@androidx.annotation.IntRange(0,7) val whatBarToEdit:Int,val whatMoveBeClicked :Int = 0) : Parcelable
 {
     companion object{
         const val SEQ_UPPER_RIGHT = 0

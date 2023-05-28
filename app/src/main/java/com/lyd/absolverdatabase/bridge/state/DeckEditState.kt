@@ -110,6 +110,22 @@ class DeckEditState(private val repository: DeckEditRepository,
         }
     }
 
+    private val _moveBeClickedFlow :MutableStateFlow<Int> = MutableStateFlow(value = 0)
+    val moveBeClickFlow = _moveBeClickedFlow.asStateFlow()
+    fun selectWhatMoveInSeq(whatMoveInSeq :Int = 0){
+        viewModelScope.launch(Dispatchers.IO){
+            _moveBeClickedFlow.emit(whatMoveInSeq)
+        }
+    }
+
+    private val _sideLimitFlow :MutableStateFlow<SideLimit> = MutableStateFlow(value = SideLimit.noLimit())
+    val sideLimitFlow = _sideLimitFlow.asStateFlow()
+    fun updateSideLimit(sideLimit: SideLimit){
+        viewModelScope.launch(Dispatchers.IO){
+            _sideLimitFlow.emit(sideLimit)
+        }
+    }
+
     /**给moveRecycleFragment用的，传递选择的招式*/
     private val _moveForSelectFlow :MutableStateFlow<MoveSelectFragment.MoveMsgState> = MutableStateFlow(value = MoveSelectFragment.MoveMsgState.SelectNull)
     val moveForSelectFlow = _moveForSelectFlow.asStateFlow()

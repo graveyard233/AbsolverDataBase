@@ -9,4 +9,7 @@
     <dimen name="deck_edit_add_move_img_margin">10dp</dimen>
 
     <dimen name="bottom_sheet_width">0dp</dimen>
+
+    <dimen name="moveShapeableImgStrokeWidth">4dp</dimen>
+    <dimen name="moveShapeableImgPadding">2dp</dimen><!--这个需要是StrokeWidth一半的宽度-->
 </resources>
