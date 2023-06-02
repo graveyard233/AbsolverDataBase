@@ -46,7 +46,8 @@ object MoveGenerate{
                     defenseAdvantageFrame = (i..15).random(),
                     effect = MoveEffectGenerate.generateString(),
                     canHand = i % 3 == 0,
-                    canSword = i % 4 == 0
+                    canOriginSword = i % 4 == 0,
+                    canMirrorSword = i % 6 == 0
                 )
             )
         }
@@ -76,7 +77,8 @@ object MoveGenerate{
                     defenseAdvantageFrame = (i..15).random(),
                     effect = MoveEffectGenerate.generateString(),
                     canHand = i % 3 == 0,
-                    canSword = i % 4 == 0
+                    canOriginSword = i % 4 == 0,
+                    canMirrorSword = i % 6 == 1
                 )
             )
         }
@@ -103,7 +105,8 @@ object MoveGenerate{
         defenseAdvantageFrame = 0,
         effect = MoveEffect.NULL.name,
         canHand = false,
-        canSword = false
+        canOriginSword = false,
+        canMirrorSword = false
     )
 }
 

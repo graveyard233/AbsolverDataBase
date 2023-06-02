@@ -118,6 +118,13 @@ class DeckEditState(private val repository: DeckEditRepository,
         }
     }
 
+    suspend fun getSeqMovesByIds(seq :List<Int>) :List<MoveOrigin?> {
+        return repository.getOriginListByIds(seq)
+    }
+    suspend fun getOptMoveById(optId :Int) :MoveOrigin?{
+        return repository.getOriginMoveById(optId)
+    }
+
     private val _sideLimitFlow :MutableStateFlow<SideLimit> = MutableStateFlow(value = SideLimit.noLimit())
     val sideLimitFlow = _sideLimitFlow.asStateFlow()
     fun updateSideLimit(sideLimit: SideLimit){

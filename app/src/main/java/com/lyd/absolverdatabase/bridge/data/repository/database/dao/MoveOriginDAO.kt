@@ -54,12 +54,17 @@ interface MoveOriginDAO {
     @Query("select * from moveOrigin_tb where endSide = :endSide and canHand = 1")// 注意，true在sql中是1和0
     suspend fun getHandMoveByEndSide(endSide: StandSide) :List<MoveOrigin>
 
-    @Query("select * from moveOrigin_tb where endSide = :endSide and canSword = 1")
+    @Deprecated(message = "结束站架不可靠", replaceWith = ReplaceWith("getSwordMove()"))
+    @Query("select * from moveOrigin_tb where endSide = :endSide and (canOriginSword = 1 or canMirrorSword = 1)")
     suspend fun getSwordMoveByEndSide(endSide: StandSide) :List<MoveOrigin>
 
     @Query("select * from moveOrigin_tb where startSide = :startSide and endSide = :endSide and canHand = 1")
     suspend fun getHandMoveBySide(startSide: StandSide, endSide: StandSide) :List<MoveOrigin>
 
-    @Query("select * from moveOrigin_tb where startSide = :startSide and endSide = :endSide and canSword = 1")
-    suspend fun getSwordMoveBySide(startSide: StandSide, endSide: StandSide) :List<MoveOrigin>
+    @Query("select * from moveOrigin_tb where (startSide = :startSide or startSide = :mirrorStartSide) and canHand = 1")
+    suspend fun getHandMoveByStartWithMirror(startSide: StandSide, mirrorStartSide: StandSide) :List<MoveOrigin>
+
+    /**在剑卡组中筛选镜像过于麻烦，还是交给仓库层中干，sql实在是不会写*/
+    @Query("select * from moveOrigin_tb where canOriginSword = 1 or canMirrorSword = 1")
+    suspend fun getSwordMove() :List<MoveOrigin>
 }

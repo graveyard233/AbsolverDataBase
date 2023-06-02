@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lyd.absolverdatabase.App
@@ -26,6 +27,9 @@ import com.lyd.absolverdatabase.ui.adapter.MovePagerAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.SideUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -66,8 +70,9 @@ class MoveSelectFragment :BaseFragment(){
         MovePagerAdapter(this@MoveSelectFragment)
     }
 
-    private var sequenceAs :MutableList<Int> ?= null
-    private var optionA :Int ?= null
+    // 采用包的形式，一起打包招式和id，用起来更加方便，使用update方法，同时更新招式和id字段，也更加便利
+    private var seqPack :SeqPack ?= null
+    private var optionPack :OptPack ?= null
 
     private var sideStart :ImageView ?= null// 公共使用的side
     private var sideEnd :ImageView ?= null
@@ -78,7 +83,7 @@ class MoveSelectFragment :BaseFragment(){
     private var move0 :ShapeableImageView ?= null// 公共img
     private var move1 :ShapeableImageView ?= null
     private var move2 :ShapeableImageView ?= null
-    private val moveList :MutableList<ShapeableImageView?> = mutableListOf<ShapeableImageView?>()
+    private val moveImgList :MutableList<ShapeableImageView?> = mutableListOf<ShapeableImageView?>()
 
 
     override fun onCreateView(
@@ -96,29 +101,67 @@ class MoveSelectFragment :BaseFragment(){
             in 0..3 ->{// 应该加载带3个按钮的MovesBar
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_moves
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.35F)
-                when(argMsg.toSelectMsg.whatBarToEdit){
-                    0 -> sequenceAs = editState.getDeckInSaved()!!.sequenceUpperRight
-                    1 -> sequenceAs = editState.getDeckInSaved()!!.sequenceUpperLeft
-                    2 -> sequenceAs = editState.getDeckInSaved()!!.sequenceLowerLeft
-                    3 -> sequenceAs = editState.getDeckInSaved()!!.sequenceLowerRight
+                lifecycleScope.launch(Dispatchers.IO){
+                    seqPack = SeqPack().apply {
+                        replaceList(
+                            editState.getSeqMovesByIds(
+                                when(argMsg.toSelectMsg.whatBarToEdit){
+                                    0 -> editState.getDeckInSaved()!!.sequenceUpperRight
+                                    1 -> editState.getDeckInSaved()!!.sequenceUpperLeft
+                                    2 -> editState.getDeckInSaved()!!.sequenceLowerLeft
+                                    3 -> editState.getDeckInSaved()!!.sequenceLowerRight
+                                    else -> listOf<Int>(-1,-1,-1)
+                                }
+                            )
+                        )
+                    }
+
                 }
+
             }
             in 4..7 ->{// 应该加载oneMoveBar
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_one_move
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.4F)
-                when(argMsg.toSelectMsg.whatBarToEdit){
-                    4 -> optionA = editState.getDeckInSaved()!!.optionalUpperRight
-                    5 -> optionA = editState.getDeckInSaved()!!.optionalUpperLeft
-                    6 -> optionA = editState.getDeckInSaved()!!.optionalLowerLeft
-                    7 -> optionA = editState.getDeckInSaved()!!.optionalLowerRight
+                lifecycleScope.launch(Dispatchers.IO){
+                    optionPack = OptPack().apply {
+                        updateOpt(editState.getOptMoveById(
+                            when(argMsg.toSelectMsg.whatBarToEdit){
+                                4 -> editState.getDeckInSaved()!!.optionalUpperRight
+                                5 -> editState.getDeckInSaved()!!.optionalUpperLeft
+                                6 -> editState.getDeckInSaved()!!.optionalLowerLeft
+                                7 -> editState.getDeckInSaved()!!.optionalLowerRight
+                                else -> -1
+                            }
+                        ))
+                    }
                 }
+
+
             }
         }
-
-        dataBinding?.moveSelectViewStub?.viewStub?.inflate()
         // viewStub加载完成之后，要在onViewCreate那里才能找到加载的view
+        dataBinding?.moveSelectViewStub?.viewStub?.inflate()
         dataBinding?.apply {
-            moveSelectPager?.adapter = movePagerAdapter
+            moveSelectPager?.apply {
+                adapter = movePagerAdapter
+                registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
+                    override fun onPageScrolled(
+                        position: Int,
+                        positionOffset: Float,
+                        positionOffsetPixels: Int
+                    ) {
+                        super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                    }
+
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                    }
+
+                    override fun onPageScrollStateChanged(state: Int) {
+                        super.onPageScrollStateChanged(state)
+                    }
+                })
+            }
             val iconList = listOf<Int>(R.drawable.ic_upper_right_bold,R.drawable.ic_upper_left_bold,
             R.drawable.ic_lower_left_bold,R.drawable.ic_lower_right_bold)
             if (moveSelectTab != null) {
@@ -128,6 +171,7 @@ class MoveSelectFragment :BaseFragment(){
                     }.attach()
                 }
             }
+            // 设置筛选spinner
             moveSelectSpinnerToward?.apply{
                 adapter = spinnerTowardAdapter
                 onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
@@ -193,7 +237,7 @@ class MoveSelectFragment :BaseFragment(){
         try {
             barLazy = requireView().findViewById(R.id.moveSelect_bar) as ViewGroup// 拿到布局 这个流程必须再onViewCreated这里进行
             // TODO: 在这里要给move的img加点击事件，告诉下面的recycleFragment startSide是什么，用flow传递过去
-            if (sequenceAs != null){
+            if (seqPack != null){
                 barLazy?.apply {
                     sideStart = findViewById(R.id.bar_move_side_0)
                     side1 = findViewById(R.id.bar_move_side_1)
@@ -204,20 +248,21 @@ class MoveSelectFragment :BaseFragment(){
                     move1 = findViewById(R.id.bar_move_1)
                     move2 = findViewById(R.id.bar_move_2)
 
-                    moveList.clear()
-                    moveList.addAll(listOf(move0,move1,move2))
-                    moveList.forEachIndexed { index, img ->// 设置每一个move的点击事件
+                    moveImgList.clear()
+                    moveImgList.addAll(listOf(move0,move1,move2))
+                    moveImgList.forEachIndexed { index, img ->// 设置每一个move的点击事件
                         img?.setOnClickListener {
                             whenClickMoveInBar(index)
                         }
 
                     }
                 }
-            } else if (optionA != null){
+            } else if (optionPack != null){
                 barLazy?.apply {
                     sideStart = findViewById(R.id.bar_oneMove_side_start)
                     sideEnd = findViewById(R.id.bar_oneMove_side_end)
                     move0 = findViewById(R.id.bar_oneMove_img)
+                    move0?.setOnClickListener { whenClickMoveInOneBar() }
                 }
 
                 move0?.strokeWidth = resources.getDimension(R.dimen.moveShapeableImgStrokeWidth)
@@ -230,7 +275,7 @@ class MoveSelectFragment :BaseFragment(){
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.moveBeClickFlow.collectLatest {
-                    if (sequenceAs != null){// 只有序列攻击才要设置选择边框
+                    if (seqPack != null){// 只有序列攻击才要设置选择边框
                         Log.i(TAG, "onViewCreated: 接受到选择边框变化->$it")
                         setMoveInBarBeSelect(it)
                     }
@@ -274,7 +319,7 @@ class MoveSelectFragment :BaseFragment(){
     }
 
     private fun setMoveInBarBeSelect(moveIndex :Int){
-        moveList.forEachIndexed { index, img ->
+        moveImgList.forEachIndexed { index, img ->
             if (index == moveIndex){
                 img?.strokeWidth = resources.getDimension(R.dimen.moveShapeableImgStrokeWidth)
             } else {
@@ -290,7 +335,94 @@ class MoveSelectFragment :BaseFragment(){
     // 假如都没限定，则传递all就行
     private fun whenClickMoveInBar(moveIndex: Int){
         editState.selectWhatMoveInSeq(moveIndex)
+        dataBinding?.moveSelectPager?.isUserInputEnabled = true// 先解锁
         // 在这里判断是否有限制，然后分发sideLimit
+        CoroutineScope(Dispatchers.Default).launch { // 进CPU密集型线程来计算，别阻塞主线程
+
+            if(seqPack != null){
+                seqPack!!.apply {
+                    when(moveIndex){
+                        0 ->{// 选择了序列的第一个，起始站架已经被定死，但还要判断结束站架是否被第二个招式(还可能为空)限制
+                            val tempStart = when(argMsg.toSelectMsg.whatBarToEdit){
+                                0 -> StandSide.UPPER_RIGHT
+                                1 -> StandSide.UPPER_LEFT
+                                2 -> StandSide.UPPER_LEFT
+                                3 -> StandSide.LOWER_RIGHT
+                                else -> StandSide.UPPER_RIGHT
+                            }
+                            if (idList[1] != -1){// 说明第二个槽位有招式，它的起始站架限制了这个结束站架
+                                // TODO: 要限制tab只能处于结束站架限定的那个viewPage
+                                val tempEnd = originList[1]!!.startSide
+                                SideLimit.limitAll(startSide = tempStart,
+                                endSide = tempEnd)
+                                dataBinding?.moveSelectPager?.setCurrentItem(SideUtil.getIntBySide(tempEnd),true)// 滚动到结束站架限定的viewPager
+                                dataBinding?.moveSelectPager?.isUserInputEnabled = false
+                            } else {
+                                SideLimit.limitStart(startSide = tempStart)
+                            }
+                        }
+                        1 ->{// 选择了第二个，所有情况均有可能
+                            if (idList[0] != -1){// 说明第一个槽位有招式,它的结束站架限制了第二个招式的起始站架
+                                val tempStart = originList[0]!!.endSide
+                                if (idList[2] != -1){// 说明第三个槽位有招式，它的起始站架限制了第二个招式的结束站架
+                                    // TODO: 要限制tab只能处于结束站架限定的那个viewPage
+                                    val tempEnd = originList[2]!!.startSide
+                                    SideLimit.limitAll(startSide = tempStart, endSide = tempEnd)
+                                    dataBinding?.moveSelectPager?.setCurrentItem(SideUtil.getIntBySide(tempEnd),true)// 滚动到结束站架限定的viewPager
+                                    dataBinding?.moveSelectPager?.isUserInputEnabled = false
+                                } else {
+                                    // 第三个槽位为空，说明只限制了起始站架
+                                    SideLimit.limitStart(startSide = tempStart)
+                                }
+                            } else {// 第一个槽位为空，则起始站架没被限制
+                                if (idList[2] != -1){// 说明第三个槽位有招式，它的起始站架限制了第二个招式的结束站架
+                                    // TODO: 这里要限制tab只能处于结束站架限定的那个viewPage
+                                    val tempEnd = originList[2]!!.startSide
+                                    SideLimit.limitEnd(endSide = tempEnd)
+                                    dataBinding?.moveSelectPager?.setCurrentItem(SideUtil.getIntBySide(tempEnd),true)// 滚动到结束站架限定的viewPager
+                                    dataBinding?.moveSelectPager?.isUserInputEnabled = false
+                                } else {
+                                    // 第三个槽位为空,结束站架也没有任何限制
+                                    SideLimit.noLimit()
+                                }
+                            }
+                        }
+                        2 ->{// 选择了第三个，结束站架不会被限制，只看第二个招式的限制
+                            if (idList[1] != -1){// 说明第二个槽位有招式，它的结束站架限制了第三个招式的起始站架
+                                SideLimit.limitStart(startSide = originList[1]!!.endSide)
+                            } else {
+                                // 第二个槽位为空，则起始站架没有任何限制
+                                SideLimit.noLimit()
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+    private fun whenClickMoveInOneBar(){
+        CoroutineScope(Dispatchers.Default).launch {
+            if (optionPack != null){
+                // 起始站架总是会被限制，结束站架被限制成不能和起始站架一样的数据
+                // TODO: 应该设置tab不能跳到和起始站架一样的viewPage
+//                dataBinding?.moveSelectTab?.getTabAt(when(argMsg.toSelectMsg.whatBarToEdit){
+//                    4 -> 0
+//                    5 -> 1
+//                    6 -> 2
+//                    7 -> 3
+//                    else -> 0
+//                })?.view?.isEnabled = false// 这句话只是禁用了tabLayout的点击事件，但没有禁用viewPager的滚动，还需要跳过
+                SideLimit.optLimit(startSide = when(argMsg.toSelectMsg.whatBarToEdit){
+                    4 -> StandSide.UPPER_RIGHT
+                    5 -> StandSide.UPPER_LEFT
+                    6 -> StandSide.UPPER_LEFT
+                    7 -> StandSide.LOWER_RIGHT
+                    else -> StandSide.UPPER_RIGHT
+                })
+            }
+        }
+
     }
 
     private fun setMoveMsg(moveForSelect: MoveForSelect) {

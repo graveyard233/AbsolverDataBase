@@ -38,9 +38,19 @@ class MoveRecycleState(private val repository: MoveRepository,
     }
 
 
-    suspend fun originListWithMirror(sideInt: Int,endInt: Int,canHand: Boolean = false,canSword: Boolean = false)
+    // 根据起始站架以及镜像来筛选所有招式
+    suspend fun originListWithMirror(startInt: Int?,endInt: Int,canHand: Boolean = false) :List<MoveOrigin>
     {
-
+        val result = if (canHand){
+            repository.getHandOriginWithMirror(startInt,endInt)
+        } else {
+            repository.getSwordOriginWithMirror(startInt,endInt)
+        }
+        when(result){
+            is RepoResult.RpEmpty -> TODO()
+            is RepoResult.RpError -> TODO()
+            is RepoResult.RpSuccess -> TODO()
+        }
     }
 }
 

@@ -27,7 +27,15 @@ enum class StandSide {
 }
 /**攻击朝向*/
 enum class AttackToward {
-    LEFT, RIGHT
+    LEFT, RIGHT;
+    companion object{
+        fun getMirrorToward(toward: AttackToward):AttackToward{
+            return when(toward){
+                AttackToward.LEFT -> AttackToward.RIGHT
+                AttackToward.RIGHT -> AttackToward.LEFT
+            }
+        }
+    }
 }
 /**攻击高度*/
 enum class AttackAltitude {
