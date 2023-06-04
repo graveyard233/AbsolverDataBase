@@ -2,7 +2,8 @@ package com.lyd.absolverdatabase.bridge.data.bean
 
 data class SeqPack (
     val idList: MutableList<Int> = mutableListOf<Int>(-1,-1,-1),
-    val originList: MutableList<MoveOrigin?> = mutableListOf<MoveOrigin?>(null,null,null)
+    val originList: MutableList<MoveOrigin?> = mutableListOf<MoveOrigin?>(null,null,null),
+    val startSide: StandSide
 ){
     /**替换招式,会同时替换[idList]和[originList]*/
     fun replaceList(list: List<MoveOrigin?>){

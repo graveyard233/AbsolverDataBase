@@ -113,6 +113,7 @@ class MoveRecycleFragment :BaseFragment()
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.sideLimitFlow.collectLatest { it ->// 在这里要改变_limit和_sideList
+                    Log.i(TAG, "side->${SideUtil.getSideByInt(whatSide)}: 接受到招式限制 $it")
                     // 变化玩limit之后，需要实现实时筛选对应起始站架的招式
                     synchronized(_limit){
                         _limit = it
@@ -127,7 +128,6 @@ class MoveRecycleFragment :BaseFragment()
                     }
                     val resultList = filterByOpt(_sideList,_filter)
                     moveAdapter.submitList(resultList)
-
                 }
             }
         }
@@ -175,33 +175,7 @@ class MoveRecycleFragment :BaseFragment()
         Log.i(TAG, "onDestroyView:  side ${SideUtil.getSideByInt(whatSide)}")
     }
 
-    /**根据filterOption来筛选list*/
-    private fun filterList(sideList: MutableList<MoveForSelect>, option: FilterOption) {
-        sideList.filter {
-            when(option.attackToward){
-                is AttackTowardOption.left -> { it.moveOrigin.attackToward == AttackToward.LEFT }
-                is AttackTowardOption.right -> { it.moveOrigin.attackToward == AttackToward.RIGHT }
-                is AttackTowardOption.all -> true
-            }
-        }.filter {
-            when(option.attackAltitude){
-                is AttackAltitudeOption.height -> { it.moveOrigin.attackAltitude == AttackAltitude.HEIGHT }
-                is AttackAltitudeOption.middle -> { it.moveOrigin.attackAltitude == AttackAltitude.MIDDLE }
-                is AttackAltitudeOption.low -> { it.moveOrigin.attackAltitude == AttackAltitude.LOW }
-                is AttackAltitudeOption.all -> true
-            }
-        }.filter {
-            when(option.attackDirection){
-                is AttackDirectionOption.horizontal -> { it.moveOrigin.attackDirection == AttackDirection.HORIZONTAL }
-                is AttackDirectionOption.vertical -> { it.moveOrigin.attackDirection == AttackDirection.VERTICAL }
-                is AttackDirectionOption.poke -> { it.moveOrigin.attackDirection == AttackDirection.POKE }
-                is AttackDirectionOption.all -> true
-            }
-        }.apply {
-            moveAdapter.submitList(this)
-        }
 
-    }
     /**先执行这个，按站架筛选，筛出来的结果再交给[filterByOpt]*/
     private suspend fun filterBySideLimit(sideLimit: SideLimit,canHand :Boolean = true) :List<MoveOrigin>{
         return sideLimit.let {
@@ -232,6 +206,7 @@ class MoveRecycleFragment :BaseFragment()
                     }
                     is SideLimit.optLimit -> {
                         Log.w(TAG, "optLimit: ${it.startSide}")
+                        // TODO: 2023/6/4 这里要做一个专门给自选序列一个专门的筛选方法
                         moveRecycleState.originListWithMirror(null, endInt = whatSide,tempCanHand)
                     }
                 }

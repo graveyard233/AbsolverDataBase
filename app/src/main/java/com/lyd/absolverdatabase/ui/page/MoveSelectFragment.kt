@@ -102,7 +102,13 @@ class MoveSelectFragment :BaseFragment(){
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_moves
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.35F)
                 lifecycleScope.launch(Dispatchers.IO){
-                    seqPack = SeqPack().apply {
+                    seqPack = SeqPack(startSide = when(argMsg.toSelectMsg.whatBarToEdit){
+                        0 -> StandSide.UPPER_RIGHT
+                        1 -> StandSide.UPPER_LEFT
+                        2 -> StandSide.LOWER_LEFT
+                        3 -> StandSide.LOWER_RIGHT
+                        else -> StandSide.UPPER_RIGHT
+                    }).apply {
                         replaceList(
                             editState.getSeqMovesByIds(
                                 when(argMsg.toSelectMsg.whatBarToEdit){
@@ -115,7 +121,7 @@ class MoveSelectFragment :BaseFragment(){
                             )
                         )
                     }
-
+                    whenClickMoveInBar(argMsg.toSelectMsg.whatMoveBeClicked)
                 }
 
             }
@@ -123,7 +129,13 @@ class MoveSelectFragment :BaseFragment(){
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_one_move
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.4F)
                 lifecycleScope.launch(Dispatchers.IO){
-                    optionPack = OptPack().apply {
+                    optionPack = OptPack(startSide = when(argMsg.toSelectMsg.whatBarToEdit){
+                        4 -> StandSide.UPPER_RIGHT
+                        5 -> StandSide.UPPER_LEFT
+                        6 -> StandSide.LOWER_LEFT
+                        7 -> StandSide.LOWER_RIGHT
+                        else -> StandSide.UPPER_RIGHT
+                    }).apply {
                         updateOpt(editState.getOptMoveById(
                             when(argMsg.toSelectMsg.whatBarToEdit){
                                 4 -> editState.getDeckInSaved()!!.optionalUpperRight
@@ -134,6 +146,7 @@ class MoveSelectFragment :BaseFragment(){
                             }
                         ))
                     }
+                    whenClickMoveInOneBar()
                 }
 
 
@@ -244,17 +257,21 @@ class MoveSelectFragment :BaseFragment(){
                     side2 = findViewById(R.id.bar_move_side_2)
                     sideEnd = findViewById(R.id.bar_move_side_3)
 
+                    sideStart?.setImageResource(SideUtil.imgIdForMoves(seqPack!!.startSide))
+                    side1?.setImageResource(SideUtil.imgIdForMoves(seqPack!!.startSide))
+                    side2?.setImageResource(SideUtil.imgIdForMoves(seqPack!!.startSide))
+                    sideEnd?.setImageResource(SideUtil.imgIdForMoves(seqPack!!.startSide))
+
                     move0 = findViewById(R.id.bar_move_0)
                     move1 = findViewById(R.id.bar_move_1)
                     move2 = findViewById(R.id.bar_move_2)
 
                     moveImgList.clear()
-                    moveImgList.addAll(listOf(move0,move1,move2))
+                    moveImgList.addAll(listOf(move0,move1,move2))// 最多最多放三个，多一个都不行，所以上面的站架图片就别搞list了，好好的一个一个写
                     moveImgList.forEachIndexed { index, img ->// 设置每一个move的点击事件
                         img?.setOnClickListener {
                             whenClickMoveInBar(index)
                         }
-
                     }
                 }
             } else if (optionPack != null){
@@ -338,66 +355,65 @@ class MoveSelectFragment :BaseFragment(){
         dataBinding?.moveSelectPager?.isUserInputEnabled = true// 先解锁
         // 在这里判断是否有限制，然后分发sideLimit
         CoroutineScope(Dispatchers.Default).launch { // 进CPU密集型线程来计算，别阻塞主线程
-
-            if(seqPack != null){
-                seqPack!!.apply {
-                    when(moveIndex){
-                        0 ->{// 选择了序列的第一个，起始站架已经被定死，但还要判断结束站架是否被第二个招式(还可能为空)限制
-                            val tempStart = when(argMsg.toSelectMsg.whatBarToEdit){
-                                0 -> StandSide.UPPER_RIGHT
-                                1 -> StandSide.UPPER_LEFT
-                                2 -> StandSide.UPPER_LEFT
-                                3 -> StandSide.LOWER_RIGHT
-                                else -> StandSide.UPPER_RIGHT
-                            }
-                            if (idList[1] != -1){// 说明第二个槽位有招式，它的起始站架限制了这个结束站架
+            seqPack?.apply {
+                when(moveIndex){
+                    0 ->{// 选择了序列的第一个，起始站架已经被定死，但还要判断结束站架是否被第二个招式(还可能为空)限制
+                        val tempStart = when(argMsg.toSelectMsg.whatBarToEdit){
+                            0 -> StandSide.UPPER_RIGHT
+                            1 -> StandSide.UPPER_LEFT
+                            2 -> StandSide.LOWER_LEFT
+                            3 -> StandSide.LOWER_RIGHT
+                            else -> StandSide.UPPER_RIGHT
+                        }
+                        if (idList[1] != -1){// 说明第二个槽位有招式，它的起始站架限制了这个结束站架
+                            // TODO: 要限制tab只能处于结束站架限定的那个viewPage
+                            val tempEnd = originList[1]!!.startSide
+                            editState.updateSideLimit(
+                                SideLimit.limitAll(startSide = tempStart, endSide = tempEnd)
+                            )
+                            dataBinding?.moveSelectPager?.setCurrentItem(SideUtil.getIntBySide(tempEnd),true)// 滚动到结束站架限定的viewPager
+                            dataBinding?.moveSelectPager?.isUserInputEnabled = false
+                        } else {
+                            editState.updateSideLimit(SideLimit.limitStart(startSide = tempStart))
+                        }
+                    }
+                    1 ->{// 选择了第二个，所有情况均有可能
+                        if (idList[0] != -1){// 说明第一个槽位有招式,它的结束站架限制了第二个招式的起始站架
+                            val tempStart = originList[0]!!.endSide
+                            if (idList[2] != -1){// 说明第三个槽位有招式，它的起始站架限制了第二个招式的结束站架
                                 // TODO: 要限制tab只能处于结束站架限定的那个viewPage
-                                val tempEnd = originList[1]!!.startSide
-                                SideLimit.limitAll(startSide = tempStart,
-                                endSide = tempEnd)
+                                val tempEnd = originList[2]!!.startSide
+                                editState.updateSideLimit(SideLimit.limitAll(startSide = tempStart, endSide = tempEnd))
                                 dataBinding?.moveSelectPager?.setCurrentItem(SideUtil.getIntBySide(tempEnd),true)// 滚动到结束站架限定的viewPager
                                 dataBinding?.moveSelectPager?.isUserInputEnabled = false
                             } else {
-                                SideLimit.limitStart(startSide = tempStart)
+                                // 第三个槽位为空，说明只限制了起始站架
+                                editState.updateSideLimit(SideLimit.limitStart(startSide = tempStart))
+                            }
+                        } else {// 第一个槽位为空，则起始站架没被限制
+                            if (idList[2] != -1){// 说明第三个槽位有招式，它的起始站架限制了第二个招式的结束站架
+                                // TODO: 这里要限制tab只能处于结束站架限定的那个viewPage
+                                val tempEnd = originList[2]!!.startSide
+                                editState.updateSideLimit(SideLimit.limitEnd(endSide = tempEnd))
+                                dataBinding?.moveSelectPager?.setCurrentItem(SideUtil.getIntBySide(tempEnd),true)// 滚动到结束站架限定的viewPager
+                                dataBinding?.moveSelectPager?.isUserInputEnabled = false
+                            } else {
+                                // 第三个槽位为空,结束站架也没有任何限制
+                                editState.updateSideLimit(SideLimit.noLimit())
                             }
                         }
-                        1 ->{// 选择了第二个，所有情况均有可能
-                            if (idList[0] != -1){// 说明第一个槽位有招式,它的结束站架限制了第二个招式的起始站架
-                                val tempStart = originList[0]!!.endSide
-                                if (idList[2] != -1){// 说明第三个槽位有招式，它的起始站架限制了第二个招式的结束站架
-                                    // TODO: 要限制tab只能处于结束站架限定的那个viewPage
-                                    val tempEnd = originList[2]!!.startSide
-                                    SideLimit.limitAll(startSide = tempStart, endSide = tempEnd)
-                                    dataBinding?.moveSelectPager?.setCurrentItem(SideUtil.getIntBySide(tempEnd),true)// 滚动到结束站架限定的viewPager
-                                    dataBinding?.moveSelectPager?.isUserInputEnabled = false
-                                } else {
-                                    // 第三个槽位为空，说明只限制了起始站架
-                                    SideLimit.limitStart(startSide = tempStart)
-                                }
-                            } else {// 第一个槽位为空，则起始站架没被限制
-                                if (idList[2] != -1){// 说明第三个槽位有招式，它的起始站架限制了第二个招式的结束站架
-                                    // TODO: 这里要限制tab只能处于结束站架限定的那个viewPage
-                                    val tempEnd = originList[2]!!.startSide
-                                    SideLimit.limitEnd(endSide = tempEnd)
-                                    dataBinding?.moveSelectPager?.setCurrentItem(SideUtil.getIntBySide(tempEnd),true)// 滚动到结束站架限定的viewPager
-                                    dataBinding?.moveSelectPager?.isUserInputEnabled = false
-                                } else {
-                                    // 第三个槽位为空,结束站架也没有任何限制
-                                    SideLimit.noLimit()
-                                }
-                            }
-                        }
-                        2 ->{// 选择了第三个，结束站架不会被限制，只看第二个招式的限制
-                            if (idList[1] != -1){// 说明第二个槽位有招式，它的结束站架限制了第三个招式的起始站架
+                    }
+                    2 ->{// 选择了第三个，结束站架不会被限制，只看第二个招式的限制
+                        editState.updateSideLimit(
+                            if (idList[1] != -1) {// 说明第二个槽位有招式，它的结束站架限制了第三个招式的起始站架
                                 SideLimit.limitStart(startSide = originList[1]!!.endSide)
                             } else {
                                 // 第二个槽位为空，则起始站架没有任何限制
                                 SideLimit.noLimit()
                             }
-                        }
+                        )
                     }
                 }
-
             }
         }
     }

@@ -2,7 +2,8 @@ package com.lyd.absolverdatabase.bridge.data.bean
 
 data class OptPack(
     var optionA :Int = -1,
-    var optionMove :MoveOrigin? = null
+    var optionMove :MoveOrigin? = null,
+    val startSide: StandSide
 ){
     /**会同时更新[optionA]和[optionMove]*/
     fun updateOpt(move :MoveOrigin?){

@@ -16,28 +16,6 @@ class MoveRecycleState(private val repository: MoveRepository,
 
     private val TAG = "${javaClass.simpleName}-${javaClass.hashCode()}"
 
-    suspend fun originListByEndSideAndType(sideInt: Int, canHand :Boolean = false, canSword :Boolean = false):List<MoveOrigin>{
-        val result = if (canHand){
-            repository.getOriginHandListByEndSide(sideInt)
-        } else if (canSword){
-            repository.getOriginSwordListByEndSide(sideInt)
-        } else {
-            repository.getOriginListByStartSide(sideInt)
-        }
-        when(result){
-            is RepoResult.RpSuccess ->{
-                return result.data
-            }
-            is RepoResult.RpEmpty ->{
-                return emptyList()
-            }
-            is RepoResult.RpError ->{
-                return emptyList()
-            }
-        }
-    }
-
-
     // 根据起始站架以及镜像来筛选所有招式
     suspend fun originListWithMirror(startInt: Int?,endInt: Int,canHand: Boolean = false) :List<MoveOrigin>
     {
@@ -46,10 +24,10 @@ class MoveRecycleState(private val repository: MoveRepository,
         } else {
             repository.getSwordOriginWithMirror(startInt,endInt)
         }
-        when(result){
-            is RepoResult.RpEmpty -> TODO()
-            is RepoResult.RpError -> TODO()
-            is RepoResult.RpSuccess -> TODO()
+        return when(result){
+            is RepoResult.RpEmpty -> listOf<MoveOrigin>()
+            is RepoResult.RpError -> listOf<MoveOrigin>()
+            is RepoResult.RpSuccess -> result.data
         }
     }
 }
