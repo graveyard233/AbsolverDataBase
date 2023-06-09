@@ -12,7 +12,7 @@
         android:layout_weight="1"
         app:srcCompat="@drawable/ic_upper_right"/>
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/bar_oneMove_img"
         android:layout_width="0dp"
         android:layout_height="match_parent"

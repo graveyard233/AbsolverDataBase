@@ -124,14 +124,14 @@ object DeckGenerate{
         updateTime = if (isFromDeckToEdit) 1L else 0L,
         createTime = 0L,
         note = "",
-        sequenceUpperRight = mutableListOf(-1,-1,-1),
-        sequenceLowerRight = mutableListOf(-1,-1,-1),
-        sequenceUpperLeft = mutableListOf(-1,-1,-1),
-        sequenceLowerLeft = mutableListOf(-1,-1,-1),
-        optionalUpperRight = -1,
-        optionalLowerRight = -1,
-        optionalUpperLeft = -1,
-        optionalLowerLeft = -1
+        sequenceUpperRight = mutableListOf(MoveBox(), MoveBox(),MoveBox()),
+        sequenceLowerRight = mutableListOf(MoveBox(), MoveBox(),MoveBox()),
+        sequenceUpperLeft = mutableListOf(MoveBox(), MoveBox(),MoveBox()),
+        sequenceLowerLeft = mutableListOf(MoveBox(), MoveBox(),MoveBox()),
+        optionalUpperRight = MoveBox(),
+        optionalLowerRight = MoveBox(),
+        optionalUpperLeft = MoveBox(),
+        optionalLowerLeft = MoveBox()
     )
     fun generateDeck(count :Int = 5) :List<Deck>{
         val tempList = mutableListOf<Deck>()
@@ -145,14 +145,14 @@ object DeckGenerate{
                     createTime = Date().time,
                     updateTime = Date().time + (0..10000).random(),
                     note = StringUtils.getRandomString((10..60).random()),
-                    sequenceUpperRight = mutableListOf((0..i).random(),(0..i).random(),(0..i).random()),
-                    sequenceLowerRight = mutableListOf((0..i).random(),(0..i).random(),(0..i).random()),
-                    sequenceUpperLeft = mutableListOf((0..i).random(),(0..i).random(),(0..i).random()),
-                    sequenceLowerLeft = mutableListOf((0..i).random(),(0..i).random(),(0..i).random()),
-                    optionalUpperRight = (0..i).random(),
-                    optionalLowerRight = (0..i).random(),
-                    optionalUpperLeft = (0..i).random(),
-                    optionalLowerLeft = (0..i).random()
+                    sequenceUpperRight = mutableListOf(MoveBox((0..i).random()),MoveBox((0..i).random()),MoveBox((0..i).random())),
+                    sequenceLowerRight = mutableListOf(MoveBox((0..i).random()),MoveBox((0..i).random()),MoveBox((0..i).random())),
+                    sequenceUpperLeft = mutableListOf(MoveBox((0..i).random()),MoveBox((0..i).random()),MoveBox((0..i).random())),
+                    sequenceLowerLeft = mutableListOf(MoveBox((0..i).random()),MoveBox((0..i).random()),MoveBox((0..i).random())),
+                    optionalUpperRight = MoveBox((0..i).random()),
+                    optionalLowerRight = MoveBox((0..i).random()),
+                    optionalUpperLeft = MoveBox((0..i).random()),
+                    optionalLowerLeft = MoveBox((0..i).random()),
                 )
             )
         }

@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
+import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
 import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.MoveGenerate
@@ -18,9 +19,7 @@ class MovesBar : ConstraintLayout {
 
     private val TAG = "${javaClass.simpleName}-${hashCode()}"
 
-    private val originList = mutableListOf<MoveOrigin>(MoveGenerate.generateEmptyOriginMove(),
-        MoveGenerate.generateEmptyOriginMove(),
-        MoveGenerate.generateEmptyOriginMove())
+    private val originList = mutableListOf<MoveBox>(MoveBox(), MoveBox(), MoveBox())
 
 
     private lateinit var side0 :ImageView
@@ -63,23 +62,20 @@ class MovesBar : ConstraintLayout {
     // TODO: 1.判断listSize可靠性 2.比较glide和setImageBitmap的加载速度 3.按照招式来设置前后的方向 4.根据招式之间的方向来进行判断前后是否冲突
     // 这个算是初始化设置，不应该考虑冲突问题，冲突问题交给其他设置函数处理
     // 应该有个规定，假如是emptyMove
-    fun initOriginMoves(moveList: List<MoveOrigin>){
+    fun updateMoves(moveList: List<MoveBox>){
         if (moveList.size != 3)
             return
-//        move0.setImageBitmap(AssetsUtil.getBitmapByMoveId(context = context,idList[0]))
-//        move1.setImageBitmap(AssetsUtil.getBitmapByMoveId(context = context,idList[1]))
-//        move2.setImageBitmap(AssetsUtil.getBitmapByMoveId(context = context,idList[2]))
-
         // 先完成赋值
-        Log.i(TAG, "initOriginMoves:size: ${originList.size} $originList")
-        for (i in 0 until originList.size){
-            originList[i] = moveList[i]
+        originList.forEachIndexed { index, moveBox ->
+            originList[index] = moveList[index]
         }
+//        move0.setMoveImg(originList[0])
+//        move1.setMoveImg(originList[1])
+//        move2.setMoveImg(originList[2])
 
-        move0.setMoveImg(originList[0])
-        move1.setMoveImg(originList[1])
-        move2.setMoveImg(originList[2])
-
+        updateOneMove(0)
+        updateOneMove(1)
+        updateOneMove(2)
 //        GlideApp.with(move0)
 //            .load("${AssetsUtil.rootPath+AssetsUtil.movesPath}${idList[0]}.jpg")
 //            .into(move0)
@@ -99,31 +95,50 @@ class MovesBar : ConstraintLayout {
         }
     }
 
-
-
-    // TODO: 未完成，待完善
-    private fun setSideImg(startView: ImageView?,endView: ImageView?,move: MoveOrigin){
-        startView?.apply {
-            GlideApp.with(this)
-                .load(SideUtil.imgIdForMoves(move.startSide))
-                .into(this)
-        }
-        endView?.apply {
-            GlideApp.with(this)
-                .load(SideUtil.imgIdForMoves(move.endSide))
-                .into(this)
+    private fun updateOneMove(position :Int){
+        when(position){
+            0 ->{
+                changeMoveImg(move0,originList[position].moveId)
+                originList[position].moveOrigin?.apply {
+                    GlideApp.with(side1)
+                        .load(SideUtil.imgIdForMoves(startSide))
+                        .into(side1)
+                }
+            }
+            1 ->{
+                changeMoveImg(move1,originList[position].moveId)
+                originList[position].moveOrigin?.apply {
+                    GlideApp.with(side1)
+                        .load(SideUtil.imgIdForMoves(startSide))
+                        .into(side1)
+                    GlideApp.with(side2)
+                        .load(SideUtil.imgIdForMoves(endSide))
+                        .into(side2)
+                }
+            }
+            2 ->{
+                changeMoveImg(move2,originList[position].moveId)
+                originList[position].moveOrigin?.apply {
+                    GlideApp.with(side2)
+                        .load(SideUtil.imgIdForMoves(startSide))
+                        .into(side2)
+                    GlideApp.with(side3)
+                        .load(SideUtil.imgIdForMoves(endSide))
+                        .into(side3)
+                }
+            }
         }
     }
 
-    private fun ImageView.setMoveImg(move :MoveOrigin){
-        if (move.id >= 0){// 正常招式
-            setImageBitmap(AssetsUtil.getBitmapByMoveId(context, moveId = move.id))
-//            scaleType = ImageView.ScaleType.FIT_XY
-            setBackgroundColor(resources.getColor(R.color.transparent))// 避免黑边和背景颜色对不上，所以要去掉背景色
-        } else{// 空招式
-            setImageResource(R.drawable.ic_add_move)
-//            scaleType = ImageView.ScaleType.FIT_CENTER
-            setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+    private fun changeMoveImg(imageView: ImageView,moveId :Int){
+        if (moveId > 0){
+            GlideApp.with(imageView)
+                .load(AssetsUtil.getBitmapByMoveId(context, moveId = moveId))
+                .into(imageView)
+            imageView.setBackgroundColor(resources.getColor(R.color.transparent))// 避免黑边和背景颜色对不上，所以要去掉背景色
+        } else {
+            imageView.setImageResource(R.drawable.ic_add_move)
+            imageView.setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
         }
     }
 }

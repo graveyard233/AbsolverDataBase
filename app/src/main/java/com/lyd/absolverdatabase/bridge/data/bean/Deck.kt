@@ -5,11 +5,18 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.lyd.absolverdatabase.utils.IntMutableListConverter
+import com.lyd.absolverdatabase.utils.MoveBoxConverter
+import com.lyd.absolverdatabase.utils.MoveBoxListConverter
+import com.lyd.absolverdatabase.utils.SideUtil
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 @Entity(tableName = "deck_tb")
-@TypeConverters(IntMutableListConverter::class)
+@TypeConverters(value = [
+    IntMutableListConverter::class,
+    MoveBoxListConverter::class,
+    MoveBoxConverter::class
+])
 data class Deck(
 
     @PrimaryKey
@@ -25,15 +32,15 @@ data class Deck(
     // 这里拿的是Move的id，以这种list来确定关系，不直接持有move实例来防止后期move出问题了这边也要改
     // 要用的时候靠id去move_tb那搜索就行
     // 序列攻击
-    var sequenceUpperRight :MutableList<Int>,
-    var sequenceLowerRight :MutableList<Int>,
-    var sequenceUpperLeft :MutableList<Int>,
-    var sequenceLowerLeft :MutableList<Int>,
+    var sequenceUpperRight :MutableList<MoveBox>,
+    var sequenceLowerRight :MutableList<MoveBox>,
+    var sequenceUpperLeft :MutableList<MoveBox>,
+    var sequenceLowerLeft :MutableList<MoveBox>,
     // 自选攻击
-    var optionalUpperRight :Int,
-    var optionalLowerRight :Int,
-    var optionalUpperLeft :Int,
-    var optionalLowerLeft :Int
+    var optionalUpperRight :MoveBox,
+    var optionalLowerRight :MoveBox,
+    var optionalUpperLeft :MoveBox,
+    var optionalLowerLeft :MoveBox
 ) : Parcelable
 
 /**专门存数据库的招式类*/
@@ -73,7 +80,13 @@ data class MoveOrigin(
     val canHand :Boolean,// 徒手是否可用
     val canOriginSword :Boolean,// 原版招式在剑卡组里是否可用
     val canMirrorSword :Boolean,// 镜像招式在剑卡组里是否可用 因为有些招式在剑卡组里面不能使用镜像搜索（起始结束站架被动画限死），所以加这个字段，两个字段其中有一个是1就可以在剑卡组中使用，全0就不能在剑卡组中所以用
-)
+){
+    fun toMirror(){
+        startSide = SideUtil.getMirrorSide(startSide)
+        endSide = SideUtil.getMirrorSide(endSide)
+        attackToward = AttackToward.getMirrorToward(attackToward)
+    }
+}
 
 @Entity(tableName = "moveGP_tb")
 data class MoveGP(

@@ -58,6 +58,14 @@ object SideUtil {
             else -> StandSide.UPPER_LEFT
         }
     }
+    fun getMirrorSide(side: StandSide) :StandSide{
+        return when(side){
+            StandSide.UPPER_RIGHT -> StandSide.UPPER_LEFT
+            StandSide.UPPER_LEFT -> StandSide.UPPER_RIGHT
+            StandSide.LOWER_LEFT -> StandSide.LOWER_RIGHT
+            StandSide.LOWER_RIGHT -> StandSide.LOWER_LEFT
+        }
+    }
     fun getMirrorInt(side: StandSide):Int{
         return when(side){
             StandSide.UPPER_RIGHT -> UPPER_LEFT

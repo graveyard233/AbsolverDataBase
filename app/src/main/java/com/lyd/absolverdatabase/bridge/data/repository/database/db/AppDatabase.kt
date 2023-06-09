@@ -52,6 +52,25 @@ abstract class AppDatabase :RoomDatabase(){
                             CoroutineScope(Dispatchers.IO).launch {
 
                                 moveOriginDao().upsertAll(GsonUtils.fromJson(JsonTxt.moveOriginJson,GsonUtils.getListType(MoveOrigin::class.java)))
+
+                                deckDao().upsertAll(listOf(
+                                    Deck(
+                                        name = "测试卡组_1",
+                                        deckType = DeckType.HAND,
+                                        deckStyle = Style.FORSAKEN,
+                                        createTime = System.currentTimeMillis(),
+                                        updateTime = System.currentTimeMillis(),
+                                        note = "这是测试的卡组",
+                                        sequenceUpperRight = mutableListOf(MoveBox(1,0),MoveBox(20,1),MoveBox()),
+                                        sequenceUpperLeft = mutableListOf(MoveBox(13,1),MoveBox(),MoveBox()),
+                                        sequenceLowerLeft = mutableListOf(MoveBox(),MoveBox(27,1),MoveBox()),
+                                        sequenceLowerRight = mutableListOf(MoveBox(92,0),MoveBox(),MoveBox(35,1)),
+                                        optionalUpperRight = MoveBox(42,1),
+                                        optionalUpperLeft = MoveBox(),
+                                        optionalLowerLeft = MoveBox(86,1),
+                                        optionalLowerRight = MoveBox()
+                                    )
+                                ))
                             }
                         }
                     }

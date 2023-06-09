@@ -13,6 +13,7 @@ import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
 import com.lyd.absolverdatabase.bridge.data.bean.EditToSelectMsg
+import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
 import com.lyd.absolverdatabase.bridge.state.DeckEditState
 import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentDeckEditBinding
@@ -56,13 +57,13 @@ class DeckEditFragment :BaseFragment() {
             deckEditBarUpperRight.initClick(clickProxy = { view: View,clickWhatMove :Int ->
                 beforeMoveToSelect(EditToSelectMsg.SEQ_UPPER_RIGHT,clickWhatMove)
             })
-            deckEditBarUpperLeft.initClick(clickProxy = { view: View,clickWhatMove :Int ->
+            deckEditBarUpperLeft.initClick(clickProxy = { _: View, clickWhatMove :Int ->
                 beforeMoveToSelect(EditToSelectMsg.SEQ_UPPER_LEFT, clickWhatMove)
             })
-            deckEditBarLowerLeft.initClick(clickProxy = { view: View,clickWhatMove :Int ->
+            deckEditBarLowerLeft.initClick(clickProxy = { _: View, clickWhatMove :Int ->
                 beforeMoveToSelect(EditToSelectMsg.SEQ_LOWER_LEFT, clickWhatMove)
             })
-            deckEditBarLowerRight.initClick(clickProxy = {view: View,clickWhatMove :Int ->
+            deckEditBarLowerRight.initClick(clickProxy = { _: View, clickWhatMove :Int ->
                 beforeMoveToSelect(EditToSelectMsg.SEQ_LOWER_RIGHT, clickWhatMove)
             })
 
@@ -102,50 +103,50 @@ class DeckEditFragment :BaseFragment() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             editState.sequenceUpperRight.collectLatest {
-                Log.i(TAG, "接收sequenceUpperRight: $it")
+                dataBinding?.deckEditBarUpperRight?.updateMoves(it)
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             editState.sequenceUpperLeft.collectLatest {
-                Log.i(TAG, "sequenceUpperLeft: $it")
+                dataBinding?.deckEditBarUpperLeft?.updateMoves(it)
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             editState.sequenceLowerLeft.collectLatest {
-                Log.i(TAG, "sequenceLowerLeft: $it")
+                dataBinding?.deckEditBarLowerLeft?.updateMoves(it)
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             editState.sequenceLowerRight.collectLatest {
-                Log.i(TAG, "sequenceLowerRight: $it")
+                dataBinding?.deckEditBarLowerRight?.updateMoves(it)
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             launch {
                 editState.optUpperRight.collectLatest {
-                    Log.i(TAG, "optUpperRight-> $it")
+                    dataBinding?.deckEditOptionalUpperRight?.updateMove(it)
                 }
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             launch {
                 editState.optUpperLeft.collectLatest {
-                    Log.i(TAG, "optUpperLeft-> $it")
+                    dataBinding?.deckEditOptionalUpperLeft?.updateMove(it)
                 }
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             launch {
                 editState.optLowerLift.collectLatest {
-                    Log.i(TAG, "optLowerLift-> $it")
+                    dataBinding?.deckEditOptionalLowerLeft?.updateMove(it)
                 }
             }
         }
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             launch {
                 editState.optLowerRight.collectLatest {
-                    Log.i(TAG, "optLowerRight-> $it")
+                    dataBinding?.deckEditOptionalLowerRight?.updateMove(it)
                 }
             }
         }
@@ -182,7 +183,7 @@ class DeckEditFragment :BaseFragment() {
         dataBinding = null
     }
 
-    private fun beforeMoveToSelect(@IntRange(0, 7) whatForEdit: Int, clickWhatMove: Int){
+    private fun beforeMoveToSelect(@IntRange(0, 7) whatForEdit: Int,@IntRange(0,2) clickWhatMove: Int){
         editState.initFilterOption()
         editState.initSelectMove()
         editState.selectWhatMoveInSeq(clickWhatMove)

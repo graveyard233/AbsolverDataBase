@@ -24,7 +24,7 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
     init {
         CoroutineScope(Dispatchers.IO).launch {
             moveJsDao.deleteAll()
-            deckDao.deleteAll()
+//            deckDao.deleteAll()
 //            moveOriginDAO.deleteAll()// 现在已经不需要自己生成原版招式了，在数据库创建的时候就已经搞定了数据生成
             moveGPDAO.deleteAll()
 
@@ -37,7 +37,7 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
                 moveGPDAO.upsertAll(MoveGenerate.generateMoveGPs())
             }
             val r3 = async {
-                deckDao.upsertAll(DeckGenerate.generateDeck(15))
+//                deckDao.upsertAll(DeckGenerate.generateDeck(15))
                 // TODO: 准备做一个专门来测试的卡组
 //                deckDao.upsertAll(listOf(
 //                    Deck(
@@ -47,13 +47,20 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
 //                        createTime = System.currentTimeMillis(),
 //                        updateTime = System.currentTimeMillis(),
 //                        note = "这是测试的卡组",
-//                        sequenceUpperRight =
+//                        sequenceUpperRight = mutableListOf(MoveBox(1,0),MoveBox(20,1),MoveBox()),
+//                        sequenceUpperLeft = mutableListOf(MoveBox(13,1),MoveBox(),MoveBox()),
+//                        sequenceLowerLeft = mutableListOf(MoveBox(),MoveBox(27,1),MoveBox()),
+//                        sequenceLowerRight = mutableListOf(MoveBox(92,0),MoveBox(),MoveBox(35,1)),
+//                        optionalUpperRight = MoveBox(42,1),
+//                        optionalUpperLeft = MoveBox(),
+//                        optionalLowerLeft = MoveBox(86,1),
+//                        optionalLowerRight = MoveBox()
 //                    )
 //                ))
             }
 //            r1.await()
             r2.await()
-            r3.await()
+//            r3.await()
 
 
             Log.i(TAG, "decksJson -> ${GsonUtils.toJson(deckDao.getAllDeck())}")

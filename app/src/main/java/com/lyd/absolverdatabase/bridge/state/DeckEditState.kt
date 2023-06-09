@@ -39,39 +39,39 @@ class DeckEditState(private val repository: DeckEditRepository,
 
 
 
-    val optUpperRight :MutableSharedFlow<Int> = MutableSharedFlow()
-    val optUpperLeft :MutableSharedFlow<Int> = MutableSharedFlow()
-    val optLowerLift :MutableSharedFlow<Int> = MutableSharedFlow()
-    val optLowerRight :MutableSharedFlow<Int> = MutableSharedFlow()
+    val optUpperRight :MutableSharedFlow<MoveBox> = MutableSharedFlow()
+    val optUpperLeft :MutableSharedFlow<MoveBox> = MutableSharedFlow()
+    val optLowerLift :MutableSharedFlow<MoveBox> = MutableSharedFlow()
+    val optLowerRight :MutableSharedFlow<MoveBox> = MutableSharedFlow()
 
-    private val _sequenceUpperRight :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
-    private val _sequenceUpperLeft :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
-    private val _sequenceLowerLeft :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
-    private val _sequenceLowerRight :MutableSharedFlow<MutableList<Int>> = MutableSharedFlow()
+    private val _sequenceUpperRight :MutableSharedFlow<MutableList<MoveBox>> = MutableSharedFlow()
+    private val _sequenceUpperLeft :MutableSharedFlow<MutableList<MoveBox>> = MutableSharedFlow()
+    private val _sequenceLowerLeft :MutableSharedFlow<MutableList<MoveBox>> = MutableSharedFlow()
+    private val _sequenceLowerRight :MutableSharedFlow<MutableList<MoveBox>> = MutableSharedFlow()
 
     val sequenceUpperRight = _sequenceUpperRight.asSharedFlow()
     val sequenceUpperLeft  = _sequenceUpperLeft .asSharedFlow()
     val sequenceLowerLeft  = _sequenceLowerLeft .asSharedFlow()
     val sequenceLowerRight = _sequenceLowerRight.asSharedFlow()
 
-    suspend fun updateSeqUpperRight(list :MutableList<Int>) = _sequenceUpperRight.emit(list)
-    suspend fun updateSeqUpperLeft(list :MutableList<Int>) = _sequenceUpperLeft.emit(list)
-    suspend fun updateSeqLowerLeft(list :MutableList<Int>) = _sequenceLowerLeft.emit(list)
-    suspend fun updateSeqLowerRight(list :MutableList<Int>) = _sequenceLowerRight.emit(list)
+    suspend fun updateSeqUpperRight(list :MutableList<MoveBox>) = _sequenceUpperRight.emit(list)
+    suspend fun updateSeqUpperLeft(list :MutableList<MoveBox>) = _sequenceUpperLeft.emit(list)
+    suspend fun updateSeqLowerLeft(list :MutableList<MoveBox>) = _sequenceLowerLeft.emit(list)
+    suspend fun updateSeqLowerRight(list :MutableList<MoveBox>) = _sequenceLowerRight.emit(list)
 
     fun updateAllOption(deck: Deck){
         viewModelScope.launch(Dispatchers.IO){
             launch {
-                optUpperRight.emit(deck.optionalUpperRight)
+                optUpperRight.emit(repository.getOriginWithMirrorByBox(deck.optionalUpperRight))
             }
             launch {
-                optUpperLeft.emit(deck.optionalUpperLeft)
+                optUpperLeft.emit(repository.getOriginWithMirrorByBox(deck.optionalUpperLeft))
             }
             launch {
-                optLowerLift.emit(deck.optionalLowerLeft)
+                optLowerLift.emit(repository.getOriginWithMirrorByBox(deck.optionalLowerLeft))
             }
             launch {
-                optLowerRight.emit(deck.optionalLowerRight)
+                optLowerRight.emit(repository.getOriginWithMirrorByBox(deck.optionalLowerRight))
             }
         }
     }
@@ -79,16 +79,16 @@ class DeckEditState(private val repository: DeckEditRepository,
     fun updateAllSequence(deck: Deck){// 千万不要修改这个deck的属性
         viewModelScope.launch/*(Dispatchers.IO)*/{
             launch {
-                updateSeqUpperRight(deck.sequenceUpperRight)
+                updateSeqUpperRight(repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperRight))
             }
             launch {
-                updateSeqUpperLeft(deck.sequenceUpperLeft)
+                updateSeqUpperLeft(repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperLeft))
             }
             launch {
-                updateSeqLowerLeft(deck.sequenceLowerLeft)
+                updateSeqLowerLeft(repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerLeft))
             }
             launch {
-                updateSeqLowerRight(deck.sequenceLowerRight)
+                updateSeqLowerRight(repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerRight))
             }
         }
     }

@@ -102,24 +102,33 @@ class MoveSelectFragment :BaseFragment(){
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_moves
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.35F)
                 lifecycleScope.launch(Dispatchers.IO){
-                    seqPack = SeqPack(startSide = when(argMsg.toSelectMsg.whatBarToEdit){
-                        0 -> StandSide.UPPER_RIGHT
-                        1 -> StandSide.UPPER_LEFT
-                        2 -> StandSide.LOWER_LEFT
-                        3 -> StandSide.LOWER_RIGHT
-                        else -> StandSide.UPPER_RIGHT
-                    }).apply {
-                        replaceList(
-                            editState.getSeqMovesByIds(
-                                when(argMsg.toSelectMsg.whatBarToEdit){
-                                    0 -> editState.getDeckInSaved()!!.sequenceUpperRight
-                                    1 -> editState.getDeckInSaved()!!.sequenceUpperLeft
-                                    2 -> editState.getDeckInSaved()!!.sequenceLowerLeft
-                                    3 -> editState.getDeckInSaved()!!.sequenceLowerRight
-                                    else -> listOf<Int>(-1,-1,-1)
-                                }
-                            )
-                        )
+                    // TODO: 这里获取的招式序列应该按镜像list来处理
+                    seqPack = when(argMsg.toSelectMsg.whatBarToEdit){
+                        0 ->{
+                            SeqPack(startSide = StandSide.UPPER_RIGHT, isMirrorList = MoveBox.getMirrorList(editState.getDeckInSaved()!!.sequenceUpperRight)).apply {
+                                replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceUpperRight)))
+                            }
+                        }
+                        1 ->{
+                            SeqPack(startSide = StandSide.UPPER_LEFT, isMirrorList = MoveBox.getMirrorList(editState.getDeckInSaved()!!.sequenceUpperLeft)).apply {
+                                replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceUpperLeft)))
+                            }
+                        }
+                        2 ->{
+                            SeqPack(startSide = StandSide.LOWER_LEFT, isMirrorList = MoveBox.getMirrorList(editState.getDeckInSaved()!!.sequenceLowerLeft)).apply {
+                                replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceLowerLeft)))
+                            }
+                        }
+                        3 ->{
+                            SeqPack(startSide = StandSide.LOWER_RIGHT, isMirrorList = MoveBox.getMirrorList(editState.getDeckInSaved()!!.sequenceLowerRight)).apply {
+                                replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceLowerRight)))
+                            }
+                        }
+                        else ->{
+                            SeqPack(startSide = StandSide.UPPER_RIGHT).apply {
+                                replaceList(editState.getSeqMovesByIds(listOf<Int>(-1,-1,-1)))
+                            }
+                        }
                     }
                     whenClickMoveInBar(argMsg.toSelectMsg.whatMoveBeClicked)
                 }
@@ -138,10 +147,10 @@ class MoveSelectFragment :BaseFragment(){
                     }).apply {
                         updateOpt(editState.getOptMoveById(
                             when(argMsg.toSelectMsg.whatBarToEdit){
-                                4 -> editState.getDeckInSaved()!!.optionalUpperRight
-                                5 -> editState.getDeckInSaved()!!.optionalUpperLeft
-                                6 -> editState.getDeckInSaved()!!.optionalLowerLeft
-                                7 -> editState.getDeckInSaved()!!.optionalLowerRight
+                                4 -> editState.getDeckInSaved()!!.optionalUpperRight.moveId
+                                5 -> editState.getDeckInSaved()!!.optionalUpperLeft.moveId
+                                6 -> editState.getDeckInSaved()!!.optionalLowerLeft.moveId
+                                7 -> editState.getDeckInSaved()!!.optionalLowerRight.moveId
                                 else -> -1
                             }
                         ))
@@ -239,14 +248,6 @@ class MoveSelectFragment :BaseFragment(){
         barLazy = requireView().findViewById(R.id.moveSelect_bar)
         // 在这里可以找到加载布局的控件
 
-//        try {
-//            barLazy = requireView().findViewById(R.id.moveSelect_bar)
-////            val tempBar :MovesBar = barLazy as MovesBar // 做不到强制转换，因为这不是一个view，而是一个layout，所以要靠
-//            val tempImg = barLazy?.findViewById<ImageView>(R.id.bar_move_0)
-//            tempImg!!.setImageResource(R.drawable.ic_faejin)
-//        } catch (e :Exception){
-//            Log.e(TAG, "onCreateView: ", e)
-//        }
         try {
             barLazy = requireView().findViewById(R.id.moveSelect_bar) as ViewGroup// 拿到布局 这个流程必须再onViewCreated这里进行
             // TODO: 在这里要给move的img加点击事件，告诉下面的recycleFragment startSide是什么，用flow传递过去
@@ -274,6 +275,7 @@ class MoveSelectFragment :BaseFragment(){
                         }
                     }
                 }
+                changeMovesBar(0,1,2)
             } else if (optionPack != null){
                 barLazy?.apply {
                     sideStart = findViewById(R.id.bar_oneMove_side_start)
@@ -281,7 +283,7 @@ class MoveSelectFragment :BaseFragment(){
                     move0 = findViewById(R.id.bar_oneMove_img)
                     move0?.setOnClickListener { whenClickMoveInOneBar() }
                 }
-
+                changeOneMoveBar()
                 move0?.strokeWidth = resources.getDimension(R.dimen.moveShapeableImgStrokeWidth)
             }
 
@@ -323,6 +325,28 @@ class MoveSelectFragment :BaseFragment(){
                         is MoveMsgState.SelectNull -> { removeMsg() }
                         is MoveMsgState.SelectOne -> {
                             setMoveMsg(it.moveForSelect)
+                            // 然后还要更新bar的布局
+                            if (seqPack != null){
+                                moveImgList[editState.moveBeClickFlow.value]?.setImageBitmap(
+                                    AssetsUtil.getBitmapByMoveId(requireContext(),it.moveForSelect.moveOrigin.id)
+                                )
+                                when(editState.moveBeClickFlow.value){// 根据选择的招式来修改起始结束站架
+                                    0 ->{// 起始站架已经定死，只用修改结束站架side1
+                                        side1?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.endSide))
+                                    }
+                                    1 ->{
+                                        side1?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.startSide))
+                                        side2?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.endSide))
+                                    }
+                                    2 ->{
+                                        side2?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.startSide))
+                                        sideEnd?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.endSide))
+                                    }
+                                }
+                            }else if (optionPack != null){// 起始站架已经定死，所以只用修改结束站架
+                                move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),it.moveForSelect.moveOrigin.id))
+                                sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it.moveForSelect.moveOrigin.endSide)))
+                            }
                         }
                     }
                 }
@@ -354,7 +378,7 @@ class MoveSelectFragment :BaseFragment(){
         editState.selectWhatMoveInSeq(moveIndex)
         dataBinding?.moveSelectPager?.isUserInputEnabled = true// 先解锁
         // 在这里判断是否有限制，然后分发sideLimit
-        CoroutineScope(Dispatchers.Default).launch { // 进CPU密集型线程来计算，别阻塞主线程
+        CoroutineScope(Dispatchers.Main).launch { // 进CPU密集型线程来计算，别阻塞主线程
             seqPack?.apply {
                 when(moveIndex){
                     0 ->{// 选择了序列的第一个，起始站架已经被定死，但还要判断结束站架是否被第二个招式(还可能为空)限制
@@ -418,7 +442,7 @@ class MoveSelectFragment :BaseFragment(){
         }
     }
     private fun whenClickMoveInOneBar(){
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             if (optionPack != null){
                 // 起始站架总是会被限制，结束站架被限制成不能和起始站架一样的数据
                 // TODO: 应该设置tab不能跳到和起始站架一样的viewPage
@@ -429,13 +453,14 @@ class MoveSelectFragment :BaseFragment(){
 //                    7 -> 3
 //                    else -> 0
 //                })?.view?.isEnabled = false// 这句话只是禁用了tabLayout的点击事件，但没有禁用viewPager的滚动，还需要跳过
-                SideLimit.optLimit(startSide = when(argMsg.toSelectMsg.whatBarToEdit){
+                editState.updateSideLimit(SideLimit.optLimit(startSide = optionPack!!.startSide/*when(argMsg.toSelectMsg.whatBarToEdit){
                     4 -> StandSide.UPPER_RIGHT
                     5 -> StandSide.UPPER_LEFT
                     6 -> StandSide.UPPER_LEFT
                     7 -> StandSide.LOWER_RIGHT
                     else -> StandSide.UPPER_RIGHT
-                })
+                }*/))
+                // TODO: opt的viewPager限制还有问题
             }
         }
 
@@ -582,6 +607,78 @@ class MoveSelectFragment :BaseFragment(){
                     Log.i(TAG, "tryChangeSpinner: attackDirection 不一样，更新")
                     setSelection(filterOption.attackDirection.num)
                 }
+            }
+        }
+    }
+
+    /**根据[seqPack]里面的数据变更bar*/
+    private fun changeMovesBar(@androidx.annotation.IntRange(0,2) vararg changePosition :Int){
+        seqPack?.apply {
+            changePosition.forEachIndexed { index, position ->
+                if (originList[index] != null && idList[position] != -1){
+                    originList[index]!!.apply {
+                        moveImgList[index]?.setImageBitmap(
+                            AssetsUtil.getBitmapByMoveId(requireContext(),id)
+                        )
+                        when(position){// 根据选择的招式来修改起始结束站架
+                            0 ->{// 起始站架已经定死，只用修改结束站架side1
+                                side1?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                            }
+                            1 ->{
+                                side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                side2?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                            }
+                            2 ->{
+                                side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                sideEnd?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                            }
+                        }
+                    }
+                } else{
+                    // 恢复招式img为初始化
+                    moveImgList[index]?.apply {
+                        setImageResource(R.drawable.ic_add_move)
+                        setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                    }
+                    when(position){// 恢复站架图标，需要按照前后是否有招式判断,恢复的是按起始站架来变
+                        0 ->{// 只用看第二个有没有招式有就不变，没就变
+                            if (idList[1] == -1){
+                                side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                            }
+                        }
+                        1 ->{// 要看前后，而且是分开来看
+                            if (idList[0] == -1){
+                                side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                            }
+                            if (idList[2] == -1){
+                                side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                            }
+                        }
+                        2 ->{// 看中间那个，第二个
+                            if (idList[1] == -1){
+                                side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+    /**根据[optionPack]里面的数据来变更*/
+    private fun changeOneMoveBar(){
+        optionPack?.apply {
+            if (optionMove != null && optionA != -1){
+                optionMove!!.let {move->
+                    move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),move.id))
+                    sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(move.endSide)))
+                }
+            } else{
+                move0?.apply {
+                    setImageResource(R.drawable.ic_add_move)
+                    setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                }
+                sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(this.startSide)))
             }
         }
     }
