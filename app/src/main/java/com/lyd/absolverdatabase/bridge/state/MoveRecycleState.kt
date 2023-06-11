@@ -6,10 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.lyd.absolverdatabase.bridge.data.bean.MoveForSelect
-import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
 import com.lyd.absolverdatabase.bridge.data.bean.RepoResult
 import com.lyd.absolverdatabase.bridge.data.repository.MoveRepository
-import com.lyd.absolverdatabase.utils.SideUtil
 
 
 class MoveRecycleState(private val repository: MoveRepository,
@@ -33,12 +31,12 @@ class MoveRecycleState(private val repository: MoveRepository,
         }
     }
 
-    suspend fun originOptListWithMirror(startInt: Int,canHand: Boolean = false) :List<MoveForSelect>
+    suspend fun originOptListWithMirror(startInt: Int,endInt: Int,canHand: Boolean = false) :List<MoveForSelect>
     {
         val result = if (canHand){
-            repository.getHandOriginOptWithMirror(startInt)
+            repository.getHandOriginOptWithMirror(startInt,endInt)
         } else {
-            repository.getSwordOriginOptWithMirror(startInt)
+            repository.getSwordOriginOptWithMirror(startInt,endInt)
         }
         return when(result){
             is RepoResult.RpEmpty -> listOf<MoveForSelect>()

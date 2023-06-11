@@ -5,8 +5,6 @@ import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveGPDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveOriginDAO
 import com.lyd.absolverdatabase.utils.SideUtil
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class MoveRepository(private val moveOriginDAO: MoveOriginDAO, // 和下面的dao一样用于查询招式
                      private val moveGPDAO: MoveGPDAO)
@@ -19,7 +17,7 @@ class MoveRepository(private val moveOriginDAO: MoveOriginDAO, // 和下面的da
         val mirrorIdList = mutableListOf<Int>()
         // 先获取到包含起始站架和镜像起始站架的所有招式，这里要按有没有起始站夹限制来区分使用哪一个DAO函数
         if (startInt != null){// 起始站架被限制，我需要按起始站架及镜像来搜索徒手招式
-            Log.i(TAG, "getHandOriginWithMirror: 查询的起始站架是 ${SideUtil.getSideByInt(startInt)} 镜像站架是 ${SideUtil.getMirrorSide(startInt)}")
+            Log.i(TAG, "getHandOriginWithMirror: 查询的起始站架是 ${SideUtil.getSideByInt(startInt)} 镜像站架是 ${SideUtil.getMirrorSide(startInt)} 结束站架是 ${SideUtil.getSideByInt(endInt)}")
             val tempList = moveOriginDAO.getHandMoveByStartWithMirror(SideUtil.getSideByInt(startInt), mirrorStartSide = SideUtil.getMirrorSide(startInt))
             // 然后把其中是镜像站架的招式进行全部进行镜像操作
             result = tempList.map {before ->
@@ -148,8 +146,9 @@ class MoveRepository(private val moveOriginDAO: MoveOriginDAO, // 和下面的da
     }
 
     /**寻找自选序列可用的招式，起始站架不能和结束站架相同*/
-    suspend fun getHandOriginOptWithMirror(startInt: Int) :RepoResult<List<MoveForSelect>>{
+    suspend fun getHandOriginOptWithMirror(startInt: Int, endInt: Int) :RepoResult<List<MoveForSelect>>{
         val canNotEndInSide = SideUtil.getSideByInt(startInt)
+        val endSide = SideUtil.getSideByInt(endInt)
         var result = listOf<MoveOrigin>()
         val mirrorIdList = mutableListOf<Int>()
         // 先获取起始针对起始站架筛选的招式，这些招式的起始站架或者是镜像的起始站架都是符合起始站架限制的
@@ -165,7 +164,7 @@ class MoveRepository(private val moveOriginDAO: MoveOriginDAO, // 和下面的da
             }
             before
         }.filter {// 然后从这些招式中，筛选出结束站架不等于起始站架的
-            it.endSide != canNotEndInSide
+            it.endSide != canNotEndInSide && it.endSide == endSide
         }
         return if (result.isEmpty()){
             RepoResult.RpEmpty("optHand is empty")
@@ -176,7 +175,7 @@ class MoveRepository(private val moveOriginDAO: MoveOriginDAO, // 和下面的da
         }
     }
 
-    suspend fun getSwordOriginOptWithMirror(startInt: Int) :RepoResult<List<MoveForSelect>>{
+    suspend fun getSwordOriginOptWithMirror(startInt: Int, endInt: Int) :RepoResult<List<MoveForSelect>>{
         var result :List<MoveOrigin> = listOf()
         val swordList = moveOriginDAO.getSwordMove()// 先筛选出剑卡中可用的招式
         val mirrorIdList = mutableListOf<Int>()

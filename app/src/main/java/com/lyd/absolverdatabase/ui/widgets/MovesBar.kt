@@ -101,7 +101,7 @@ class MovesBar : ConstraintLayout {
                 changeMoveImg(move0,originList[position].moveId)
                 originList[position].moveOrigin?.apply {
                     GlideApp.with(side1)
-                        .load(SideUtil.imgIdForMoves(startSide))
+                        .load(SideUtil.imgIdForMoves(endSide))
                         .into(side1)
                 }
             }

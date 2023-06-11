@@ -88,7 +88,7 @@ class MoveRecycleFragment :BaseFragment()
     ): View? {
         val view :View = inflater.inflate(R.layout.fragment_move_recycle,container,false)
 
-        arguments?.getInt("whatSide")?.let {
+        arguments?.getInt("whatEndSide")?.let {
             whatEndSide = it
         }
 
@@ -210,7 +210,7 @@ class MoveRecycleFragment :BaseFragment()
                         Log.w(TAG, "optLimit: ${it.startSide}")
                         // TODO: 2023/6/4 这里要做一个专门给自选序列一个专门的筛选方法
                         // TODO: 2023/6/9 这个数据还有点问题
-                        moveRecycleState.originOptListWithMirror(SideUtil.getIntBySide(it.startSide),tempCanHand)
+                        moveRecycleState.originOptListWithMirror(SideUtil.getIntBySide(it.startSide),whatEndSide,tempCanHand)
                     }
                 }
             }
