@@ -24,6 +24,7 @@ import com.lyd.absolverdatabase.ui.adapter.MoveItemAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.utils.SideUtil
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -188,7 +189,52 @@ class MoveRecycleFragment :BaseFragment()
                 null -> true
             }
             withContext(Dispatchers.IO) {
-                when(it){
+                val tempMoveListBeSelect = async {
+                    val tempList = mutableListOf<Int>()
+                    val tempDeck = editState.getDeckInSaved()
+                    tempDeck?.sequenceUpperRight?.forEach { tempBox ->
+                        if (tempBox.moveId != -1){
+                            tempList.add(tempBox.moveId)
+                        }
+                    }
+                    tempDeck?.sequenceUpperLeft?.forEach { tempBox ->
+                        if (tempBox.moveId != -1){
+                            tempList.add(tempBox.moveId)
+                        }
+                    }
+                    tempDeck?.sequenceLowerLeft?.forEach { tempBox ->
+                        if (tempBox.moveId != -1){
+                            tempList.add(tempBox.moveId)
+                        }
+                    }
+                    tempDeck?.sequenceLowerRight?.forEach { tempBox ->
+                        if (tempBox.moveId != -1){
+                            tempList.add(tempBox.moveId)
+                        }
+                    }
+                    tempDeck?.optionalUpperRight?.moveId?.let { optId ->
+                        if (optId != -1){
+                            tempList.add(optId)
+                        }
+                    }
+                    tempDeck?.optionalUpperLeft?.moveId?.let { optId ->
+                        if (optId != -1){
+                            tempList.add(optId)
+                        }
+                    }
+                    tempDeck?.optionalLowerLeft?.moveId?.let { optId ->
+                        if (optId != -1){
+                            tempList.add(optId)
+                        }
+                    }
+                    tempDeck?.optionalLowerRight?.moveId?.let { optId ->
+                        if (optId != -1){
+                            tempList.add(optId)
+                        }
+                    }
+                    tempList
+                }
+                val tempForSelect = when(it){
                     is SideLimit.noLimit -> {
                         Log.i(TAG, "noLimit: ${it.msg}")
                         moveRecycleState.originListWithMirror(null,whatEndSide,tempCanHand)
@@ -213,6 +259,13 @@ class MoveRecycleFragment :BaseFragment()
                         moveRecycleState.originOptListWithMirror(SideUtil.getIntBySide(it.startSide),whatEndSide,tempCanHand)
                     }
                 }
+                val idsBeSelect = tempMoveListBeSelect.await()
+                tempForSelect.forEach { tempMoveForSelect->
+                    if (tempMoveForSelect.moveOrigin.id in idsBeSelect){
+                        tempMoveForSelect.isSelected = true// 标记已选择的招式
+                    }
+                }
+                tempForSelect
             }
         }
     }

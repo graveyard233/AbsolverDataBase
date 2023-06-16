@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.imageview.ShapeableImageView
 import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
@@ -27,9 +28,9 @@ class MovesBar : ConstraintLayout {
     private lateinit var side2 :ImageView
     private lateinit var side3 :ImageView
 
-    private lateinit var move0 :ImageView
-    private lateinit var move1 :ImageView
-    private lateinit var move2 :ImageView
+    private lateinit var move0 :ShapeableImageView
+    private lateinit var move1 :ShapeableImageView
+    private lateinit var move2 :ShapeableImageView
 
     constructor(context: Context) :this(context,null)
     constructor(context: Context, attrs: AttributeSet?) : super(context,attrs) {
@@ -83,7 +84,7 @@ class MovesBar : ConstraintLayout {
 
     }
 
-    fun initClick(clickProxy :(view:View,clickWhatMove :Int)->Unit = { view: View, clickWhatMove: Int -> }){
+    fun initClick(clickProxy :(view:View,clickWhatMove :Int)->Unit = { _: View, _: Int -> }){
         move0.setOnClickListener { view ->
             clickProxy.invoke(view,0)
         }

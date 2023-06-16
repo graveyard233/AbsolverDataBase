@@ -446,21 +446,8 @@ class MoveSelectFragment :BaseFragment(){
             if (optionPack != null){
                 // 起始站架总是会被限制，结束站架被限制成不能和起始站架一样的数据
                 // TODO: 应该设置tab不能跳到和起始站架一样的viewPage
-//                dataBinding?.moveSelectTab?.getTabAt(when(argMsg.toSelectMsg.whatBarToEdit){
-//                    4 -> 0
-//                    5 -> 1
-//                    6 -> 2
-//                    7 -> 3
-//                    else -> 0
-//                })?.view?.isEnabled = false// 这句话只是禁用了tabLayout的点击事件，但没有禁用viewPager的滚动，还需要跳过
-                editState.updateSideLimit(SideLimit.optLimit(startSide = optionPack!!.startSide/*when(argMsg.toSelectMsg.whatBarToEdit){
-                    4 -> StandSide.UPPER_RIGHT
-                    5 -> StandSide.UPPER_LEFT
-                    6 -> StandSide.UPPER_LEFT
-                    7 -> StandSide.LOWER_RIGHT
-                    else -> StandSide.UPPER_RIGHT
-                }*/))
-                // TODO: opt的viewPager限制还有问题
+                // 不需要限制了因为经过筛选后和起始站架一样的pager的数据直接为空，选不了就不会出事
+                editState.updateSideLimit(SideLimit.optLimit(startSide = optionPack!!.startSide))
             }
         }
 
@@ -575,7 +562,7 @@ class MoveSelectFragment :BaseFragment(){
         }
     }
 
-    private fun doAfterChangeFilterManual (){// 应该在发射这里进行拦截，确保collect的时候总会更新，然后recycle那边也不会收到很多次
+    private fun doAfterChangeFilterManual(){// 应该在发射这里进行拦截，确保collect的时候总会更新，然后recycle那边也不会收到很多次
         if (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - launchFilterTime) < 0.8 && launchFilterTime != 0L){
             Log.i(TAG, "doAfterChangeFilterManual: 过于频繁，放弃")
         } else {

@@ -1,15 +1,15 @@
 package com.lyd.absolverdatabase.ui.widgets
 
 import android.app.Activity
-import android.util.Log
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.core.widget.addTextChangedListener
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputLayout
-import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
 import com.lyd.absolverdatabase.bridge.data.bean.Style
@@ -84,23 +84,29 @@ class DeckDetailDialog(activity: Activity) : BaseBottomSheetDialog(activity) {
                 _deckNote.editText?.setText(note)
             _imgDeckStyle.setImageResource(StyleUtil.styleId(deckStyle))
             _buttonGroup.check(getIdByStyle(deckStyle))
-            _createTime.text = /*"创建时间:\n${if (createTime == 0L) {
-                Date().time.toDateStr(_format)
-            } else {
-                createTime.toDateStr(_format)
-            }}"*/context.resources.getString(R.string.deckDetail_createTime,if (createTime == 0L) {
+            _createTime.text = context.resources.getString(R.string.deckDetail_createTime,if (createTime == 0L) {
                 Date().time.toDateStr(_format)
             } else {
                 createTime.toDateStr(_format)
             })
-            _updateTime.text = /*"更新时间:\n${if (updateTime == 0L) {
+            _updateTime.text =context.resources.getString(R.string.deckDetail_updateTime,if (updateTime == 0L) {
                 Date().time.toDateStr(_format)
             } else {
                 updateTime.toDateStr(_format)
-            }}"*/context.resources.getString(R.string.deckDetail_updateTime,if (updateTime == 0L) {
-                Date().time.toDateStr(_format)
-            } else {
-                updateTime.toDateStr(_format)
+            })
+        }?.apply {
+            _deckName.editText?.addTextChangedListener(
+                afterTextChanged = {text: Editable? ->
+                    text?.let {
+                        if (it.isNotBlank())// 不能为空，所以要判断
+                            mDeck?.name = it.toString()
+                    }
+                }
+            )
+            _deckNote.editText?.addTextChangedListener(afterTextChanged = {text: Editable? ->
+                text?.let {
+                    mDeck?.note = it.toString()// 可空，所以不需要判断isNotBlank
+                }
             })
         }
 

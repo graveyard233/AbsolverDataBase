@@ -25,7 +25,7 @@ class DeckEditState(private val repository: DeckEditRepository,
     fun getDeckInSaved() : Deck? = savedState.get<Deck>("deckInSaved")
     fun saveDeckInSaved(deck: Deck) {
         savedState.set("deckInSaved", deck)
-        // 保存的时候应该还要触发序列sharedFlow的变化
+        // 保存的时候应该还要触发序列sharedFlow的变化，前面这句话应该不需要，因为一旦改变所有的都会跟着一起动，序列数据已经变了，所以不需要触发序列变化
     }
 
     val deckInSaved = savedState.getStateFlow("deckInSaved",DeckGenerate.generateEmptyDeck())

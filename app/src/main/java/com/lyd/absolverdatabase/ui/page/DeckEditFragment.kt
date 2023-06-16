@@ -90,6 +90,7 @@ class DeckEditFragment :BaseFragment() {
 
         dataBinding?.apply {
             deckEditConstrainBg?.setOnLongClickListener {view ->
+                // 这一步，我把这个args中的deck传进了dialog，然后里面的修改也会改变外面的值
                 deckDetailDialog.apply { mDeck = args.deckForEdit }.show()
                 return@setOnLongClickListener true
             }

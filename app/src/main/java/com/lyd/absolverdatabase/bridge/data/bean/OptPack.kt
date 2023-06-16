@@ -11,11 +11,7 @@ data class OptPack(
         if (move != null){
             optionA = move.id
             optionMove = move
-            isMirror = if (move.startSide != startSide){
-                1
-            } else {
-                0
-            }
+            isMirror = if (move.startSide != startSide) 1 else 0
         }
     }
 }

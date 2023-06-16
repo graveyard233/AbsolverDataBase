@@ -180,6 +180,7 @@ class MoveRepository(private val moveOriginDAO: MoveOriginDAO, // 和下面的da
         val swordList = moveOriginDAO.getSwordMove()// 先筛选出剑卡中可用的招式
         val mirrorIdList = mutableListOf<Int>()
         val tempStartSide = SideUtil.getSideByInt(startInt)
+        val endSide = SideUtil.getSideByInt(endInt)
         result = swordList.filter {origin: MoveOrigin ->
             if (origin.canOriginSword && !origin.canMirrorSword){// 仅原版可用
                 origin.startSide == tempStartSide
@@ -213,7 +214,7 @@ class MoveRepository(private val moveOriginDAO: MoveOriginDAO, // 和下面的da
                 false
             }
         }.filter {
-            it.endSide != tempStartSide
+            it.endSide != tempStartSide && it.endSide == endSide
         }
         return if (result.isEmpty()){
             RepoResult.RpEmpty("handList is empty")
