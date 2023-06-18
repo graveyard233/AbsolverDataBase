@@ -16,4 +16,18 @@ data class SeqPack (
             idList[index] = origin?.id ?: -1
         }
     }
+
+    fun updateOne(whatIndex :Int,moveForSelect: MoveForSelect?){
+        if (moveForSelect == null){
+            idList[whatIndex] = -1
+            originList[whatIndex] = null
+            isMirrorList[whatIndex] = 0
+        } else {
+            if (whatIndex in 0..2){
+                idList[whatIndex] = moveForSelect.moveOrigin.id
+                originList[whatIndex] = moveForSelect.moveOrigin
+                isMirrorList[whatIndex] = moveForSelect.isMirror
+            }
+        }
+    }
 }

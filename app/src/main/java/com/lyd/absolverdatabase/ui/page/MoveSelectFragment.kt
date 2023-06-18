@@ -145,15 +145,24 @@ class MoveSelectFragment :BaseFragment(){
                         7 -> StandSide.LOWER_RIGHT
                         else -> StandSide.UPPER_RIGHT
                     }).apply {
-                        updateOpt(editState.getOptMoveById(
-                            when(argMsg.toSelectMsg.whatBarToEdit){
-                                4 -> editState.getDeckInSaved()!!.optionalUpperRight.moveId
-                                5 -> editState.getDeckInSaved()!!.optionalUpperLeft.moveId
-                                6 -> editState.getDeckInSaved()!!.optionalLowerLeft.moveId
-                                7 -> editState.getDeckInSaved()!!.optionalLowerRight.moveId
-                                else -> -1
+                        updateOpt(
+                            move = editState.getOptMoveById(
+                                when (argMsg.toSelectMsg.whatBarToEdit) {
+                                    4 -> editState.getDeckInSaved()!!.optionalUpperRight.moveId
+                                    5 -> editState.getDeckInSaved()!!.optionalUpperLeft.moveId
+                                    6 -> editState.getDeckInSaved()!!.optionalLowerLeft.moveId
+                                    7 -> editState.getDeckInSaved()!!.optionalLowerRight.moveId
+                                    else -> -1
+                                }
+                            ),
+                            isUseMirror = when (argMsg.toSelectMsg.whatBarToEdit) {
+                                4 -> editState.getDeckInSaved()!!.optionalUpperRight.isUseMirror
+                                5 -> editState.getDeckInSaved()!!.optionalUpperLeft.isUseMirror
+                                6 -> editState.getDeckInSaved()!!.optionalLowerLeft.isUseMirror
+                                7 -> editState.getDeckInSaved()!!.optionalLowerRight.isUseMirror
+                                else -> 0
                             }
-                        ))
+                        )
                     }
                     whenClickMoveInOneBar()
                 }
@@ -320,7 +329,7 @@ class MoveSelectFragment :BaseFragment(){
 
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                editState.moveForSelectFlow.collectLatest {
+                editState.moveForSelectFlow.collectLatest {// 接收到数据，首先更新数据部分的文本，然后更新站架信息，最后更新pack的数据，最后找机会变更viewModel
                     when(it){
                         is MoveMsgState.SelectNull -> { removeMsg() }
                         is MoveMsgState.SelectOne -> {
@@ -343,9 +352,11 @@ class MoveSelectFragment :BaseFragment(){
                                         sideEnd?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.endSide))
                                     }
                                 }
+//                                seqPack!!.updateOne(editState.moveBeClickFlow.value,it.moveForSelect)
                             }else if (optionPack != null){// 起始站架已经定死，所以只用修改结束站架
                                 move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),it.moveForSelect.moveOrigin.id))
                                 sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it.moveForSelect.moveOrigin.endSide)))
+//                                optionPack!!.updateOpt(it.moveForSelect.moveOrigin)
                             }
                         }
                     }
