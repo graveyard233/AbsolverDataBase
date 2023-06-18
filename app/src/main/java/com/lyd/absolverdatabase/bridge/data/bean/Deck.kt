@@ -18,8 +18,10 @@ import kotlinx.parcelize.Parcelize
     MoveBoxConverter::class
 ])
 data class Deck(
+    @PrimaryKey(autoGenerate = true)
+    var deckId :Int = 0,
+//    @PrimaryKey
 
-    @PrimaryKey
     var name :String,
 
     var deckType :DeckType,

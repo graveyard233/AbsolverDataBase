@@ -82,16 +82,24 @@ class DeckEditFragment :BaseFragment() {
             })
 
             deckEditeFabSave.setOnClickListener { view ->
-                showShortToast("保存卡组")
-                editState.saveDeckInSaved(_deckForEdit.copy(updateTime = TimeUtils.curTime))
+                editState.saveDeckInSaved(_deckForEdit.copy(updateTime = TimeUtils.curTime),
+                    isForSave = true,
+                    ifError = {
+                        Log.e(TAG, "saveDeckInSavedError: $it")
+                        showShortToast(it)
+                    },
+                    ifSuccess = {
+                        Log.i(TAG, "saveDeckInSavedSuccess: $it")
+                        showShortToast("操作id为${it}的卡组成功")
+                    })
             }
 
         }
 
         dataBinding?.apply {
             deckEditConstrainBg?.setOnLongClickListener {view ->
-                // 这一步，我把这个args中的deck传进了dialog，然后里面的修改也会改变外面的值
-                deckDetailDialog.apply { mDeck = args.deckForEdit }.show()
+                // 这一步，我把这个_deckForEdit中的deck传进了dialog，然后里面的修改也会改变外面的值，注意不要用args.deckForEdit这个数据，对象不一样
+                deckDetailDialog.apply { mDeck = _deckForEdit }.show()
                 return@setOnLongClickListener true
             }
         }

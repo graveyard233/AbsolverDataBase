@@ -2,6 +2,8 @@ package com.lyd.absolverdatabase.bridge.data.repository.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
@@ -24,4 +26,7 @@ interface DeckDAO {
 
     @Delete
     suspend fun deleteOneDeck(deck: Deck ):Int
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertDeck(deck: Deck) :Long
 }

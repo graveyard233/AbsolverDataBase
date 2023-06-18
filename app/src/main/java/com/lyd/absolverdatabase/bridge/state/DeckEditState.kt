@@ -23,9 +23,31 @@ class DeckEditState(private val repository: DeckEditRepository,
     }
 
     fun getDeckInSaved() : Deck? = savedState.get<Deck>("deckInSaved")
-    fun saveDeckInSaved(deck: Deck) {
-        savedState.set("deckInSaved", deck)
+    fun saveDeckInSaved(deck: Deck,
+                        isForSave :Boolean = false,
+                        ifError :(String)->Unit = {},
+                        ifSuccess :(String)->Unit = {}) {
+
         // 保存的时候应该还要触发序列sharedFlow的变化，前面这句话应该不需要，因为一旦改变所有的都会跟着一起动，序列数据已经变了，所以不需要触发序列变化
+        if (isForSave){
+            viewModelScope.launch {
+                repository.saveDeckIntoDatabase(deck = deck).collectLatest {
+                    when(it){
+                        is RepoResult.RpEmpty -> {}
+                        is RepoResult.RpError -> {
+                            ifError.invoke(it.error)
+                        }
+                        is RepoResult.RpSuccess -> {
+//                            ifSuccess.invoke(it.data)
+                            ifSuccess.invoke(it.data)
+                            savedState.set("deckInSaved", deck.apply { deckId = it.data.toInt() })
+                        }
+                    }
+                }
+            }
+        } else {
+            savedState.set("deckInSaved", deck)
+        }
     }
 
     val deckInSaved = savedState.getStateFlow("deckInSaved",DeckGenerate.generateEmptyDeck())
