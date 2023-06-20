@@ -36,9 +36,13 @@ class OneMoveBar :LinearLayout{
     }
 
 
-    fun initClick(clickProxy :(view:View)->Unit = {}){
+    fun initClick(clickProxy :(view:View)->Unit = {},longClickProxy :(view:View)->Unit = {}){
         img.setOnClickListener {
             clickProxy.invoke(it)
+        }
+        img.setOnLongClickListener {
+            longClickProxy.invoke(it)
+            return@setOnLongClickListener true
         }
     }
 

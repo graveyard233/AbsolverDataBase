@@ -7,11 +7,18 @@ data class OptPack(
     val startSide: StandSide
 ){
     /**会同时更新[optionA],[optionMove]和[isMirror]*/
-    fun updateOpt(move :MoveOrigin?,isUseMirror :Int = 0){
-        if (move != null){
-            optionA = move.id
-            optionMove = move
-            isMirror = isUseMirror
+    fun updateOpt(moveOrigin :MoveOrigin?,isUseMirror :Int = 0){
+        optionA = moveOrigin?.id ?: -1
+        if (isUseMirror != 0){
+            moveOrigin?.toMirror()
         }
+        optionMove = moveOrigin
+        isMirror = isUseMirror
+    }
+
+    fun updateOptByMoveForSelect(moveForSelect: MoveForSelect?){
+        optionA = moveForSelect?.moveOrigin?.id ?: -1
+        optionMove = moveForSelect?.moveOrigin
+        isMirror = moveForSelect?.isMirror ?: 0
     }
 }

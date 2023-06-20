@@ -17,7 +17,7 @@ data class SeqPack (
         }
     }
 
-    fun updateOne(whatIndex :Int,moveForSelect: MoveForSelect?){
+    fun updateOne(whatIndex :Int,moveForSelect: MoveForSelect?){// 注意，moveForSelect是已经经过镜像修改的数据
         if (moveForSelect == null){
             idList[whatIndex] = -1
             originList[whatIndex] = null

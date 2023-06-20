@@ -140,6 +140,7 @@ class DeckEditState(private val repository: DeckEditRepository,
         }
     }
 
+    /**直接按id查招式，没镜像处理*/
     suspend fun getSeqMovesByIds(seq :List<Int>) :List<MoveOrigin?> {
         return repository.getOriginListByIds(seq)
     }
@@ -161,6 +162,11 @@ class DeckEditState(private val repository: DeckEditRepository,
     fun selectMove(moveForSelect: MoveForSelect){
         viewModelScope.launch(Dispatchers.IO){
             _moveForSelectFlow.emit(MoveSelectFragment.MoveMsgState.SelectOne(moveForSelect = moveForSelect))
+        }
+    }
+    fun selectNull(){
+        viewModelScope.launch {
+            _moveForSelectFlow.emit(MoveSelectFragment.MoveMsgState.SelectNull)
         }
     }
     fun initSelectMove(){

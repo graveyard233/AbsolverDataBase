@@ -97,7 +97,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     // 更加强大的recycleAdapter
-    implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta04"
+    implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta14"
 
     // glide
     implementation 'com.github.bumptech.glide:glide:4.15.0'

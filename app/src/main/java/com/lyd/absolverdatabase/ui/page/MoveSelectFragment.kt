@@ -130,7 +130,7 @@ class MoveSelectFragment :BaseFragment(){
                             }
                         }
                     }
-                    whenClickMoveInBar(argMsg.toSelectMsg.whatMoveBeClicked)
+                    whenClickMoveInBar(editState.moveBeClickFlow.value)
                 }
 
             }
@@ -146,7 +146,7 @@ class MoveSelectFragment :BaseFragment(){
                         else -> StandSide.UPPER_RIGHT
                     }).apply {
                         updateOpt(
-                            move = editState.getOptMoveById(
+                            moveOrigin = editState.getOptMoveById(
                                 when (argMsg.toSelectMsg.whatBarToEdit) {
                                     4 -> editState.getDeckInSaved()!!.optionalUpperRight.moveId
                                     5 -> editState.getDeckInSaved()!!.optionalUpperLeft.moveId
@@ -282,6 +282,10 @@ class MoveSelectFragment :BaseFragment(){
                         img?.setOnClickListener {
                             whenClickMoveInBar(index)
                         }
+                        img?.setOnLongClickListener { _->
+                            whenLongClickMove(index)
+                            return@setOnLongClickListener true
+                        }
                     }
                 }
                 changeMovesBar(0,1,2)
@@ -291,6 +295,10 @@ class MoveSelectFragment :BaseFragment(){
                     sideEnd = findViewById(R.id.bar_oneMove_side_end)
                     move0 = findViewById(R.id.bar_oneMove_img)
                     move0?.setOnClickListener { whenClickMoveInOneBar() }
+                    move0?.setOnLongClickListener {_->
+                        whenLongClickMove()
+                        return@setOnLongClickListener true
+                    }
                 }
                 changeOneMoveBar()
                 move0?.strokeWidth = resources.getDimension(R.dimen.moveShapeableImgStrokeWidth)
@@ -331,7 +339,44 @@ class MoveSelectFragment :BaseFragment(){
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.moveForSelectFlow.collectLatest {// 接收到数据，首先更新数据部分的文本，然后更新站架信息，最后更新pack的数据，最后找机会变更viewModel
                     when(it){
-                        is MoveMsgState.SelectNull -> { removeMsg() }
+                        is MoveMsgState.SelectNull -> {
+                            if (seqPack != null){
+                                seqPack!!.updateOne(editState.moveBeClickFlow.value,null)
+                                moveImgList[editState.moveBeClickFlow.value]?.setImageResource(R.drawable.ic_add_move)
+                                moveImgList[editState.moveBeClickFlow.value]?.setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                                when(editState.moveBeClickFlow.value){
+                                    0 ->{// 起始站架已经定死，看看第二个框有没有招式
+                                        if (seqPack!!.idList[1] == -1){// 没有就修改结束站架
+                                            side1?.setImageResource(SideUtil.imgIdForMoves(seqPack!!.startSide))
+                                        }
+                                    }
+                                    1 ->{// 移除的是中间的，则前后都要看
+                                        if (seqPack!!.idList[0] == -1){// 第一个没有招式，改
+                                            side1?.setImageResource(SideUtil.imgIdForMoves(seqPack!!.startSide))
+                                        }
+                                        if (seqPack!!.idList[2] == -1){// 第三个没招式，改
+                                            side2?.setImageResource(SideUtil.imgIdForMoves(seqPack!!.startSide))
+                                        }
+                                    }
+                                    2 ->{// 移除的是最后一个
+                                        if (seqPack!!.idList[1] == -1){// 第二个没有招式，改
+                                            side2?.setImageResource(SideUtil.imgIdForMoves(seqPack!!.startSide))
+                                        }
+                                        sideEnd?.setImageResource(SideUtil.imgIdForMoves(seqPack!!.startSide))// 结束站架可以直接修改
+                                    }
+                                }
+                            }
+                            if (optionPack != null){
+                                optionPack!!.updateOptByMoveForSelect(null)
+                                sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(optionPack!!.startSide)))
+                                move0?.apply {
+                                    setImageResource(R.drawable.ic_add_move)
+                                    setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                                }
+                            }
+                            removeMsg()
+                            updateDeckInSaveState()
+                        }
                         is MoveMsgState.SelectOne -> {
                             setMoveMsg(it.moveForSelect)
                             // 然后还要更新bar的布局
@@ -352,12 +397,16 @@ class MoveSelectFragment :BaseFragment(){
                                         sideEnd?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.endSide))
                                     }
                                 }
-//                                seqPack!!.updateOne(editState.moveBeClickFlow.value,it.moveForSelect)
+                                seqPack!!.updateOne(editState.moveBeClickFlow.value,it.moveForSelect)
+                                Log.i(TAG, "moveForSelectFlow: idList:${seqPack!!.idList} isMirrorList:${seqPack!!.isMirrorList}")
+                                // 这里要更新editState里面存在saveState中的deck数据就行
                             }else if (optionPack != null){// 起始站架已经定死，所以只用修改结束站架
                                 move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),it.moveForSelect.moveOrigin.id))
                                 sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it.moveForSelect.moveOrigin.endSide)))
-//                                optionPack!!.updateOpt(it.moveForSelect.moveOrigin)
+                                optionPack!!.updateOptByMoveForSelect(moveForSelect = it.moveForSelect)
+                                Log.i(TAG, "moveForSelectFlow: ${optionPack!!}")
                             }
+                            updateDeckInSaveState()
                         }
                     }
                 }
@@ -462,6 +511,11 @@ class MoveSelectFragment :BaseFragment(){
             }
         }
 
+    }
+    // 长按招式框，可以把这个框和对应的seqPack还有editState里面的deck的数据也一起变更了
+    private fun whenLongClickMove(moveIndex: Int = 0){
+        editState.selectWhatMoveInSeq(moveIndex)
+        editState.selectNull()
     }
 
     private fun setMoveMsg(moveForSelect: MoveForSelect) {
@@ -666,6 +720,7 @@ class MoveSelectFragment :BaseFragment(){
     /**根据[optionPack]里面的数据来变更*/
     private fun changeOneMoveBar(){
         optionPack?.apply {
+            sideStart?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(this.startSide)))
             if (optionMove != null && optionA != -1){
                 optionMove!!.let {move->
                     move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),move.id))
@@ -677,6 +732,65 @@ class MoveSelectFragment :BaseFragment(){
                     setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
                 }
                 sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(this.startSide)))
+            }
+        }
+    }
+
+
+    private fun updateDeckInSaveState(){
+        if (seqPack != null){
+            when(argMsg.toSelectMsg.whatBarToEdit){
+                0->{
+                    editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                        this.sequenceUpperRight = seqPack!!.idList.zip(seqPack!!.isMirrorList).map {
+                            MoveBox(moveId = it.first, isUseMirror = it.second)
+                        }.toMutableList()
+                    })
+                }
+                1->{
+                    editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                        this.sequenceUpperLeft = seqPack!!.idList.zip(seqPack!!.isMirrorList).map {
+                            MoveBox(moveId = it.first, isUseMirror = it.second)
+                        }.toMutableList()
+                    })
+                }
+                2->{
+                    editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                        this.sequenceLowerLeft = seqPack!!.idList.zip(seqPack!!.isMirrorList).map {
+                            MoveBox(moveId = it.first, isUseMirror = it.second)
+                        }.toMutableList()
+                    })
+                }
+                3->{
+                    editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                        this.sequenceLowerRight = seqPack!!.idList.zip(seqPack!!.isMirrorList).map {
+                            MoveBox(moveId = it.first, isUseMirror = it.second)
+                        }.toMutableList()
+                    })
+                }
+            }
+        } else if (optionPack != null){
+            when(argMsg.toSelectMsg.whatBarToEdit){
+                4->{
+                    editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                        this.optionalUpperRight = MoveBox(moveId = optionPack!!.optionA, isUseMirror = optionPack!!.isMirror)
+                    })
+                }
+                5->{
+                    editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                        this.optionalUpperLeft = MoveBox(moveId = optionPack!!.optionA, isUseMirror = optionPack!!.isMirror)
+                    })
+                }
+                6->{
+                    editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                        this.optionalLowerLeft = MoveBox(moveId = optionPack!!.optionA, isUseMirror = optionPack!!.isMirror)
+                    })
+                }
+                7->{
+                    editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                        this.optionalLowerRight = MoveBox(moveId = optionPack!!.optionA, isUseMirror = optionPack!!.isMirror)
+                    })
+                }
             }
         }
     }

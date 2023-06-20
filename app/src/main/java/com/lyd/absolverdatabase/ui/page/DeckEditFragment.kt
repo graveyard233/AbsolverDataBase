@@ -56,29 +56,45 @@ class DeckEditFragment :BaseFragment() {
         dataBinding?.apply {
             deckEditBarUpperRight.initClick(clickProxy = { view: View,clickWhatMove :Int ->
                 beforeMoveToSelect(EditToSelectMsg.SEQ_UPPER_RIGHT,clickWhatMove)
+            }, longClickProxy = { view: View,clickWhatMove :Int ->
+                onLongClickBar(EditToSelectMsg.SEQ_UPPER_RIGHT, clickWhatMove = clickWhatMove)
             })
             deckEditBarUpperLeft.initClick(clickProxy = { _: View, clickWhatMove :Int ->
                 beforeMoveToSelect(EditToSelectMsg.SEQ_UPPER_LEFT, clickWhatMove)
+            },longClickProxy = { _: View,clickWhatMove :Int ->
+                onLongClickBar(EditToSelectMsg.SEQ_UPPER_LEFT, clickWhatMove = clickWhatMove)
             })
             deckEditBarLowerLeft.initClick(clickProxy = { _: View, clickWhatMove :Int ->
                 beforeMoveToSelect(EditToSelectMsg.SEQ_LOWER_LEFT, clickWhatMove)
+            },longClickProxy = { _: View,clickWhatMove :Int ->
+                onLongClickBar(EditToSelectMsg.SEQ_LOWER_LEFT, clickWhatMove = clickWhatMove)
             })
             deckEditBarLowerRight.initClick(clickProxy = { _: View, clickWhatMove :Int ->
                 beforeMoveToSelect(EditToSelectMsg.SEQ_LOWER_RIGHT, clickWhatMove)
+            },longClickProxy = { _: View,clickWhatMove :Int ->
+                onLongClickBar(EditToSelectMsg.SEQ_LOWER_RIGHT, clickWhatMove = clickWhatMove)
             })
 
 
             deckEditOptionalUpperRight.initClick(clickProxy = {view: View ->
                 beforeMoveToSelect(EditToSelectMsg.OPT_UPPER_RIGHT, 0)
+            }, longClickProxy = {
+                onLongClickOneBar(EditToSelectMsg.OPT_UPPER_RIGHT)
             })
             deckEditOptionalUpperLeft.initClick(clickProxy = {
                 beforeMoveToSelect(EditToSelectMsg.OPT_UPPER_LEFT, 0)
+            }, longClickProxy = {
+                onLongClickOneBar(EditToSelectMsg.OPT_UPPER_LEFT)
             })
             deckEditOptionalLowerLeft.initClick(clickProxy = {
                 beforeMoveToSelect(EditToSelectMsg.OPT_LOWER_LEFT, 0)
+            }, longClickProxy = {
+                onLongClickOneBar(EditToSelectMsg.OPT_LOWER_LEFT)
             })
             deckEditOptionalLowerRight.initClick(clickProxy = {
                 beforeMoveToSelect(EditToSelectMsg.OPT_LOWER_RIGHT, 0)
+            }, longClickProxy = {
+                onLongClickOneBar(EditToSelectMsg.OPT_LOWER_RIGHT)
             })
 
             deckEditeFabSave.setOnClickListener { view ->
@@ -199,5 +215,70 @@ class DeckEditFragment :BaseFragment() {
         nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
             EditToSelectMsg(whatForEdit, whatMoveBeClicked = clickWhatMove/*,_deckForEdit.deckType*/)
         ))
+    }
+
+    private fun onLongClickBar(@IntRange(0, 3) whatForEdit: Int,@IntRange(0,2) clickWhatMove: Int){
+        when(whatForEdit){
+            0 ->{
+                editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                    sequenceUpperRight[clickWhatMove] = MoveBox()
+                })
+                lifecycleScope.launchWhenStarted {
+                    editState.updateSeqUpperRight(editState.getDeckInSaved()!!.sequenceUpperRight)
+                }
+            }
+            1 ->{
+                editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                    sequenceUpperLeft[clickWhatMove] = MoveBox()
+                })
+                lifecycleScope.launchWhenStarted {
+                    editState.updateSeqUpperLeft(editState.getDeckInSaved()!!.sequenceUpperLeft)
+                }
+            }
+            2 ->{
+                editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                    sequenceLowerLeft[clickWhatMove] = MoveBox()
+                })
+                lifecycleScope.launchWhenStarted {
+                    editState.updateSeqLowerLeft(editState.getDeckInSaved()!!.sequenceLowerLeft)
+                }
+            }
+            3 ->{
+                editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                    sequenceLowerRight[clickWhatMove] = MoveBox()
+                })
+                lifecycleScope.launchWhenStarted {
+                    editState.updateSeqLowerRight(editState.getDeckInSaved()!!.sequenceLowerRight)
+                }
+            }
+        }
+    }
+    private fun onLongClickOneBar(@IntRange(4,7) whatForEdit: Int){
+        when(whatForEdit){
+            4 ->{
+                editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                    optionalUpperRight = MoveBox()
+                })
+                lifecycleScope.launchWhenStarted { editState.optUpperRight.emit(MoveBox()) }
+            }
+            5 ->{
+                editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                    optionalUpperLeft = MoveBox()
+                })
+                lifecycleScope.launchWhenStarted { editState.optUpperLeft.emit(MoveBox()) }
+            }
+            6 ->{
+                editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                    optionalLowerLeft = MoveBox()
+                })
+                lifecycleScope.launchWhenStarted { editState.optLowerLift.emit(MoveBox()) }
+            }
+            7 ->{
+                editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
+                    optionalLowerRight = MoveBox()
+                })
+                lifecycleScope.launchWhenStarted { editState.optLowerRight.emit(MoveBox()) }
+            }
+        }
     }
 }
