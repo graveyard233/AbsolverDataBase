@@ -29,7 +29,6 @@ import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.SideUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -38,7 +37,7 @@ class MoveSelectFragment :BaseFragment(){
 
     sealed class MoveMsgState{
         data class SelectOne(val moveForSelect: MoveForSelect) :MoveMsgState()
-        object SelectNull : MoveMsgState()
+        data class SelectNull(val isEnterFromEdit:Boolean = false) : MoveMsgState()
     }
 
     private val editState :DeckEditState by navGraphViewModels(navGraphId = R.id.nav_deck, factoryProducer = {
@@ -340,7 +339,12 @@ class MoveSelectFragment :BaseFragment(){
                 editState.moveForSelectFlow.collectLatest {// 接收到数据，首先更新数据部分的文本，然后更新站架信息，最后更新pack的数据，最后找机会变更viewModel
                     when(it){
                         is MoveMsgState.SelectNull -> {
+                            if (it.isEnterFromEdit){
+                                Log.i(TAG, "moveForSelectFlow: 从editFragment进来的")
+                                return@collectLatest
+                            }
                             if (seqPack != null){
+                                Log.i(TAG, "moveForSelectFlow->: 第${editState.moveBeClickFlow.value}个置空")
                                 seqPack!!.updateOne(editState.moveBeClickFlow.value,null)
                                 moveImgList[editState.moveBeClickFlow.value]?.setImageResource(R.drawable.ic_add_move)
                                 moveImgList[editState.moveBeClickFlow.value]?.setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
@@ -514,6 +518,7 @@ class MoveSelectFragment :BaseFragment(){
     }
     // 长按招式框，可以把这个框和对应的seqPack还有editState里面的deck的数据也一起变更了
     private fun whenLongClickMove(moveIndex: Int = 0){
+        Log.i(TAG, "whenLongClickMove: $moveIndex 触发了长按删除")
         editState.selectWhatMoveInSeq(moveIndex)
         editState.selectNull()
     }

@@ -157,7 +157,7 @@ class DeckEditState(private val repository: DeckEditRepository,
     }
 
     /**给moveRecycleFragment用的，传递选择的招式*/
-    private val _moveForSelectFlow :MutableStateFlow<MoveSelectFragment.MoveMsgState> = MutableStateFlow(value = MoveSelectFragment.MoveMsgState.SelectNull)
+    private val _moveForSelectFlow :MutableStateFlow<MoveSelectFragment.MoveMsgState> = MutableStateFlow(value = MoveSelectFragment.MoveMsgState.SelectNull())
     val moveForSelectFlow = _moveForSelectFlow.asStateFlow()
     fun selectMove(moveForSelect: MoveForSelect){
         viewModelScope.launch(Dispatchers.IO){
@@ -166,12 +166,12 @@ class DeckEditState(private val repository: DeckEditRepository,
     }
     fun selectNull(){
         viewModelScope.launch {
-            _moveForSelectFlow.emit(MoveSelectFragment.MoveMsgState.SelectNull)
+            _moveForSelectFlow.emit(MoveSelectFragment.MoveMsgState.SelectNull())
         }
     }
     fun initSelectMove(){
         viewModelScope.launch(Dispatchers.IO){
-            _moveForSelectFlow.update { MoveSelectFragment.MoveMsgState.SelectNull }
+            _moveForSelectFlow.update { MoveSelectFragment.MoveMsgState.SelectNull(true) }
         }
     }
 
