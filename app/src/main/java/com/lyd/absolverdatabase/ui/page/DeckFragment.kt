@@ -22,6 +22,7 @@ import com.chad.library.adapter.base.QuickAdapterHelper
 import com.google.android.material.color.MaterialColors
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
+import com.lyd.absolverdatabase.bridge.data.bean.Deck
 import com.lyd.absolverdatabase.bridge.data.bean.DeckType
 import com.lyd.absolverdatabase.bridge.state.DeckEditState
 import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
@@ -31,13 +32,19 @@ import com.lyd.absolverdatabase.databinding.FragmentDeckBinding
 import com.lyd.absolverdatabase.ui.adapter.DeckAdapter
 import com.lyd.absolverdatabase.ui.adapter.DeckHeaderAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
+import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.ui.widgets.ColorShades
 import com.lyd.absolverdatabase.ui.widgets.SpacesItemDecoration
+import com.lyd.absolverdatabase.utils.ClipUtil
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import com.lyd.absolverdatabase.utils.GsonUtils
 import kotlinx.coroutines.flow.collectLatest
 
 class DeckFragment :BaseFragment() {
+
+    companion object{
+        private const val sharedIdTag :Int = -2
+    }
 
     private var deckBinding : FragmentDeckBinding? = null
     private val deckState : DeckState by navGraphViewModels(navGraphId = R.id.nav_deck, factoryProducer = {
@@ -59,7 +66,10 @@ class DeckFragment :BaseFragment() {
                 nav().navigate(DeckFragmentDirections.actionDeckFragmentToDeckEditFragment(getItem(position)!!))
             }
             addOnItemChildLongClickListener(R.id.item_deck_constraint){adapter, view, position ->
-                Log.i(TAG, "onLongClick: ${GsonUtils.toJson(getItem(position))}")
+                val deckForShareText = GsonUtils.toJson(getItem(position)?.copy(deckId = sharedIdTag))
+                Log.i(TAG, "onLongClick: $deckForShareText")
+                // 将卡组数据写入剪贴板
+                ClipUtil.copyText(deckForShareText)
                 return@addOnItemChildLongClickListener true// 返回true就不会出发onclick
             }
             addOnItemChildClickListener(R.id.item_deck_img_delete){adapter,view,position ->
@@ -97,7 +107,23 @@ class DeckFragment :BaseFragment() {
                     DeckGenerate.generateEmptyDeck(deckType = getDeckTypeByPosition(deckState.choiceFlow.value)))
                 )
             }
+            setOnItemLongClickListener(object :BaseQuickAdapter.OnItemLongClickListener<Any>{
+                override fun onLongClick(adapter: BaseQuickAdapter<Any, *>,
+                                         view: View, position: Int): Boolean {
+                    importDeckDialog.show()
+                    return true
+                }
+            })
         }
+    }
+
+    private val importDeckDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        BaseDialogBuilder(requireActivity())
+            .setTitle("需要导入复制的卡组吗")
+            .setPositiveButton("确定"){dialog,num ->
+                importDeck()
+            }
+            .create()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -251,6 +277,42 @@ class DeckFragment :BaseFragment() {
     @ColorInt
     private fun getThemeAttrColor(@NonNull context: Context, @StyleRes themeResId: Int, @AttrRes attrResId: Int): Int {
         return MaterialColors.getColor(ContextThemeWrapper(context, themeResId), attrResId, Color.WHITE)
+    }
+
+    private fun importDeck(){
+        // 从剪贴板中读取数据
+        Log.i(TAG, "deckHeaderAdapter onLongClick: ${ClipUtil.readText()}")
+        val tempText = ClipUtil.readText()
+        if (tempText == "null"){
+            showShortToast("剪贴板为空")
+            return
+        }
+        var deckToSaved :Deck ?= null
+        try {
+            deckToSaved = GsonUtils.fromJson<Deck>(ClipUtil.readText(),Deck::class.java)
+                .apply { this.deckId = 0 }
+        } catch (e: Exception) {
+            Log.e(TAG, "onLongClick: 错误的json数据")
+            showShortToast("错误的json数据")
+            return
+        }
+        if (deckToSaved != null && deckToSaved.deckId == 0){
+            Log.i(TAG, "onLongClick: 获取卡组成功")
+            editState.saveDeckFromShared(
+                deckToSaved,
+                ifError = {
+                    Log.e(TAG, "onLongClick: 保存分享卡组失败 $it")
+                    showShortToast("保存分享卡组失败 $it")
+                },
+                ifSuccess = {
+                    Log.i(TAG, "onLongClick: 保存卡组成功，id为 $it")
+                    // 这里应该刷新列表
+                    viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                        // 不能通过setChoice来获取，而是得手动查询才行，因为stateFlow相同的数据不会触发collect
+                        deckState.queryDecksByDeckType(getDeckTypeByPosition(deckState.choiceFlow.value))
+                    }
+                })
+        }
     }
 
     override fun onDestroyView() {

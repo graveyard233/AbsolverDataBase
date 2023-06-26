@@ -56,7 +56,23 @@ class DeckEditState(private val repository: DeckEditRepository,
             started = SharingStarted.WhileSubscribed(),
             replay = 0
         )
-
+    fun saveDeckFromShared(deck: Deck,
+                           ifError: (String) -> Unit = {},
+                           ifSuccess: (String) -> Unit = {}){
+        viewModelScope.launch {
+            repository.saveDeckIntoDatabase(deck = deck).collectLatest {
+                when(it){
+                    is RepoResult.RpEmpty -> {}
+                    is RepoResult.RpError -> {
+                        ifError.invoke(it.error)
+                    }
+                    is RepoResult.RpSuccess -> {
+                        ifSuccess.invoke(it.data)
+                    }
+                }
+            }
+        }
+    }
 
 
 

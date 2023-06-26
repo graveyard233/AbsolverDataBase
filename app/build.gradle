@@ -115,4 +115,6 @@ dependencies {
     // 排版layout，用于展示
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
+    // dataStore来实现数据存储
+    implementation("androidx.datastore:datastore-preferences:1.1.0-alpha01")
 }

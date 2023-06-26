@@ -139,7 +139,7 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
         return flow<RepoResult<String>> {
             val result = deckDao.upsertDeck(deck)// 拿到的是操作的id，假如是更新replace，则拿到的是已经插入的id，假如是实打实的插入，则拿到的是插入的新id
             Log.i(TAG, "saveDeckIntoDatabase: 触发了更新或插入操作 $result")
-            if (result > 0){
+            if (result >= 0){
                 emit(RepoResult.RpSuccess(result.toString()))
             } else {
                 emit(RepoResult.RpError("操作失败:$result"))
