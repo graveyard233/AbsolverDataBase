@@ -12,4 +12,7 @@
 
     <dimen name="moveShapeableImgStrokeWidth">4dp</dimen>
     <dimen name="moveShapeableImgPadding">2dp</dimen><!--这个需要是StrokeWidth一半的宽度-->
+
+    <dimen name="setting_title_icon_size">35dp</dimen>
+    <dimen name="setting_item_icon_size">30dp</dimen>
 </resources>

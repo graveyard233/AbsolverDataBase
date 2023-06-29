@@ -2,14 +2,12 @@ package com.lyd.absolverdatabase
 
 import android.app.Activity
 import android.app.Application
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
-import com.lyd.absolverdatabase.bridge.data.repository.BilibiliRepository
-import com.lyd.absolverdatabase.bridge.data.repository.DeckEditRepository
-import com.lyd.absolverdatabase.bridge.data.repository.DeckRepository
-import com.lyd.absolverdatabase.bridge.data.repository.MoveRepository
+import com.lyd.absolverdatabase.bridge.data.repository.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.db.AppDatabase
 import com.lyd.architecture.utils.Utils
 import com.tencent.mmkv.MMKV
@@ -42,6 +40,7 @@ class App : Application(), ViewModelStoreOwner {
     override fun onCreate() {
         super.onCreate()
 
+        Log.i("App", "onCreate: 初始化Utils")
         Utils.init(this)
         mAppViewModelStore = ViewModelStore()
 
@@ -50,6 +49,8 @@ class App : Application(), ViewModelStoreOwner {
 //        // 这里必须初始化一下，是为了保证播放音乐管理类（PlayerManager.java） 不会为null，从而不引发空指针异常
 //        PlayerManager.instance.init(this)
 
+        // 把初始化阶段的代码写在了manifest，交给startup来处理，不知道从哪里引入了startup的库，可能依赖混乱了吧，假如不想写在manifest，可以用下面的手动初始化也行，目的就是要拿到application
+//        AppInitializer.getInstance(applicationContext).initializeComponent(DataStoreInitializer::class.java)
     }
 
     // 专门给 BaseActivity 与 BaseFragment 用的

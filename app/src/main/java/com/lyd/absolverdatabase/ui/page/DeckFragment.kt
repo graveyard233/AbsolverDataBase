@@ -24,6 +24,7 @@ import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
 import com.lyd.absolverdatabase.bridge.data.bean.DeckType
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.bridge.state.DeckEditState
 import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.bridge.state.DeckState
@@ -110,7 +111,11 @@ class DeckFragment :BaseFragment() {
             setOnItemLongClickListener(object :BaseQuickAdapter.OnItemLongClickListener<Any>{
                 override fun onLongClick(adapter: BaseQuickAdapter<Any, *>,
                                          view: View, position: Int): Boolean {
-                    importDeckDialog.show()
+                    if (SettingRepository.isNeedAskBeforeImport){
+                        importDeckDialog.show()
+                    } else {
+                        importDeck()
+                    }
                     return true
                 }
             })

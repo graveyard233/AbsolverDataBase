@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.lyd.absolverdatabase.R
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.displayCompat
 import com.lyd.absolverdatabase.utils.isNightMode
 import com.lyd.absolverdatabase.utils.setNavigationBarTransparentCompat
@@ -58,9 +59,11 @@ abstract class BaseBottomSheetDialog(context: Context) : BottomSheetDialog(conte
         // 高斯模糊
         window?.let {
             if (Build.VERSION.SDK_INT >= 31){
-                it.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-                it.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-                it.attributes.blurBehindRadius = 32
+                if (SettingRepository.isDialogGaussianBlur){
+                    it.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+                    it.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+                    it.attributes.blurBehindRadius = 32
+                }
             }
         }
     }

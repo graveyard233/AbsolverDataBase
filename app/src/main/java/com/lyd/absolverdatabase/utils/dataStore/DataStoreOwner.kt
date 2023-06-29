@@ -8,6 +8,11 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+/**
+ * @author DylanCai
+ * https://github.com/DylanCaiCoding/DataStoreKTX/blob/master/README_ZH.md
+ * 我这里直接照搬了大佬的封装
+ * */
 open class DataStoreOwner(name :String) : IDataStoreOwner{
     private val Context.dataStore by preferencesDataStore(name)
     override val dataStore get() = context.dataStore

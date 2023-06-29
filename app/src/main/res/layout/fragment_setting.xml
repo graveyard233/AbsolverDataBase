@@ -7,24 +7,115 @@
 
         <variable
             name="vm"
-            type="com.lyd.absolverdatabase.bridge.state.SettingViewModel" />
+            type="com.lyd.absolverdatabase.bridge.state.SettingState" />
         <variable
             name="click"
             type="com.lyd.absolverdatabase.ui.page.SettingFragment.ClickProxy" />
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/setting"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical"
+                    >
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/config_setting"
+                            app:drawableStartCompat="@drawable/ic_config"
+                            style="@style/SettingFragmentTitleText" />
+
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:background="@color/grey_split_line" />
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/setting_switch_gaussianBlur"
+                        style="@style/SettingFragmentSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dialogGaussianBlur" />
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/setting_switch_askBeforeImport"
+                        style="@style/SettingFragmentSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ask_before_import" />
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/setting_switch_showStyleIconInMoveMsg"
+                        style="@style/SettingFragmentSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/showStyleIconInMoveMsg" />
+
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/about_app"
+                        style="@style/SettingFragmentTitleText"
+                        app:drawableStartCompat="@drawable/ic_about" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:background="@color/grey_split_line" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/author"
+                        style="@style/SettingFragmentItemText"
+                        app:drawableStartCompat="@drawable/ic_code"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/repositoryText"
+                        android:hint="@string/repositoryUrl"
+                        style="@style/SettingFragmentItemText"
+                        app:drawableStartCompat="@drawable/ic_github"
+                        android:onClick="@{(theVeiw)->click.openWeb(theVeiw)}"/>
+
+                    <TextView
+                        android:id="@+id/setting_about_version"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/version"
+                        android:hint="@string/repositoryUrl"
+                        style="@style/SettingFragmentItemText"
+                        app:drawableStartCompat="@drawable/ic_version"
+                        android:onClick="@{(theVeiw)->click.openWeb(theVeiw)}"/>
+
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

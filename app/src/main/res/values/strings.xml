@@ -39,6 +39,20 @@
     <string name="moveMsg_hitAdvantage">命中优势帧:%1$d</string>
     <string name="moveMsg_defenseAdvantage">防御优势帧:%1$d</string>
 
+    <string name="config_setting">可配置项</string>
+    <string name="dialogGaussianBlur">高斯模糊</string>
+    <string name="ask_before_import">在导入卡组前弹窗</string>
+    <string name="showStyleIconInMoveMsg">招式信息界面中显示流派图标</string>
+
+
+    <string name="about_app">关于</string>
+    <string name="author">开发者:graveyard233</string>
+    <string name="repositoryText">项目地址</string>
+    <string name="repositoryUrl">https://github.com/graveyard233/AbsolverDatabase</string>
+    <string name="version">版本:%1$s</string>
+
+
+
 <!--    这些是用于展示Material3颜色的，用于fragment_color_board.xml-->
     <string name="colors.item_background.description">Background</string>
     <string name="colors.item_error.description">Error</string>
