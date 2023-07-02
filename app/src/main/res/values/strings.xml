@@ -43,6 +43,7 @@
     <string name="dialogGaussianBlur">高斯模糊</string>
     <string name="ask_before_import">在导入卡组前弹窗</string>
     <string name="showStyleIconInMoveMsg">招式信息界面中显示流派图标</string>
+    <string name="use_CNEditionMod">启用China Edition Mod</string>
 
 
     <string name="about_app">关于</string>

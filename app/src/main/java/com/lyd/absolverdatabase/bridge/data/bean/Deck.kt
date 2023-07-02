@@ -54,10 +54,10 @@ data class MoveJson(
 )
 
 
-// TODO: 使用两个类来区分原版和GP版，我可以放心的使用数据库存两个表了，马上就把上面的带json的给删了
+// TODO: 使用两个类来区分原版和CN版，我可以放心的使用数据库存两个表了，马上就把上面的带json的给删了
 /**
  * 招式
- * 和GP版有修改的可以使用ArrayMap来存储版本
+ * 和CN版有修改的可以使用ArrayMap来存储版本
  * */
 @Entity(tableName = "moveOrigin_tb")
 data class MoveOrigin(
@@ -69,15 +69,15 @@ data class MoveOrigin(
     var startSide: StandSide,// 起始站架 可变是为了镜像修改
     var endSide: StandSide,// 结束站架 可变是为了镜像修改
     val strength :Int,// 力度 1~3，分别为轻中重
-    val attackRange :Float,// 攻击范围，这个GP有修改
+    val attackRange :Float,// 攻击范围，这个CN有修改
     var attackToward :AttackToward,// 攻击朝向 可变是为了镜像修改
     val attackAltitude: AttackAltitude,// 攻击高度
     val attackDirection: AttackDirection,// 攻击走向
-    val startFrame :Int,// 起手帧数，这个GP有修改
-    val physicalWeakness :Float,// 削弱对手体力，这个GP有修改
-    val physicalOutput :Float,// 自身体力消耗，这个GP有修改
-    val hitAdvantageFrame :Int,// 击中优势帧，这个GP有修改
-    val defenseAdvantageFrame :Int,// 防御优势帧，这个GP有修改
+    val startFrame :Int,// 起手帧数，这个CN有修改
+    val physicalWeakness :Float,// 削弱对手体力，这个CN有修改
+    val physicalOutput :Float,// 自身体力消耗，这个CN有修改
+    val hitAdvantageFrame :Int,// 击中优势帧，这个CN有修改
+    val defenseAdvantageFrame :Int,// 防御优势帧，这个CN有修改
     val effect :String,// 招式效果，用于整合多个招式效果，但注意这个只是string，不是枚举
     val canHand :Boolean,// 徒手是否可用
     val canOriginSword :Boolean,// 原版招式在剑卡组里是否可用
@@ -90,8 +90,8 @@ data class MoveOrigin(
     }
 }
 
-@Entity(tableName = "moveGP_tb")
-data class MoveGP(
+@Entity(tableName = "moveCN_tb")
+data class MoveCN(
     @PrimaryKey
     val id :Int,// id，保持和MoveJson的id一致，用于检索
     val name: String,// 名称
@@ -100,15 +100,20 @@ data class MoveGP(
     val startSide: StandSide,// 起始站架
     val endSide: StandSide,// 结束站架
     val strength :Int,// 力度 1~3，分别为轻中重
-    val attackRange :Float,// 攻击范围，这个GP有修改
+    val attackRange :Float,// 攻击范围，这个CN有修改
     val attackToward :AttackToward,// 攻击朝向
     val attackAltitude: AttackAltitude,// 攻击高度
     val attackDirection: AttackDirection,// 攻击走向
-    val startFrame :Int,// 起手帧数，这个GP有修改
-    val physicalWeakness :Float,// 削弱对手体力，这个GP有修改
-    val physicalOutput :Float,// 自身体力消耗，这个GP有修改
-    val hitAdvantageFrame :Int,// 击中优势帧，这个GP有修改
-    val defenseAdvantageFrame :Int,// 防御优势帧，这个GP有修改
+    val startFrame :Int,// 起手帧数，这个CN有修改
+    val physicalWeakness :Float,// 削弱对手体力，这个CN有修改
+    val physicalOutput :Float,// 自身体力消耗，这个CN有修改
+    val hitAdvantageFrame :Int,// 击中优势帧，这个CN有修改
+    val defenseAdvantageFrame :Int,// 防御优势帧，这个CN有修改
+
+    val cancelPoint :Int,// 取消点 帧长
+    val hitFrame :String,// 打击帧 招式的打击判定长度，这个
+    val yellowAttackFrame :Int,// 黄攻帧 打击帧后距离黄攻点的距离
+
     val effect :String,// 招式效果，用于整合多个招式效果，但注意这个只是string，不是枚举
     val canHand :Boolean,// 徒手是否可用
     val canOriginSword :Boolean,// 原版招式在剑卡组里是否可用

@@ -6,7 +6,7 @@ import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
 import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
 import com.lyd.absolverdatabase.bridge.data.bean.RepoResult
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.DeckDAO
-import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveGPDAO
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveCNDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveOriginDAO
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flowOn
 
 class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完的卡组
                          private val moveOriginDAO: MoveOriginDAO, // 和下面的dao一样用于查询招式
-                         private val moveGPDAO: MoveGPDAO) {
+                         private val moveCNDAO: MoveCNDAO) {
 
     private val TAG = javaClass.simpleName
 

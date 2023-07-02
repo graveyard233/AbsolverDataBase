@@ -54,11 +54,11 @@ object MoveGenerate{
         return tempList
     }
 
-    fun generateMoveGPs() :MutableList<MoveGP>{
-        val tempList = mutableListOf<MoveGP>()
+    fun generateMoveCNs() :MutableList<MoveCN>{
+        val tempList = mutableListOf<MoveCN>()
         for( i in 0 .. 10){
             tempList.add(
-                MoveGP(
+                MoveCN(
                     id = i,
                     name = StringUtils.getRandomString((5..15).random()),
                     name_en = StringUtils.getRandomString((5..15).random()),
@@ -75,6 +75,9 @@ object MoveGenerate{
                     physicalOutput = ((30..150).random() / 10).toFloat(),
                     hitAdvantageFrame = (i..20).random(),
                     defenseAdvantageFrame = (i..15).random(),
+                    cancelPoint = (1..15).random(),
+                    hitFrame = listOf("4","3","5","1","2","2+2+2","3+2+2").random(),
+                    yellowAttackFrame = (0..5).random(),
                     effect = MoveEffectGenerate.generateString(),
                     canHand = i % 3 == 0,
                     canOriginSword = i % 4 == 0,

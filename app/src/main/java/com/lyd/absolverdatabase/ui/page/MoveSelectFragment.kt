@@ -37,7 +37,7 @@ class MoveSelectFragment :BaseFragment(){
 
     sealed class MoveMsgState{
         data class SelectOne(val moveForSelect: MoveForSelect) :MoveMsgState()
-        data class SelectNull(val isEnterFromEdit:Boolean = false) : MoveMsgState()
+        class SelectNull(val isEnterFromEdit:Boolean = false) : MoveMsgState()// 这里不要用data class 因为
     }
 
     private val editState :DeckEditState by navGraphViewModels(navGraphId = R.id.nav_deck, factoryProducer = {
@@ -339,6 +339,7 @@ class MoveSelectFragment :BaseFragment(){
                 editState.moveForSelectFlow.collectLatest {// 接收到数据，首先更新数据部分的文本，然后更新站架信息，最后更新pack的数据，最后找机会变更viewModel
                     when(it){
                         is MoveMsgState.SelectNull -> {
+                            Log.i(TAG, "moveForSelectFlow: 接收到 null 的选择")
                             if (it.isEnterFromEdit){
                                 Log.i(TAG, "moveForSelectFlow: 从editFragment进来的")
                                 return@collectLatest
@@ -411,6 +412,9 @@ class MoveSelectFragment :BaseFragment(){
                                 Log.i(TAG, "moveForSelectFlow: ${optionPack!!}")
                             }
                             updateDeckInSaveState()
+                        }
+                        else -> {
+                            Log.i(TAG, "moveForSelectFlow: 不知道是什么类型")
                         }
                     }
                 }

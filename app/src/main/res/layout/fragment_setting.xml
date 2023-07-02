@@ -72,7 +72,12 @@
                         android:layout_height="wrap_content"
                         android:text="@string/showStyleIconInMoveMsg" />
 
-
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/setting_switch_useCNEditionMod"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/SettingFragmentSwitch"
+                        android:text="@string/use_CNEditionMod"/>
 
                     <TextView
                         android:layout_width="match_parent"

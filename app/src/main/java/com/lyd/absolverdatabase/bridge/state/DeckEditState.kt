@@ -182,6 +182,7 @@ class DeckEditState(private val repository: DeckEditRepository,
     }
     fun selectNull(){
         viewModelScope.launch {
+            Log.i(TAG, "selectNull: 被触发")
             _moveForSelectFlow.emit(MoveSelectFragment.MoveMsgState.SelectNull())
         }
     }

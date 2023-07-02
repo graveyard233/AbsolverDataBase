@@ -59,6 +59,7 @@ class SettingFragment : BaseFragment() {
                 if (Build.VERSION.SDK_INT < 31){// 如果低于31，高斯模糊不生效，所以只能这样
                     isChecked = false
                     isEnabled = false
+                    settingState.changeGaussianBlurFlow(false)
                 }
             }
             settingSwitchAskBeforeImport.setOnCheckedChangeListener { btn, isChecked ->
@@ -68,6 +69,10 @@ class SettingFragment : BaseFragment() {
             settingSwitchShowStyleIconInMoveMsg.setOnCheckedChangeListener { btn, isChecked ->
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeShowStyleIconInMoveMsg(isChecked)
+            }
+            settingSwitchUseCNEditionMod.setOnCheckedChangeListener { btn, isChecked ->
+                if (!btn.isPressed) return@setOnCheckedChangeListener
+                settingState.changeUseCNEditionMod(isChecked)
             }
 
         }
@@ -101,9 +106,18 @@ class SettingFragment : BaseFragment() {
 
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                settingState.showStyleIconInMoveMsg.collectLatest {
+                settingState.showStyleIconInMoveMsgFlow.collectLatest {
                     Log.i(TAG, "showStyleIconInMoveMsg: 接收到数据 $it")
                     settingBinding?.settingSwitchShowStyleIconInMoveMsg?.isChecked = it
+                }
+            }
+        }
+
+        lifecycleScope.launch{
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.useCNEditionModFlow.collectLatest {
+                    Log.i(TAG, "useGPModFlow: 接收到数据 $it")
+                    settingBinding?.settingSwitchUseCNEditionMod?.isChecked = it
                 }
             }
         }

@@ -10,7 +10,7 @@ import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.JsonTxt
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.BilibiliVideoDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.DeckDAO
-import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveGPDAO
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveCNDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveJsDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveOriginDAO
 import com.lyd.absolverdatabase.utils.GsonUtils
@@ -18,7 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [BilibiliVideo::class,Deck::class,MoveJson::class,MoveOrigin::class,MoveGP::class], version = 1, exportSchema = false)
+@Database(entities = [BilibiliVideo::class,Deck::class,MoveJson::class,MoveOrigin::class,MoveCN::class], version = 1, exportSchema = false)
 abstract class AppDatabase :RoomDatabase(){
 
     abstract fun videoDao() : BilibiliVideoDAO
@@ -29,7 +29,7 @@ abstract class AppDatabase :RoomDatabase(){
 
     abstract fun moveOriginDao() :MoveOriginDAO
 
-    abstract fun moveGPDao() :MoveGPDAO
+    abstract fun moveCNDao() :MoveCNDAO
 
     companion object{
 
