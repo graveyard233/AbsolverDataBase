@@ -26,15 +26,15 @@ class App : Application(), ViewModelStoreOwner {
     }
 
     val deckRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        DeckRepository(database.deckDao(),database.moveJsDao(),database.moveOriginDao(),database.moveCNDao())
+        DeckRepository(database.deckDao(),database.moveJsDao(),database.moveOriginDao(),database.moveCEDao())
     }
 
     val deckEditRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        DeckEditRepository(database.deckDao(),database.moveOriginDao(),database.moveCNDao())
+        DeckEditRepository(database.deckDao(),database.moveOriginDao(),database.moveCEDao())
     }
 
     val moveRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        MoveRepository(database.moveOriginDao(), moveCNDAO = database.moveCNDao())
+        MoveRepository(database.moveOriginDao(), moveCEDAO = database.moveCEDao())
     }
 
     override fun onCreate() {

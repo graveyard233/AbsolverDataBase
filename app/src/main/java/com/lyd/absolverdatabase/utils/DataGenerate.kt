@@ -8,7 +8,7 @@ object MoveGenerate{
     private val TAG = javaClass.simpleName
 
     private val ORIGIN = "原版"
-    private val GP = "GP"
+    private val CE = "CE"
 
     fun generateMoveJsons():MutableList<MoveJson> {
         val tempList = mutableListOf<MoveJson>()
@@ -54,11 +54,11 @@ object MoveGenerate{
         return tempList
     }
 
-    fun generateMoveCNs() :MutableList<MoveCN>{
-        val tempList = mutableListOf<MoveCN>()
+    fun generateMoveCEs() :MutableList<MoveCE>{
+        val tempList = mutableListOf<MoveCE>()
         for( i in 0 .. 10){
             tempList.add(
-                MoveCN(
+                MoveCE(
                     id = i,
                     name = StringUtils.getRandomString((5..15).random()),
                     name_en = StringUtils.getRandomString((5..15).random()),
@@ -67,6 +67,9 @@ object MoveGenerate{
                     endSide = StandSide.values().random(),
                     strength = (1..3).random(),
                     attackRange = ((75..300).random() / 10).toFloat(),
+                    strengthBonus = listOf("A","B","C","D","E","none").random(),
+                    agilityBonus = listOf("A","B","C","D","E","none").random(),
+                    flexibleBonus = listOf("A","B","C","D","E","none").random(),
                     attackToward = AttackToward.values().random(),
                     attackAltitude = AttackAltitude.values().random(),
                     attackDirection = AttackDirection.values().random(),

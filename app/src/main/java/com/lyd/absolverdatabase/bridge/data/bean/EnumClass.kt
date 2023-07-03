@@ -54,6 +54,7 @@ enum class MoveEffect(val str: String) {
     SUPER_ARMOR("霸体"),// 霸体
     BLOCK_COUNTER("格挡反击"),// 格挡反击
     DOUBLE_ATTACK("二段"),// 二段
+    TRIPLE_ATTACK("三段"),// 三段，用于CE Mod
     MID_LINE("中线"),// 中线
     MENTAL_BLOW("精神打击"),// 精神打击
     NULL("无效果")// 无效果

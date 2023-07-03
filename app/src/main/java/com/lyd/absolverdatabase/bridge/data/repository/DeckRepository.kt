@@ -3,7 +3,7 @@ package com.lyd.absolverdatabase.bridge.data.repository
 import android.util.Log
 import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.DeckDAO
-import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveCNDAO
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveCEDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveJsDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveOriginDAO
 import com.lyd.absolverdatabase.utils.GsonUtils
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsDAO,
-                     private val moveOriginDAO: MoveOriginDAO,private val moveCNDAO: MoveCNDAO)
+                     private val moveOriginDAO: MoveOriginDAO,private val moveCEDAO: MoveCEDAO)
 {
 
     private val TAG = javaClass.simpleName
@@ -25,7 +25,7 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
             moveJsDao.deleteAll()
 //            deckDao.deleteAll()
 //            moveOriginDAO.deleteAll()// 现在已经不需要自己生成原版招式了，在数据库创建的时候就已经搞定了数据生成
-            moveCNDAO.deleteAll()
+            moveCEDAO.deleteAll()
 
 
             moveJsDao.upsertAll(MoveGenerate.generateMoveJsons())
@@ -33,7 +33,7 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
 //                moveOriginDAO.upsertAll(MoveGenerate.generateMoveOrigins())
 //            }
             val r2 = async {
-                moveCNDAO.upsertAll(MoveGenerate.generateMoveCNs())
+                moveCEDAO.upsertAll(MoveGenerate.generateMoveCEs())
             }
             val r3 = async {
 //                deckDao.upsertAll(DeckGenerate.generateDeck(15))

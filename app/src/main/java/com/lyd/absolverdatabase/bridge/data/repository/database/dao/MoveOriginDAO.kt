@@ -47,9 +47,9 @@ interface MoveOriginDAO {
      * 然后从这里集合中检索数据
      * */
     @Query("select * from moveOrigin_tb " +
-            "join moveCN_tb on moveOrigin_tb.id = moveCN_tb.id " +
+            "join moveCE_tb on moveOrigin_tb.id = moveCE_tb.id " +
             "where moveOrigin_tb.id in (:ids) ")
-    suspend fun getMoveMapByIds(ids: List<Int>) :Map<MoveOrigin,MoveCN>
+    suspend fun getMoveMapByIds(ids: List<Int>) :Map<MoveOrigin,MoveCE>
 
     @Query("select * from moveOrigin_tb where (startSide = :startSide or startSide = :mirrorStartSide) and canHand = 1")
     suspend fun getHandMoveByStartWithMirror(startSide: StandSide, mirrorStartSide: StandSide) :List<MoveOrigin>

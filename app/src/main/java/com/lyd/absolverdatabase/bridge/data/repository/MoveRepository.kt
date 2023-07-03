@@ -2,12 +2,15 @@ package com.lyd.absolverdatabase.bridge.data.repository
 
 import android.util.Log
 import com.lyd.absolverdatabase.bridge.data.bean.*
-import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveCNDAO
+import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveCEDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveOriginDAO
 import com.lyd.absolverdatabase.utils.SideUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MoveRepository(private val moveOriginDAO: MoveOriginDAO, // 和下面的dao一样用于查询招式
-                     private val moveCNDAO: MoveCNDAO)
+                     private val moveCEDAO: MoveCEDAO)
 {
     private val TAG = javaClass.simpleName
 
