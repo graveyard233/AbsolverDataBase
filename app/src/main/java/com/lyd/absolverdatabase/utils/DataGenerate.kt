@@ -92,7 +92,7 @@ object MoveGenerate{
     }
 
     /**生成空招式，用于占位。假如发现id为-1，则这个招式用空招式替换*/
-    fun generateEmptyOriginMove():MoveOrigin = MoveOrigin(
+    val emptyMoveOrigin :MoveOrigin = MoveOrigin(
         id = -1,
         name = "",
         name_en = "",
@@ -109,6 +109,39 @@ object MoveGenerate{
         physicalOutput = 0F,
         hitAdvantageFrame = 0,
         defenseAdvantageFrame = 0,
+        effect = MoveEffect.NULL.name,
+        canHand = false,
+        canOriginSword = false,
+        canMirrorSword = false
+    )
+
+    val emptyMoveCE :MoveCE = MoveCE(
+        id = -1,
+        name = "",
+        name_en = "",
+        school = Style.WINDFALL,
+        startSide = StandSide.UPPER_RIGHT,
+        endSide = StandSide.UPPER_RIGHT,
+        strength = 0,
+
+        strengthBonus = "none",
+        agilityBonus = "none",
+        flexibleBonus = "none",
+
+        attackRange = 0F,
+        attackToward = AttackToward.RIGHT,
+        attackAltitude = AttackAltitude.HEIGHT,
+        attackDirection = AttackDirection.POKE,
+        startFrame = 0,
+        physicalWeakness = 0F,
+        physicalOutput = 0F,
+        hitAdvantageFrame = 0,
+        defenseAdvantageFrame = 0,
+
+        cancelPoint = 0,
+        hitFrame = "0",
+        yellowAttackFrame = 0,
+
         effect = MoveEffect.NULL.name,
         canHand = false,
         canOriginSword = false,

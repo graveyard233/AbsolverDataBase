@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.lyd.absolverdatabase.bridge.data.bean.MoveForSelect
 import com.lyd.absolverdatabase.bridge.data.bean.RepoResult
 import com.lyd.absolverdatabase.bridge.data.repository.MoveRepository
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 
 
 class MoveRecycleState(private val repository: MoveRepository,
@@ -17,30 +18,46 @@ class MoveRecycleState(private val repository: MoveRepository,
     private val TAG = "${javaClass.simpleName}-${javaClass.hashCode()}"
 
     // 根据起始站架以及镜像来筛选所有招式
-    suspend fun originListWithMirror(startInt: Int?,endInt: Int,canHand: Boolean = false) :List<MoveForSelect>
+    suspend fun moveListWithMirror(startInt: Int?, endInt: Int, canHand: Boolean = false) :List<MoveForSelect>
     {
         val result = if (canHand){
-            repository.getHandOriginWithMirror(startInt,endInt)
+            if (SettingRepository.isUseCNEditionMod){
+                repository.getHandCEWithMirror(startInt,endInt)
+            } else {
+                repository.getHandOriginWithMirror(startInt,endInt)
+            }
         } else {
-            repository.getSwordOriginWithMirror(startInt,endInt)
+            if (SettingRepository.isUseCNEditionMod){
+                repository.getSwordCEWithMirror(startInt,endInt)
+            } else {
+                repository.getSwordOriginWithMirror(startInt,endInt)
+            }
         }
         return when(result){
-            is RepoResult.RpEmpty -> listOf<MoveForSelect>()
-            is RepoResult.RpError -> listOf<MoveForSelect>()
+            is RepoResult.RpEmpty -> emptyList()
+            is RepoResult.RpError -> emptyList()
             is RepoResult.RpSuccess -> result.data
         }
     }
 
-    suspend fun originOptListWithMirror(startInt: Int,endInt: Int,canHand: Boolean = false) :List<MoveForSelect>
+    suspend fun optListWithMirror(startInt: Int, endInt: Int, canHand: Boolean = false) :List<MoveForSelect>
     {
         val result = if (canHand){
-            repository.getHandOriginOptWithMirror(startInt,endInt)
+            if (SettingRepository.isUseCNEditionMod){
+                repository.getHandCEOptWithMirror(startInt,endInt)
+            } else {
+                repository.getHandOriginOptWithMirror(startInt,endInt)
+            }
         } else {
-            repository.getSwordOriginOptWithMirror(startInt,endInt)
+            if (SettingRepository.isUseCNEditionMod){
+                repository.getSwordCEOptWithMirror(startInt,endInt)
+            } else {
+                repository.getSwordOriginOptWithMirror(startInt,endInt)
+            }
         }
         return when(result){
-            is RepoResult.RpEmpty -> listOf<MoveForSelect>()
-            is RepoResult.RpError -> listOf<MoveForSelect>()
+            is RepoResult.RpEmpty -> emptyList()
+            is RepoResult.RpError -> emptyList()
             is RepoResult.RpSuccess -> result.data
         }
     }

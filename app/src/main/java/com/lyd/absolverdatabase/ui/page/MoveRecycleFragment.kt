@@ -16,6 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.*
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.bridge.state.DeckEditState
 import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.bridge.state.MoveRecycleState
@@ -237,34 +238,43 @@ class MoveRecycleFragment :BaseFragment()
                 val tempForSelect = when(it){
                     is SideLimit.noLimit -> {
                         Log.i(TAG, "noLimit: ${it.msg}")
-                        moveRecycleState.originListWithMirror(null,whatEndSide,tempCanHand)
+                        moveRecycleState.moveListWithMirror(null,whatEndSide,tempCanHand)
                     }
                     is SideLimit.limitAll -> {
                         Log.i(TAG, "limitAll: start:${it.startSide} end:${it.endSide}")
-                        moveRecycleState.originListWithMirror(SideUtil.getIntBySide(it.startSide),SideUtil.getIntBySide(it.endSide),tempCanHand)
+                        moveRecycleState.moveListWithMirror(SideUtil.getIntBySide(it.startSide),SideUtil.getIntBySide(it.endSide),tempCanHand)
                     }
                     is SideLimit.limitStart -> {
                         Log.i(TAG, "limitStart: start:${it.startSide}")
-                        moveRecycleState.originListWithMirror(SideUtil.getIntBySide(it.startSide),whatEndSide,tempCanHand)
+                        moveRecycleState.moveListWithMirror(SideUtil.getIntBySide(it.startSide),whatEndSide,tempCanHand)
                     }
                     is SideLimit.limitEnd -> {
                         Log.i(TAG, "limitEnd: end:${it.endSide}")
-                        moveRecycleState.originListWithMirror(null, endInt = whatEndSide,tempCanHand)
+                        moveRecycleState.moveListWithMirror(null, endInt = whatEndSide,tempCanHand)
 
                     }
                     is SideLimit.optLimit -> {
                         Log.w(TAG, "optLimit: ${it.startSide}")
                         // TODO: 2023/6/4 这里要做一个专门给自选序列一个专门的筛选方法
                         // TODO: 2023/6/9 这个数据还有点问题
-                        moveRecycleState.originOptListWithMirror(SideUtil.getIntBySide(it.startSide),whatEndSide,tempCanHand)
+                        moveRecycleState.optListWithMirror(SideUtil.getIntBySide(it.startSide),whatEndSide,tempCanHand)
                     }
                 }
                 val idsBeSelect = tempMoveListBeSelect.await()
-                tempForSelect.forEach { tempMoveForSelect->
-                    if (tempMoveForSelect.moveOrigin.id in idsBeSelect){
-                        tempMoveForSelect.isSelected = true// 标记已选择的招式
+                if (SettingRepository.isUseCNEditionMod){
+                    tempForSelect.forEach { tempMoveForSelect->
+                        if (tempMoveForSelect.moveCE.id in idsBeSelect){
+                            tempMoveForSelect.isSelected = true// 标记已选择的招式
+                        }
+                    }
+                } else {
+                    tempForSelect.forEach { tempMoveForSelect->
+                        if (tempMoveForSelect.moveOrigin.id in idsBeSelect){
+                            tempMoveForSelect.isSelected = true// 标记已选择的招式
+                        }
                     }
                 }
+
                 tempForSelect
             }
         }
@@ -272,25 +282,49 @@ class MoveRecycleFragment :BaseFragment()
     /**执行完[filterBySideLimit]后再执行这个，按选项筛选，输出[MoveForSelect]的list，以便标记招式，所以筛选都按这个流程走*/
     private suspend fun filterByOpt(sideList: MutableList<MoveForSelect>, option: FilterOption) :List<MoveForSelect>{
         return withContext(Dispatchers.Default){
-            sideList.filter {
-                when(option.attackToward){
-                    is AttackTowardOption.left -> { it.moveOrigin.attackToward == AttackToward.LEFT }
-                    is AttackTowardOption.right -> { it.moveOrigin.attackToward == AttackToward.RIGHT }
-                    is AttackTowardOption.all -> true
+            if (SettingRepository.isUseCNEditionMod){
+                sideList.filter {
+                    when(option.attackToward){
+                        is AttackTowardOption.left -> { it.moveCE.attackToward == AttackToward.LEFT }
+                        is AttackTowardOption.right -> { it.moveCE.attackToward == AttackToward.RIGHT }
+                        is AttackTowardOption.all -> true
+                    }
+                }.filter {
+                    when(option.attackAltitude){
+                        is AttackAltitudeOption.height -> { it.moveCE.attackAltitude == AttackAltitude.HEIGHT }
+                        is AttackAltitudeOption.middle -> { it.moveCE.attackAltitude == AttackAltitude.MIDDLE }
+                        is AttackAltitudeOption.low -> { it.moveCE.attackAltitude == AttackAltitude.LOW }
+                        is AttackAltitudeOption.all -> true
+                    }
+                }.filter {
+                    when(option.attackDirection){
+                        is AttackDirectionOption.horizontal -> { it.moveCE.attackDirection == AttackDirection.HORIZONTAL }
+                        is AttackDirectionOption.vertical -> { it.moveCE.attackDirection == AttackDirection.VERTICAL }
+                        is AttackDirectionOption.poke -> { it.moveCE.attackDirection == AttackDirection.POKE }
+                        is AttackDirectionOption.all -> true
+                    }
                 }
-            }.filter {
-                when(option.attackAltitude){
-                    is AttackAltitudeOption.height -> { it.moveOrigin.attackAltitude == AttackAltitude.HEIGHT }
-                    is AttackAltitudeOption.middle -> { it.moveOrigin.attackAltitude == AttackAltitude.MIDDLE }
-                    is AttackAltitudeOption.low -> { it.moveOrigin.attackAltitude == AttackAltitude.LOW }
-                    is AttackAltitudeOption.all -> true
-                }
-            }.filter {
-                when(option.attackDirection){
-                    is AttackDirectionOption.horizontal -> { it.moveOrigin.attackDirection == AttackDirection.HORIZONTAL }
-                    is AttackDirectionOption.vertical -> { it.moveOrigin.attackDirection == AttackDirection.VERTICAL }
-                    is AttackDirectionOption.poke -> { it.moveOrigin.attackDirection == AttackDirection.POKE }
-                    is AttackDirectionOption.all -> true
+            } else {
+                sideList.filter {
+                    when(option.attackToward){
+                        is AttackTowardOption.left -> { it.moveOrigin.attackToward == AttackToward.LEFT }
+                        is AttackTowardOption.right -> { it.moveOrigin.attackToward == AttackToward.RIGHT }
+                        is AttackTowardOption.all -> true
+                    }
+                }.filter {
+                    when(option.attackAltitude){
+                        is AttackAltitudeOption.height -> { it.moveOrigin.attackAltitude == AttackAltitude.HEIGHT }
+                        is AttackAltitudeOption.middle -> { it.moveOrigin.attackAltitude == AttackAltitude.MIDDLE }
+                        is AttackAltitudeOption.low -> { it.moveOrigin.attackAltitude == AttackAltitude.LOW }
+                        is AttackAltitudeOption.all -> true
+                    }
+                }.filter {
+                    when(option.attackDirection){
+                        is AttackDirectionOption.horizontal -> { it.moveOrigin.attackDirection == AttackDirection.HORIZONTAL }
+                        is AttackDirectionOption.vertical -> { it.moveOrigin.attackDirection == AttackDirection.VERTICAL }
+                        is AttackDirectionOption.poke -> { it.moveOrigin.attackDirection == AttackDirection.POKE }
+                        is AttackDirectionOption.all -> true
+                    }
                 }
             }
         }

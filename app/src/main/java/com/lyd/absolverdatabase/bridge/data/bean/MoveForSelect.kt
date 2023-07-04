@@ -5,6 +5,7 @@ package com.lyd.absolverdatabase.bridge.data.bean
  * */
 data class MoveForSelect(
     val moveOrigin: MoveOrigin,
+    val moveCE: MoveCE,
     var isSelected :Boolean = false,
     var isMirror :Int = 0
 )

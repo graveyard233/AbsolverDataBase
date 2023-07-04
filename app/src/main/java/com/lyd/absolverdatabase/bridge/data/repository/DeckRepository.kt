@@ -25,16 +25,16 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
             moveJsDao.deleteAll()
 //            deckDao.deleteAll()
 //            moveOriginDAO.deleteAll()// 现在已经不需要自己生成原版招式了，在数据库创建的时候就已经搞定了数据生成
-            moveCEDAO.deleteAll()
+//            moveCEDAO.deleteAll()
 
 
             moveJsDao.upsertAll(MoveGenerate.generateMoveJsons())
 //            val r1 = async {
 //                moveOriginDAO.upsertAll(MoveGenerate.generateMoveOrigins())
 //            }
-            val r2 = async {
-                moveCEDAO.upsertAll(MoveGenerate.generateMoveCEs())
-            }
+//            val r2 = async {
+//                moveCEDAO.upsertAll(MoveGenerate.generateMoveCEs())
+//            }
             val r3 = async {
 //                deckDao.upsertAll(DeckGenerate.generateDeck(15))
                 // TODO: 准备做一个专门来测试的卡组
@@ -58,7 +58,7 @@ class DeckRepository(private val deckDao: DeckDAO,private val moveJsDao: MoveJsD
 //                ))
             }
 //            r1.await()
-            r2.await()
+//            r2.await()
 //            r3.await()
 
 

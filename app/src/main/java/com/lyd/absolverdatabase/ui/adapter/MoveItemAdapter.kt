@@ -13,6 +13,7 @@ import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveForSelect
 import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.AssetsUtil
 
 class MoveItemAdapter :BaseQuickAdapter<MoveForSelect,MoveItemAdapter.VH>() {
@@ -20,10 +21,12 @@ class MoveItemAdapter :BaseQuickAdapter<MoveForSelect,MoveItemAdapter.VH>() {
     override fun onBindViewHolder(holder: VH, position: Int, item: MoveForSelect?) {
         item?.run {
             GlideApp.with(holder.img)
-                .load(AssetsUtil.getBitmapByMoveId(context, moveId = item.moveOrigin.id))
+                .load(AssetsUtil.getBitmapByMoveId(context, moveId = if (SettingRepository.isUseCNEditionMod) item.moveCE.id else item.moveOrigin.id))
                 .error(R.drawable.ic_video_load_error)
                 .into(holder.img)
-            holder.moveName.text = moveOrigin.name
+            val tempId = if (SettingRepository.isUseCNEditionMod) item.moveCE.id else item.moveOrigin.id
+            holder.img.setBackgroundColor(context.resources.getColor(if (tempId >= 198) R.color.img_add_move_bg else R.color.transparent))
+            holder.moveName.text = if (SettingRepository.isUseCNEditionMod) moveCE.name else moveOrigin.name
             holder.imgSelect.visibility = if (item.isSelected) View.VISIBLE else View.GONE
         }
     }

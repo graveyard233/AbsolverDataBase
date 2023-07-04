@@ -97,8 +97,8 @@ data class MoveCE(
     val name: String,// 名称
     val name_en:String,// 英文名称
     val school :Style,// 流派
-    val startSide: StandSide,// 起始站架
-    val endSide: StandSide,// 结束站架
+    var startSide: StandSide,// 起始站架
+    var endSide: StandSide,// 结束站架
     val strength :Int,// 力度 1~3，分别为轻中重
 
     val strengthBonus :String,// 力量加成
@@ -106,7 +106,7 @@ data class MoveCE(
     val flexibleBonus :String,// 机动加成
 
     val attackRange :Float,// 攻击范围，这个CE有修改
-    val attackToward :AttackToward,// 攻击朝向
+    var attackToward :AttackToward,// 攻击朝向
     val attackAltitude: AttackAltitude,// 攻击高度
     val attackDirection: AttackDirection,// 攻击走向
     val startFrame :Int,// 起手帧数，这个CE有修改
@@ -123,6 +123,12 @@ data class MoveCE(
     val canHand :Boolean,// 徒手是否可用
     val canOriginSword :Boolean,// 原版招式在剑卡组里是否可用
     val canMirrorSword :Boolean,// 镜像招式在剑卡组里是否可用 因为有些招式在剑卡组里面不能使用镜像搜索（起始结束站架被动画限死），所以加这个字段，两个字段其中有一个是1就可以在剑卡组中使用，全0就不能在剑卡组中所以用
-)
+){
+    fun toMirror(){
+        startSide = SideUtil.getMirrorSide(startSide)
+        endSide = SideUtil.getMirrorSide(endSide)
+        attackToward = AttackToward.getMirrorToward(attackToward)
+    }
+}
 
 

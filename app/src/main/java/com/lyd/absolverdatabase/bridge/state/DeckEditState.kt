@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.DeckEditRepository
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.ui.page.DeckEditFragment
 import com.lyd.absolverdatabase.ui.page.MoveSelectFragment
 import com.lyd.absolverdatabase.utils.DeckGenerate
@@ -100,16 +101,33 @@ class DeckEditState(private val repository: DeckEditRepository,
     fun updateAllOption(deck: Deck){
         viewModelScope.launch(Dispatchers.IO){
             launch {
-                optUpperRight.emit(repository.getOriginWithMirrorByBox(deck.optionalUpperRight))
+                if (SettingRepository.isUseCNEditionMod){
+                    optUpperRight.emit(repository.getCEWithMirrorByBox(deck.optionalUpperRight))
+                } else {
+                    optUpperRight.emit(repository.getOriginWithMirrorByBox(deck.optionalUpperRight))
+                }
             }
             launch {
-                optUpperLeft.emit(repository.getOriginWithMirrorByBox(deck.optionalUpperLeft))
+                if (SettingRepository.isUseCNEditionMod){
+                    optUpperLeft.emit(repository.getCEWithMirrorByBox(deck.optionalUpperLeft))
+                } else {
+                    optUpperLeft.emit(repository.getOriginWithMirrorByBox(deck.optionalUpperLeft))
+                }
             }
             launch {
-                optLowerLift.emit(repository.getOriginWithMirrorByBox(deck.optionalLowerLeft))
+                if (SettingRepository.isUseCNEditionMod){
+                    optLowerLift.emit(repository.getCEWithMirrorByBox(deck.optionalLowerLeft))
+                } else {
+                    optLowerLift.emit(repository.getOriginWithMirrorByBox(deck.optionalLowerLeft))
+                }
+
             }
             launch {
-                optLowerRight.emit(repository.getOriginWithMirrorByBox(deck.optionalLowerRight))
+                if (SettingRepository.isUseCNEditionMod){
+                    optLowerRight.emit(repository.getCEWithMirrorByBox(deck.optionalLowerRight))
+                } else {
+                    optLowerRight.emit(repository.getOriginWithMirrorByBox(deck.optionalLowerRight))
+                }
             }
         }
     }
@@ -117,16 +135,32 @@ class DeckEditState(private val repository: DeckEditRepository,
     fun updateAllSequence(deck: Deck){// 千万不要修改这个deck的属性
         viewModelScope.launch/*(Dispatchers.IO)*/{
             launch {
-                updateSeqUpperRight(repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperRight))
+                if (SettingRepository.isUseCNEditionMod){
+                    updateSeqUpperRight(repository.getCEsWithMirrorByBoxes(deck.sequenceUpperRight))
+                } else {
+                    updateSeqUpperRight(repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperRight))
+                }
             }
             launch {
-                updateSeqUpperLeft(repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperLeft))
+                if (SettingRepository.isUseCNEditionMod){
+                    updateSeqUpperLeft(repository.getCEsWithMirrorByBoxes(deck.sequenceUpperLeft))
+                } else {
+                    updateSeqUpperLeft(repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperLeft))
+                }
             }
             launch {
-                updateSeqLowerLeft(repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerLeft))
+                if (SettingRepository.isUseCNEditionMod){
+                    updateSeqLowerLeft(repository.getCEsWithMirrorByBoxes(deck.sequenceLowerLeft))
+                } else {
+                    updateSeqLowerLeft(repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerLeft))
+                }
             }
             launch {
-                updateSeqLowerRight(repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerRight))
+                if (SettingRepository.isUseCNEditionMod){
+                    updateSeqLowerRight(repository.getCEsWithMirrorByBoxes(deck.sequenceLowerRight))
+                } else {
+                    updateSeqLowerRight(repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerRight))
+                }
             }
         }
     }
@@ -163,6 +197,12 @@ class DeckEditState(private val repository: DeckEditRepository,
     suspend fun getOptMoveById(optId :Int) :MoveOrigin?{
         return repository.getOriginMoveById(optId)
     }
+    suspend fun getSeqCEMovesByIds(seq :List<Int>) :List<MoveCE?> {
+        return repository.getCEListByIds(seq)
+    }
+    suspend fun getOptCEMoveById(optId :Int) :MoveCE?{
+        return repository.getCEMoveById(optId)
+    }
 
     private val _sideLimitFlow :MutableStateFlow<SideLimit> = MutableStateFlow(value = SideLimit.noLimit())
     val sideLimitFlow = _sideLimitFlow.asStateFlow()
@@ -182,7 +222,6 @@ class DeckEditState(private val repository: DeckEditRepository,
     }
     fun selectNull(){
         viewModelScope.launch {
-            Log.i(TAG, "selectNull: 被触发")
             _moveForSelectFlow.emit(MoveSelectFragment.MoveMsgState.SelectNull())
         }
     }

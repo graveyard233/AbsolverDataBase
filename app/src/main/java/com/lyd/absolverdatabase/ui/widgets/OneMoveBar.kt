@@ -10,6 +10,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.SideUtil
 
@@ -57,9 +58,14 @@ class OneMoveBar :LinearLayout{
             GlideApp.with(img)
                 .load(AssetsUtil.getBitmapByMoveId(context,box.moveId))
                 .into(img)
-            img.setBackgroundColor(resources.getColor(R.color.transparent))
-            box.moveOrigin?.endSide?.let { SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it)) }
-                ?.let { endSide.setImageResource(it) }
+            img.setBackgroundColor(resources.getColor(if (box.moveId >= 198) R.color.img_add_move_bg else R.color.transparent))
+            if (SettingRepository.isUseCNEditionMod){
+                box.moveCE?.endSide?.let { SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it)) }
+                    ?.let { endSide.setImageResource(it) }
+            } else {
+                box.moveOrigin?.endSide?.let { SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it)) }
+                    ?.let { endSide.setImageResource(it) }
+            }
         } else {
             img.setImageResource(R.drawable.ic_add_move)
             img.setBackgroundColor(resources.getColor(R.color.img_add_move_bg))

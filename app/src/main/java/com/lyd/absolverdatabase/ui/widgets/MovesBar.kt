@@ -2,7 +2,6 @@ package com.lyd.absolverdatabase.ui.widgets
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -11,16 +10,15 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
-import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.AssetsUtil
-import com.lyd.absolverdatabase.utils.MoveGenerate
 import com.lyd.absolverdatabase.utils.SideUtil
 
 class MovesBar : ConstraintLayout {
 
     private val TAG = "${javaClass.simpleName}-${hashCode()}"
 
-    private val originList = mutableListOf<MoveBox>(MoveBox(), MoveBox(), MoveBox())
+    private val boxList = mutableListOf<MoveBox>(MoveBox(), MoveBox(), MoveBox())
 
 
     private lateinit var side0 :ImageView
@@ -67,8 +65,8 @@ class MovesBar : ConstraintLayout {
         if (moveList.size != 3)
             return
         // 先完成赋值
-        originList.forEachIndexed { index, moveBox ->
-            originList[index] = moveList[index]
+        boxList.forEachIndexed { index, moveBox ->
+            boxList[index] = moveList[index]
         }
 //        move0.setMoveImg(originList[0])
 //        move1.setMoveImg(originList[1])
@@ -111,33 +109,63 @@ class MovesBar : ConstraintLayout {
     private fun updateOneMove(position :Int){
         when(position){
             0 ->{
-                changeMoveImg(move0,originList[position].moveId)
-                originList[position].moveOrigin?.apply {
-                    GlideApp.with(side1)
-                        .load(SideUtil.imgIdForMoves(endSide))
-                        .into(side1)
+                changeMoveImg(move0,boxList[position].moveId)
+                if (SettingRepository.isUseCNEditionMod){
+                    boxList[position].moveCE?.apply {
+                        GlideApp.with(side1)
+                            .load(SideUtil.imgIdForMoves(endSide))
+                            .into(side1)
+                    }
+                } else {
+                    boxList[position].moveOrigin?.apply {
+                        GlideApp.with(side1)
+                            .load(SideUtil.imgIdForMoves(endSide))
+                            .into(side1)
+                    }
                 }
             }
             1 ->{
-                changeMoveImg(move1,originList[position].moveId)
-                originList[position].moveOrigin?.apply {
-                    GlideApp.with(side1)
-                        .load(SideUtil.imgIdForMoves(startSide))
-                        .into(side1)
-                    GlideApp.with(side2)
-                        .load(SideUtil.imgIdForMoves(endSide))
-                        .into(side2)
+                changeMoveImg(move1,boxList[position].moveId)
+                if (SettingRepository.isUseCNEditionMod){
+                    boxList[position].moveCE?.apply {
+                        GlideApp.with(side1)
+                            .load(SideUtil.imgIdForMoves(startSide))
+                            .into(side1)
+                        GlideApp.with(side2)
+                            .load(SideUtil.imgIdForMoves(endSide))
+                            .into(side2)
+                    }
+                } else {
+                    boxList[position].moveOrigin?.apply {
+                        GlideApp.with(side1)
+                            .load(SideUtil.imgIdForMoves(startSide))
+                            .into(side1)
+                        GlideApp.with(side2)
+                            .load(SideUtil.imgIdForMoves(endSide))
+                            .into(side2)
+                    }
                 }
             }
             2 ->{
-                changeMoveImg(move2,originList[position].moveId)
-                originList[position].moveOrigin?.apply {
-                    GlideApp.with(side2)
-                        .load(SideUtil.imgIdForMoves(startSide))
-                        .into(side2)
-                    GlideApp.with(side3)
-                        .load(SideUtil.imgIdForMoves(endSide))
-                        .into(side3)
+                changeMoveImg(move2,boxList[position].moveId)
+                if (SettingRepository.isUseCNEditionMod){
+                    boxList[position].moveCE?.apply {
+                        GlideApp.with(side2)
+                            .load(SideUtil.imgIdForMoves(startSide))
+                            .into(side2)
+                        GlideApp.with(side3)
+                            .load(SideUtil.imgIdForMoves(endSide))
+                            .into(side3)
+                    }
+                } else {
+                    boxList[position].moveOrigin?.apply {
+                        GlideApp.with(side2)
+                            .load(SideUtil.imgIdForMoves(startSide))
+                            .into(side2)
+                        GlideApp.with(side3)
+                            .load(SideUtil.imgIdForMoves(endSide))
+                            .into(side3)
+                    }
                 }
             }
         }
@@ -148,7 +176,7 @@ class MovesBar : ConstraintLayout {
             GlideApp.with(imageView)
                 .load(AssetsUtil.getBitmapByMoveId(context, moveId = moveId))
                 .into(imageView)
-            imageView.setBackgroundColor(resources.getColor(R.color.transparent))// 避免黑边和背景颜色对不上，所以要去掉背景色
+            imageView.setBackgroundColor( resources.getColor(if (moveId >= 198) R.color.img_add_move_bg else R.color.transparent))// 避免黑边和背景颜色对不上，所以要去掉背景色
         } else {
             imageView.setImageResource(R.drawable.ic_add_move)
             imageView.setBackgroundColor(resources.getColor(R.color.img_add_move_bg))

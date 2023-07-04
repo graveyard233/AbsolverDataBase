@@ -13,11 +13,14 @@ object AssetsUtil {
 
     val movesPath:String = "moves/"
 
+    val jpgSuffix = ".jpg"
+    val pngSuffix = ".png"
+
 
     fun getBitmapByMoveId(context: Context, moveId :Int):Bitmap?{
         var tempBitmap :Bitmap ?= null
         try {
-            context.resources.assets.open("$movesPath$moveId.jpg").use {
+            context.resources.assets.open("$movesPath$moveId${if (moveId >= 198) pngSuffix else jpgSuffix}").use {
                 tempBitmap = BitmapFactory.decodeStream(it)
             }
         }catch (e :Exception){

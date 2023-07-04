@@ -37,4 +37,6 @@ data class MoveBox(
     /**招式，内部的数据和是否启用镜像是同步的，即假如[isUseMirror]是1，则[moveOrigin]内部已经做出了镜像转换了，不需要再变更*/
     @Ignore
     var moveOrigin :MoveOrigin ?= null
+    @Ignore
+    var moveCE :MoveCE ?= null
 }

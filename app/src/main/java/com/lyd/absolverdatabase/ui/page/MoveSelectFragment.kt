@@ -20,6 +20,7 @@ import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.*
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.bridge.state.DeckEditState
 import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentMoveSelectBinding
@@ -105,27 +106,47 @@ class MoveSelectFragment :BaseFragment(){
                     seqPack = when(argMsg.toSelectMsg.whatBarToEdit){
                         0 ->{
                             SeqPack(startSide = StandSide.UPPER_RIGHT, isMirrorList = MoveBox.getMirrorList(editState.getDeckInSaved()!!.sequenceUpperRight)).apply {
-                                replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceUpperRight)))
+                                if (SettingRepository.isUseCNEditionMod) {
+                                    replaceCEList(editState.getSeqCEMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceUpperRight)))
+                                } else {
+                                    replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceUpperRight)))
+                                }
                             }
                         }
                         1 ->{
                             SeqPack(startSide = StandSide.UPPER_LEFT, isMirrorList = MoveBox.getMirrorList(editState.getDeckInSaved()!!.sequenceUpperLeft)).apply {
-                                replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceUpperLeft)))
+                                if (SettingRepository.isUseCNEditionMod) {
+                                    replaceCEList(editState.getSeqCEMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceUpperLeft)))
+                                } else {
+                                    replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceUpperLeft)))
+                                }
                             }
                         }
                         2 ->{
                             SeqPack(startSide = StandSide.LOWER_LEFT, isMirrorList = MoveBox.getMirrorList(editState.getDeckInSaved()!!.sequenceLowerLeft)).apply {
-                                replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceLowerLeft)))
+                                if (SettingRepository.isUseCNEditionMod) {
+                                    replaceCEList(editState.getSeqCEMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceLowerLeft)))
+                                } else {
+                                    replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceLowerLeft)))
+                                }
                             }
                         }
                         3 ->{
                             SeqPack(startSide = StandSide.LOWER_RIGHT, isMirrorList = MoveBox.getMirrorList(editState.getDeckInSaved()!!.sequenceLowerRight)).apply {
-                                replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceLowerRight)))
+                                if (SettingRepository.isUseCNEditionMod) {
+                                    replaceCEList(editState.getSeqCEMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceLowerRight)))
+                                } else {
+                                    replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceLowerRight)))
+                                }
                             }
                         }
                         else ->{
                             SeqPack(startSide = StandSide.UPPER_RIGHT).apply {
-                                replaceList(editState.getSeqMovesByIds(listOf<Int>(-1,-1,-1)))
+                                if (SettingRepository.isUseCNEditionMod) {
+                                    replaceCEList(editState.getSeqCEMovesByIds(listOf<Int>(-1,-1,-1)))
+                                } else {
+                                    replaceList(editState.getSeqMovesByIds(listOf<Int>(-1,-1,-1)))
+                                }
                             }
                         }
                     }
@@ -144,24 +165,46 @@ class MoveSelectFragment :BaseFragment(){
                         7 -> StandSide.LOWER_RIGHT
                         else -> StandSide.UPPER_RIGHT
                     }).apply {
-                        updateOpt(
-                            moveOrigin = editState.getOptMoveById(
-                                when (argMsg.toSelectMsg.whatBarToEdit) {
-                                    4 -> editState.getDeckInSaved()!!.optionalUpperRight.moveId
-                                    5 -> editState.getDeckInSaved()!!.optionalUpperLeft.moveId
-                                    6 -> editState.getDeckInSaved()!!.optionalLowerLeft.moveId
-                                    7 -> editState.getDeckInSaved()!!.optionalLowerRight.moveId
-                                    else -> -1
+                        if (SettingRepository.isUseCNEditionMod){
+                            updateOpt(
+                                moveCE = editState.getOptCEMoveById(
+                                    when (argMsg.toSelectMsg.whatBarToEdit) {
+                                        4 -> editState.getDeckInSaved()!!.optionalUpperRight.moveId
+                                        5 -> editState.getDeckInSaved()!!.optionalUpperLeft.moveId
+                                        6 -> editState.getDeckInSaved()!!.optionalLowerLeft.moveId
+                                        7 -> editState.getDeckInSaved()!!.optionalLowerRight.moveId
+                                        else -> -1
+                                    }
+                                ),
+                                isUseMirror = when (argMsg.toSelectMsg.whatBarToEdit) {
+                                    4 -> editState.getDeckInSaved()!!.optionalUpperRight.isUseMirror
+                                    5 -> editState.getDeckInSaved()!!.optionalUpperLeft.isUseMirror
+                                    6 -> editState.getDeckInSaved()!!.optionalLowerLeft.isUseMirror
+                                    7 -> editState.getDeckInSaved()!!.optionalLowerRight.isUseMirror
+                                    else -> 0
                                 }
-                            ),
-                            isUseMirror = when (argMsg.toSelectMsg.whatBarToEdit) {
-                                4 -> editState.getDeckInSaved()!!.optionalUpperRight.isUseMirror
-                                5 -> editState.getDeckInSaved()!!.optionalUpperLeft.isUseMirror
-                                6 -> editState.getDeckInSaved()!!.optionalLowerLeft.isUseMirror
-                                7 -> editState.getDeckInSaved()!!.optionalLowerRight.isUseMirror
-                                else -> 0
-                            }
-                        )
+                            )
+                        } else {
+                            updateOpt(
+                                moveOrigin = editState.getOptMoveById(
+                                    when (argMsg.toSelectMsg.whatBarToEdit) {
+                                        4 -> editState.getDeckInSaved()!!.optionalUpperRight.moveId
+                                        5 -> editState.getDeckInSaved()!!.optionalUpperLeft.moveId
+                                        6 -> editState.getDeckInSaved()!!.optionalLowerLeft.moveId
+                                        7 -> editState.getDeckInSaved()!!.optionalLowerRight.moveId
+                                        else -> -1
+                                    }
+                                ),
+                                isUseMirror = when (argMsg.toSelectMsg.whatBarToEdit) {
+                                    4 -> editState.getDeckInSaved()!!.optionalUpperRight.isUseMirror
+                                    5 -> editState.getDeckInSaved()!!.optionalUpperLeft.isUseMirror
+                                    6 -> editState.getDeckInSaved()!!.optionalLowerLeft.isUseMirror
+                                    7 -> editState.getDeckInSaved()!!.optionalLowerRight.isUseMirror
+                                    else -> 0
+                                }
+                            )
+                        }
+
                     }
                     whenClickMoveInOneBar()
                 }
@@ -383,31 +426,50 @@ class MoveSelectFragment :BaseFragment(){
                             updateDeckInSaveState()
                         }
                         is MoveMsgState.SelectOne -> {
-                            setMoveMsg(it.moveForSelect)
+                            if (SettingRepository.isUseCNEditionMod){
+                                setMoveCEMsg(it.moveForSelect)
+                            } else{
+                                setMoveMsg(it.moveForSelect)
+                            }
                             // 然后还要更新bar的布局
                             if (seqPack != null){
                                 moveImgList[editState.moveBeClickFlow.value]?.setImageBitmap(
-                                    AssetsUtil.getBitmapByMoveId(requireContext(),it.moveForSelect.moveOrigin.id)
+                                    AssetsUtil.getBitmapByMoveId(requireContext(),
+                                        if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.id } else { it.moveForSelect.moveOrigin.id })
                                 )
                                 when(editState.moveBeClickFlow.value){// 根据选择的招式来修改起始结束站架
                                     0 ->{// 起始站架已经定死，只用修改结束站架side1
-                                        side1?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.endSide))
+                                        side1?.setImageResource(SideUtil.imgIdForMoves(
+                                            if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.endSide } else { it.moveForSelect.moveOrigin.endSide }
+                                        ))
                                     }
                                     1 ->{
-                                        side1?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.startSide))
-                                        side2?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.endSide))
+                                        side1?.setImageResource(SideUtil.imgIdForMoves(
+                                            if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.startSide } else { it.moveForSelect.moveOrigin.startSide }
+                                        ))
+                                        side2?.setImageResource(SideUtil.imgIdForMoves(
+                                            if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.endSide } else { it.moveForSelect.moveOrigin.endSide }
+                                        ))
                                     }
                                     2 ->{
-                                        side2?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.startSide))
-                                        sideEnd?.setImageResource(SideUtil.imgIdForMoves(it.moveForSelect.moveOrigin.endSide))
+                                        side2?.setImageResource(SideUtil.imgIdForMoves(
+                                            if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.startSide } else { it.moveForSelect.moveOrigin.startSide }
+                                        ))
+                                        sideEnd?.setImageResource(SideUtil.imgIdForMoves(
+                                            if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.endSide } else { it.moveForSelect.moveOrigin.endSide }
+                                        ))
                                     }
                                 }
                                 seqPack!!.updateOne(editState.moveBeClickFlow.value,it.moveForSelect)
                                 Log.i(TAG, "moveForSelectFlow: idList:${seqPack!!.idList} isMirrorList:${seqPack!!.isMirrorList}")
                                 // 这里要更新editState里面存在saveState中的deck数据就行
                             }else if (optionPack != null){// 起始站架已经定死，所以只用修改结束站架
-                                move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),it.moveForSelect.moveOrigin.id))
-                                sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it.moveForSelect.moveOrigin.endSide)))
+                                move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),
+                                    if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.id } else { it.moveForSelect.moveOrigin.id }
+                                ))
+                                sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(
+                                    if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.endSide } else { it.moveForSelect.moveOrigin.endSide }
+                                )))
                                 optionPack!!.updateOptByMoveForSelect(moveForSelect = it.moveForSelect)
                                 Log.i(TAG, "moveForSelectFlow: ${optionPack!!}")
                             }
@@ -459,7 +521,7 @@ class MoveSelectFragment :BaseFragment(){
                         }
                         if (idList[1] != -1){// 说明第二个槽位有招式，它的起始站架限制了这个结束站架
                             // TODO: 要限制tab只能处于结束站架限定的那个viewPage
-                            val tempEnd = originList[1]!!.startSide
+                            val tempEnd = if (SettingRepository.isUseCNEditionMod){ ceList[1]!!.startSide } else { originList[1]!!.startSide }
                             editState.updateSideLimit(
                                 SideLimit.limitAll(startSide = tempStart, endSide = tempEnd)
                             )
@@ -471,10 +533,10 @@ class MoveSelectFragment :BaseFragment(){
                     }
                     1 ->{// 选择了第二个，所有情况均有可能
                         if (idList[0] != -1){// 说明第一个槽位有招式,它的结束站架限制了第二个招式的起始站架
-                            val tempStart = originList[0]!!.endSide
+                            val tempStart = if (SettingRepository.isUseCNEditionMod) { ceList[0]!!.endSide } else { originList[0]!!.endSide }
                             if (idList[2] != -1){// 说明第三个槽位有招式，它的起始站架限制了第二个招式的结束站架
                                 // TODO: 要限制tab只能处于结束站架限定的那个viewPage
-                                val tempEnd = originList[2]!!.startSide
+                                val tempEnd = if (SettingRepository.isUseCNEditionMod) { ceList[2]!!.startSide } else { originList[2]!!.startSide }
                                 editState.updateSideLimit(SideLimit.limitAll(startSide = tempStart, endSide = tempEnd))
                                 dataBinding?.moveSelectPager?.setCurrentItem(SideUtil.getIntBySide(tempEnd),true)// 滚动到结束站架限定的viewPager
                                 dataBinding?.moveSelectPager?.isUserInputEnabled = false
@@ -485,7 +547,7 @@ class MoveSelectFragment :BaseFragment(){
                         } else {// 第一个槽位为空，则起始站架没被限制
                             if (idList[2] != -1){// 说明第三个槽位有招式，它的起始站架限制了第二个招式的结束站架
                                 // TODO: 这里要限制tab只能处于结束站架限定的那个viewPage
-                                val tempEnd = originList[2]!!.startSide
+                                val tempEnd = if (SettingRepository.isUseCNEditionMod){ ceList[2]!!.startSide } else { originList[2]!!.startSide }
                                 editState.updateSideLimit(SideLimit.limitEnd(endSide = tempEnd))
                                 dataBinding?.moveSelectPager?.setCurrentItem(SideUtil.getIntBySide(tempEnd),true)// 滚动到结束站架限定的viewPager
                                 dataBinding?.moveSelectPager?.isUserInputEnabled = false
@@ -498,7 +560,7 @@ class MoveSelectFragment :BaseFragment(){
                     2 ->{// 选择了第三个，结束站架不会被限制，只看第二个招式的限制
                         editState.updateSideLimit(
                             if (idList[1] != -1) {// 说明第二个槽位有招式，它的结束站架限制了第三个招式的起始站架
-                                SideLimit.limitStart(startSide = originList[1]!!.endSide)
+                                SideLimit.limitStart(startSide = if (SettingRepository.isUseCNEditionMod){ ceList[1]!!.endSide } else { originList[1]!!.endSide })
                             } else {
                                 // 第二个槽位为空，则起始站架没有任何限制
                                 SideLimit.noLimit()
@@ -534,6 +596,92 @@ class MoveSelectFragment :BaseFragment(){
             GlideApp.with(msgImg)
                 .load(AssetsUtil.getBitmapByMoveId(requireContext(), moveId = tempMove.id))
                 .into(msgImg)
+            msgImg.setBackgroundColor(resources.getColor(if (tempMove.id > 197) R.color.img_add_move_bg else R.color.transparent))
+
+            // 设置第二部分
+            GlideApp.with(msgStartSideImg)
+                .load(SideUtil.imgIdForMoves(tempMove.startSide))
+                .into(msgStartSideImg)
+            GlideApp.with(msgEndSideImg)
+                .load(SideUtil.imgIdForMoves(tempMove.endSide))
+                .into(msgEndSideImg)
+            msgName.text = tempMove.name
+
+            msgStrength.text = getString(
+                R.string.moveMsg_strength,
+                when (tempMove.strength) {
+                    1 -> "轻"
+                    2 -> "中"
+                    3 -> "重"
+                    else -> "error"
+                }
+            )
+            msgRange.text = getString(R.string.moveMsg_range, tempMove.attackRange)
+            "${
+                when (tempMove.attackToward) {
+                    AttackToward.LEFT -> "左"
+                    AttackToward.RIGHT -> "右"
+                }
+            }${
+                when (tempMove.attackAltitude) {
+                    AttackAltitude.LOW -> "低"
+                    AttackAltitude.MIDDLE -> "中"
+                    AttackAltitude.HEIGHT -> "高"
+                }
+            }位${
+                when (tempMove.attackDirection) {
+                    AttackDirection.HORIZONTAL -> "横向"
+                    AttackDirection.VERTICAL -> "纵向"
+                    AttackDirection.POKE -> "戳击"
+                }
+            }".let {
+                msgAttackTowardDetail.text = it
+            }
+            val sb = StringBuilder()
+            tempMove.effect.split(",").apply {
+                onEachIndexed { index, effectStr ->
+                    sb.append(when(effectStr){
+                        MoveEffect.STOP.name -> MoveEffect.STOP.str
+                        MoveEffect.DODGE_UP.name -> MoveEffect.DODGE_UP.str
+                        MoveEffect.DODGE_LOW.name -> MoveEffect.DODGE_LOW.str
+                        MoveEffect.DODGE_SIDE.name -> MoveEffect.DODGE_SIDE.str
+                        MoveEffect.BREAK_DEFENCES.name -> MoveEffect.BREAK_DEFENCES.str
+                        MoveEffect.SUPER_ARMOR.name -> MoveEffect.SUPER_ARMOR.str
+                        MoveEffect.BLOCK_COUNTER.name -> MoveEffect.BLOCK_COUNTER.str
+                        MoveEffect.DOUBLE_ATTACK.name -> MoveEffect.DOUBLE_ATTACK.str
+                        MoveEffect.MID_LINE.name -> MoveEffect.MID_LINE.str
+                        MoveEffect.MENTAL_BLOW.name -> MoveEffect.MENTAL_BLOW.str
+                        MoveEffect.NULL.name -> MoveEffect.NULL.str
+                        else -> { "error" }
+                    })
+                    if (this.size == 2){
+                        if (index == 0)
+                            sb.append(",")
+                    } else if (this.size == 3){
+                        if (index == 0 || index == 1){
+                            sb.append(",")
+                        }
+                    }
+                }
+            }
+            msgEffect.text = getString(R.string.moveMsg_effect,sb.toString())
+
+            // 设置第三部分
+            msgStartFrame.text = getString(R.string.moveMsg_startFrame,tempMove.startFrame)
+            msgPhyOutput.text = getString(R.string.moveMsg_phyOutput,tempMove.physicalOutput)
+            msgPhyWeakness.text = getString(R.string.moveMsg_phyWeakness,tempMove.physicalWeakness)
+            msgHitAdvantage.text = getString(R.string.moveMsg_hitAdvantage,tempMove.hitAdvantageFrame)
+            msgDefenseAdvantage.text = getString(R.string.moveMsg_defenseAdvantage,tempMove.defenseAdvantageFrame)
+        }
+    }
+    private fun setMoveCEMsg(moveForSelect: MoveForSelect) {
+        val tempMove = moveForSelect.moveCE
+        dataBinding?.moveSelectInclude?.apply {
+            // 设置第一部分
+            GlideApp.with(msgImg)
+                .load(AssetsUtil.getBitmapByMoveId(requireContext(), moveId = tempMove.id))
+                .into(msgImg)
+            msgImg.setBackgroundColor(resources.getColor(if (tempMove.id > 197) R.color.img_add_move_bg else R.color.transparent))
 
             // 设置第二部分
             GlideApp.with(msgStartSideImg)
@@ -676,48 +824,97 @@ class MoveSelectFragment :BaseFragment(){
     private fun changeMovesBar(@androidx.annotation.IntRange(0,2) vararg changePosition :Int){
         seqPack?.apply {
             changePosition.forEachIndexed { index, position ->
-                if (originList[index] != null && idList[position] != -1){
-                    originList[index]!!.apply {
-                        moveImgList[index]?.setImageBitmap(
-                            AssetsUtil.getBitmapByMoveId(requireContext(),id)
-                        )
-                        when(position){// 根据选择的招式来修改起始结束站架
-                            0 ->{// 起始站架已经定死，只用修改结束站架side1
-                                side1?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                if (SettingRepository.isUseCNEditionMod){// 使用mod的情况下
+                    if (ceList[index] != null && idList[position] != -1){
+                        ceList[index]!!.apply {
+                            moveImgList[index]?.setImageBitmap(
+                                AssetsUtil.getBitmapByMoveId(requireContext(),id)
+                            )
+                            when(position){// 根据选择的招式来修改起始结束站架
+                                0 ->{// 起始站架已经定死，只用修改结束站架side1
+                                    side1?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                                }
+                                1 ->{
+                                    side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                    side2?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                                }
+                                2 ->{
+                                    side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                    sideEnd?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                                }
                             }
-                            1 ->{
-                                side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
-                                side2?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                        }
+                    } else{
+                        // 恢复招式img为初始化
+                        moveImgList[index]?.apply {
+                            setImageResource(R.drawable.ic_add_move)
+                            setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                        }
+                        when(position){// 恢复站架图标，需要按照前后是否有招式判断,恢复的是按起始站架来变
+                            0 ->{// 只用看第二个有没有招式有就不变，没就变
+                                if (idList[1] == -1){
+                                    side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                }
                             }
-                            2 ->{
-                                side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
-                                sideEnd?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                            1 ->{// 要看前后，而且是分开来看
+                                if (idList[0] == -1){
+                                    side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                }
+                                if (idList[2] == -1){
+                                    side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                }
+                            }
+                            2 ->{// 看中间那个，第二个
+                                if (idList[1] == -1){
+                                    side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                }
                             }
                         }
                     }
-                } else{
-                    // 恢复招式img为初始化
-                    moveImgList[index]?.apply {
-                        setImageResource(R.drawable.ic_add_move)
-                        setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
-                    }
-                    when(position){// 恢复站架图标，需要按照前后是否有招式判断,恢复的是按起始站架来变
-                        0 ->{// 只用看第二个有没有招式有就不变，没就变
-                            if (idList[1] == -1){
-                                side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                } else {// 不使用mod的情况下
+                    if (originList[index] != null && idList[position] != -1){
+                        originList[index]!!.apply {
+                            moveImgList[index]?.setImageBitmap(
+                                AssetsUtil.getBitmapByMoveId(requireContext(),id)
+                            )
+                            when(position){// 根据选择的招式来修改起始结束站架
+                                0 ->{// 起始站架已经定死，只用修改结束站架side1
+                                    side1?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                                }
+                                1 ->{
+                                    side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                    side2?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                                }
+                                2 ->{
+                                    side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                    sideEnd?.setImageResource(SideUtil.imgIdForMoves(endSide))
+                                }
                             }
                         }
-                        1 ->{// 要看前后，而且是分开来看
-                            if (idList[0] == -1){
-                                side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
-                            }
-                            if (idList[2] == -1){
-                                side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
-                            }
+                    } else{
+                        // 恢复招式img为初始化
+                        moveImgList[index]?.apply {
+                            setImageResource(R.drawable.ic_add_move)
+                            setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
                         }
-                        2 ->{// 看中间那个，第二个
-                            if (idList[1] == -1){
-                                side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                        when(position){// 恢复站架图标，需要按照前后是否有招式判断,恢复的是按起始站架来变
+                            0 ->{// 只用看第二个有没有招式有就不变，没就变
+                                if (idList[1] == -1){
+                                    side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                }
+                            }
+                            1 ->{// 要看前后，而且是分开来看
+                                if (idList[0] == -1){
+                                    side1?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                }
+                                if (idList[2] == -1){
+                                    side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                }
+                            }
+                            2 ->{// 看中间那个，第二个
+                                if (idList[1] == -1){
+                                    side2?.setImageResource(SideUtil.imgIdForMoves(startSide))
+                                }
                             }
                         }
                     }
@@ -730,18 +927,34 @@ class MoveSelectFragment :BaseFragment(){
     private fun changeOneMoveBar(){
         optionPack?.apply {
             sideStart?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(this.startSide)))
-            if (optionMove != null && optionA != -1){
-                optionMove!!.let {move->
-                    move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),move.id))
-                    sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(move.endSide)))
+            if (SettingRepository.isUseCNEditionMod){
+                if (ceMove != null && optionA != -1){
+                    ceMove!!.let {move->
+                        move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),move.id))
+                        sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(move.endSide)))
+                    }
+                } else{
+                    move0?.apply {
+                        setImageResource(R.drawable.ic_add_move)
+                        setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                    }
+                    sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(this.startSide)))
                 }
-            } else{
-                move0?.apply {
-                    setImageResource(R.drawable.ic_add_move)
-                    setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+            } else {
+                if (optionMove != null && optionA != -1){
+                    optionMove!!.let {move->
+                        move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),move.id))
+                        sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(move.endSide)))
+                    }
+                } else{
+                    move0?.apply {
+                        setImageResource(R.drawable.ic_add_move)
+                        setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                    }
+                    sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(this.startSide)))
                 }
-                sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(this.startSide)))
             }
+
         }
     }
 
