@@ -15,6 +15,7 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/setting_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -38,46 +39,35 @@
                     >
 
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/config_setting"
-                            app:drawableStartCompat="@drawable/ic_config"
-                            style="@style/SettingFragmentTitleText" />
-
+                    <TextView
+                        android:id="@+id/setting_title_config"
+                        style="@style/SettingFragmentTitleText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/config_setting"
+                        app:drawableStartCompat="@drawable/ic_config"
+                        android:clickable="true"
+                        android:background="?selectableItemBackground"/>
 
                     <View
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/grey_split_line" />
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/setting_switch_gaussianBlur"
-                        style="@style/SettingFragmentSwitch"
+                    <TextView
+                        android:id="@+id/setting_title_database"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/dialogGaussianBlur" />
+                        android:text="@string/about_database"
+                        style="@style/SettingFragmentTitleText"
+                        app:drawableStartCompat="@drawable/ic_database"
+                        android:clickable="true"
+                        android:background="?selectableItemBackground"/>
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/setting_switch_askBeforeImport"
-                        style="@style/SettingFragmentSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/ask_before_import" />
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/setting_switch_showStyleIconInMoveMsg"
-                        style="@style/SettingFragmentSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/showStyleIconInMoveMsg" />
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/setting_switch_useCNEditionMod"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/SettingFragmentSwitch"
-                        android:text="@string/use_CNEditionMod"/>
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:background="@color/grey_split_line" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -112,10 +102,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/version"
-                        android:hint="@string/repositoryUrl"
+                        android:hint="@string/repositoryVersion"
                         style="@style/SettingFragmentItemText"
                         app:drawableStartCompat="@drawable/ic_version"
                         android:onClick="@{(theVeiw)->click.openWeb(theVeiw)}"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/support_author"
+                        style="@style/SettingFragmentItemText"
+                        app:drawableStartCompat="@drawable/ic_start"/>
 
                 </LinearLayout>
 

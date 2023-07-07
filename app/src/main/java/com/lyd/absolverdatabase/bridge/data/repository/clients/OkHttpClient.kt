@@ -53,6 +53,15 @@ object OkHttpClient {
             })
         }.build()
     }
+
+    val csdnClient :OkHttpClient by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        val logging = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+        OkHttpClient.Builder().apply {
+//            addInterceptor(logging)
+        }.build()
+    }
 }
 
 class MyCookieJar : CookieJar{

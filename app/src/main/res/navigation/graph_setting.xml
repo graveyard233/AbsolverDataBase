@@ -9,5 +9,22 @@
         android:id="@+id/settingFragment"
         android:name="com.lyd.absolverdatabase.ui.page.SettingFragment"
         android:label="SettingFragment"
-        tools:layout="@layout/fragment_setting"/>
+        tools:layout="@layout/fragment_setting">
+        <action
+            android:id="@+id/action_settingFragment_to_settingConfigFragment"
+            app:destination="@id/settingConfigFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_settingDatabaseFragment"
+            app:destination="@id/settingDatabaseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingConfigFragment"
+        android:name="com.lyd.absolverdatabase.ui.page.SettingConfigFragment"
+        android:label="SettingConfigFragment"
+        tools:layout="@layout/fragment_setting_config"/>
+    <fragment
+        android:id="@+id/settingDatabaseFragment"
+        android:name="com.lyd.absolverdatabase.ui.page.SettingDatabaseFragment"
+        android:label="SettingDatabaseFragment"
+        tools:layout="@layout/fragment_setting_database"/>
 </navigation>

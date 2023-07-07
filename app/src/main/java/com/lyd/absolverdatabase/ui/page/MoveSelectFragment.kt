@@ -27,6 +27,7 @@ import com.lyd.absolverdatabase.databinding.FragmentMoveSelectBinding
 import com.lyd.absolverdatabase.ui.adapter.MovePagerAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.utils.AssetsUtil
+import com.lyd.absolverdatabase.utils.MoveGenerate
 import com.lyd.absolverdatabase.utils.SideUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -373,6 +374,44 @@ class MoveSelectFragment :BaseFragment(){
                         filterOption.changeBy.set(0)
                     }
 
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                editState.enterSelectFlow.collectLatest {
+                    when(it){
+                        in 0..2 ->{
+                            Log.i(TAG, "enterSelectFlow: 第一次进来")
+                            if (seqPack != null){//
+                                if (seqPack!!.idList[it] != -1){// 说明选中的框有招式
+                                    val tempForSelect = MoveForSelect(
+                                        moveOrigin = if (SettingRepository.isUseCNEditionMod) MoveGenerate.emptyMoveOrigin else seqPack!!.originList[it]!!,
+                                        moveCE = if (SettingRepository.isUseCNEditionMod) seqPack!!.ceList[it]!! else MoveGenerate.emptyMoveCE,
+                                        isSelected = false,
+                                        isMirror = seqPack!!.isMirrorList[it]
+                                    )
+                                    editState.selectMove(tempForSelect)
+                                }
+                            }
+                            if (optionPack != null){
+                                if (optionPack!!.optionA != -1){
+                                    val tempForSelect = MoveForSelect(
+                                        moveOrigin = if (SettingRepository.isUseCNEditionMod) MoveGenerate.emptyMoveOrigin else optionPack!!.optionMove!!,
+                                        moveCE = if (SettingRepository.isUseCNEditionMod) optionPack!!.ceMove!! else MoveGenerate.emptyMoveCE,
+                                        isSelected = false,
+                                        isMirror = optionPack!!.isMirror
+                                    )
+                                    editState.selectMove(tempForSelect)
+                                }
+                            }
+                            editState.initEnterSelect(-1)// 重新设置成其他数据
+                        }
+                        else->{
+                            Log.i(TAG, "enterSelectFlow: 不是第一次进来，就别设置了")
+                        }
+                    }
                 }
             }
         }

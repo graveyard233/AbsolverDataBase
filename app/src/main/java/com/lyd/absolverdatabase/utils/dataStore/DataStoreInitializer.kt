@@ -29,16 +29,12 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempAskBeforeImport = async {
                     SettingRepository.isNeedAskBeforeImportPreference.getOrDefault()
                 }
-                val tempShowStyleIconInMoveMsg = async {
-                    SettingRepository.isNeedShowStyleIconInMoveMsgPreference.getOrDefault()
-                }
                 val tempUseCNEditionMod = async {
                     SettingRepository.isUseCNEditionModPreference.getOrDefault()
                 }
 
                 SettingRepository.isDialogGaussianBlur = tempGaussianBlur.await()
                 SettingRepository.isNeedAskBeforeImport = tempAskBeforeImport.await()
-                SettingRepository.isNeedShowStyleIconInMoveMsg = tempShowStyleIconInMoveMsg.await()
                 SettingRepository.isUseCNEditionMod = tempUseCNEditionMod.await()
 
             }

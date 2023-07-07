@@ -11,9 +11,6 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     var isNeedAskBeforeImport :Boolean = true
     val isNeedAskBeforeImportPreference by booleanPreference(default = true)
 
-    var isNeedShowStyleIconInMoveMsg :Boolean = false
-    val isNeedShowStyleIconInMoveMsgPreference by booleanPreference(default = false)
-
     var isUseCNEditionMod :Boolean = false
     val isUseCNEditionModPreference by booleanPreference(default = false)
 

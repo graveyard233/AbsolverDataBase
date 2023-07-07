@@ -16,7 +16,7 @@ android {
         minSdk 29
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "0.70"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -117,4 +117,7 @@ dependencies {
 
     // dataStore来实现数据存储
     implementation("androidx.datastore:datastore-preferences:1.1.0-alpha01")
+
+    // Jsoup Html解析
+    implementation 'org.jsoup:jsoup:1.16.1'
 }

@@ -3,10 +3,7 @@ package com.lyd.absolverdatabase.bridge.state
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class SettingState(private val repository :SettingRepository, private val state : SavedStateHandle) : ViewModel() {
@@ -30,22 +27,13 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.isNeedAskBeforeImportPreference.set { boolean }
         }
     }
-    val showStyleIconInMoveMsgFlow :StateFlow<Boolean> = repository.isNeedShowStyleIconInMoveMsgPreference.asFlow().map {
-        it ?: false
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
-    fun changeShowStyleIconInMoveMsg(boolean: Boolean){
-        repository.isNeedShowStyleIconInMoveMsg = boolean
-        viewModelScope.launch {
-            repository.isNeedShowStyleIconInMoveMsgPreference.set { boolean }
-        }
-    }
     val useCNEditionModFlow :StateFlow<Boolean> = repository.isUseCNEditionModPreference.asFlow().map {
         it ?: false
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
-    fun changeUseCNEditionMod(boolean: Boolean){
-        repository.isUseCNEditionMod = boolean
+    fun changeUseCNEditionMod(enable: Boolean){
+        repository.isUseCNEditionMod = enable
         viewModelScope.launch {
-            repository.isUseCNEditionModPreference.set { boolean }
+            repository.isUseCNEditionModPreference.set { enable }
         }
     }
 }

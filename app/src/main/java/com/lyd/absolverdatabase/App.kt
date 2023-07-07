@@ -37,6 +37,10 @@ class App : Application(), ViewModelStoreOwner {
         MoveRepository(database.moveOriginDao(), moveCEDAO = database.moveCEDao())
     }
 
+    val settingDatabaseRepository by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        SettingDatabaseRepository(moveOriginDAO = database.moveOriginDao(), moveCEDAO = database.moveCEDao())
+    }
+
     override fun onCreate() {
         super.onCreate()
 

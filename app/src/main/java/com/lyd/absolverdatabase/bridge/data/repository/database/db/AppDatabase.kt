@@ -7,7 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.lyd.absolverdatabase.bridge.data.bean.*
-import com.lyd.absolverdatabase.bridge.data.repository.database.JsonTxt
+import com.lyd.absolverdatabase.bridge.data.repository.database.JsonTXT
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.BilibiliVideoDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.DeckDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveCEDAO
@@ -51,8 +51,8 @@ abstract class AppDatabase :RoomDatabase(){
                         INSTANCE?.apply {
                             CoroutineScope(Dispatchers.IO).launch {
 
-                                moveOriginDao().upsertAll(GsonUtils.fromJson(JsonTxt.moveOriginJson,GsonUtils.getListType(MoveOrigin::class.java)))
-                                moveCEDao().upsertAll(GsonUtils.fromJson(JsonTxt.moveCEJson,GsonUtils.getListType(MoveCE::class.java)))
+                                moveOriginDao().upsertAll(GsonUtils.fromJson(JsonTXT.moveOriginJson,GsonUtils.getListType(MoveOrigin::class.java)))
+                                moveCEDao().upsertAll(GsonUtils.fromJson(JsonTXT.moveCEJson,GsonUtils.getListType(MoveCE::class.java)))
 
                                 deckDao().upsertAll(listOf(
                                     Deck(

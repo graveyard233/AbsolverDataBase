@@ -165,6 +165,15 @@ class DeckEditState(private val repository: DeckEditRepository,
         }
     }
 
+    /**第一次进入[MoveSelectFragment]需要显示点击的招式(如果有)*/
+    private val _enterSelectFlow :MutableStateFlow<Int> = MutableStateFlow(-1)
+    val enterSelectFlow = _enterSelectFlow.asStateFlow()
+    fun initEnterSelect(whatMoveBeClicked :Int){
+        viewModelScope.launch {
+            _enterSelectFlow.emit(whatMoveBeClicked)
+        }
+    }
+
     /**给moveSelectFragment用的筛选类*/
     private val _filterOptionFlow :MutableStateFlow<FilterOption> = MutableStateFlow(FilterOption(AttackTowardOption.all(),
         AttackAltitudeOption.all(), AttackDirectionOption.all()))
