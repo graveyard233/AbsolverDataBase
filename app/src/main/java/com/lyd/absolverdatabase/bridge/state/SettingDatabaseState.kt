@@ -22,9 +22,9 @@ class SettingDatabaseState(private val repository: SettingDatabaseRepository,pri
         }
     }
 
-    fun syncCETableFromCloud(whenError: (String) -> Unit = {}, whenSuccess: (Long) -> Unit = {}){
+    fun syncCETableFromWebView(html :String,startTime :Long,whenError: (String) -> Unit = {}, whenSuccess: (Long) -> Unit = {},whenFinish: () -> Unit){
         viewModelScope.launch {
-            repository.syncMoveCETableFromCloudFlow().collectLatest {
+            repository.syncMoveCETableFromWebViewFlow(html,startTime).collectLatest {
                 when(it){
                     is DataResult.Error -> {
                         whenError.invoke(it.error)
@@ -33,6 +33,7 @@ class SettingDatabaseState(private val repository: SettingDatabaseRepository,pri
                         whenSuccess.invoke(it.data)
                     }
                 }
+                whenFinish.invoke()
             }
         }
     }

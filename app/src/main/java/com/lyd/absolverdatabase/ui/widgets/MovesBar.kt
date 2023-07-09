@@ -13,6 +13,8 @@ import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.SideUtil
+import com.lyd.absolverdatabase.utils.getResourceColor
+import com.lyd.absolverdatabase.utils.isNightMode
 
 class MovesBar : ConstraintLayout {
 
@@ -30,6 +32,9 @@ class MovesBar : ConstraintLayout {
     private lateinit var move1 :ShapeableImageView
     private lateinit var move2 :ShapeableImageView
 
+    private var bgColor :Int = resources.getColor(R.color.transparent)
+    private var ceBg :Int = resources.getColor(R.color.img_add_move_bg)
+
     constructor(context: Context) :this(context,null)
     constructor(context: Context, attrs: AttributeSet?) : super(context,attrs) {
         LayoutInflater.from(context).inflate(R.layout.bar_moves,this)
@@ -38,6 +43,8 @@ class MovesBar : ConstraintLayout {
         val initSide = ats.getResourceId(R.styleable.MovesBar_startStandSide,R.drawable.ic_upper_right)
         ats.recycle()
 
+        bgColor = context.getResourceColor(com.google.android.material.R.attr.colorSecondaryContainer)
+        ceBg = context.getResourceColor(com.google.android.material.R.attr.colorSecondary)
         findViews()
 
 
@@ -176,10 +183,15 @@ class MovesBar : ConstraintLayout {
             GlideApp.with(imageView)
                 .load(AssetsUtil.getBitmapByMoveId(context, moveId = moveId))
                 .into(imageView)
-            imageView.setBackgroundColor( resources.getColor(if (moveId >= 198) R.color.img_add_move_bg else R.color.transparent))// 避免黑边和背景颜色对不上，所以要去掉背景色
+            if (context.isNightMode()){
+                imageView.setBackgroundColor(resources.getColor(if (moveId >= 198) R.color.img_add_move_bg else R.color.transparent))// 避免黑边和背景颜色对不上，所以要去掉背景色
+            } else {
+                imageView.setBackgroundColor( if (moveId >= 198) ceBg else resources.getColor(R.color.transparent))// 避免黑边和背景颜色对不上，所以要去掉背景色
+            }
+
         } else {
             imageView.setImageResource(R.drawable.ic_add_move)
-            imageView.setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+            imageView.setBackgroundColor(/*resources.getColor(R.color.img_add_move_bg)*/bgColor)
         }
     }
 }

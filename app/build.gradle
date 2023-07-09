@@ -120,4 +120,9 @@ dependencies {
 
     // Jsoup Html解析
     implementation 'org.jsoup:jsoup:1.16.1'
+    // 格式化HTML文本
+    implementation 'org.apache.commons:commons-text:1.10.0'
+    // 更容易使用的webView
+    implementation 'com.github.Justson.AgentWeb:agentweb-core:v5.0.6-androidx'
+
 }

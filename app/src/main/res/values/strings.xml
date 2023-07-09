@@ -43,11 +43,14 @@
     <string name="dialogGaussianBlur">高斯模糊</string>
     <string name="ask_before_import">在导入卡组前弹窗</string>
     <string name="use_CNEditionMod">启用China Edition Mod</string>
+    <string name="nightMode_yes">夜间模式:启用</string>
+    <string name="nightMode_follow_system">夜间模式:跟随系统</string>
+
 
     <string name="about_database">数据库相关</string>
     <string name="sync_moveDatabase_from_local">同步原版招式数据</string>
-    <string name="sync_moveCEDatabase_from_cloud">云端同步CEMod招式数据</string>
-    <string name="sync_moveCEDatabase_from_local">本地同步CEMod招式数据</string>
+    <string name="sync_moveCEDatabase_from_local">本地代码同步CEMod招式数据</string>
+    <string name="sync_moveCEDatabase_from_webView">使用WebView同步CEMod招式数据</string>
     <string name="sync_finish">同步完成</string>
 
     <string name="shake_click">点击过于频繁</string>

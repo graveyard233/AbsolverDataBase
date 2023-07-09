@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.QuickAdapterHelper
+import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.MaterialColors
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
@@ -39,7 +40,9 @@ import com.lyd.absolverdatabase.ui.widgets.SpacesItemDecoration
 import com.lyd.absolverdatabase.utils.ClipUtil
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import com.lyd.absolverdatabase.utils.GsonUtils
+import com.lyd.absolverdatabase.utils.getResourceColor
 import kotlinx.coroutines.flow.collectLatest
+import okhttp3.internal.toHexString
 
 class DeckFragment :BaseFragment() {
 
@@ -259,18 +262,21 @@ class DeckFragment :BaseFragment() {
     private fun getColorByPosition(position: Int) : Int{
         return when(position){
             0 ->{
-                getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
-                    com.google.android.material.R.attr.colorPrimaryContainer)
+                requireActivity().getResourceColor(com.google.android.material.R.attr.colorPrimaryContainer)
+//                getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
+//                    com.google.android.material.R.attr.colorPrimaryContainer)
             }
 
             1 ->{
-                getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
-                    com.google.android.material.R.attr.colorSecondaryContainer)
+                requireActivity().getResourceColor(com.google.android.material.R.attr.colorSecondaryContainer)
+//                getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
+//                    com.google.android.material.R.attr.colorSecondaryContainer)
             }
 
             2 ->{
-                getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
-                    com.google.android.material.R.attr.colorTertiaryContainer)
+                requireActivity().getResourceColor(com.google.android.material.R.attr.colorTertiaryContainer)
+//                getThemeAttrColor(requireContext(),R.style.Base_Theme_AbsolverDatabase,
+//                    com.google.android.material.R.attr.colorTertiaryContainer)
             }
 
             else ->{

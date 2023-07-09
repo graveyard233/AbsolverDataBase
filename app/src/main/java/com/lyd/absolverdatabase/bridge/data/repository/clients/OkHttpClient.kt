@@ -1,6 +1,5 @@
 package com.lyd.absolverdatabase.bridge.data.repository.clients
 
-import android.content.Context
 import android.util.Log
 import com.lyd.absolverdatabase.utils.MMKVUtils
 import okhttp3.*
@@ -54,14 +53,6 @@ object OkHttpClient {
         }.build()
     }
 
-    val csdnClient :OkHttpClient by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        val logging = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-        OkHttpClient.Builder().apply {
-//            addInterceptor(logging)
-        }.build()
-    }
 }
 
 class MyCookieJar : CookieJar{

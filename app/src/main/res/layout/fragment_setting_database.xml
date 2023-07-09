@@ -59,7 +59,7 @@
                             android:id="@+id/settingDatabase_syncCE_from_cloud"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/sync_moveCEDatabase_from_cloud"
+                            android:text="@string/sync_moveCEDatabase_from_webView"
                             style="@style/SettingFragmentItemText"
                             app:drawableStartCompat="@drawable/ic_sync_from_cloud"/>
 
@@ -72,6 +72,13 @@
                             app:drawableStartCompat="@drawable/ic_sync_from_local"/>
 
                     </LinearLayout>
+
+                    <WebView
+                        android:id="@+id/setting_database_webLinear"
+                        android:layout_width="match_parent"
+                        android:layout_height="550dp"
+                        android:visibility="gone"
+                        android:orientation="vertical"/>
 
                 </LinearLayout>
 

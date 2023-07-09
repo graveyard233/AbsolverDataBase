@@ -13,13 +13,16 @@ import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.SideUtil
+import com.lyd.absolverdatabase.utils.getResourceColor
+import com.lyd.absolverdatabase.utils.isNightMode
 
 class OneMoveBar :LinearLayout{
 
     private lateinit var startSide :ImageView
     private lateinit var endSide :ImageView
     private lateinit var img :ShapeableImageView
-
+    private var bgColor :Int = resources.getColor(R.color.transparent)
+    private var ceBg :Int = resources.getColor(R.color.img_add_move_bg)
 
     constructor(context: Context) :this(context,null)
     constructor(context: Context,attributeSet: AttributeSet?):super(context,attributeSet){
@@ -29,7 +32,8 @@ class OneMoveBar :LinearLayout{
         val initStartSide = ats.getInt(R.styleable.OneMoveBar_startSide,0)
         val initEndSide = ats.getInt(R.styleable.OneMoveBar_endSide,0)
         ats.recycle()
-
+        bgColor = context.getResourceColor(com.google.android.material.R.attr.colorSecondaryContainer)
+        ceBg = context.getResourceColor(com.google.android.material.R.attr.colorSecondary)
         findViews()
 
         startSide.setImageResource(SideUtil.imgIdForOneMove(initStartSide))
@@ -58,7 +62,11 @@ class OneMoveBar :LinearLayout{
             GlideApp.with(img)
                 .load(AssetsUtil.getBitmapByMoveId(context,box.moveId))
                 .into(img)
-            img.setBackgroundColor(resources.getColor(if (box.moveId >= 198) R.color.img_add_move_bg else R.color.transparent))
+            if (context.isNightMode()){
+                img.setBackgroundColor(resources.getColor(if (box.moveId >= 198) R.color.img_add_move_bg else R.color.transparent))
+            } else {
+                img.setBackgroundColor(if (box.moveId >= 198) ceBg else resources.getColor(R.color.transparent))
+            }
             if (SettingRepository.isUseCNEditionMod){
                 box.moveCE?.endSide?.let { SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it)) }
                     ?.let { endSide.setImageResource(it) }
@@ -68,7 +76,7 @@ class OneMoveBar :LinearLayout{
             }
         } else {
             img.setImageResource(R.drawable.ic_add_move)
-            img.setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+            img.setBackgroundColor(bgColor)
             endSide.setImageDrawable(startSide.drawable)
         }
     }

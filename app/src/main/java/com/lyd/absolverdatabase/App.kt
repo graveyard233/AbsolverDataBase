@@ -14,6 +14,10 @@ import com.tencent.mmkv.MMKV
 
 class App : Application(), ViewModelStoreOwner {
 
+    companion object{
+        private const val TAG = "App"
+    }
+
     private var mAppViewModelStore: ViewModelStore? = null
     private var mFactory: ViewModelProvider.Factory? = null
 
@@ -44,7 +48,7 @@ class App : Application(), ViewModelStoreOwner {
     override fun onCreate() {
         super.onCreate()
 
-        Log.i("App", "onCreate: 初始化Utils")
+        Log.i(TAG, "onCreate: 初始化Utils")
         Utils.init(this)
         mAppViewModelStore = ViewModelStore()
 

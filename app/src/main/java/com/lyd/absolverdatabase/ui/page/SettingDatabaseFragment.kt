@@ -5,12 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.snackbar.Snackbar
+import com.just.agentweb.AgentWeb
+import com.just.agentweb.WebViewClient
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
@@ -21,10 +26,22 @@ import com.lyd.absolverdatabase.bridge.state.SettingViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentSettingDatabaseBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
+import com.lyd.absolverdatabase.utils.TimeUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.apache.commons.text.StringEscapeUtils
 
 class SettingDatabaseFragment :BaseFragment() {
+
+    companion object{
+        private const val getHtml :String = "javascript:function getHtmlCode(){" +
+                "var content = document.getElementsByTagName('html')[0].innerHTML;" +
+                "return '<html>' + content + '</html>'" +
+                "}"
+    }
 
     private var setDbBinding :FragmentSettingDatabaseBinding ?= null
     private val settingState : SettingState by navGraphViewModels(navGraphId = R.id.nav_setting, factoryProducer = {
@@ -53,11 +70,67 @@ class SettingDatabaseFragment :BaseFragment() {
     }
     private val syncFromCloudDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         BaseDialogBuilder(requireActivity())
-            .setTitle("云端同步")
+            .setTitle("使用WebView同步")
             .setIcon(R.drawable.ic_sync_from_cloud)
             .setMessage("同步数据中")
             .setView(LinearProgressIndicator(requireContext()).apply { isIndeterminate = true })
             .create()
+    }
+
+    private var agentWeb :AgentWeb ?= null
+    private var startTime = 0L
+    private var checkTimeFirst = 0
+    private val webViewClient by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        object :WebViewClient(){
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                // 在这里注入JS，但还没调用
+                view?.evaluateJavascript(SettingDatabaseFragment.getHtml) {
+
+                }
+            }
+
+            override fun shouldInterceptRequest(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): WebResourceResponse? {
+                if (request?.method == "POST"){
+                    Log.i(TAG, "shouldInterceptRequest: ${request.url}")
+                    if (request.url.toString().startsWith("https://ev.csdn.net")){
+                        checkTimeFirst++
+                        if (checkTimeFirst == 2){
+                            Log.i(TAG, "shouldInterceptRequest: 可以拿HTML代码了")
+                            CoroutineScope(Dispatchers.IO).launch {
+                                delay(1000)
+                                agentWeb?.jsAccessEntrace?.quickCallJs("getHtmlCode",
+                                    { value ->
+                                        if (!value.isNullOrEmpty()){
+                                            val trueHtml = StringEscapeUtils.unescapeEcmaScript(value)
+                                            settingDatabaseState.syncCETableFromWebView(html = trueHtml, startTime = startTime,
+                                            whenError = {
+                                                showShortToast("同步失败:$it")
+                                            },
+                                            whenSuccess = {
+                                                showShortToast("同步成功,耗时:${it}秒")
+                                            },
+                                            whenFinish = {
+                                                syncFromCloudDialog.dismiss()
+                                                agentWeb?.webLifeCycle?.onDestroy()// 释放webView
+                                                setDbBinding?.settingDatabaseWebLinear?.visibility = View.GONE// 把webView藏起来
+                                            })
+                                        } else {
+                                            showShortToast("同步失败:获取的HTML数据为空")
+                                            syncFromCloudDialog.dismiss()
+                                        }
+                                    })
+                            }
+                            checkTimeFirst = 0
+                        }
+                    }
+                }
+                return super.shouldInterceptRequest(view, request)
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,18 +160,15 @@ class SettingDatabaseFragment :BaseFragment() {
             })
             settingDatabaseSyncCEFromCloud.setOnClickListener(object : OnAntiShakeClickListener(){
                 override fun antiShakeClick(view: View?) {
-                    syncFromCloudDialog.show()
-                    settingDatabaseState.syncCETableFromCloud(
-                        whenError = {
-                            syncFromCloudDialog.dismiss()
-                            showShortToast("同步失败:$it")
-                        },
-                        whenSuccess = {
-                            syncFromCloudDialog.dismiss()
-                            Log.i(TAG, "antiShakeClick: success $it")
-                            showShortToast("同步成功,耗时:${it}秒")
-                        }
-                    )
+                    lifecycleScope.launchWhenStarted {
+                        settingDatabaseWebLinear.visibility = View.VISIBLE
+                        syncFromCloudDialog.show()
+
+                        startTime = TimeUtils.curTime
+                        initWebView()
+
+                    }
+
                 }
                 override fun whenShake() {
                     snackBarWhenShakeClick.show()
@@ -129,6 +199,21 @@ class SettingDatabaseFragment :BaseFragment() {
                     setDbBinding?.settingDatabaseDatabaseLinear?.visibility = if (it) View.VISIBLE else View.GONE
                  }
             }
+        }
+
+
+    }
+
+    private fun initWebView(){
+        setDbBinding?.apply {
+            Log.i(TAG, "onViewCreated: 加载url")
+            agentWeb = AgentWeb.with(this@SettingDatabaseFragment)
+                .setAgentWebParent(settingDatabaseWebLinear, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT))
+                .useDefaultIndicator()
+                .setWebViewClient(webViewClient)
+                .createAgentWeb()
+                .ready()
+                .go("https://blog.csdn.net/graveyard233/article/details/131581015")
         }
     }
 

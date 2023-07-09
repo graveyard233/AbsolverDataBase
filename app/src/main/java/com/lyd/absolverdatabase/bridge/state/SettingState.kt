@@ -36,6 +36,24 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.isUseCNEditionModPreference.set { enable }
         }
     }
+    val useNightModeFlow :StateFlow<Boolean> = repository.useNightModePreference.asFlow().map {
+        it ?: false
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
+    fun changeUseNightMode(boolean: Boolean){
+        repository.useNightMode = boolean
+        viewModelScope.launch {
+            repository.useNightModePreference.set { boolean }
+        }
+    }
+    val useWhatThemeFlow :StateFlow<Int> = repository.useWhatThemePreference.asFlow().map {
+        it ?: 1
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),1)
+    fun changeUseWhatTheme(whatTheme :Int){
+        repository.useWhatTheme = whatTheme
+        viewModelScope.launch {
+            repository.useWhatThemePreference.set { whatTheme }
+        }
+    }
 }
 
 class SettingViewModelFactory(private val repository: SettingRepository) :ViewModelProvider.Factory{

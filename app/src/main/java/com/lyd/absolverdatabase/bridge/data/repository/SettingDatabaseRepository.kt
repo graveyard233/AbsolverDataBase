@@ -4,7 +4,6 @@ import android.util.Log
 import com.lyd.absolverdatabase.bridge.data.bean.DataResult
 import com.lyd.absolverdatabase.bridge.data.bean.MoveCE
 import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
-import com.lyd.absolverdatabase.bridge.data.repository.clients.RetrofitClient
 import com.lyd.absolverdatabase.bridge.data.repository.database.JsonTXT
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveCEDAO
 import com.lyd.absolverdatabase.bridge.data.repository.database.dao.MoveOriginDAO
@@ -31,18 +30,17 @@ class SettingDatabaseRepository(private val moveOriginDAO: MoveOriginDAO,
         moveCEDAO.upsertAll(GsonUtils.fromJson(JsonTXT.moveCEJson,GsonUtils.getListType(MoveCE::class.java)))
     }
 
-    suspend fun syncMoveCETableFromCloudFlow() : Flow<DataResult<Long>> {
+    suspend fun syncMoveCETableFromWebViewFlow(htmlStr :String,startTime :Long) : Flow<DataResult<Long>> {
         return flow<DataResult<Long>> {
-            val startTime = TimeUtils.curTime
-            val responseBody = RetrofitClient.csdnService.getCSDNHtml()
-            val htmlStr = responseBody.string()
             val doc = Jsoup.parse(htmlStr)
-            val jsonText = doc.getElementsByTag("article").first()
+            val jsonText = doc.getElementById("main")
+                ?.getElementById("article")
+                ?.select("div.baidu_pl")?.first()
                 ?.select("div.article_content")?.first()
                 ?.getElementById("content_views")
                 ?.getElementsByTag("pre")?.first()
                 ?.select("code.prism")?.first()?.text()
-//            Log.i(TAG, "syncMoveCETableFromCloudFlow: $jsonText")
+            Log.i(TAG, "syncMoveCETableFromCloudFlow: $jsonText")
             if (!jsonText.isNullOrEmpty()){
                 val tempList = GsonUtils.fromJson<List<MoveCE>>(jsonText,GsonUtils.getListType(MoveCE::class.java))
 //                tempList.takeLast(20).forEach {
@@ -50,11 +48,12 @@ class SettingDatabaseRepository(private val moveOriginDAO: MoveOriginDAO,
 //                }
                 moveCEDAO.upsertAll(tempList)
                 val endTime = TimeUtils.curTime
-                emit(DataResult.Success((endTime - startTime) / 1000))
+                emit(DataResult.Success((endTime - startTime) / 1000L))
             } else {
                 emit(DataResult.Error("jsonText is null or empty"))
             }
         }.catch {
+            it.printStackTrace()
             emit(DataResult.Error(it.message!!))
         }.flowOn(Dispatchers.IO)
     }

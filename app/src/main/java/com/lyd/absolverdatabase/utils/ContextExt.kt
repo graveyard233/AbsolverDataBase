@@ -1,6 +1,7 @@
 package com.lyd.absolverdatabase.utils
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
@@ -50,4 +51,13 @@ fun Context.getResourceColor(@AttrRes resource: Int, alphaFactor: Float = 1f): I
     }
 
     return color
+}
+
+fun Context.restartApp(){
+    packageManager.getLaunchIntentForPackage(packageName)?.let {
+        return@let Intent.makeRestartActivityTask(it.component)
+    }?.let {
+        startActivity(it)
+    }
+    android.os.Process.killProcess(android.os.Process.myPid())
 }

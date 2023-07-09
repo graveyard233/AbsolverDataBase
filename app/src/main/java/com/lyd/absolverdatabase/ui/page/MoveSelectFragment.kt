@@ -29,6 +29,8 @@ import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.MoveGenerate
 import com.lyd.absolverdatabase.utils.SideUtil
+import com.lyd.absolverdatabase.utils.getResourceColor
+import com.lyd.absolverdatabase.utils.isNightMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -86,6 +88,8 @@ class MoveSelectFragment :BaseFragment(){
     private var move2 :ShapeableImageView ?= null
     private val moveImgList :MutableList<ShapeableImageView?> = mutableListOf<ShapeableImageView?>()
 
+    private var bgColor :Int = 0
+    private var ceBg :Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,6 +101,9 @@ class MoveSelectFragment :BaseFragment(){
         dataBinding = FragmentMoveSelectBinding.bind(view)
         dataBinding?.lifecycleOwner = viewLifecycleOwner
         dataBinding?.vm = editState
+
+        bgColor = requireActivity().getResourceColor(com.google.android.material.R.attr.colorSecondaryContainer)
+        ceBg = requireActivity().getResourceColor(com.google.android.material.R.attr.colorSecondary)
 
         when (argMsg.toSelectMsg.whatBarToEdit){
             in 0..3 ->{// 应该加载带3个按钮的MovesBar
@@ -429,8 +436,11 @@ class MoveSelectFragment :BaseFragment(){
                             if (seqPack != null){
                                 Log.i(TAG, "moveForSelectFlow->: 第${editState.moveBeClickFlow.value}个置空")
                                 seqPack!!.updateOne(editState.moveBeClickFlow.value,null)
+                                if (moveImgList.isEmpty()){
+                                    return@collectLatest
+                                }
                                 moveImgList[editState.moveBeClickFlow.value]?.setImageResource(R.drawable.ic_add_move)
-                                moveImgList[editState.moveBeClickFlow.value]?.setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                                moveImgList[editState.moveBeClickFlow.value]?.setBackgroundColor(bgColor)
                                 when(editState.moveBeClickFlow.value){
                                     0 ->{// 起始站架已经定死，看看第二个框有没有招式
                                         if (seqPack!!.idList[1] == -1){// 没有就修改结束站架
@@ -458,7 +468,7 @@ class MoveSelectFragment :BaseFragment(){
                                 sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(optionPack!!.startSide)))
                                 move0?.apply {
                                     setImageResource(R.drawable.ic_add_move)
-                                    setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                                    setBackgroundColor(bgColor)
                                 }
                             }
                             removeMsg()
@@ -472,10 +482,27 @@ class MoveSelectFragment :BaseFragment(){
                             }
                             // 然后还要更新bar的布局
                             if (seqPack != null){
-                                moveImgList[editState.moveBeClickFlow.value]?.setImageBitmap(
-                                    AssetsUtil.getBitmapByMoveId(requireContext(),
-                                        if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.id } else { it.moveForSelect.moveOrigin.id })
-                                )
+                                if (moveImgList.isEmpty()){
+                                    return@collectLatest
+                                }
+                                moveImgList[editState.moveBeClickFlow.value]?.apply {
+                                    val tempCeBg = if (context.isNightMode()){
+                                        resources.getColor(R.color.img_add_move_bg)
+                                    } else {
+                                        ceBg
+                                    }
+                                    if (SettingRepository.isUseCNEditionMod){
+                                        setImageBitmap(
+                                            AssetsUtil.getBitmapByMoveId(requireContext(), it.moveForSelect.moveCE.id)
+                                        )
+                                        setBackgroundColor(if (it.moveForSelect.moveCE.id > 197) tempCeBg else bgColor)
+                                    } else {
+                                        setImageBitmap(
+                                            AssetsUtil.getBitmapByMoveId(requireContext(), it.moveForSelect.moveOrigin.id)
+                                        )
+                                        setBackgroundColor(if (it.moveForSelect.moveOrigin.id > 197) tempCeBg else bgColor)
+                                    }
+                                }
                                 when(editState.moveBeClickFlow.value){// 根据选择的招式来修改起始结束站架
                                     0 ->{// 起始站架已经定死，只用修改结束站架side1
                                         side1?.setImageResource(SideUtil.imgIdForMoves(
@@ -503,9 +530,21 @@ class MoveSelectFragment :BaseFragment(){
                                 Log.i(TAG, "moveForSelectFlow: idList:${seqPack!!.idList} isMirrorList:${seqPack!!.isMirrorList}")
                                 // 这里要更新editState里面存在saveState中的deck数据就行
                             }else if (optionPack != null){// 起始站架已经定死，所以只用修改结束站架
-                                move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),
-                                    if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.id } else { it.moveForSelect.moveOrigin.id }
-                                ))
+                                move0?.apply {
+                                    setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),
+                                        if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.id } else { it.moveForSelect.moveOrigin.id }
+                                    ))
+                                    val tempCeBg = if (context.isNightMode()){
+                                        resources.getColor(R.color.img_add_move_bg)
+                                    } else {
+                                        ceBg
+                                    }
+                                    if (SettingRepository.isUseCNEditionMod){
+                                        setBackgroundColor(if (it.moveForSelect.moveCE.id > 197) tempCeBg else bgColor)
+                                    } else {
+                                        setBackgroundColor(if (it.moveForSelect.moveOrigin.id > 197) tempCeBg else bgColor)
+                                    }
+                                }
                                 sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(
                                     if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.endSide } else { it.moveForSelect.moveOrigin.endSide }
                                 )))
@@ -635,7 +674,12 @@ class MoveSelectFragment :BaseFragment(){
             GlideApp.with(msgImg)
                 .load(AssetsUtil.getBitmapByMoveId(requireContext(), moveId = tempMove.id))
                 .into(msgImg)
-            msgImg.setBackgroundColor(resources.getColor(if (tempMove.id > 197) R.color.img_add_move_bg else R.color.transparent))
+            val tempCeBg = if (requireContext().isNightMode()){
+                resources.getColor(R.color.img_add_move_bg)
+            } else {
+                ceBg
+            }
+            msgImg.setBackgroundColor(if (tempMove.id > 197) tempCeBg else resources.getColor(R.color.transparent))
 
             // 设置第二部分
             GlideApp.with(msgStartSideImg)
@@ -688,6 +732,7 @@ class MoveSelectFragment :BaseFragment(){
                         MoveEffect.SUPER_ARMOR.name -> MoveEffect.SUPER_ARMOR.str
                         MoveEffect.BLOCK_COUNTER.name -> MoveEffect.BLOCK_COUNTER.str
                         MoveEffect.DOUBLE_ATTACK.name -> MoveEffect.DOUBLE_ATTACK.str
+                        MoveEffect.TRIPLE_ATTACK.name -> MoveEffect.TRIPLE_ATTACK.str
                         MoveEffect.MID_LINE.name -> MoveEffect.MID_LINE.str
                         MoveEffect.MENTAL_BLOW.name -> MoveEffect.MENTAL_BLOW.str
                         MoveEffect.NULL.name -> MoveEffect.NULL.str
@@ -720,7 +765,12 @@ class MoveSelectFragment :BaseFragment(){
             GlideApp.with(msgImg)
                 .load(AssetsUtil.getBitmapByMoveId(requireContext(), moveId = tempMove.id))
                 .into(msgImg)
-            msgImg.setBackgroundColor(resources.getColor(if (tempMove.id > 197) R.color.img_add_move_bg else R.color.transparent))
+            val tempCeBg = if (requireContext().isNightMode()){
+                resources.getColor(R.color.img_add_move_bg)
+            } else {
+                ceBg
+            }
+            msgImg.setBackgroundColor(if (tempMove.id > 197) tempCeBg else resources.getColor(R.color.transparent))
 
             // 设置第二部分
             GlideApp.with(msgStartSideImg)
@@ -773,6 +823,7 @@ class MoveSelectFragment :BaseFragment(){
                         MoveEffect.SUPER_ARMOR.name -> MoveEffect.SUPER_ARMOR.str
                         MoveEffect.BLOCK_COUNTER.name -> MoveEffect.BLOCK_COUNTER.str
                         MoveEffect.DOUBLE_ATTACK.name -> MoveEffect.DOUBLE_ATTACK.str
+                        MoveEffect.TRIPLE_ATTACK.name -> MoveEffect.TRIPLE_ATTACK.str
                         MoveEffect.MID_LINE.name -> MoveEffect.MID_LINE.str
                         MoveEffect.MENTAL_BLOW.name -> MoveEffect.MENTAL_BLOW.str
                         MoveEffect.NULL.name -> MoveEffect.NULL.str
@@ -803,6 +854,7 @@ class MoveSelectFragment :BaseFragment(){
             val textHolder = null
             // 移除第一部分
             GlideApp.with(msgImg).clear(msgImg)
+            msgImg.setBackgroundColor(resources.getColor(R.color.transparent))
 
             // 移除第二部分
             GlideApp.with(msgStartSideImg).clear(msgStartSideImg)
@@ -866,9 +918,14 @@ class MoveSelectFragment :BaseFragment(){
                 if (SettingRepository.isUseCNEditionMod){// 使用mod的情况下
                     if (ceList[index] != null && idList[position] != -1){
                         ceList[index]!!.apply {
-                            moveImgList[index]?.setImageBitmap(
-                                AssetsUtil.getBitmapByMoveId(requireContext(),id)
-                            )
+                            moveImgList[index]?.apply {
+                                setImageBitmap(
+                                    AssetsUtil.getBitmapByMoveId(requireContext(),idList[position])
+                                )
+                                if (idList[position] > 197){
+                                    setBackgroundColor(if (context.isNightMode()) resources.getColor(R.color.img_add_move_bg) else ceBg)
+                                }
+                            }
                             when(position){// 根据选择的招式来修改起始结束站架
                                 0 ->{// 起始站架已经定死，只用修改结束站架side1
                                     side1?.setImageResource(SideUtil.imgIdForMoves(endSide))
@@ -887,7 +944,7 @@ class MoveSelectFragment :BaseFragment(){
                         // 恢复招式img为初始化
                         moveImgList[index]?.apply {
                             setImageResource(R.drawable.ic_add_move)
-                            setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                            setBackgroundColor(bgColor)
                         }
                         when(position){// 恢复站架图标，需要按照前后是否有招式判断,恢复的是按起始站架来变
                             0 ->{// 只用看第二个有没有招式有就不变，没就变
@@ -913,9 +970,14 @@ class MoveSelectFragment :BaseFragment(){
                 } else {// 不使用mod的情况下
                     if (originList[index] != null && idList[position] != -1){
                         originList[index]!!.apply {
-                            moveImgList[index]?.setImageBitmap(
-                                AssetsUtil.getBitmapByMoveId(requireContext(),id)
-                            )
+                            moveImgList[index]?.apply {
+                                setImageBitmap(
+                                    AssetsUtil.getBitmapByMoveId(requireContext(),idList[position])
+                                )
+                                if (idList[position] > 197){
+                                    setBackgroundColor(if (context.isNightMode()) resources.getColor(R.color.img_add_move_bg) else ceBg)
+                                }
+                            }
                             when(position){// 根据选择的招式来修改起始结束站架
                                 0 ->{// 起始站架已经定死，只用修改结束站架side1
                                     side1?.setImageResource(SideUtil.imgIdForMoves(endSide))
@@ -934,7 +996,7 @@ class MoveSelectFragment :BaseFragment(){
                         // 恢复招式img为初始化
                         moveImgList[index]?.apply {
                             setImageResource(R.drawable.ic_add_move)
-                            setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                            setBackgroundColor(bgColor)
                         }
                         when(position){// 恢复站架图标，需要按照前后是否有招式判断,恢复的是按起始站架来变
                             0 ->{// 只用看第二个有没有招式有就不变，没就变
@@ -969,26 +1031,36 @@ class MoveSelectFragment :BaseFragment(){
             if (SettingRepository.isUseCNEditionMod){
                 if (ceMove != null && optionA != -1){
                     ceMove!!.let {move->
-                        move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),move.id))
+                        move0?.apply {
+                            setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),move.id))
+                            if (optionA > 197){
+                                setBackgroundColor(if (context.isNightMode()) resources.getColor(R.color.img_add_move_bg) else ceBg)
+                            }
+                        }
                         sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(move.endSide)))
                     }
                 } else{
                     move0?.apply {
                         setImageResource(R.drawable.ic_add_move)
-                        setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                        setBackgroundColor(bgColor)
                     }
                     sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(this.startSide)))
                 }
             } else {
                 if (optionMove != null && optionA != -1){
                     optionMove!!.let {move->
-                        move0?.setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),move.id))
+                        move0?.apply {
+                            setImageBitmap(AssetsUtil.getBitmapByMoveId(requireContext(),move.id))
+                            if (optionA > 197){
+                                setBackgroundColor(if (context.isNightMode()) resources.getColor(R.color.img_add_move_bg) else ceBg)
+                            }
+                        }
                         sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(move.endSide)))
                     }
                 } else{
                     move0?.apply {
                         setImageResource(R.drawable.ic_add_move)
-                        setBackgroundColor(resources.getColor(R.color.img_add_move_bg))
+                        setBackgroundColor(bgColor)
                     }
                     sideEnd?.setImageResource(SideUtil.imgIdForOneMove(SideUtil.getIntBySide(this.startSide)))
                 }

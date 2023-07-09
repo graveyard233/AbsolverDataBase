@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         app:srcCompat="@drawable/ic_add_move"
-        android:background="@color/img_add_move_bg"
+        android:background="?colorSecondaryContainer"
         android:clickable="true"
         android:foreground="?selectableItemBackground"
         />
