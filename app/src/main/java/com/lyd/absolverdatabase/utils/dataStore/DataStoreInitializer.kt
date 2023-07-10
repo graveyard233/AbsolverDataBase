@@ -26,7 +26,7 @@ class DataStoreInitializer : Initializer<Unit> {
             val timeCost1 = measureTimeMillis {
 
                 val tempGaussianBlur = async {
-                    if (Build.VERSION.SDK_INT < 31){
+                    if (Build.VERSION.SDK_INT < /*31*/Build.VERSION_CODES.S){// 低于Android12不能使用高斯模糊
                         false
                     } else{
                         SettingRepository.isDialogGaussianBlurPreference.getOrDefault()
@@ -42,7 +42,11 @@ class DataStoreInitializer : Initializer<Unit> {
                     SettingRepository.useNightModePreference.getOrDefault()
                 }
                 val tempUseWhatTheme = async {
-                    SettingRepository.useWhatThemePreference.getOrDefault()
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S){// 低于Android12不能使用动态主题，只能使用默认主题
+                        UseTheme.DefaultId
+                    } else {
+                        SettingRepository.useWhatThemePreference.getOrDefault()
+                    }
                 }
                 SettingRepository.isDialogGaussianBlur = tempGaussianBlur.await()
                 SettingRepository.isNeedAskBeforeImport = tempAskBeforeImport.await()

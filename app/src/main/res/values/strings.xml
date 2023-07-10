@@ -45,6 +45,13 @@
     <string name="use_CNEditionMod">启用China Edition Mod</string>
     <string name="nightMode_yes">夜间模式:启用</string>
     <string name="nightMode_follow_system">夜间模式:跟随系统</string>
+    <string name="choose_theme">主题选择</string>
+    <string name="theme_default">默认</string>
+    <string name="theme_wallpaper">壁纸动态</string>
+    <string name="theme_red">枫叶红</string>
+    <string name="theme_gold">鎏金</string>
+    <string name="theme_blue">满天星紫</string>
+    <string name="theme_green">油绿</string>
 
 
     <string name="about_database">数据库相关</string>

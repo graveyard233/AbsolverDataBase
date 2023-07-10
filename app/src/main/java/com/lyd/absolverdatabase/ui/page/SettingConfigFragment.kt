@@ -11,8 +11,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.chip.Chip
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
+import com.lyd.absolverdatabase.bridge.data.bean.UseTheme
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.bridge.state.SettingState
 import com.lyd.absolverdatabase.bridge.state.SettingViewModelFactory
@@ -69,12 +71,58 @@ class SettingConfigFragment :BaseFragment() {
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeUseNightMode(isChecked)
             }
-            settingConfigSlider.addOnChangeListener { slider, value, fromUser ->
-                if (!fromUser) return@addOnChangeListener
-                settingState.changeUseWhatTheme(value.toInt())
-                Log.i(TAG, "settingConfigSlider in View: changeUseWhatTheme 选择了$value")
+
+            if (requireContext().isNightMode()){
+                settingConfigChipDefault.setTextColor(requireContext().getColor(com.google.android.material.R.color.design_dark_default_color_primary))
+                settingConfigChipRed.setTextColor(resources.getColor(R.color.red_md_theme_dark_primary))
+                settingConfigChipGold.setTextColor(resources.getColor(R.color.gold_md_theme_dark_primary))
+                settingConfigChipBlue.setTextColor(resources.getColor(R.color.blue_md_theme_dark_primary))
+                settingConfigChipGreen.setTextColor(resources.getColor(R.color.green_md_theme_dark_primary))
+            }
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S){
+                settingConfigChipDefault.isEnabled = false
+                settingConfigChipWallpaper.isEnabled = false
+                settingConfigChipRed.isEnabled = false
+                settingConfigChipGold.isEnabled = false
+                settingConfigChipBlue.isEnabled = false
+                settingConfigChipGreen.isEnabled = false
+                settingState.changeUseWhatTheme(UseTheme.DefaultId)
+            }
+            settingConfigChipGroupTheme.setOnCheckedStateChangeListener { group, checkedIds ->// 由于我是singleSelect，所以这个ids只有一个
+                if (checkedIds.isEmpty())
+                    return@setOnCheckedStateChangeListener
+                val tempBtn = group.findViewById<Chip>(checkedIds[0])
+                if (!tempBtn.isPressed) {
+                    return@setOnCheckedStateChangeListener
+                }
+                when(checkedIds[0]){
+                    R.id.settingConfig_chip_default ->{
+                        settingState.changeUseWhatTheme(UseTheme.DefaultId)
+                    }
+                    R.id.settingConfig_chip_wallpaper ->{
+                        settingState.changeUseWhatTheme(UseTheme.WallpaperId)
+                    }
+                    R.id.settingConfig_chip_red ->{
+                        settingState.changeUseWhatTheme(UseTheme.RedId)
+                    }
+                    R.id.settingConfig_chip_gold ->{
+                        settingState.changeUseWhatTheme(UseTheme.YellowId)
+                    }
+                    R.id.settingConfig_chip_blue ->{
+                        settingState.changeUseWhatTheme(UseTheme.BlueId)
+                    }
+                    R.id.settingConfig_chip_green ->{
+                        settingState.changeUseWhatTheme(UseTheme.GreenId)
+                    }
+                }
                 lifecycleScope.launchWhenStarted {
-                    // TODO: 逻辑还能再优化，比如锁定等 或者重写slider
+                    settingConfigChipDefault.isEnabled = false
+                    settingConfigChipWallpaper.isEnabled = false
+                    settingConfigChipRed.isEnabled = false
+                    settingConfigChipGold.isEnabled = false
+                    settingConfigChipBlue.isEnabled = false
+                    settingConfigChipGreen.isEnabled = false
+                    group.findViewById<Chip>(checkedIds[0]).isEnabled = true
                     showShortToast("一秒后会重启应用")
                     delay(1000)
                     context?.restartApp()
@@ -140,7 +188,14 @@ class SettingConfigFragment :BaseFragment() {
                 settingState.useWhatThemeFlow.collectLatest {
                     Log.i(TAG, "useWhatThemeFlow: 接收到数据 $it")
                     configBinding?.apply {
-                        settingConfigSlider.setValues(it.toFloat())
+                        when(it){
+                            UseTheme.DefaultId ->{ settingConfigChipGroupTheme.check(R.id.settingConfig_chip_default) }
+                            UseTheme.WallpaperId ->{ settingConfigChipGroupTheme.check(R.id.settingConfig_chip_wallpaper) }
+                            UseTheme.RedId ->{ settingConfigChipGroupTheme.check(R.id.settingConfig_chip_red) }
+                            UseTheme.YellowId ->{ settingConfigChipGroupTheme.check(R.id.settingConfig_chip_gold) }
+                            UseTheme.BlueId ->{ settingConfigChipGroupTheme.check(R.id.settingConfig_chip_blue) }
+                            UseTheme.GreenId ->{ settingConfigChipGroupTheme.check(R.id.settingConfig_chip_green) }
+                        }
                     }
                 }
             }
