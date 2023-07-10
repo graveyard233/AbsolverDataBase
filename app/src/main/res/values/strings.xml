@@ -58,6 +58,11 @@
     <string name="sync_moveDatabase_from_local">同步原版招式数据</string>
     <string name="sync_moveCEDatabase_from_local">本地代码同步CEMod招式数据</string>
     <string name="sync_moveCEDatabase_from_webView">使用WebView同步CEMod招式数据</string>
+    <string name="sync_with_webView">使用WebView同步</string>
+    <string name="on_sync_ing_data">同步数据中</string>
+    <string name="sync_error">同步失败</string>
+    <string name="html_data_is_null">获取的HTML数据为空</string>
+    <string name="sync_success_and_cost_time">同步成功,耗时:%1$s秒</string>
     <string name="sync_finish">同步完成</string>
 
     <string name="shake_click">点击过于频繁</string>

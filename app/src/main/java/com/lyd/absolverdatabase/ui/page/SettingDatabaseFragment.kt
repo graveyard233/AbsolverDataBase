@@ -70,9 +70,9 @@ class SettingDatabaseFragment :BaseFragment() {
     }
     private val syncFromCloudDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         BaseDialogBuilder(requireActivity())
-            .setTitle("使用WebView同步")
+            .setTitle(getString(R.string.sync_with_webView))
             .setIcon(R.drawable.ic_sync_from_cloud)
-            .setMessage("同步数据中")
+            .setMessage(getString(R.string.on_sync_ing_data))
             .setView(LinearProgressIndicator(requireContext()).apply { isIndeterminate = true })
             .create()
     }
@@ -108,10 +108,10 @@ class SettingDatabaseFragment :BaseFragment() {
                                             val trueHtml = StringEscapeUtils.unescapeEcmaScript(value)
                                             settingDatabaseState.syncCETableFromWebView(html = trueHtml, startTime = startTime,
                                             whenError = {
-                                                showShortToast("同步失败:$it")
+                                                showShortToast("${getString(R.string.sync_error)}:$it")
                                             },
                                             whenSuccess = {
-                                                showShortToast("同步成功,耗时:${it}秒")
+                                                showShortToast(getString(R.string.sync_success_and_cost_time,it.toString()))
                                             },
                                             whenFinish = {
                                                 syncFromCloudDialog.dismiss()
@@ -119,7 +119,7 @@ class SettingDatabaseFragment :BaseFragment() {
                                                 setDbBinding?.settingDatabaseWebLinear?.visibility = View.GONE// 把webView藏起来
                                             })
                                         } else {
-                                            showShortToast("同步失败:获取的HTML数据为空")
+                                            showShortToast(getString(R.string.html_data_is_null))
                                             syncFromCloudDialog.dismiss()
                                         }
                                     })

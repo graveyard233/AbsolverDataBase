@@ -21,7 +21,7 @@ interface DeckDAO {
     @Query("select * from deck_tb")
     suspend fun getAllDeck() :List<Deck>
 
-    @Query("select * from deck_tb where deckType = :type")
+    @Query("select * from deck_tb where deckType = :type order by updateTime DESC")
     suspend fun getDecksByDeckType(type :DeckType) :List<Deck>
 
     @Delete

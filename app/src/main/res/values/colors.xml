@@ -9,6 +9,8 @@
 
     <color name="img_add_move_bg">#2C3438</color>
 
+    <color name="ic_launcher_background">#F3C42F</color>
+
 <!--    枫叶红 红色主题-->
     <color name="red_seed">#c21f30</color>
     <color name="red_md_theme_light_primary">#BA182B</color>
