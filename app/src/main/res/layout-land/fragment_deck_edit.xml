@@ -61,7 +61,7 @@
 
                 <com.lyd.absolverdatabase.ui.widgets.MovesBar
                     android:id="@+id/deckEdit_bar_upperRight"
-                    app:startStandSide="@drawable/ic_upper_right"
+                    app:startStandSide="@drawable/ic_upper_right_bold"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2" />
@@ -73,7 +73,7 @@
 
                 <com.lyd.absolverdatabase.ui.widgets.MovesBar
                     android:id="@+id/deckEdit_bar_upperLeft"
-                    app:startStandSide="@drawable/ic_upper_left"
+                    app:startStandSide="@drawable/ic_upper_left_bold"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2" />
@@ -85,7 +85,7 @@
 
                 <com.lyd.absolverdatabase.ui.widgets.MovesBar
                     android:id="@+id/deckEdit_bar_lowerLeft"
-                    app:startStandSide="@drawable/ic_lower_left"
+                    app:startStandSide="@drawable/ic_lower_left_bold"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2" />
@@ -97,7 +97,7 @@
 
                 <com.lyd.absolverdatabase.ui.widgets.MovesBar
                     android:id="@+id/deckEdit_bar_lowerRight"
-                    app:startStandSide="@drawable/ic_lower_right"
+                    app:startStandSide="@drawable/ic_lower_right_bold"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="2" />

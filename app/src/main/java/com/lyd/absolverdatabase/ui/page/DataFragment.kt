@@ -29,10 +29,10 @@ class DataFragment : BaseFragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (position == 1){
-                    hideTab()
+//                    hideTab()
 //                    (mActivity as MainActivity).hideOrShowBottomNav(0)
                 } else {// 滑到其他页面的时候要显示tab和nav
-                    showTab()
+//                    showTab()
 //                    (mActivity as MainActivity).hideOrShowBottomNav(1)
                 }
 
@@ -63,8 +63,9 @@ class DataFragment : BaseFragment() {
 
         viewPagerAdapter = DataPagerAdapter(this)
         viewPager.adapter = viewPagerAdapter
-        val tabList = listOf(getString(R.string.tab_map),"调色板","其他")
-        val iconList = listOf<Int>(R.drawable.ic_map,R.drawable.ic_color_broard,R.drawable.ic_tag)
+        val tabList = listOf(getString(R.string.tab_map),getString(R.string.tab_palette),getString(R.string.tab_tip),getString(R.string.tab_other))
+        val iconList = listOf<Int>(R.drawable.ic_map,R.drawable.ic_color_broard,
+            R.drawable.ic_tag,R.drawable.ic_about)
         TabLayoutMediator(tabLayout,viewPager){tab, position ->
             tab.setIcon(iconList[position])
             tab.text = tabList[position]

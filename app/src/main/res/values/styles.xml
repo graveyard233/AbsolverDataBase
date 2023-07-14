@@ -43,6 +43,21 @@
 		<item name="android:background">?selectableItemBackground</item>
 	</style>
 
+	<style name="SettingLicense.Card" parent="Widget.Material3.CardView.Elevated">
+		<item name="android:layout_marginStart">10dp</item>
+		<item name="android:layout_marginEnd">10dp</item>
+		<item name="android:layout_marginBottom">10dp</item>
+		<item name="android:paddingTop">10dp</item>
+		<item name="android:clickable">true</item>
+		<item name="android:focusable">true</item>
+	</style>
+	<style name="SettingLicense.Card.Title">
+		<item name="android:textAppearance">?textAppearanceTitleMedium</item>
+	</style>
+	<style name="SettingLicense.Card.Content">
+		<item name="android:textAppearance">?textAppearanceBodyMedium</item>
+	</style>
+
 <!--	<style name="WidgetsSectionItem">-->
 <!--		<item name="android:textAppearance">?textAppearanceTitleSmall</item>-->
 <!--		<item name="android:textColor">?android:textColorSecondary</item>-->

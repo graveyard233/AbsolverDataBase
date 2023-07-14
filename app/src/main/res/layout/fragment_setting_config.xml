@@ -63,6 +63,13 @@
                         android:text="@string/use_CNEditionMod"/>
 
                     <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingConfig_switch_showMoreMoveCEInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/SettingFragmentSwitch"
+                        android:text="@string/show_more_moveCE_info"/>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/settingConfig_switch_useNightMode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

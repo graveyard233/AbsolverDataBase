@@ -108,6 +108,7 @@
                         android:onClick="@{(theVeiw)->click.openWeb(theVeiw)}"/>
 
                     <TextView
+                        android:id="@+id/setting_item_thanks"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/support_author"

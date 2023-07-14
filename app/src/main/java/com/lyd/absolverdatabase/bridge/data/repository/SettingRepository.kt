@@ -13,6 +13,8 @@ object SettingRepository :DataStoreOwner(name = "setting") {
 
     var isUseCNEditionMod :Boolean = false
     val isUseCNEditionModPreference by booleanPreference(default = false)
+    var isShowMoreMoveCEInfo :Boolean = false
+    val isShowMoreMoveCEInfoPreference by booleanPreference(default = false)
 
     /**true:启用使用夜间 false:跟随系统*/
     var useNightMode :Boolean = false

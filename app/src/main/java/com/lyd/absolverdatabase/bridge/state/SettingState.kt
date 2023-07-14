@@ -36,6 +36,15 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.isUseCNEditionModPreference.set { enable }
         }
     }
+    val showMoreMoveCEInfoFlow :StateFlow<Boolean> = repository.isShowMoreMoveCEInfoPreference.asFlow().map {
+        it ?: false
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
+    fun changeShowMoreMoveCEInfo(boolean: Boolean){
+        repository.isShowMoreMoveCEInfo = boolean
+        viewModelScope.launch {
+            repository.isShowMoreMoveCEInfoPreference.set { boolean }
+        }
+    }
     val useNightModeFlow :StateFlow<Boolean> = repository.useNightModePreference.asFlow().map {
         it ?: false
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)

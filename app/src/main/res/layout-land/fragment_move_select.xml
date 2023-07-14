@@ -137,13 +137,13 @@
                 layout="@layout/bar_move_msg"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/guidline_moveMsg_bottom"
+                app:layout_constraintBottom_toTopOf="@+id/guidline_land_moveMsg_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guidline_moveMsg_top" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidline_moveMsg_bottom"
+                android:id="@+id/guidline_land_moveMsg_bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

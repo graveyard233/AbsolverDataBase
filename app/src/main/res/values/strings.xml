@@ -16,7 +16,12 @@
     <string name="latest_video">最新视频</string>
 
     <string name="tab_map">地图</string>
-    
+    <string name="tab_palette">调色板</string>
+    <string name="tab_tip">Tip</string>
+    <string name="tab_other">其他</string>
+
+    <string name="attack_detail">攻击细节</string>
+
     
     <string name="bare_handed">徒手</string>
     <string name="glove">拳套</string>
@@ -39,10 +44,18 @@
     <string name="moveMsg_hitAdvantage">命中优势帧:%1$d</string>
     <string name="moveMsg_defenseAdvantage">防御优势帧:%1$d</string>
 
+    <string name="moveCEMsg_strengthBonus">力量:%1$s</string>
+    <string name="moveCEMsg_agilityBonus">敏捷:%1$s</string>
+    <string name="moveCEMsg_flexibleBonus">机动:%1$s</string>
+    <string name="moveCEMsg_cancelPoint">取消点:%1$d</string>
+    <string name="moveCEMsg_hitFrame">打击帧:%1$s</string>
+    <string name="moveCEMsg_yellowAttackFrame">黄攻帧:%1$d</string>
+
     <string name="config_setting">可配置项</string>
     <string name="dialogGaussianBlur">高斯模糊</string>
     <string name="ask_before_import">在导入卡组前弹窗</string>
     <string name="use_CNEditionMod">启用China Edition Mod</string>
+    <string name="show_more_moveCE_info">显示CEMod招式更多数据</string>
     <string name="nightMode_yes">夜间模式:启用</string>
     <string name="nightMode_follow_system">夜间模式:跟随系统</string>
     <string name="choose_theme">主题选择</string>
@@ -74,6 +87,11 @@
     <string name="repositoryVersion">https://github.com/graveyard233/AbsolverDatabase/commits/dev</string>
     <string name="version">版本:%1$s</string>
     <string name="support_author">如果觉得软件真好用，可以进Github给项目一个START</string>
+
+    <string name="thanks_title">致谢</string>
+    <string name="thanks_content">感谢Ghost对卡组筛选逻辑的讲解，原版数据表格及编辑器原型设计支持。\n感谢China Edition制作组提供CEMod的招式数据与图片，APP矢量图标文件。
+感谢赦免者国服QQ群的玩家给予APP测试的反馈支持。\n感谢第三方开源库与包括但不限于github，掘金，wanandroid，简书，CSDN上博客对本应用的架构与设计指导。
+感谢iconfont网站的矢量图标支持；感谢在线格式转换网站将jpg，png转svg，才得以制作流派与站架图标。</string>
 
 
 

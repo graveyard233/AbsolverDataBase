@@ -212,7 +212,6 @@ class DeckEditFragment :BaseFragment() {
         editState.initFilterOption()
         editState.initSelectMove()
         editState.selectWhatMoveInSeq(clickWhatMove)
-        editState.initEnterSelect(clickWhatMove)
         nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
             EditToSelectMsg(whatForEdit, whatMoveBeClicked = clickWhatMove/*,_deckForEdit.deckType*/)
         ))

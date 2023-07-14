@@ -9,27 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
-import com.google.android.material.dialog.MaterialDialogs
-import com.google.android.material.progressindicator.LinearProgressIndicator
-import com.google.android.material.snackbar.Snackbar
-import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.BuildConfig
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
-import com.lyd.absolverdatabase.bridge.state.SettingDatabaseState
-import com.lyd.absolverdatabase.bridge.state.SettingDatabaseViewModelFactory
 import com.lyd.absolverdatabase.bridge.state.SettingState
 import com.lyd.absolverdatabase.bridge.state.SettingViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentSettingBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
-import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class SettingFragment : BaseFragment() {
 
@@ -63,6 +50,9 @@ class SettingFragment : BaseFragment() {
             }
             settingTitleDatabase.setOnClickListener {
                 nav().navigate(SettingFragmentDirections.actionSettingFragmentToSettingDatabaseFragment())
+            }
+            settingItemThanks.setOnClickListener {
+                nav().navigate(SettingFragmentDirections.actionSettingFragmentToSettingLicenseFragment())
             }
 
             settingAboutVersion.text = getString(R.string.version,BuildConfig.VERSION_NAME)

@@ -67,6 +67,10 @@ class SettingConfigFragment :BaseFragment() {
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeUseCNEditionMod(isChecked)
             }
+            settingConfigSwitchShowMoreMoveCEInfo.setOnCheckedChangeListener { btn, isChecked ->
+                if (!btn.isPressed) return@setOnCheckedChangeListener
+                settingState.changeShowMoreMoveCEInfo(isChecked)
+            }
             settingConfigSwitchUseNightMode.setOnCheckedChangeListener{ btn, isChecked ->
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeUseNightMode(isChecked)
@@ -157,8 +161,16 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useCNEditionModFlow.collectLatest {
-                    Log.i(TAG, "useGPModFlow: 接收到数据 $it")
+                    Log.i(TAG, "useCNEditionModFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchUseCNEditionMod?.isChecked = it
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.showMoreMoveCEInfoFlow.collectLatest {
+                    Log.i(TAG, "showMoreMoveCEInfoFlow: 接收到数据 $it")
+                    configBinding?.settingConfigSwitchShowMoreMoveCEInfo?.isChecked = it
                 }
             }
         }

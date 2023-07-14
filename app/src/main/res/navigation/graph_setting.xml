@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_settingFragment_to_settingDatabaseFragment"
             app:destination="@id/settingDatabaseFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_settingLicenseFragment"
+            app:destination="@id/settingLicenseFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingConfigFragment"
@@ -27,4 +30,9 @@
         android:name="com.lyd.absolverdatabase.ui.page.SettingDatabaseFragment"
         android:label="SettingDatabaseFragment"
         tools:layout="@layout/fragment_setting_database"/>
+    <fragment
+        android:id="@+id/settingLicenseFragment"
+        android:name="com.lyd.absolverdatabase.ui.page.SettingLicenseFragment"
+        android:label="SettingLicenseFragment"
+        tools:layout="@layout/fragment_setting_license"/>
 </navigation>

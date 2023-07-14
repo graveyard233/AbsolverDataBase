@@ -8,14 +8,14 @@
       android:pathData="M12.173,6.321L12.114,16.287"
       android:strokeLineJoin="bevel"
       android:strokeWidth="2.2"
-      android:fillColor="?colorOnSecondaryContainer"
-      android:strokeColor="?colorOnSecondaryContainer"
+      android:fillColor="?colorSecondary"
+      android:strokeColor="?colorSecondary"
       android:strokeLineCap="square"/>
   <path
       android:pathData="M7.139,11.166L17.128,11.166"
       android:strokeLineJoin="bevel"
       android:strokeWidth="2"
-      android:fillColor="?colorOnSecondaryContainer"
-      android:strokeColor="?colorOnSecondaryContainer"
+      android:fillColor="?colorSecondary"
+      android:strokeColor="?colorSecondary"
       android:strokeLineCap="square"/>
 </vector>

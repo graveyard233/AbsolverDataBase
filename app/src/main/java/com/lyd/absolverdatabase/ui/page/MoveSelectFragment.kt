@@ -1,13 +1,17 @@
 package com.lyd.absolverdatabase.ui.page
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.constraintlayout.widget.Guideline
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -31,6 +35,7 @@ import com.lyd.absolverdatabase.utils.MoveGenerate
 import com.lyd.absolverdatabase.utils.SideUtil
 import com.lyd.absolverdatabase.utils.getResourceColor
 import com.lyd.absolverdatabase.utils.isNightMode
+import com.lyd.architecture.utils.ScreenUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -223,6 +228,23 @@ class MoveSelectFragment :BaseFragment(){
         // viewStub加载完成之后，要在onViewCreate那里才能找到加载的view
         dataBinding?.moveSelectViewStub?.viewStub?.inflate()
         dataBinding?.apply {
+            if (SettingRepository.isUseCNEditionMod && SettingRepository.isShowMoreMoveCEInfo){
+                moveSelectInclude.apply {
+                    msgCeModMorePart.visibility = View.VISIBLE
+                }
+                // 需要对布局进行重组
+                val tempLayout = moveSelectInclude.baseMsgLinearLayout.layoutParams as ViewGroup.LayoutParams
+                tempLayout.height = LayoutParams.WRAP_CONTENT
+                moveSelectInclude.baseMsgLinearLayout.layoutParams = tempLayout
+
+                if (ScreenUtils.isLandscape){// 如果是横屏
+                    guidlineLandMoveMsgBottom?.setGuidelinePercent(0.9F)
+                } else {
+                    guideline15?.setGuidelinePercent(0.46F)
+                    val newLayout = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,0,4F)
+                    view.findViewById<ViewGroup>(R.id.moveSelect_include).layoutParams = newLayout
+                }
+            }
             moveSelectPager?.apply {
                 adapter = movePagerAdapter
                 registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
@@ -292,6 +314,7 @@ class MoveSelectFragment :BaseFragment(){
                     }
                 }
             }
+
 
         }
 
@@ -364,6 +387,10 @@ class MoveSelectFragment :BaseFragment(){
                     if (seqPack != null){// 只有序列攻击才要设置选择边框
                         Log.i(TAG, "onViewCreated: 接受到选择边框变化->$it")
                         setMoveInBarBeSelect(it)
+                        editState.watchWhatMsgInBar(it)// 点击moveBar里面的数据也能看到数据
+                    }
+                    if (optionPack != null){
+                        editState.watchWhatMsgInBar(0)
                     }
                 }
             }
@@ -387,10 +414,10 @@ class MoveSelectFragment :BaseFragment(){
 
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                editState.enterSelectFlow.collectLatest {
+                editState.watchMsgInBarFlow.collectLatest {
                     when(it){
                         in 0..2 ->{
-                            Log.i(TAG, "enterSelectFlow: 第一次进来")
+                            Log.i(TAG, "watchMsgInBarFlow: 消息的第一次消费")
                             if (seqPack != null){//
                                 if (seqPack!!.idList[it] != -1){// 说明选中的框有招式
                                     val tempForSelect = MoveForSelect(
@@ -413,10 +440,10 @@ class MoveSelectFragment :BaseFragment(){
                                     editState.selectMove(tempForSelect)
                                 }
                             }
-                            editState.initEnterSelect(-1)// 重新设置成其他数据
+                            editState.watchWhatMsgInBar(-1)// 重新设置成其他数据,确保这个消息是一次性的
                         }
                         else->{
-                            Log.i(TAG, "enterSelectFlow: 不是第一次进来，就别设置了")
+                            Log.i(TAG, "watchMsgInBarFlow: 消息已经消费过了，就别设置了")
                         }
                     }
                 }
@@ -847,6 +874,15 @@ class MoveSelectFragment :BaseFragment(){
             msgPhyWeakness.text = getString(R.string.moveMsg_phyWeakness,tempMove.physicalWeakness)
             msgHitAdvantage.text = getString(R.string.moveMsg_hitAdvantage,tempMove.hitAdvantageFrame)
             msgDefenseAdvantage.text = getString(R.string.moveMsg_defenseAdvantage,tempMove.defenseAdvantageFrame)
+
+            if (SettingRepository.isShowMoreMoveCEInfo){
+                msgCeModeStrengthBonus.text = getString(R.string.moveCEMsg_strengthBonus,tempMove.strengthBonus)
+                msgCeModeAgilityBonus.text = getString(R.string.moveCEMsg_agilityBonus,tempMove.agilityBonus)
+                msgCeModeFlexibleBonus.text = getString(R.string.moveCEMsg_flexibleBonus,tempMove.flexibleBonus)
+                msgCeModeCancelPoint.text = getString(R.string.moveCEMsg_cancelPoint,tempMove.cancelPoint)
+                msgCeModeHitFrame.text = getString(R.string.moveCEMsg_hitFrame,tempMove.hitFrame)
+                msgCeModeYellowAttackFrame.text = getString(R.string.moveCEMsg_yellowAttackFrame,tempMove.yellowAttackFrame)
+            }
         }
     }
     private fun removeMsg(){

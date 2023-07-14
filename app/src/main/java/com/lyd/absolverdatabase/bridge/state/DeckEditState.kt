@@ -165,12 +165,12 @@ class DeckEditState(private val repository: DeckEditRepository,
         }
     }
 
-    /**第一次进入[MoveSelectFragment]需要显示点击的招式(如果有)*/
-    private val _enterSelectFlow :MutableStateFlow<Int> = MutableStateFlow(-1)
-    val enterSelectFlow = _enterSelectFlow.asStateFlow()
-    fun initEnterSelect(whatMoveBeClicked :Int){
+    /**查看MoveBar上面的招式数据的流*/
+    private val _watchMsgInBarFlow :MutableStateFlow<Int> = MutableStateFlow(-1)
+    val watchMsgInBarFlow = _watchMsgInBarFlow.asStateFlow()
+    fun watchWhatMsgInBar(whatMoveBeClicked :Int){
         viewModelScope.launch {
-            _enterSelectFlow.emit(whatMoveBeClicked)
+            _watchMsgInBarFlow.emit(whatMoveBeClicked)
         }
     }
 
