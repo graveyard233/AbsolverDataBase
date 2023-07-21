@@ -10,27 +10,27 @@
 
 <div align="center">
     <h3>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#description">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#description">
     Description
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#download">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#download">
     Download
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#use">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#use">
     Use
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#screenshot">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#screenshot">
     Screenshot
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#thanks">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#thanks">
     Thanks
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#licence">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#licence">
     Licence
     </a>
     </h3>
@@ -97,7 +97,7 @@ AbsolverDatabase has received assistance from many open source projects and tech
 - [Bilibili-API](https://github.com/SocialSisterYi/bilibili-API-collect)
 
 
-# Licence
+# [Licence](https://github.com/graveyard233/AbsolverDatabase/blob/master/LICENSE)
 
         Copyright (C) 2023  graveyard233
 

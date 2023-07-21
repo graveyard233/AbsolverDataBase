@@ -10,27 +10,27 @@
 
 <div align="center">
     <h3>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#%E6%8F%8F%E8%BF%B0">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#描述">
     描述
     </a>
     <span> | </span>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#%E4%B8%8B%E8%BD%BD">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#下载">
     下载
     </a>
     <span> | </span>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#%E4%BD%BF%E7%94%A8">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#使用">
     使用
     </a>
     <span> | </span>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#%E6%88%AA%E5%9B%BE">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#截图">
     截图
     </a>
     <span> | </span>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#%E6%84%9F%E8%B0%A2">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#感谢">
     感谢
     </a>
     <span> | </span>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#%E8%AE%B8%E5%8F%AF%E8%AF%81">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#许可证">
     许可证
     </a>
     </h3>
@@ -97,7 +97,7 @@
 - [AgentWeb](https://github.com/Justson/AgentWeb)
 - [Bilibili-API](https://github.com/SocialSisterYi/bilibili-API-collect)
 
-# 许可证
+# [许可证](https://github.com/graveyard233/AbsolverDatabase/blob/master/LICENSE)
 
         Copyright (C) 2023  graveyard233
 
