@@ -10,27 +10,27 @@
 
 <div align="center">
     <h3>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/README_EN.md#Description">
+    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#description">
     Description
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/README_EN.md#Download">
+    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#download">
     Download
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/README_EN.md#Use">
+    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#use">
     Use
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/README_EN.md#Screenshot">
+    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#screenshot">
     Screenshot
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/README_EN.md#Thanks">
+    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#thanks">
     Thanks
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/README_EN.md#Licence">
+    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md#licence">
     Licence
     </a>
     </h3>

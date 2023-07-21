@@ -1,7 +1,7 @@
 <p align="right">
     <strong>中文</strong>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase/README_EN.md">English</a>
+    <a href="https://www.github.com/graveyard233/AbsolverDatabase/blob/master/README_EN.md">English</a>
 </p>
 
 <h1 align="center">
@@ -10,27 +10,27 @@
 
 <div align="center">
     <h3>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase#描述">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#%E6%8F%8F%E8%BF%B0">
     描述
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase#下载">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#%E4%B8%8B%E8%BD%BD">
     下载
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase#使用">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#%E4%BD%BF%E7%94%A8">
     使用
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase#截图">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#%E6%88%AA%E5%9B%BE">
     截图
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase#感谢">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#%E6%84%9F%E8%B0%A2">
     感谢
     </a>
     <span> | </span>
-    <a href="https://www.github.com/graveyard233/AbsolverDatabase#许可证">
+    <a href="https://github.com/graveyard233/AbsolverDatabase#%E8%AE%B8%E5%8F%AF%E8%AF%81">
     许可证
     </a>
     </h3>
