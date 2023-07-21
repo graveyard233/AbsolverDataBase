@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">AbsolverDatabase</string>
+
+    <string name="copy">COPY</string>
+    <string name="confirm">YES</string>
+
+    <string name="learn">Learn</string>
+    <string name="data">Data</string>
+    <string name="deck">Deck</string>
+    <string name="setting">Setting</string>
+
+    <string name="press_one_more_time_for_finish">Press one more time to exit</string>
+
+    <string name="item_learn_author">up: %1$s</string>
+    <string name="item_learn_videoMsg">views: %1$d · %2$s</string>
+    <string name="dateFormat_for_videoAdapter">MM-dd</string>
+
+    <string name="choice_video">Choice video</string>
+    <string name="ghost_teach">Teach by ghost</string>
+    <string name="latest_video">Latest video</string>
+
+    <string name="network_request_error">Network request error:%1$s</string>
+
+    <string name="tab_map">Map</string>
+    <string name="tab_palette">Palette</string>
+    <string name="tab_tip">Tip</string>
+    <string name="tab_other">Other</string>
+
+    <string name="attack_detail">Attack detail</string>
+
+    <string name="bare_handed">Hand</string>
+    <string name="glove">Glove</string>
+    <string name="sword">Sword</string>
+
+    <string name="has_copy_deck_code">Has copy deck code</string>
+    <string name="need_to_import_deck_from_clip">Import deck from clipboard?</string>
+    <string name="clipboard_is_empty">The clipboard is empty</string>
+    <string name="error_json_data">Error Json data</string>
+    <string name="save_deck_by_shared_false">Save deck by shared false %1$s</string>
+
+    <string name="dateFormat_for_deckAdapter">MM-dd HH:mm:ss</string>
+    <string name="item_deck_aboutTime">Update Time:%1$s</string>
+
+    <string name="save_deck_success">Save deck(ID=%1$s) success</string>
+
+    <string name="deck_name">Deck Name</string>
+    <string name="deck_note">Deck Note</string>
+
+    <string name="deckDetail_createTime">Create Time:\n%1$s</string>
+    <string name="deckDetail_updateTime">Update Time:\n%1$s</string>
+
+    <string name="strength_light">Light</string>
+    <string name="strength_mid">Mid</string>
+    <string name="strength_heavy">Heavy</string>
+
+    <string name="attackToward_left">Left</string>
+    <string name="attackToward_right">Right</string>
+    <string name="attackToward_all">All</string>
+
+    <string name="attackAltitude_low">Low</string>
+    <string name="attackAltitude_middle">Mid</string>
+    <string name="attackAltitude_height">Height</string>
+    <string name="attackAltitude_all">All</string>
+    <string name="altitude">&#160;</string>
+
+    <string name="attackDirection_horizontal">Horizontal</string>
+    <string name="attackDirection_vertical">Vertical</string>
+    <string name="attackDirection_poke">Poke</string>
+    <string name="attackDirection_all">All</string>
+
+    <string name="moveEffect_stop">Stop</string>
+    <string name="moveEffect_dodge_up">Dodge up</string>
+    <string name="moveEffect_dodge_low">Dodge low</string>
+    <string name="moveEffect_dodge_side">Dodge side</string>
+    <string name="moveEffect_break_defences">Break defences</string>
+    <string name="moveEffect_super_armor">Super armor</string>
+    <string name="moveEffect_block_counter">Block counter</string>
+    <string name="moveEffect_double_attack">Double attack</string>
+    <string name="moveEffect_triple_attack">Triple attack</string>
+    <string name="moveEffect_mid_line">Mid line</string>
+    <string name="moveEffect_mental_blow">Mental blow</string>
+    <string name="moveEffect_null">NULL</string>
+    <string name="moveEffect_error">Error</string>
+
+    <string name="moveMsg_strength">Strength:%1$s</string>
+    <string name="moveMsg_range">Range:%1$1.2f</string>
+    <string name="moveMsg_effect">Effect:%1$s</string>
+    <string name="moveMsg_startFrame">StartFrame:%1$d</string>
+    <string name="moveMsg_phyOutput">PhyOutput:%1$1.2f</string>
+    <string name="moveMsg_phyWeakness">PhyWeakness:%1$1.2f</string>
+    <string name="moveMsg_hitAdvantage">HitAdvantage:%1$d</string>
+    <string name="moveMsg_defenseAdvantage">DefenseAdvantage:%1$d</string>
+
+    <string name="moveCEMsg_strengthBonus">StrengthBonus:%1$s</string>
+    <string name="moveCEMsg_agilityBonus">AgilityBonus:%1$s</string>
+    <string name="moveCEMsg_flexibleBonus">FlexibleBonus:%1$s</string>
+    <string name="moveCEMsg_cancelPoint">CancelPoint:%1$d</string>
+    <string name="moveCEMsg_hitFrame">HitFrame:%1$s</string>
+    <string name="moveCEMsg_yellowAttackFrame">YellowAttackFrame:%1$d</string>
+
+    <string name="config_setting">Config</string>
+    <string name="dialogGaussianBlur">Gaussian Blur</string>
+    <string name="ask_before_import">Show Dialog Before Import Deck</string>
+    <string name="use_CNEditionMod">Use China Edition Mod</string>
+    <string name="show_more_moveCE_info">Show CEMod More Information</string>
+    <string name="nightMode_yes">NightMode:Enable</string>
+    <string name="nightMode_follow_system">NightMode:Follow System</string>
+    <string name="choose_theme">Theme</string>
+    <string name="theme_default">Default</string>
+    <string name="theme_wallpaper">Wallpaper</string>
+    <string name="theme_red">Maple Leaf Red</string>
+    <string name="theme_gold">Gilding</string>
+    <string name="theme_blue">Baby\'s Breath Purple</string>
+    <string name="theme_green">Glossy Green</string>
+    <string name="choose_language">Language</string>
+    <string name="language_zh">Chinese</string>
+    <string name="language_en">English</string>
+
+
+    <string name="restart_app_in_time">Restart App after one second.</string>
+
+
+    <string name="about_database">Database</string>
+    <string name="sync_moveDatabase_from_local">Sync OriginMoves Data From Code</string>
+    <string name="sync_moveCEDatabase_from_local">Sync CEMoves Data From Code</string>
+    <string name="sync_moveCEDatabase_from_webView">Sync CEMoves Data By WebView</string>
+    <string name="sync_with_webView">Sync By WebView</string>
+    <string name="on_sync_ing_data">Sync Data</string>
+    <string name="sync_error">Sync False</string>
+    <string name="html_data_is_null">HTML Code Is NULL</string>
+    <string name="sync_success_and_cost_time">Sync Success,Cost:%1$sS</string>
+    <string name="sync_finish">Sync Finish</string>
+
+    <string name="shake_click">Click Too Often</string>
+
+    <string name="about_app">About</string>
+    <string name="author">Developer:graveyard233</string>
+    <string name="repositoryText">Repository</string>
+    <string name="repositoryUrl">https://github.com/graveyard233/AbsolverDatabase</string>
+    <string name="repositoryVersion">https://github.com/graveyard233/AbsolverDatabase/commits/dev</string>
+    <string name="version">Version:%1$s</string>
+    <string name="support_author">If you think App is good,you can go to Github and give the project a START.</string>
+    <string name="feedback">Feedback</string>
+
+    <string name="feedback_snackbar_content">Email:%1$s</string>
+
+    <string name="thanks_title">Thanks</string>
+    <string name="thanks_content">Thank Ghost for the explanation of the card group screening logic, the original data table and editor prototype design support.\nThank China Edition production team for providing CEMod movement data and pictures, APP vector icon file.
+Thank the players of the CN service in QQ group for giving feedback and support to the APP test.\nThanks to third party open source libraries and blogs including but not limited to github, 掘金, wanandroid, 简书, CSDN for architectural and design guidance on this application.
+Thank iconfont website vector icon support; Thanks to online format conversion sites that convert jpg, png to svg, we can make Style and StandSide ICONS.</string>
+
+
+
+    <!--    这些是用于展示Material3颜色的，用于fragment_color_board.xml-->
+    <string name="colors.item_background.description">Background</string>
+    <string name="colors.item_error.description">Error</string>
+    <string name="colors.item_error_container.description">Error Container</string>
+    <string name="colors.item_on_background.description">On Background</string>
+    <string name="colors.item_on_error.description">On Error</string>
+    <string name="colors.item_on_error_container.description">On Error Container</string>
+    <string name="colors.item_on_primary.description">On Primary</string>
+    <string name="colors.item_on_primary_container.description">On Primary Container</string>
+    <string name="colors.item_on_secondary.description">On Secondary</string>
+    <string name="colors.item_on_secondary_container.description">On Secondary Container</string>
+    <string name="colors.item_on_surface.description">On Surface</string>
+    <string name="colors.item_on_surface_inverse.description">On Surface Inverse</string>
+    <string name="colors.item_on_surface_variant.description">On Surface Variant</string>
+    <string name="colors.item_on_tertiary.description">On Tertiary</string>
+    <string name="colors.item_on_tertiary_container.description">On Tertiary Container</string>
+    <string name="colors.item_outline.description">Outline</string>
+    <string name="colors.item_primary.description">Primary</string>
+    <string name="colors.item_primary_container.description">Primary Container</string>
+    <string name="colors.item_secondary.description">Secondary</string>
+    <string name="colors.item_secondary_container.description">Secondary Container</string>
+    <string name="colors.item_surface.description">Surface</string>
+    <string name="colors.item_surface_inverse.description">Surface Inverse</string>
+    <string name="colors.item_surface_variant.description">Surface Variant</string>
+    <string name="colors.item_tertiary.description">Tertiary</string>
+    <string name="colors.item_tertiary_container.description">Tertiary Container</string>
+
+</resources>

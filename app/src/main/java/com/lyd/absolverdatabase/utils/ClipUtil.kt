@@ -13,9 +13,10 @@ object ClipUtil {
 
         clipboardManager.setPrimaryClip(ClipData.newPlainText("",text))
 
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
-            Toast.makeText(Utils.getApp(),"Copy in clipboard",Toast.LENGTH_SHORT).show()
-        }
+        // 这里不应该弹toast
+//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
+//            Toast.makeText(Utils.getApp(),"Copy in clipboard",Toast.LENGTH_SHORT).show()
+//        }
     }
 
     fun readText() :String{

@@ -115,6 +115,14 @@
                         style="@style/SettingFragmentItemText"
                         app:drawableStartCompat="@drawable/ic_start"/>
 
+                    <TextView
+                        android:id="@+id/setting_item_feedback"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/feedback"
+                        style="@style/SettingFragmentItemText"
+                        app:drawableStartCompat="@drawable/ic_email"/>
+
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>

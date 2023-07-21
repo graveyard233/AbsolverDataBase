@@ -3,6 +3,7 @@ package com.lyd.absolverdatabase
 import android.app.Activity
 import android.app.Application
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
@@ -11,6 +12,7 @@ import com.lyd.absolverdatabase.bridge.data.repository.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.db.AppDatabase
 import com.lyd.architecture.utils.Utils
 import com.tencent.mmkv.MMKV
+import java.util.Locale
 
 class App : Application(), ViewModelStoreOwner {
 
@@ -54,8 +56,14 @@ class App : Application(), ViewModelStoreOwner {
 
         val path = MMKV.initialize(this)
 
-//        // 这里必须初始化一下，是为了保证播放音乐管理类（PlayerManager.java） 不会为null，从而不引发空指针异常
-//        PlayerManager.instance.init(this)
+        val curLanguage = if (AppCompatDelegate.getApplicationLocales().isEmpty){
+            Log.i(TAG, "onCreate: AppCompatDelegate.getApplicationLocales().isEmpty")
+            Locale.getDefault().toLanguageTag()
+        } else {
+            Log.i(TAG, "onCreate: use AppCompatDelegate.getApplicationLocales()[0]?.toLanguageTag()")
+            AppCompatDelegate.getApplicationLocales()[0]?.toLanguageTag() ?: "error"
+        }
+        Log.i(TAG, "onCreate: this language -> $curLanguage")
 
         // 把初始化阶段的代码写在了manifest，交给startup来处理，不知道从哪里引入了startup的库，可能依赖混乱了吧，假如不想写在manifest，可以用下面的手动初始化也行，目的就是要拿到application
 //        AppInitializer.getInstance(applicationContext).initializeComponent(DataStoreInitializer::class.java)

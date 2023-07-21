@@ -238,7 +238,7 @@ class LearnFragment : BaseFragment() {
 
     private val whenLoadError :(errorMsg:String) -> Any? = {
         learnBinding?.learnRefresh?.isRefreshing = false
-        showShortToast("网络请求错误:$it")
+        showShortToast(getString(R.string.network_request_error,it))
     }
 
     inner class ClickProxy {

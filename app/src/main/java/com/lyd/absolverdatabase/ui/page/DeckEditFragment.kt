@@ -106,7 +106,7 @@ class DeckEditFragment :BaseFragment() {
                     },
                     ifSuccess = {
                         Log.i(TAG, "saveDeckInSavedSuccess: $it")
-                        showShortToast("操作id为${it}的卡组成功")
+                        showShortToast(getString(R.string.save_deck_success,it))
                     })
             }
 

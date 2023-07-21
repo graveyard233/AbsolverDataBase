@@ -19,6 +19,8 @@ android {
         versionName "0.70"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        resConfigs "zh-rCN","en"
     }
 
     buildTypes {

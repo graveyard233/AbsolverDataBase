@@ -40,6 +40,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class MoveSelectFragment :BaseFragment(){
@@ -60,13 +61,31 @@ class MoveSelectFragment :BaseFragment(){
     private var barLazy :View ?=null
 
     private val spinnerTowardAdapter :ArrayAdapter<String> by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        ArrayAdapter<String>(requireContext(), com.google.android.material.R.layout.support_simple_spinner_dropdown_item,AttackTowardOption.getOptionStr())
+        ArrayAdapter<String>(requireContext(), com.google.android.material.R.layout.support_simple_spinner_dropdown_item,listOf(getString(R.string.attackToward_left),getString(R.string.attackToward_right),getString(R.string.attackToward_all))
+//            if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+//                AttackTowardOption.getOptionStr()
+//            } else {
+//                listOf(getString(R.string.attackToward_left),getString(R.string.attackToward_right),getString(R.string.attackToward_all))
+//            }
+        )
     }
     private val spinnerAltitudeAdapter :ArrayAdapter<String> by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        ArrayAdapter<String>(requireContext(), com.google.android.material.R.layout.support_simple_spinner_dropdown_item,AttackAltitudeOption.getOptionStr())
+        ArrayAdapter<String>(requireContext(), com.google.android.material.R.layout.support_simple_spinner_dropdown_item,listOf(getString(R.string.attackAltitude_height),getString(R.string.attackAltitude_middle),getString(R.string.attackAltitude_low),getString(R.string.attackAltitude_all))
+//            if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+//                AttackAltitudeOption.getOptionStr()
+//            } else {
+//                listOf(getString(R.string.attackAltitude_height),getString(R.string.attackAltitude_middle),getString(R.string.attackAltitude_low),getString(R.string.attackAltitude_all))
+//            }
+        )
     }
     private val spinnerDirectionAdapter :ArrayAdapter<String> by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        ArrayAdapter<String>(requireContext(),com.google.android.material.R.layout.support_simple_spinner_dropdown_item,AttackDirectionOption.getOptionStr())
+        ArrayAdapter<String>(requireContext(),com.google.android.material.R.layout.support_simple_spinner_dropdown_item,listOf(getString(R.string.attackDirection_horizontal),getString(R.string.attackDirection_vertical),getString(R.string.attackDirection_poke),getString(R.string.attackDirection_all))
+//            if (Locale.getDefault().toLanguageTag().startsWith("zh")) {
+//                AttackDirectionOption.getOptionStr()
+//            } else {
+//                listOf(getString(R.string.attackDirection_horizontal),getString(R.string.attackDirection_vertical),getString(R.string.attackDirection_poke),getString(R.string.attackDirection_all))
+//            }
+        )
     }
 
     private val filterOption :FilterOption by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
@@ -715,34 +734,46 @@ class MoveSelectFragment :BaseFragment(){
             GlideApp.with(msgEndSideImg)
                 .load(SideUtil.imgIdForMoves(tempMove.endSide))
                 .into(msgEndSideImg)
-            msgName.text = tempMove.name
+            msgName.text = if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+                tempMove.name
+            } else {
+                tempMove.name_en
+            }
 
-            msgStrength.text = getString(
-                R.string.moveMsg_strength,
+            msgStrength.text = if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+                getString(R.string.moveMsg_strength,
+                    when (tempMove.strength) {
+                        1 -> getString(R.string.strength_light)
+                        2 -> getString(R.string.strength_mid)
+                        3 -> getString(R.string.strength_heavy)
+                        else -> "error"
+                    })
+            } else {
                 when (tempMove.strength) {
-                    1 -> "轻"
-                    2 -> "中"
-                    3 -> "重"
+                    1 -> getString(R.string.strength_light)
+                    2 -> getString(R.string.strength_mid)
+                    3 -> getString(R.string.strength_heavy)
                     else -> "error"
                 }
-            )
+            }
+
             msgRange.text = getString(R.string.moveMsg_range, tempMove.attackRange)
             "${
                 when (tempMove.attackToward) {
-                    AttackToward.LEFT -> "左"
-                    AttackToward.RIGHT -> "右"
+                    AttackToward.LEFT -> getString(R.string.attackToward_left)
+                    AttackToward.RIGHT -> getString(R.string.attackToward_right)
                 }
             }${
                 when (tempMove.attackAltitude) {
-                    AttackAltitude.LOW -> "低"
-                    AttackAltitude.MIDDLE -> "中"
-                    AttackAltitude.HEIGHT -> "高"
+                    AttackAltitude.LOW -> getString(R.string.attackAltitude_low)
+                    AttackAltitude.MIDDLE -> getString(R.string.attackAltitude_middle)
+                    AttackAltitude.HEIGHT -> getString(R.string.attackAltitude_height)
                 }
-            }位${
+            }${getString(R.string.altitude)}${
                 when (tempMove.attackDirection) {
-                    AttackDirection.HORIZONTAL -> "横向"
-                    AttackDirection.VERTICAL -> "纵向"
-                    AttackDirection.POKE -> "戳击"
+                    AttackDirection.HORIZONTAL -> getString(R.string.attackDirection_horizontal)
+                    AttackDirection.VERTICAL -> getString(R.string.attackDirection_vertical)
+                    AttackDirection.POKE -> getString(R.string.attackDirection_poke)
                 }
             }".let {
                 msgAttackTowardDetail.text = it
@@ -750,21 +781,21 @@ class MoveSelectFragment :BaseFragment(){
             val sb = StringBuilder()
             tempMove.effect.split(",").apply {
                 onEachIndexed { index, effectStr ->
-                    sb.append(when(effectStr){
-                        MoveEffect.STOP.name -> MoveEffect.STOP.str
-                        MoveEffect.DODGE_UP.name -> MoveEffect.DODGE_UP.str
-                        MoveEffect.DODGE_LOW.name -> MoveEffect.DODGE_LOW.str
-                        MoveEffect.DODGE_SIDE.name -> MoveEffect.DODGE_SIDE.str
-                        MoveEffect.BREAK_DEFENCES.name -> MoveEffect.BREAK_DEFENCES.str
-                        MoveEffect.SUPER_ARMOR.name -> MoveEffect.SUPER_ARMOR.str
-                        MoveEffect.BLOCK_COUNTER.name -> MoveEffect.BLOCK_COUNTER.str
-                        MoveEffect.DOUBLE_ATTACK.name -> MoveEffect.DOUBLE_ATTACK.str
-                        MoveEffect.TRIPLE_ATTACK.name -> MoveEffect.TRIPLE_ATTACK.str
-                        MoveEffect.MID_LINE.name -> MoveEffect.MID_LINE.str
-                        MoveEffect.MENTAL_BLOW.name -> MoveEffect.MENTAL_BLOW.str
-                        MoveEffect.NULL.name -> MoveEffect.NULL.str
-                        else -> { "error" }
-                    })
+                    sb.append(getString(when(effectStr){
+                        MoveEffect.STOP.name -> R.string.moveEffect_stop
+                        MoveEffect.DODGE_UP.name -> R.string.moveEffect_dodge_up
+                        MoveEffect.DODGE_LOW.name -> R.string.moveEffect_dodge_low
+                        MoveEffect.DODGE_SIDE.name -> R.string.moveEffect_dodge_side
+                        MoveEffect.BREAK_DEFENCES.name -> R.string.moveEffect_break_defences
+                        MoveEffect.SUPER_ARMOR.name -> R.string.moveEffect_super_armor
+                        MoveEffect.BLOCK_COUNTER.name -> R.string.moveEffect_block_counter
+                        MoveEffect.DOUBLE_ATTACK.name -> R.string.moveEffect_double_attack
+                        MoveEffect.TRIPLE_ATTACK.name -> R.string.moveEffect_triple_attack
+                        MoveEffect.MID_LINE.name -> R.string.moveEffect_mid_line
+                        MoveEffect.MENTAL_BLOW.name -> R.string.moveEffect_mental_blow
+                        MoveEffect.NULL.name -> R.string.moveEffect_null
+                        else -> { R.string.moveEffect_error }
+                    }))
                     if (this.size == 2){
                         if (index == 0)
                             sb.append(",")
@@ -806,34 +837,47 @@ class MoveSelectFragment :BaseFragment(){
             GlideApp.with(msgEndSideImg)
                 .load(SideUtil.imgIdForMoves(tempMove.endSide))
                 .into(msgEndSideImg)
-            msgName.text = tempMove.name
+            msgName.text = if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+                tempMove.name
+            } else {
+                tempMove.name_en.ifEmpty {
+                    tempMove.name
+                }
+            }
 
-            msgStrength.text = getString(
-                R.string.moveMsg_strength,
+            msgStrength.text = if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+                getString(R.string.moveMsg_strength,
+                    when (tempMove.strength) {
+                        1 -> getString(R.string.strength_light)
+                        2 -> getString(R.string.strength_mid)
+                        3 -> getString(R.string.strength_heavy)
+                        else -> "error"
+                    })
+            } else {
                 when (tempMove.strength) {
-                    1 -> "轻"
-                    2 -> "中"
-                    3 -> "重"
+                    1 -> getString(R.string.strength_light)
+                    2 -> getString(R.string.strength_mid)
+                    3 -> getString(R.string.strength_heavy)
                     else -> "error"
                 }
-            )
+            }
             msgRange.text = getString(R.string.moveMsg_range, tempMove.attackRange)
             "${
                 when (tempMove.attackToward) {
-                    AttackToward.LEFT -> "左"
-                    AttackToward.RIGHT -> "右"
+                    AttackToward.LEFT -> getString(R.string.attackToward_left)
+                    AttackToward.RIGHT -> getString(R.string.attackToward_right)
                 }
             }${
                 when (tempMove.attackAltitude) {
-                    AttackAltitude.LOW -> "低"
-                    AttackAltitude.MIDDLE -> "中"
-                    AttackAltitude.HEIGHT -> "高"
+                    AttackAltitude.LOW -> getString(R.string.attackAltitude_low)
+                    AttackAltitude.MIDDLE -> getString(R.string.attackAltitude_middle)
+                    AttackAltitude.HEIGHT -> getString(R.string.attackAltitude_height)
                 }
-            }位${
+            }${getString(R.string.altitude)}${
                 when (tempMove.attackDirection) {
-                    AttackDirection.HORIZONTAL -> "横向"
-                    AttackDirection.VERTICAL -> "纵向"
-                    AttackDirection.POKE -> "戳击"
+                    AttackDirection.HORIZONTAL -> getString(R.string.attackDirection_horizontal)
+                    AttackDirection.VERTICAL -> getString(R.string.attackDirection_vertical)
+                    AttackDirection.POKE -> getString(R.string.attackDirection_poke)
                 }
             }".let {
                 msgAttackTowardDetail.text = it
@@ -841,21 +885,21 @@ class MoveSelectFragment :BaseFragment(){
             val sb = StringBuilder()
             tempMove.effect.split(",").apply {
                 onEachIndexed { index, effectStr ->
-                    sb.append(when(effectStr){
-                        MoveEffect.STOP.name -> MoveEffect.STOP.str
-                        MoveEffect.DODGE_UP.name -> MoveEffect.DODGE_UP.str
-                        MoveEffect.DODGE_LOW.name -> MoveEffect.DODGE_LOW.str
-                        MoveEffect.DODGE_SIDE.name -> MoveEffect.DODGE_SIDE.str
-                        MoveEffect.BREAK_DEFENCES.name -> MoveEffect.BREAK_DEFENCES.str
-                        MoveEffect.SUPER_ARMOR.name -> MoveEffect.SUPER_ARMOR.str
-                        MoveEffect.BLOCK_COUNTER.name -> MoveEffect.BLOCK_COUNTER.str
-                        MoveEffect.DOUBLE_ATTACK.name -> MoveEffect.DOUBLE_ATTACK.str
-                        MoveEffect.TRIPLE_ATTACK.name -> MoveEffect.TRIPLE_ATTACK.str
-                        MoveEffect.MID_LINE.name -> MoveEffect.MID_LINE.str
-                        MoveEffect.MENTAL_BLOW.name -> MoveEffect.MENTAL_BLOW.str
-                        MoveEffect.NULL.name -> MoveEffect.NULL.str
-                        else -> { "error" }
-                    })
+                    sb.append(getString(when(effectStr){
+                        MoveEffect.STOP.name -> R.string.moveEffect_stop
+                        MoveEffect.DODGE_UP.name -> R.string.moveEffect_dodge_up
+                        MoveEffect.DODGE_LOW.name -> R.string.moveEffect_dodge_low
+                        MoveEffect.DODGE_SIDE.name -> R.string.moveEffect_dodge_side
+                        MoveEffect.BREAK_DEFENCES.name -> R.string.moveEffect_break_defences
+                        MoveEffect.SUPER_ARMOR.name -> R.string.moveEffect_super_armor
+                        MoveEffect.BLOCK_COUNTER.name -> R.string.moveEffect_block_counter
+                        MoveEffect.DOUBLE_ATTACK.name -> R.string.moveEffect_double_attack
+                        MoveEffect.TRIPLE_ATTACK.name -> R.string.moveEffect_triple_attack
+                        MoveEffect.MID_LINE.name -> R.string.moveEffect_mid_line
+                        MoveEffect.MENTAL_BLOW.name -> R.string.moveEffect_mental_blow
+                        MoveEffect.NULL.name -> R.string.moveEffect_null
+                        else -> { R.string.moveEffect_error }
+                    }))
                     if (this.size == 2){
                         if (index == 0)
                             sb.append(",")

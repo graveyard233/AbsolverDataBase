@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.snackbar.Snackbar
 import com.lyd.absolverdatabase.BuildConfig
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
@@ -17,6 +18,7 @@ import com.lyd.absolverdatabase.bridge.state.SettingState
 import com.lyd.absolverdatabase.bridge.state.SettingViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentSettingBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
+import com.lyd.absolverdatabase.utils.ClipUtil
 
 class SettingFragment : BaseFragment() {
 
@@ -24,6 +26,13 @@ class SettingFragment : BaseFragment() {
     private val settingState : SettingState by navGraphViewModels(navGraphId = R.id.nav_setting, factoryProducer = {
         SettingViewModelFactory(SettingRepository)
     })
+
+    private val snackBarWithEmail by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        Snackbar.make(settingBinding!!.settingRoot,resources.getString(R.string.feedback_snackbar_content,"1991206268@qq.com"),Snackbar.LENGTH_LONG)
+            .setAction(R.string.copy) {
+                ClipUtil.copyText("1991206268@qq.com")
+            }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +66,11 @@ class SettingFragment : BaseFragment() {
 
             settingAboutVersion.text = getString(R.string.version,BuildConfig.VERSION_NAME)
 
+            settingItemFeedback.setOnClickListener {
+                if (!snackBarWithEmail.isShown){
+                    snackBarWithEmail.show()
+                }
+            }
         }
 
         return view

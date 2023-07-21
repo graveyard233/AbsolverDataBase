@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.chip.Chip
-import com.lyd.absolverdatabase.App
+import com.google.android.material.snackbar.Snackbar
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.UseTheme
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
@@ -32,6 +32,10 @@ class SettingConfigFragment :BaseFragment() {
     private val settingState :SettingState by navGraphViewModels(navGraphId = R.id.nav_setting, factoryProducer = {
         SettingViewModelFactory(SettingRepository)
     })
+
+    private val restartSnackBar by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        Snackbar.make(configBinding!!.settingConfigChipGroupTheme,R.string.restart_app_in_time,Snackbar.LENGTH_SHORT)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,7 +131,7 @@ class SettingConfigFragment :BaseFragment() {
                     settingConfigChipBlue.isEnabled = false
                     settingConfigChipGreen.isEnabled = false
                     group.findViewById<Chip>(checkedIds[0]).isEnabled = true
-                    showShortToast("一秒后会重启应用")
+                    restartSnackBar.show()
                     delay(1000)
                     context?.restartApp()
                 }
@@ -199,6 +203,10 @@ class SettingConfigFragment :BaseFragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useWhatThemeFlow.collectLatest {
                     Log.i(TAG, "useWhatThemeFlow: 接收到数据 $it")
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ){
+                        configBinding?.settingConfigChipGroupTheme?.check(R.id.settingConfig_chip_default)
+                        return@collectLatest
+                    }
                     configBinding?.apply {
                         when(it){
                             UseTheme.DefaultId ->{ settingConfigChipGroupTheme.check(R.id.settingConfig_chip_default) }

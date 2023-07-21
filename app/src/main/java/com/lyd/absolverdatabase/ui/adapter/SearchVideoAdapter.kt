@@ -27,7 +27,7 @@ class SearchVideoAdapter : BaseQuickAdapter<BilibiliVideo, SearchVideoAdapter.VH
             holder.author.text = context.resources.getString(R.string.item_learn_author,author)/*String.format(context.resources.getString(R.string.item_learn_author),author)*/
 //            holder.videoMsg.text = "播放量:$play · ${senddate.toDateStr("MM月dd日")}"
 
-            holder.videoMsg.text = context.resources.getString(R.string.item_learn_videoMsg,play,(senddate * 1000).toDateStr("MM月dd日"))
+            holder.videoMsg.text = context.resources.getString(R.string.item_learn_videoMsg,play,(senddate * 1000).toDateStr(context.resources.getString(R.string.dateFormat_for_videoAdapter)))
         }
     }
 

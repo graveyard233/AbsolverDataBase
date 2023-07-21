@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">AbsolverDatabase</string>
 
+    <string name="copy">复制</string>
+    <string name="confirm">确定</string>
+
     <string name="learn">教学</string>
     <string name="data">数据</string>
     <string name="deck">卡组</string>
@@ -10,10 +13,13 @@
     
     <string name="item_learn_author">up: %1$s</string>
     <string name="item_learn_videoMsg">播放量: %1$d · %2$s</string>
+    <string name="dateFormat_for_videoAdapter">MM月dd日</string>
 
     <string name="choice_video">选择视频</string>
     <string name="ghost_teach">老G教学</string>
     <string name="latest_video">最新视频</string>
+    
+    <string name="network_request_error">网络请求错误:%1$s</string>
 
     <string name="tab_map">地图</string>
     <string name="tab_palette">调色板</string>
@@ -21,19 +27,60 @@
     <string name="tab_other">其他</string>
 
     <string name="attack_detail">攻击细节</string>
-
     
     <string name="bare_handed">徒手</string>
     <string name="glove">拳套</string>
     <string name="sword">剑</string>
 
+    <string name="has_copy_deck_code">已复制卡组代码</string>
+    <string name="need_to_import_deck_from_clip">需要导入复制的卡组吗</string>
+    <string name="clipboard_is_empty">剪贴板为空</string>
+    <string name="error_json_data">错误的json数据</string>
+    <string name="save_deck_by_shared_false">保存分享的卡组失败 %1$s</string>
+
+    <string name="dateFormat_for_deckAdapter">MM月dd日 HH时mm分ss秒</string>
     <string name="item_deck_aboutTime">更新时间:%1$s</string>
+
+    <string name="save_deck_success">成功保存ID为%1$s的卡组</string>
 
     <string name="deck_name">卡组名称</string>
     <string name="deck_note">卡组说明</string>
 
     <string name="deckDetail_createTime">创建时间:\n%1$s</string>
     <string name="deckDetail_updateTime">更新时间:\n%1$s</string>
+
+    <string name="strength_light">轻</string>
+    <string name="strength_mid">中</string>
+    <string name="strength_heavy">重</string>
+
+    <string name="attackToward_left">左</string>
+    <string name="attackToward_right">右</string>
+    <string name="attackToward_all">左右均可</string>
+
+    <string name="attackAltitude_low">低</string>
+    <string name="attackAltitude_middle">中</string>
+    <string name="attackAltitude_height">高</string>
+    <string name="attackAltitude_all">全部高度</string>
+    <string name="altitude">位</string>
+
+    <string name="attackDirection_horizontal">横向</string>
+    <string name="attackDirection_vertical">纵向</string>
+    <string name="attackDirection_poke">戳击</string>
+    <string name="attackDirection_all">全部走向</string>
+
+    <string name="moveEffect_stop">停止</string>
+    <string name="moveEffect_dodge_up">上闪</string>
+    <string name="moveEffect_dodge_low">下闪</string>
+    <string name="moveEffect_dodge_side">侧闪</string>
+    <string name="moveEffect_break_defences">破防</string>
+    <string name="moveEffect_super_armor">霸体</string>
+    <string name="moveEffect_block_counter">格挡反击</string>
+    <string name="moveEffect_double_attack">二段</string>
+    <string name="moveEffect_triple_attack">三段</string>
+    <string name="moveEffect_mid_line">中线</string>
+    <string name="moveEffect_mental_blow">精神打击</string>
+    <string name="moveEffect_null">无效果</string>
+    <string name="moveEffect_error">Error</string>
 
     <string name="moveMsg_strength">力度:%1$s</string>
     <string name="moveMsg_range">范围:%1$1.2f</string>
@@ -65,6 +112,11 @@
     <string name="theme_gold">鎏金</string>
     <string name="theme_blue">满天星紫</string>
     <string name="theme_green">油绿</string>
+    <string name="choose_language">语言选择</string>
+    <string name="language_zh">中文</string>
+    <string name="language_en">English</string>
+
+    <string name="restart_app_in_time">一秒后重启应用</string>
 
 
     <string name="about_database">数据库相关</string>
@@ -87,6 +139,9 @@
     <string name="repositoryVersion">https://github.com/graveyard233/AbsolverDatabase/commits/dev</string>
     <string name="version">版本:%1$s</string>
     <string name="support_author">如果觉得软件真好用，可以进Github给项目一个START</string>
+    <string name="feedback">反馈</string>
+
+    <string name="feedback_snackbar_content">邮箱:%1$s</string>
 
     <string name="thanks_title">致谢</string>
     <string name="thanks_content">感谢Ghost对卡组筛选逻辑的讲解，原版数据表格及编辑器原型设计支持。\n感谢China Edition制作组提供CEMod的招式数据与图片，APP矢量图标文件。

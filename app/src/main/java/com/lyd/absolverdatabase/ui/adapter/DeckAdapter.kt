@@ -30,7 +30,7 @@ class DeckAdapter :BaseQuickAdapter<Deck,DeckAdapter.VH>()  {
             holder.note.text = note
             var dateFormat = "yyyy/MM/dd"
             if (updateTime.getDateYear() == System.currentTimeMillis().getDateYear())
-                dateFormat = "MM月dd日 HH时mm分ss秒"
+                dateFormat = context.resources.getString(R.string.dateFormat_for_deckAdapter)
             holder.aboutTime.text = context.resources.getString(R.string.item_deck_aboutTime,
                 updateTime.toDateStr(dateFormat)
             )

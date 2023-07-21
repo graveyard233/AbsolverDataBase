@@ -108,10 +108,10 @@ class SettingDatabaseFragment :BaseFragment() {
                                             val trueHtml = StringEscapeUtils.unescapeEcmaScript(value)
                                             settingDatabaseState.syncCETableFromWebView(html = trueHtml, startTime = startTime,
                                             whenError = {
-                                                showShortToast("${getString(R.string.sync_error)}:$it")
+                                                Snackbar.make(setDbBinding!!.settingDatabaseRoot,"${getString(R.string.sync_error)}:$it",Snackbar.LENGTH_SHORT).show()
                                             },
                                             whenSuccess = {
-                                                showShortToast(getString(R.string.sync_success_and_cost_time,it.toString()))
+                                                Snackbar.make(setDbBinding!!.settingDatabaseRoot,getString(R.string.sync_success_and_cost_time,it.toString()),Snackbar.LENGTH_SHORT).show()
                                             },
                                             whenFinish = {
                                                 syncFromCloudDialog.dismiss()
@@ -119,7 +119,7 @@ class SettingDatabaseFragment :BaseFragment() {
                                                 setDbBinding?.settingDatabaseWebLinear?.visibility = View.GONE// 把webView藏起来
                                             })
                                         } else {
-                                            showShortToast(getString(R.string.html_data_is_null))
+                                            Snackbar.make(setDbBinding!!.settingDatabaseRoot,getString(R.string.html_data_is_null),Snackbar.LENGTH_SHORT).show()
                                             syncFromCloudDialog.dismiss()
                                         }
                                     })

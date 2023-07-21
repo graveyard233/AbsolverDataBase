@@ -2,12 +2,14 @@ package com.lyd.absolverdatabase.ui.page
 
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.NonNull
@@ -41,6 +43,7 @@ import com.lyd.absolverdatabase.utils.ClipUtil
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import com.lyd.absolverdatabase.utils.GsonUtils
 import com.lyd.absolverdatabase.utils.getResourceColor
+import com.lyd.architecture.utils.Utils
 import kotlinx.coroutines.flow.collectLatest
 import okhttp3.internal.toHexString
 
@@ -74,6 +77,9 @@ class DeckFragment :BaseFragment() {
                 Log.i(TAG, "onLongClick: $deckForShareText")
                 // 将卡组数据写入剪贴板
                 ClipUtil.copyText(deckForShareText)
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
+                    Toast.makeText(Utils.getApp(),R.string.has_copy_deck_code, Toast.LENGTH_SHORT).show()
+                }
                 return@addOnItemChildLongClickListener true// 返回true就不会出发onclick
             }
             addOnItemChildClickListener(R.id.item_deck_img_delete){adapter,view,position ->
@@ -127,8 +133,8 @@ class DeckFragment :BaseFragment() {
 
     private val importDeckDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         BaseDialogBuilder(requireActivity())
-            .setTitle("需要导入复制的卡组吗")
-            .setPositiveButton("确定"){dialog,num ->
+            .setTitle(R.string.need_to_import_deck_from_clip)
+            .setPositiveButton(R.string.confirm){dialog,num ->
                 importDeck()
             }
             .create()
@@ -295,7 +301,7 @@ class DeckFragment :BaseFragment() {
         Log.i(TAG, "deckHeaderAdapter onLongClick: ${ClipUtil.readText()}")
         val tempText = ClipUtil.readText()
         if (tempText == "null"){
-            showShortToast("剪贴板为空")
+            showShortToast(getString(R.string.clipboard_is_empty))
             return
         }
         var deckToSaved :Deck ?= null
@@ -313,7 +319,7 @@ class DeckFragment :BaseFragment() {
                 deckToSaved,
                 ifError = {
                     Log.e(TAG, "onLongClick: 保存分享卡组失败 $it")
-                    showShortToast("保存分享卡组失败 $it")
+                    showShortToast(getString(R.string.save_deck_by_shared_false,it))
                 },
                 ifSuccess = {
                     Log.i(TAG, "onLongClick: 保存卡组成功，id为 $it")

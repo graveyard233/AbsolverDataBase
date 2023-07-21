@@ -15,6 +15,7 @@ import com.lyd.absolverdatabase.bridge.data.bean.MoveForSelect
 import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.AssetsUtil
+import java.util.*
 
 class MoveItemAdapter :BaseQuickAdapter<MoveForSelect,MoveItemAdapter.VH>() {
 
@@ -26,7 +27,20 @@ class MoveItemAdapter :BaseQuickAdapter<MoveForSelect,MoveItemAdapter.VH>() {
                 .into(holder.img)
             val tempId = if (SettingRepository.isUseCNEditionMod) item.moveCE.id else item.moveOrigin.id
             holder.img.setBackgroundColor(context.resources.getColor(if (tempId >= 198) R.color.img_add_move_bg else R.color.transparent))
-            holder.moveName.text = if (SettingRepository.isUseCNEditionMod) moveCE.name else moveOrigin.name
+            holder.moveName.text =
+                if (SettingRepository.isUseCNEditionMod) {
+                    if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+                        moveCE.name
+                    } else {
+                        moveCE.name_en.ifEmpty { moveCE.name }
+                    }
+                } else {
+                    if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+                        moveOrigin.name
+                    } else {
+                        moveOrigin.name_en
+                    }
+                }
             holder.imgSelect.visibility = if (item.isSelected) View.VISIBLE else View.GONE
         }
     }
