@@ -166,7 +166,12 @@ class SettingConfigFragment :BaseFragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useCNEditionModFlow.collectLatest {
                     Log.i(TAG, "useCNEditionModFlow: 接收到数据 $it")
-                    configBinding?.settingConfigSwitchUseCNEditionMod?.isChecked = it
+                    configBinding?.apply {
+                        settingConfigSwitchUseCNEditionMod.isChecked = it
+                        settingConfigSwitchShowMoreMoveCEInfo.visibility = if (it) View.VISIBLE else View.GONE
+                        if (!it) settingState.changeShowMoreMoveCEInfo(false)
+                    }
+
                 }
             }
         }
