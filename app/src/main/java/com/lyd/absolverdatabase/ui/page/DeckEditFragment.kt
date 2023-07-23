@@ -14,10 +14,12 @@ import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
 import com.lyd.absolverdatabase.bridge.data.bean.EditToSelectMsg
 import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.bridge.state.DeckEditState
 import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentDeckEditBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
+import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.ui.widgets.DeckDetailDialog
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import com.lyd.absolverdatabase.utils.TimeUtils
@@ -32,6 +34,11 @@ class DeckEditFragment :BaseFragment() {
 
     private val args :DeckEditFragmentArgs by navArgs()
 
+    private val howToEditDeckMsg by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        BaseDialogBuilder(requireContext())
+            .setTitle(getString(R.string.how_to_edit_deckMsg_title))
+            .setMessage(getString(R.string.how_To_edit_deckMsg_msg))
+    }
     private val deckDetailDialog :DeckDetailDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         DeckDetailDialog(requireActivity())
     }
@@ -125,6 +132,14 @@ class DeckEditFragment :BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (SettingRepository.hadShowTipHowToEditDeckMsg){
+            lifecycleScope.launchWhenStarted {
+                SettingRepository.hadShowTipHowToEditDeckMsg = false
+                SettingRepository.hadShowTipHowToEditDeckMsgPreference.set { false }
+                howToEditDeckMsg.show()
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             editState.sequenceUpperRight.collectLatest {

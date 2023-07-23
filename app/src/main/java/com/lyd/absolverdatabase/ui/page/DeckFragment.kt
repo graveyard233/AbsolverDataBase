@@ -46,6 +46,7 @@ import com.lyd.absolverdatabase.utils.getResourceColor
 import com.lyd.architecture.utils.Utils
 import kotlinx.coroutines.flow.collectLatest
 import okhttp3.internal.toHexString
+import java.util.Locale
 
 class DeckFragment :BaseFragment() {
 
@@ -77,7 +78,7 @@ class DeckFragment :BaseFragment() {
                 Log.i(TAG, "onLongClick: $deckForShareText")
                 // 将卡组数据写入剪贴板
                 ClipUtil.copyText(deckForShareText)
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2 || Locale.getDefault().toLanguageTag().startsWith("zh")){
                     Toast.makeText(Utils.getApp(),R.string.has_copy_deck_code, Toast.LENGTH_SHORT).show()
                 }
                 return@addOnItemChildLongClickListener true// 返回true就不会出发onclick

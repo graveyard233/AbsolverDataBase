@@ -51,12 +51,16 @@ class DataStoreInitializer : Initializer<Unit> {
                         SettingRepository.useWhatThemePreference.getOrDefault()
                     }
                 }
+                val tempHadShowTipHowToEditDeckMsg = async {
+                    SettingRepository.hadShowTipHowToEditDeckMsgPreference.getOrDefault()
+                }
                 SettingRepository.isDialogGaussianBlur = tempGaussianBlur.await()
                 SettingRepository.isNeedAskBeforeImport = tempAskBeforeImport.await()
                 SettingRepository.isUseCNEditionMod = tempUseCNEditionMod.await()
                 SettingRepository.isShowMoreMoveCEInfo = tempShowMoreMoveCEInfo.await()
                 SettingRepository.useNightMode = tempUseNightMode.await()
                 SettingRepository.useWhatTheme = tempUseWhatTheme.await()
+                SettingRepository.hadShowTipHowToEditDeckMsg = tempHadShowTipHowToEditDeckMsg.await()
 
                 when(SettingRepository.useNightMode){
                     true -> {

@@ -43,6 +43,8 @@
     <string name="dateFormat_for_deckAdapter">MM-dd HH:mm:ss</string>
     <string name="item_deck_aboutTime">Update Time:%1$s</string>
 
+    <string name="how_to_edit_deckMsg_title">How to edit deck message</string>
+    <string name="how_To_edit_deckMsg_msg">Long press the blank area to open the editing window</string>
     <string name="save_deck_success">Save deck(ID=%1$s) success</string>
 
     <string name="deck_name">Deck Name</string>

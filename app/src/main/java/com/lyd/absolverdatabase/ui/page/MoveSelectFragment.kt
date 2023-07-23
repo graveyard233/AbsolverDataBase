@@ -613,6 +613,7 @@ class MoveSelectFragment :BaseFragment(){
         dataBinding = null
     }
 
+    /**设置img的描边宽度的选中变化*/
     private fun setMoveInBarBeSelect(moveIndex :Int){
         moveImgList.forEachIndexed { index, img ->
             if (index == moveIndex){

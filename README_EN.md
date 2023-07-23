@@ -5,6 +5,7 @@
 </p>
 
 <h1 align="center">
+    <img src="https://i.postimg.cc/6QbkhKJy/AB-1.png" width="200">
     <br>AbsolverDatabase<br>
 </h1>
 
@@ -39,9 +40,13 @@
 # Description
 
 A modern Android app for Absolver players, which provides functions such as adding, deleting, correcting and checking decks, browsing and filtering moves, importing and sharing deck, and viewing game maps;
+
 Provide Mode switching and data support for China Edition Mode for Chinese players, and can synchronize CEMod moves data through webView;
+
 Mainly uses Kotlin language, adopts Jetpack component, uses MVVM architecture (view-View-model-repository), can run in Android 10 and above version, UI reference Ghost's deck editor;
+
 Use Navigation (relying on the database to ensure that network requests will not be repeated after replacing fragment by navigation), use Room for the database, use DataStore and MMKV for configuration data, and use flow combined with viewModel to realize data transmission in different fragments. Network requests use Retrofit + Okhttp + coroutines;
+
 Designed according to the Material Design 3 specification, provide background image dynamic color acquisition and multiple theme color switching on Android12 and above; Suitable for night mode, suitable for horizontal screen mode; Support English view;
 
 # Download
@@ -96,6 +101,7 @@ AbsolverDatabase has received assistance from many open source projects and tech
 - [AgentWeb](https://github.com/Justson/AgentWeb)
 - [Bilibili-API](https://github.com/SocialSisterYi/bilibili-API-collect)
 
+Special thanks to Ghost for the prototype design and screening logic explanation of the card deck editor.
 
 # [Licence](https://github.com/graveyard233/AbsolverDatabase/blob/master/LICENSE)
 

@@ -41,6 +41,8 @@
     <string name="dateFormat_for_deckAdapter">MM月dd日 HH时mm分ss秒</string>
     <string name="item_deck_aboutTime">更新时间:%1$s</string>
 
+    <string name="how_to_edit_deckMsg_title">如何编辑卡组信息</string>
+    <string name="how_To_edit_deckMsg_msg">长按空白区域可打开编辑界面弹窗</string>
     <string name="save_deck_success">成功保存ID为%1$s的卡组</string>
 
     <string name="deck_name">卡组名称</string>

@@ -5,6 +5,7 @@
 </p>
 
 <h1 align="center">
+    <img src="https://i.postimg.cc/6QbkhKJy/AB-1.png" width="200">
     <br>AbsolverDatabase<br>
 </h1>
 
@@ -39,9 +40,13 @@
 # 描述
 
 为赦免者玩家打造的现代化Android应用，提供对卡组进行增删改查，浏览与筛选招式，导入与分享，查看游戏地图等功能；
+
 提供针对中国玩家的China Edition Mode的模式切换与数据支持，能够通过webView网络同步CEMod招式数据；
+
 主要使用Kotlin语言，采用Jetpack组件，使用MVVM架构（视图-视图模型-仓库），可在Android 10及以上的版本运行，UI参考了Ghost的卡组编辑器；
+
 导航使用Navigation（依靠数据库确保不会重复网络请求），数据库使用Room，配置数据采用DataStore与MMKV，采用flow结合viewModel来实现数据在不同fragment的传输，网络请求使用Retrofit + Okhttp + 协程；
+
 依照Material Design 3规范设计，在Android12及以上提供背景图动态颜色获取和多种主题色切换；适配夜间模式，适配横屏模式；支持英文查看；
 
 # 下载
@@ -96,6 +101,8 @@
 - [commons-text](https://central.sonatype.com/artifact/org.apache.commons/commons-text/1.10.0)
 - [AgentWeb](https://github.com/Justson/AgentWeb)
 - [Bilibili-API](https://github.com/SocialSisterYi/bilibili-API-collect)
+
+特别感谢Ghost的卡组编辑器的原型设计与筛选逻辑讲解
 
 # [许可证](https://github.com/graveyard233/AbsolverDatabase/blob/master/LICENSE)
 

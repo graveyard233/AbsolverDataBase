@@ -22,4 +22,7 @@ object SettingRepository :DataStoreOwner(name = "setting") {
 
     var useWhatTheme :Int = 1
     val useWhatThemePreference by intPreference(default = 1)
+
+    var hadShowTipHowToEditDeckMsg :Boolean = true
+    val hadShowTipHowToEditDeckMsgPreference by booleanPreference(default = true)
 }
