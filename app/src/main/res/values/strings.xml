@@ -35,7 +35,7 @@
     <string name="has_copy_deck_code">已复制卡组代码</string>
     <string name="need_to_import_deck_from_clip">需要导入复制的卡组吗</string>
     <string name="clipboard_is_empty">剪贴板为空</string>
-    <string name="error_json_data">错误的json数据</string>
+    <string name="error_deck_data">错误的卡组代码</string>
     <string name="save_deck_by_shared_false">保存分享的卡组失败 %1$s</string>
 
     <string name="dateFormat_for_deckAdapter">MM月dd日 HH时mm分ss秒</string>
@@ -103,6 +103,7 @@
     <string name="config_setting">可配置项</string>
     <string name="dialogGaussianBlur">高斯模糊</string>
     <string name="ask_before_import">在导入卡组前弹窗</string>
+    <string name="show_seq_detail_when_shared_deck">分享卡组时附带招式名称</string>
     <string name="use_CNEditionMod">启用China Edition Mod</string>
     <string name="show_more_moveCE_info">显示CEMod招式更多数据</string>
     <string name="nightMode_yes">夜间模式:启用</string>

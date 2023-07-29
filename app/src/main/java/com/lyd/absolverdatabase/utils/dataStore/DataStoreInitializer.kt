@@ -54,6 +54,9 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempHadShowTipHowToEditDeckMsg = async {
                     SettingRepository.hadShowTipHowToEditDeckMsgPreference.getOrDefault()
                 }
+                val tempShowSeqDetailWhenShared = async {
+                    SettingRepository.isShowSeqDetailWhenSharedDeckPreference.getOrDefault()
+                }
                 SettingRepository.isDialogGaussianBlur = tempGaussianBlur.await()
                 SettingRepository.isNeedAskBeforeImport = tempAskBeforeImport.await()
                 SettingRepository.isUseCNEditionMod = tempUseCNEditionMod.await()
@@ -61,6 +64,7 @@ class DataStoreInitializer : Initializer<Unit> {
                 SettingRepository.useNightMode = tempUseNightMode.await()
                 SettingRepository.useWhatTheme = tempUseWhatTheme.await()
                 SettingRepository.hadShowTipHowToEditDeckMsg = tempHadShowTipHowToEditDeckMsg.await()
+                SettingRepository.isShowSeqDetailWhenSharedDeck = tempShowSeqDetailWhenShared.await()
 
                 when(SettingRepository.useNightMode){
                     true -> {

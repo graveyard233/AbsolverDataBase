@@ -37,7 +37,7 @@
     <string name="has_copy_deck_code">Has copy deck code</string>
     <string name="need_to_import_deck_from_clip">Import deck from clipboard?</string>
     <string name="clipboard_is_empty">The clipboard is empty</string>
-    <string name="error_json_data">Error Json data</string>
+    <string name="error_deck_data">Error deck data</string>
     <string name="save_deck_by_shared_false">Save deck by shared false %1$s</string>
 
     <string name="dateFormat_for_deckAdapter">MM-dd HH:mm:ss</string>
@@ -105,6 +105,7 @@
     <string name="config_setting">Config</string>
     <string name="dialogGaussianBlur">Gaussian Blur</string>
     <string name="ask_before_import">Show Dialog Before Import Deck</string>
+    <string name="show_seq_detail_when_shared_deck">Show move name when sharing deck</string>
     <string name="use_CNEditionMod">Use China Edition Mod</string>
     <string name="show_more_moveCE_info">Show CEMod More Information</string>
     <string name="nightMode_yes">NightMode:Enable</string>

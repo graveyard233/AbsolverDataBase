@@ -39,13 +39,11 @@ import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.ui.widgets.ColorShades
 import com.lyd.absolverdatabase.ui.widgets.SpacesItemDecoration
-import com.lyd.absolverdatabase.utils.ClipUtil
-import com.lyd.absolverdatabase.utils.DeckGenerate
-import com.lyd.absolverdatabase.utils.GsonUtils
-import com.lyd.absolverdatabase.utils.getResourceColor
+import com.lyd.absolverdatabase.utils.*
 import com.lyd.architecture.utils.Utils
 import kotlinx.coroutines.flow.collectLatest
 import okhttp3.internal.toHexString
+import java.util.Base64
 import java.util.Locale
 
 class DeckFragment :BaseFragment() {
@@ -74,8 +72,19 @@ class DeckFragment :BaseFragment() {
                 nav().navigate(DeckFragmentDirections.actionDeckFragmentToDeckEditFragment(getItem(position)!!))
             }
             addOnItemChildLongClickListener(R.id.item_deck_constraint){adapter, view, position ->
-                val deckForShareText = GsonUtils.toJson(getItem(position)?.copy(deckId = sharedIdTag))
-                Log.i(TAG, "onLongClick: $deckForShareText")
+//                val deckForShareText = GsonUtils.toJson(getItem(position)?.copy(deckId = sharedIdTag))
+
+                val whatDeck :Deck = getItem(position)?.copy(deckId = sharedIdTag) ?: DeckGenerate.generateEmptyDeck().apply {
+                    deckId = sharedIdTag
+                    createTime = System.currentTimeMillis()
+                    updateTime = System.currentTimeMillis()
+                }
+                if (SettingRepository.isShowSeqDetailWhenSharedDeck){// 如果要显示攻击序列内的招式名称，则要在外面额外加
+                    // TODO: 在这里获取提前准备好的额外文本
+                    editState
+                }
+                val deckForShareText = StringUtils.deck2MyJson(whatDeck)
+                Log.i(TAG, "长按分享的卡组代码: $deckForShareText")
                 // 将卡组数据写入剪贴板
                 ClipUtil.copyText(deckForShareText)
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2 || Locale.getDefault().toLanguageTag().startsWith("zh")){
@@ -292,6 +301,7 @@ class DeckFragment :BaseFragment() {
         }
     }
 
+    @Deprecated(message = "这样拿会只拿到默认颜色，取不到动态颜色", replaceWith = ReplaceWith("requireActivity().getResourceColor(com.google.android.material.R.attr./*color you want*/)"))
     @ColorInt
     private fun getThemeAttrColor(@NonNull context: Context, @StyleRes themeResId: Int, @AttrRes attrResId: Int): Int {
         return MaterialColors.getColor(ContextThemeWrapper(context, themeResId), attrResId, Color.WHITE)
@@ -307,11 +317,12 @@ class DeckFragment :BaseFragment() {
         }
         var deckToSaved :Deck ?= null
         try {
-            deckToSaved = GsonUtils.fromJson<Deck>(ClipUtil.readText(),Deck::class.java)
-                .apply { this.deckId = 0 }
+            deckToSaved = StringUtils.myJson2Deck(tempText).apply { this.deckId = 0 }
+//            deckToSaved = GsonUtils.fromJson<Deck>(ClipUtil.readText(),Deck::class.java)
+//                .apply { this.deckId = 0 }
         } catch (e: Exception) {
-            Log.e(TAG, "onLongClick: 错误的json数据")
-            showShortToast("错误的json数据")
+            Log.e(TAG, "onLongClick: 错误的卡组代码数据")
+            showShortToast(getString(R.string.error_deck_data))
             return
         }
         if (deckToSaved != null && deckToSaved.deckId == 0){

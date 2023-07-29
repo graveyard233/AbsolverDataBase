@@ -67,6 +67,10 @@ class SettingConfigFragment :BaseFragment() {
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeAskBeforeImportDeck(isChecked)
             }
+            settingConfigSwitchShowSeqDetail.setOnCheckedChangeListener { btn, isChecked ->
+                if (!btn.isPressed) return@setOnCheckedChangeListener
+                settingState.changeShowSeqDetailWhenSharedDeck(isChecked)
+            }
             settingConfigSwitchUseCNEditionMod.setOnCheckedChangeListener { btn, isChecked ->
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeUseCNEditionMod(isChecked)
@@ -150,6 +154,14 @@ class SettingConfigFragment :BaseFragment() {
                     Log.i(TAG, "askBeforeImportDeckFlow: flow->$it isChecked->${configBinding?.settingConfigSwitchAskBeforeImport?.isChecked}")
                     configBinding?.settingConfigSwitchAskBeforeImport?.isChecked = it
 //                    Log.i(TAG, "askBeforeImportDeckFlow: ${SettingRepository.isNeedAskBeforeImportPreference.getOrDefault()}")
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.showSeqDetailWhenSharedDeckFlow.collectLatest {
+                    Log.i(TAG, "showSeqDetailWhenSharedDeckFlow: 接收到数据 $it")
+                    configBinding?.settingConfigSwitchShowSeqDetail?.isChecked = it
                 }
             }
         }

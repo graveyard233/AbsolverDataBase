@@ -63,6 +63,15 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.useWhatThemePreference.set { whatTheme }
         }
     }
+    val showSeqDetailWhenSharedDeckFlow :StateFlow<Boolean> = repository.isShowSeqDetailWhenSharedDeckPreference.asFlow().map {
+        it ?: false
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
+    fun changeShowSeqDetailWhenSharedDeck(boolean: Boolean){
+        repository.isShowSeqDetailWhenSharedDeck = boolean
+        viewModelScope.launch {
+            repository.isShowSeqDetailWhenSharedDeckPreference.set { boolean }
+        }
+    }
 }
 
 class SettingViewModelFactory(private val repository: SettingRepository) :ViewModelProvider.Factory{

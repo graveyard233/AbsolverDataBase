@@ -51,6 +51,23 @@ class DeckEditState(private val repository: DeckEditRepository,
         }
     }
 
+    suspend fun getSeqDetailFromDeck(deck: Deck) :String{
+        // TODO: 有待完成获取额外攻击序列文本
+        if (SettingRepository.isUseCNEditionMod){
+            val list1 = repository.getCEsWithMirrorByBoxes(deck.sequenceUpperRight)
+        } else {
+
+        }
+        return "// seq1\n" +
+                "// seq2\n" +
+                "// seq3\n" +
+                "// seq4\n" +
+                "// opt1\n" +
+                "// opt2\n" +
+                "// opt3\n" +
+                "// opt4\n"
+    }
+
     val deckInSaved = savedState.getStateFlow("deckInSaved",DeckGenerate.generateEmptyDeck())
         .shareIn(
             scope = viewModelScope,

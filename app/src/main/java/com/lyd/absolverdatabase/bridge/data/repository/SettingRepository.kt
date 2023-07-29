@@ -25,4 +25,7 @@ object SettingRepository :DataStoreOwner(name = "setting") {
 
     var hadShowTipHowToEditDeckMsg :Boolean = true
     val hadShowTipHowToEditDeckMsgPreference by booleanPreference(default = true)
+
+    var isShowSeqDetailWhenSharedDeck :Boolean = false
+    val isShowSeqDetailWhenSharedDeckPreference by booleanPreference(default = false)
 }
