@@ -1,6 +1,7 @@
 package com.lyd.absolverdatabase.ui.page
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -135,6 +137,8 @@ class SettingDatabaseFragment :BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.setting_database_shared)
     }
 
     override fun onCreateView(
@@ -148,6 +152,7 @@ class SettingDatabaseFragment :BaseFragment() {
         setDbBinding?.lifecycleOwner = viewLifecycleOwner
 
         setDbBinding?.apply {
+            ViewCompat.setTransitionName(settingDatabaseDatabaseTitle,"DatabaseTitle")
             settingDatabaseSyncOriginFromLocal.setOnClickListener(object : OnAntiShakeClickListener() {
                 override fun antiShakeClick(view: View?) {
                     settingDatabaseState.syncOriginTable(whenFinish = {

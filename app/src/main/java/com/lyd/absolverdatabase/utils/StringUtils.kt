@@ -62,14 +62,15 @@ object StringUtils {
     private val noTagS = "<no>"
     private val noTagE = "<_no>"
 
-    fun deck2MyJson(deck :Deck) :String{
+    fun deck2MyJson(deck :Deck,moreDetail :String = "") :String{
         sb.clear()
         sb.apply {
 //            append("$idTagS${deck.deckId}$idTagE")// 因为id总要变成-2，所以这里没有必要写上卡组id
             if (SettingRepository.isShowSeqDetailWhenSharedDeck){// 如果要显示招式名称
-
+                if (moreDetail.isNotEmpty()){
+                    append(moreDetail)
+                }
             }
-
 
             append("$naTagS${deck.name}$naTagE")
             append("$tyTagS${deck.deckType}$tyTagE")

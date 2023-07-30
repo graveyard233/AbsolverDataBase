@@ -15,8 +15,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.NonNull
 import androidx.annotation.StyleRes
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -42,6 +40,7 @@ import com.lyd.absolverdatabase.ui.widgets.SpacesItemDecoration
 import com.lyd.absolverdatabase.utils.*
 import com.lyd.architecture.utils.Utils
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.runBlocking
 import okhttp3.internal.toHexString
 import java.util.Base64
 import java.util.Locale
@@ -79,11 +78,14 @@ class DeckFragment :BaseFragment() {
                     createTime = System.currentTimeMillis()
                     updateTime = System.currentTimeMillis()
                 }
+                var tempDetail = ""
                 if (SettingRepository.isShowSeqDetailWhenSharedDeck){// 如果要显示攻击序列内的招式名称，则要在外面额外加
                     // TODO: 在这里获取提前准备好的额外文本
-                    editState
+                    tempDetail = runBlocking {
+                        editState.getSeqDetailFromDeck(whatDeck)
+                    }
                 }
-                val deckForShareText = StringUtils.deck2MyJson(whatDeck)
+                val deckForShareText = StringUtils.deck2MyJson(whatDeck, moreDetail = tempDetail)
                 Log.i(TAG, "长按分享的卡组代码: $deckForShareText")
                 // 将卡组数据写入剪贴板
                 ClipUtil.copyText(deckForShareText)

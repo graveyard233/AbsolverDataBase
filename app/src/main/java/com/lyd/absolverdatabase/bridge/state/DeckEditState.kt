@@ -9,9 +9,13 @@ import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.ui.page.DeckEditFragment
 import com.lyd.absolverdatabase.ui.page.MoveSelectFragment
 import com.lyd.absolverdatabase.utils.DeckGenerate
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.Locale
+import kotlin.system.measureTimeMillis
 
 /**用于[DeckEditFragment]和[MoveSelectFragment]，在这里写的函数要标注好给哪个fragment用*/
 class DeckEditState(private val repository: DeckEditRepository,
@@ -52,20 +56,97 @@ class DeckEditState(private val repository: DeckEditRepository,
     }
 
     suspend fun getSeqDetailFromDeck(deck: Deck) :String{
-        // TODO: 有待完成获取额外攻击序列文本
+        // TODO: 使用async来实现同时获取数据来缩减时间
         if (SettingRepository.isUseCNEditionMod){
-            val list1 = repository.getCEsWithMirrorByBoxes(deck.sequenceUpperRight)
+            val seq0 = getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceUpperRight))
+            val seq1 = getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceUpperLeft))
+            val seq2 = getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceLowerLeft))
+            val seq3 = getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceLowerRight))
+            val opt0 = getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperRight))
+            val opt1 = getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperLeft))
+            val opt2 = getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalLowerLeft))
+            val opt3 = getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperRight))
+            return "# ↗:${seq0}\n" +
+                    "# ↖:${seq1}\n" +
+                    "# ↙:${seq2}\n" +
+                    "# ↘:${seq3}\n" +
+                    "# ↗:${opt0}\n" +
+                    "# ↖:${opt1}\n" +
+                    "# ↙:${opt2}\n" +
+                    "# ↘:${opt3}\n"
+
         } else {
+            val seq0 = getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperRight))
+            val seq1 = getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperLeft))
+            val seq2 = getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerLeft))
+            val seq3 = getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerRight))
+            val opt0 = getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperRight))
+            val opt1 = getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperLeft))
+            val opt2 = getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalLowerLeft))
+            val opt3 = getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperRight))
+            return "# ↗:${seq0}\n" +
+                    "# ↖:${seq1}\n" +
+                    "# ↙:${seq2}\n" +
+                    "# ↘:${seq3}\n" +
+                    "# ↗:${opt0}\n" +
+                    "# ↖:${opt1}\n" +
+                    "# ↙:${opt2}\n" +
+                    "# ↘:${opt3}\n"
 
         }
-        return "// seq1\n" +
-                "// seq2\n" +
-                "// seq3\n" +
-                "// seq4\n" +
-                "// opt1\n" +
-                "// opt2\n" +
-                "// opt3\n" +
-                "// opt4\n"
+    }
+    private fun getSeqDetail(seqList: List<MoveBox>) :String{
+        if (SettingRepository.isUseCNEditionMod){
+            return seqList.map {
+                if (it.moveId < 0){
+                    "_"
+                } else if (Locale.getDefault().toLanguageTag().startsWith("zh")){// 只要是中文
+                    it.moveCE?.name ?: "_"
+                } else {
+                    it.moveCE?.name_en?.ifEmpty {
+                        it.moveCE?.name ?: "_"
+                    }
+                }
+            }.joinToString()
+        } else {
+            return seqList.map {
+                if (it.moveId < 0){
+                    "_"
+                } else if (Locale.getDefault().toLanguageTag().startsWith("zh")){// 只要是中文
+                    it.moveOrigin?.name ?: "_"
+                } else {
+                    it.moveOrigin?.name_en?.ifEmpty {
+                        it.moveOrigin?.name ?: "_"
+                    }
+                }
+            }.joinToString()
+        }
+
+    }
+    private fun getOptDetail(opt :MoveBox) :String{
+        return opt.let {
+            if (SettingRepository.isUseCNEditionMod){
+                if (it.moveId < 0){
+                    "_"
+                } else if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+                    it.moveCE!!.name
+                } else {
+                    it.moveCE!!.name_en.ifEmpty {
+                        it.moveCE!!.name
+                    }
+                }
+            } else {
+                if (it.moveId < 0){
+                    "_"
+                } else if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+                    it.moveOrigin!!.name
+                } else {
+                    it.moveOrigin!!.name_en.ifEmpty {
+                        it.moveOrigin!!.name
+                    }
+                }
+            }
+        }
     }
 
     val deckInSaved = savedState.getStateFlow("deckInSaved",DeckGenerate.generateEmptyDeck())

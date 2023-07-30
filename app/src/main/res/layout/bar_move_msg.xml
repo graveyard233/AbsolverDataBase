@@ -242,6 +242,11 @@
             android:visibility="gone"
             tools:visibility="visible">
 
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -252,7 +257,7 @@
                     android:id="@+id/msg_ceMode_strengthBonus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
+                    android:gravity="center"
                     android:textAppearance="?textAppearanceBodyMedium"
                     tools:text="力量:A" />
 
@@ -260,7 +265,7 @@
                     android:id="@+id/msg_ceMode_agilityBonus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
+                    android:gravity="center"
                     android:textAppearance="?textAppearanceBodyMedium"
                     tools:text="敏捷:B" />
 
@@ -268,7 +273,7 @@
                     android:id="@+id/msg_ceMode_flexibleBonus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
+                    android:gravity="center"
                     android:textAppearance="?textAppearanceBodyMedium"
                     tools:text="机动:C" />
 
@@ -284,7 +289,7 @@
                     android:id="@+id/msg_ceMode_cancelPoint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
+                    android:gravity="start"
                     android:textAppearance="?textAppearanceBodyMedium"
                     tools:text="取消点:5" />
 
@@ -292,7 +297,7 @@
                     android:id="@+id/msg_ceMode_hitFrame"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
+                    android:gravity="start"
                     android:textAppearance="?textAppearanceBodyMedium"
                     tools:text="打击帧:7" />
 
@@ -300,7 +305,7 @@
                     android:id="@+id/msg_ceMode_yellowAttackFrame"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
+                    android:gravity="start"
                     android:textAppearance="?textAppearanceBodyMedium"
                     tools:text="黄攻帧:2" />
 

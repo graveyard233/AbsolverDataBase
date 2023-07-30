@@ -9,6 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.lyd.absolverdatabase.BuildConfig
@@ -57,8 +60,18 @@ class SettingFragment : BaseFragment() {
             settingTitleConfig.setOnClickListener {
                 nav().navigate(SettingFragmentDirections.actionSettingFragmentToSettingConfigFragment())
             }
+            ViewCompat.setTransitionName(settingTitleDatabase,"DatabaseTitle")
             settingTitleDatabase.setOnClickListener {
-                nav().navigate(SettingFragmentDirections.actionSettingFragmentToSettingDatabaseFragment())
+                val extra = FragmentNavigatorExtras(settingTitleDatabase to "DatabaseTitle")
+                nav().navigate(/*SettingFragmentDirections.actionSettingFragmentToSettingDatabaseFragment(),*/
+                    R.id.action_settingFragment_to_settingDatabaseFragment,
+                    null,null,
+//                    NavOptions.Builder().setEnterAnim(androidx.navigation.ui.R.anim.nav_default_enter_anim)
+//                        .setExitAnim(androidx.navigation.ui.R.anim.nav_default_exit_anim)
+//                        .setPopEnterAnim(androidx.navigation.ui.R.animator.nav_default_pop_enter_anim)
+//                        .setPopExitAnim(androidx.navigation.ui.R.animator.nav_default_pop_exit_anim)
+//                        .build(),
+                    navigatorExtras = extra)
             }
             settingItemThanks.setOnClickListener {
                 nav().navigate(SettingFragmentDirections.actionSettingFragmentToSettingLicenseFragment())
