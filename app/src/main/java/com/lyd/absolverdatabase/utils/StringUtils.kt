@@ -62,14 +62,13 @@ object StringUtils {
     private val noTagS = "<no>"
     private val noTagE = "<_no>"
 
+    /**将卡组按照我的方法压缩成文本*/
     fun deck2MyJson(deck :Deck,moreDetail :String = "") :String{
         sb.clear()
         sb.apply {
 //            append("$idTagS${deck.deckId}$idTagE")// 因为id总要变成-2，所以这里没有必要写上卡组id
-            if (SettingRepository.isShowSeqDetailWhenSharedDeck){// 如果要显示招式名称
-                if (moreDetail.isNotEmpty()){
-                    append(moreDetail)
-                }
+            if (SettingRepository.isShowSeqDetailWhenSharedDeck && moreDetail.isNotEmpty()){// 如果要显示招式名称
+                append(moreDetail)
             }
 
             append("$naTagS${deck.name}$naTagE")
@@ -171,6 +170,7 @@ object StringUtils {
         return sb.toString()
     }
 
+    /**将文本解压成卡组*/
     fun myJson2Deck(myJson :String) :Deck{
         val sTagLength = 4
         val eTagLength = 5

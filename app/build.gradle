@@ -99,11 +99,11 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
     // 更加强大的recycleAdapter
-    implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0-beta14"
+    implementation "io.github.cymchad:BaseRecyclerViewAdapterHelper:4.0.0"
 
     // glide
     implementation 'com.github.bumptech.glide:glide:4.15.0'
-    kapt 'com.github.bumptech.glide:compiler:4.15.0'
+    ksp 'com.github.bumptech.glide:ksp:4.15.0'
 
     // 下拉刷新
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"

@@ -11,6 +11,7 @@ import com.lyd.absolverdatabase.ui.page.MoveSelectFragment
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -56,42 +57,43 @@ class DeckEditState(private val repository: DeckEditRepository,
     }
 
     suspend fun getSeqDetailFromDeck(deck: Deck) :String{
-        // TODO: 使用async来实现同时获取数据来缩减时间
         if (SettingRepository.isUseCNEditionMod){
-            val seq0 = getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceUpperRight))
-            val seq1 = getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceUpperLeft))
-            val seq2 = getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceLowerLeft))
-            val seq3 = getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceLowerRight))
-            val opt0 = getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperRight))
-            val opt1 = getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperLeft))
-            val opt2 = getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalLowerLeft))
-            val opt3 = getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperRight))
-            return "# ↗:${seq0}\n" +
-                    "# ↖:${seq1}\n" +
-                    "# ↙:${seq2}\n" +
-                    "# ↘:${seq3}\n" +
-                    "# ↗:${opt0}\n" +
-                    "# ↖:${opt1}\n" +
-                    "# ↙:${opt2}\n" +
-                    "# ↘:${opt3}\n"
+            val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+            val seq0 = scope.async { getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceUpperRight)) }
+            val seq1 = scope.async { getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceUpperLeft)) }
+            val seq2 = scope.async { getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceLowerLeft)) }
+            val seq3 = scope.async { getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceLowerRight)) }
+            val opt0 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperRight)) }
+            val opt1 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperLeft)) }
+            val opt2 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalLowerLeft)) }
+            val opt3 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperRight)) }
+            return "# ↗:${seq0.await()}\n" +
+                    "# ↖:${seq1.await()}\n" +
+                    "# ↙:${seq2.await()}\n" +
+                    "# ↘:${seq3.await()}\n" +
+                    "# ↗:${opt0.await()}\n" +
+                    "# ↖:${opt1.await()}\n" +
+                    "# ↙:${opt2.await()}\n" +
+                    "# ↘:${opt3.await()}\n"
 
         } else {
-            val seq0 = getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperRight))
-            val seq1 = getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperLeft))
-            val seq2 = getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerLeft))
-            val seq3 = getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerRight))
-            val opt0 = getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperRight))
-            val opt1 = getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperLeft))
-            val opt2 = getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalLowerLeft))
-            val opt3 = getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperRight))
-            return "# ↗:${seq0}\n" +
-                    "# ↖:${seq1}\n" +
-                    "# ↙:${seq2}\n" +
-                    "# ↘:${seq3}\n" +
-                    "# ↗:${opt0}\n" +
-                    "# ↖:${opt1}\n" +
-                    "# ↙:${opt2}\n" +
-                    "# ↘:${opt3}\n"
+            val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+            val seq0 = scope.async { getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperRight)) }
+            val seq1 = scope.async { getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperLeft)) }
+            val seq2 = scope.async { getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerLeft)) }
+            val seq3 = scope.async { getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerRight)) }
+            val opt0 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperRight)) }
+            val opt1 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperLeft)) }
+            val opt2 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalLowerLeft)) }
+            val opt3 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperRight)) }
+            return "# ↗:${seq0.await()}\n" +
+                    "# ↖:${seq1.await()}\n" +
+                    "# ↙:${seq2.await()}\n" +
+                    "# ↘:${seq3.await()}\n" +
+                    "# ↗:${opt0.await()}\n" +
+                    "# ↖:${opt1.await()}\n" +
+                    "# ↙:${opt2.await()}\n" +
+                    "# ↘:${opt3.await()}\n"
 
         }
     }

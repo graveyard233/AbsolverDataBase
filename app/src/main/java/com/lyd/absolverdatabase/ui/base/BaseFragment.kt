@@ -11,6 +11,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.bridge.callback.SharedViewModel
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 
 open class BaseFragment : Fragment() {
 
@@ -20,6 +21,7 @@ open class BaseFragment : Fragment() {
     // private var _sharedViewModel: SharedViewModel
     // 贯穿整个项目的（只会让App(Application)初始化一次）
     protected lateinit var sharedViewModel: SharedViewModel // 共享区域的ViewModel
+    protected val llog by lazy { LLog }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

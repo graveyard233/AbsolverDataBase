@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Archive
 import com.lyd.absolverdatabase.utils.TimeUtils.toDateStr
@@ -19,7 +19,7 @@ class LearnVideoAdapter : BaseQuickAdapter<Archive, LearnVideoAdapter.VH>() {
 
     override fun onBindViewHolder(holder: VH, position: Int, item: Archive?) {
         item?.run {
-            GlideApp.with(holder.img)
+            Glide.with(holder.img)
                 .load(pic)
                 .placeholder(R.drawable.ic_video_loading)
                 .error(R.drawable.ic_video_load_error)

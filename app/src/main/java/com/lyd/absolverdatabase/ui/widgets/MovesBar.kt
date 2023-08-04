@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
-import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
@@ -82,7 +82,7 @@ class MovesBar : ConstraintLayout {
         updateOneMove(0)
         updateOneMove(1)
         updateOneMove(2)
-//        GlideApp.with(move0)
+//        Glide.with(move0)
 //            .load("${AssetsUtil.rootPath+AssetsUtil.movesPath}${idList[0]}.jpg")
 //            .into(move0)
 
@@ -119,13 +119,13 @@ class MovesBar : ConstraintLayout {
                 changeMoveImg(move0,boxList[position].moveId)
                 if (SettingRepository.isUseCNEditionMod){
                     boxList[position].moveCE?.apply {
-                        GlideApp.with(side1)
+                        Glide.with(side1)
                             .load(SideUtil.imgIdForMoves(endSide))
                             .into(side1)
                     }
                 } else {
                     boxList[position].moveOrigin?.apply {
-                        GlideApp.with(side1)
+                        Glide.with(side1)
                             .load(SideUtil.imgIdForMoves(endSide))
                             .into(side1)
                     }
@@ -135,19 +135,19 @@ class MovesBar : ConstraintLayout {
                 changeMoveImg(move1,boxList[position].moveId)
                 if (SettingRepository.isUseCNEditionMod){
                     boxList[position].moveCE?.apply {
-                        GlideApp.with(side1)
+                        Glide.with(side1)
                             .load(SideUtil.imgIdForMoves(startSide))
                             .into(side1)
-                        GlideApp.with(side2)
+                        Glide.with(side2)
                             .load(SideUtil.imgIdForMoves(endSide))
                             .into(side2)
                     }
                 } else {
                     boxList[position].moveOrigin?.apply {
-                        GlideApp.with(side1)
+                        Glide.with(side1)
                             .load(SideUtil.imgIdForMoves(startSide))
                             .into(side1)
-                        GlideApp.with(side2)
+                        Glide.with(side2)
                             .load(SideUtil.imgIdForMoves(endSide))
                             .into(side2)
                     }
@@ -157,19 +157,19 @@ class MovesBar : ConstraintLayout {
                 changeMoveImg(move2,boxList[position].moveId)
                 if (SettingRepository.isUseCNEditionMod){
                     boxList[position].moveCE?.apply {
-                        GlideApp.with(side2)
+                        Glide.with(side2)
                             .load(SideUtil.imgIdForMoves(startSide))
                             .into(side2)
-                        GlideApp.with(side3)
+                        Glide.with(side3)
                             .load(SideUtil.imgIdForMoves(endSide))
                             .into(side3)
                     }
                 } else {
                     boxList[position].moveOrigin?.apply {
-                        GlideApp.with(side2)
+                        Glide.with(side2)
                             .load(SideUtil.imgIdForMoves(startSide))
                             .into(side2)
-                        GlideApp.with(side3)
+                        Glide.with(side3)
                             .load(SideUtil.imgIdForMoves(endSide))
                             .into(side3)
                     }
@@ -180,7 +180,7 @@ class MovesBar : ConstraintLayout {
 
     private fun changeMoveImg(imageView: ImageView,moveId :Int){
         if (moveId > 0){
-            GlideApp.with(imageView)
+            Glide.with(imageView)
                 .load(AssetsUtil.getBitmapByMoveId(context, moveId = moveId))
                 .into(imageView)
             if (context.isNightMode()){

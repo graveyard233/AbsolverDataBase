@@ -10,6 +10,11 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.lyd.absolverdatabase.bridge.data.repository.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.db.AppDatabase
+import com.lyd.absolverdatabase.utils.logUtils.LLog
+import com.lyd.absolverdatabase.utils.logUtils.interceptor.LinearInterceptor
+import com.lyd.absolverdatabase.utils.logUtils.interceptor.LogcatInterceptor
+import com.lyd.absolverdatabase.utils.logUtils.interceptor.PackToLogInterceptor
+import com.lyd.absolverdatabase.utils.logUtils.interceptor.WriteInInterceptor
 import com.lyd.architecture.utils.Utils
 import com.tencent.mmkv.MMKV
 import java.util.Locale
@@ -63,8 +68,17 @@ class App : Application(), ViewModelStoreOwner {
             Log.i(TAG, "onCreate: use AppCompatDelegate.getApplicationLocales()[0]?.toLanguageTag()")
             AppCompatDelegate.getApplicationLocales()[0]?.toLanguageTag() ?: "error"
         }
-        Log.i(TAG, "onCreate: this language -> $curLanguage")
 
+        LLog.apply {
+            setDebug(true,true)
+            addInterceptor(LogcatInterceptor())
+            addInterceptor(LinearInterceptor().apply { isLoggable = {
+                !BuildConfig.DEBUG
+            }})
+            addInterceptor(PackToLogInterceptor())
+            addInterceptor(WriteInInterceptor())
+        }
+        LLog.i(msg = "onCreate: this language -> $curLanguage")
         // 把初始化阶段的代码写在了manifest，交给startup来处理，不知道从哪里引入了startup的库，可能依赖混乱了吧，假如不想写在manifest，可以用下面的手动初始化也行，目的就是要拿到application
 //        AppInitializer.getInstance(applicationContext).initializeComponent(DataStoreInitializer::class.java)
     }

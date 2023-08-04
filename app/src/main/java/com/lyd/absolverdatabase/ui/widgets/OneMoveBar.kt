@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
-import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
@@ -59,7 +59,7 @@ class OneMoveBar :LinearLayout{
 
     fun updateMove(box :MoveBox){
         if (box.moveId != -1){
-            GlideApp.with(img)
+            Glide.with(img)
                 .load(AssetsUtil.getBitmapByMoveId(context,box.moveId))
                 .into(img)
             if (context.isNightMode()){

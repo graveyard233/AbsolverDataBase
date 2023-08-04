@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
 import com.lyd.absolverdatabase.bridge.data.bean.Style
@@ -22,7 +22,7 @@ class DeckAdapter :BaseQuickAdapter<Deck,DeckAdapter.VH>()  {
 
     override fun onBindViewHolder(holder: VH, position: Int, item: Deck?) {
         item?.apply {
-            GlideApp.with(holder.imgStyle)
+            Glide.with(holder.imgStyle)
                 .load(StyleUtil.styleId(deckStyle))
                 .error(R.drawable.ic_video_load_error)
                 .into(holder.imgStyle)

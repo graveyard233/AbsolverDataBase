@@ -1,0 +1,18 @@
+package com.lyd.absolverdatabase.utils.logUtils
+
+import android.util.Log
+
+class Chain(
+    private val interceptors: List<Interceptor<in Nothing>>,
+    private val index :Int = 0
+) {
+    // 责任链向后传递 Any 类型的日志
+    fun proceed(tag :String, message :Any, priority :Int,vararg args :Any){
+        val next = Chain(interceptors, index + 1)
+        try {
+            (interceptors.getOrNull(index) as? Interceptor<Any>)?.log(tag,message,priority,next,*args)
+        } catch (e :Exception){
+            Log.d("LLog", "Chain.proceed[tag, message, priority, args]: e=${e}")
+        }
+    }
+}

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.bridge.callback.SharedViewModel
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 import com.lyd.architecture.data.manager.NetworkStateManager
 import com.lyd.architecture.utils.AdaptScreenUtils
 import com.lyd.architecture.utils.BarUtils
@@ -17,6 +18,7 @@ import com.lyd.architecture.utils.ScreenUtils
 open class BaseActivity :AppCompatActivity() {
     // 贯穿整个项目的（只会让App(Application)初始化一次）
     protected lateinit var mSharedViewModel: SharedViewModel
+    protected val llog by lazy { LLog }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

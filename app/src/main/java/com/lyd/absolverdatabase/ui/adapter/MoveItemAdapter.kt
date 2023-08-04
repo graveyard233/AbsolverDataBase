@@ -8,8 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Guideline
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveForSelect
 import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
@@ -21,7 +21,7 @@ class MoveItemAdapter :BaseQuickAdapter<MoveForSelect,MoveItemAdapter.VH>() {
 
     override fun onBindViewHolder(holder: VH, position: Int, item: MoveForSelect?) {
         item?.run {
-            GlideApp.with(holder.img)
+            Glide.with(holder.img)
                 .load(AssetsUtil.getBitmapByMoveId(context, moveId = if (SettingRepository.isUseCNEditionMod) item.moveCE.id else item.moveOrigin.id))
                 .error(R.drawable.ic_video_load_error)
                 .into(holder.img)

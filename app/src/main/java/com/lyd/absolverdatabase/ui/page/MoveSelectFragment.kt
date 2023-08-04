@@ -18,10 +18,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
 import com.lyd.absolverdatabase.App
-import com.lyd.absolverdatabase.GlideApp
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.*
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
@@ -718,7 +718,7 @@ class MoveSelectFragment :BaseFragment(){
         val tempMove = moveForSelect.moveOrigin
         dataBinding?.moveSelectInclude?.apply {
             // 设置第一部分
-            GlideApp.with(msgImg)
+            Glide.with(msgImg)
                 .load(AssetsUtil.getBitmapByMoveId(requireContext(), moveId = tempMove.id))
                 .into(msgImg)
             val tempCeBg = if (requireContext().isNightMode()){
@@ -729,10 +729,10 @@ class MoveSelectFragment :BaseFragment(){
             msgImg.setBackgroundColor(if (tempMove.id > 197) tempCeBg else resources.getColor(R.color.transparent))
 
             // 设置第二部分
-            GlideApp.with(msgStartSideImg)
+            Glide.with(msgStartSideImg)
                 .load(SideUtil.imgIdForMoves(tempMove.startSide))
                 .into(msgStartSideImg)
-            GlideApp.with(msgEndSideImg)
+            Glide.with(msgEndSideImg)
                 .load(SideUtil.imgIdForMoves(tempMove.endSide))
                 .into(msgEndSideImg)
             msgName.text = if (Locale.getDefault().toLanguageTag().startsWith("zh")){
@@ -821,7 +821,7 @@ class MoveSelectFragment :BaseFragment(){
         val tempMove = moveForSelect.moveCE
         dataBinding?.moveSelectInclude?.apply {
             // 设置第一部分
-            GlideApp.with(msgImg)
+            Glide.with(msgImg)
                 .load(AssetsUtil.getBitmapByMoveId(requireContext(), moveId = tempMove.id))
                 .into(msgImg)
             val tempCeBg = if (requireContext().isNightMode()){
@@ -832,10 +832,10 @@ class MoveSelectFragment :BaseFragment(){
             msgImg.setBackgroundColor(if (tempMove.id > 197) tempCeBg else resources.getColor(R.color.transparent))
 
             // 设置第二部分
-            GlideApp.with(msgStartSideImg)
+            Glide.with(msgStartSideImg)
                 .load(SideUtil.imgIdForMoves(tempMove.startSide))
                 .into(msgStartSideImg)
-            GlideApp.with(msgEndSideImg)
+            Glide.with(msgEndSideImg)
                 .load(SideUtil.imgIdForMoves(tempMove.endSide))
                 .into(msgEndSideImg)
             msgName.text = if (Locale.getDefault().toLanguageTag().startsWith("zh")){
@@ -934,12 +934,12 @@ class MoveSelectFragment :BaseFragment(){
         dataBinding?.moveSelectInclude?.apply {
             val textHolder = null
             // 移除第一部分
-            GlideApp.with(msgImg).clear(msgImg)
+            Glide.with(msgImg).clear(msgImg)
             msgImg.setBackgroundColor(resources.getColor(R.color.transparent))
 
             // 移除第二部分
-            GlideApp.with(msgStartSideImg).clear(msgStartSideImg)
-            GlideApp.with(msgEndSideImg).clear(msgEndSideImg)
+            Glide.with(msgStartSideImg).clear(msgStartSideImg)
+            Glide.with(msgEndSideImg).clear(msgEndSideImg)
             msgName.text = textHolder
 
             msgStrength.text = textHolder
