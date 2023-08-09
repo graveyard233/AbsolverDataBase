@@ -13,16 +13,20 @@
         <action
             android:id="@+id/action_settingFragment_to_settingConfigFragment"
             app:destination="@id/settingConfigFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/slide_enter_to_left"
+            app:exitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_enter_to_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
         <action
             android:id="@+id/action_settingFragment_to_settingDatabaseFragment"
             app:destination="@id/settingDatabaseFragment" />
         <action
             android:id="@+id/action_settingFragment_to_settingLicenseFragment"
-            app:destination="@id/settingLicenseFragment" />
+            app:destination="@id/settingLicenseFragment"
+            app:enterAnim="@anim/slide_enter_to_left"
+            app:exitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_enter_to_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
     </fragment>
     <fragment
         android:id="@+id/settingConfigFragment"

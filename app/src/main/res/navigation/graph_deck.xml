@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_deck">
         <action
             android:id="@+id/action_deckFragment_to_deckEditFragment"
-            app:destination="@id/deckEditFragment" />
+            app:destination="@id/deckEditFragment"
+            app:enterAnim="@anim/slide_enter_to_left"
+            app:exitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_enter_to_left"
+            app:popExitAnim="@anim/slide_out_to_right"/>
     </fragment>
     <fragment
         android:id="@+id/deckEditFragment"
@@ -24,7 +28,11 @@
             app:argType="com.lyd.absolverdatabase.bridge.data.bean.Deck" />
         <action
             android:id="@+id/action_deckEditFragment_to_moveSelectFragment"
-            app:destination="@id/moveSelectFragment" />
+            app:destination="@id/moveSelectFragment"
+            app:enterAnim="@anim/slide_enter_to_left"
+            app:exitAnim="@anim/slide_out_to_right"
+            app:popEnterAnim="@anim/slide_enter_to_left"
+            app:popExitAnim="@anim/slide_out_to_right"/>
     </fragment>
     <fragment
         android:id="@+id/moveSelectFragment"
