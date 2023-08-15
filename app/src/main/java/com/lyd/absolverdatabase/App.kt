@@ -10,6 +10,9 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.lyd.absolverdatabase.bridge.data.repository.*
 import com.lyd.absolverdatabase.bridge.data.repository.database.db.AppDatabase
+import com.lyd.absolverdatabase.utils.crashUtils.CrashHelperUtil
+import com.lyd.absolverdatabase.utils.crashUtils.ICrashCallback
+import com.lyd.absolverdatabase.utils.crashUtils.JavaCrashHandler
 import com.lyd.absolverdatabase.utils.logUtils.LLog
 import com.lyd.absolverdatabase.utils.logUtils.interceptor.LinearInterceptor
 import com.lyd.absolverdatabase.utils.logUtils.interceptor.LogcatInterceptor
@@ -81,6 +84,15 @@ class App : Application(), ViewModelStoreOwner {
         LLog.i(msg = "onCreate: this language -> $curLanguage")
         // 把初始化阶段的代码写在了manifest，交给startup来处理，不知道从哪里引入了startup的库，可能依赖混乱了吧，假如不想写在manifest，可以用下面的手动初始化也行，目的就是要拿到application
 //        AppInitializer.getInstance(applicationContext).initializeComponent(DataStoreInitializer::class.java)
+
+
+        JavaCrashHandler.get().init(this,object :ICrashCallback{
+            override fun onCrash(ex: Throwable) {
+                LLog.e(tag = "Crash", msg = ex)
+
+                CrashHelperUtil.dumpExceptionToFile(this@App,ex)
+            }
+        })
     }
 
     // 专门给 BaseActivity 与 BaseFragment 用的

@@ -28,4 +28,6 @@ object SettingRepository :DataStoreOwner(name = "setting") {
 
     var isShowSeqDetailWhenSharedDeck :Boolean = false
     val isShowSeqDetailWhenSharedDeckPreference by booleanPreference(default = false)
+
+    var isRecordCrashMsg :Boolean = false
 }
