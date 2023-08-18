@@ -1,8 +1,10 @@
 package com.lyd.absolverdatabase.bridge.state
 
+import androidx.annotation.IntRange
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -70,6 +72,33 @@ class SettingState(private val repository :SettingRepository, private val state 
         repository.isShowSeqDetailWhenSharedDeck = boolean
         viewModelScope.launch {
             repository.isShowSeqDetailWhenSharedDeckPreference.set { boolean }
+        }
+    }
+    val recordCrashMsgFlow :StateFlow<Boolean> = repository.isRecordCrashMsgPreference.asFlow().map {
+        it ?: true
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),true)
+    fun changeRecordCrashMsg(boolean: Boolean){
+        repository.isRecordCrashMsg = boolean
+        viewModelScope.launch {
+            repository.isRecordCrashMsgPreference.set { boolean }
+        }
+    }
+    val logPrintLevelFlow :StateFlow<Int> = repository.logPrintLevelPreference.asFlow().map {
+        it ?: 3
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),3)
+    fun changeLogPrintLevel(@IntRange(from = 1, to = 6) level: Int){
+        repository.logPrintLevel = level
+        viewModelScope.launch {
+            repository.logPrintLevelPreference.set { level }
+        }
+    }
+    val logWriteLevelFlow :StateFlow<Int> = repository.logWriteLevelPreference.asFlow().map {
+        it ?: 4
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),4)
+    fun changeLogWriteLevel(@IntRange(from = 3,to = 6) level: Int){
+        repository.logWriteLevel = level
+        viewModelScope.launch {
+            repository.logWriteLevelPreference.set { level }
         }
     }
 }

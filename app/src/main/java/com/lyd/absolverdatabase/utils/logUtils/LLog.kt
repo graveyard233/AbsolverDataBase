@@ -11,7 +11,7 @@ object LLog {
     private const val ERROR = 6
 
     /**不打印日志的标志*/
-    const val NONE = 8
+    const val NONE = 1
     /**当前日志过滤等级,默认是[DEBUG],用于过滤logcat打印*/
     var curPriority = DEBUG
 

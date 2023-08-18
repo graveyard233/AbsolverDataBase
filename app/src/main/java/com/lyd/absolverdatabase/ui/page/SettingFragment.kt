@@ -73,6 +73,16 @@ class SettingFragment : BaseFragment() {
 //                        .build(),
                     navigatorExtras = extra)
             }
+            ViewCompat.setTransitionName(settingDev,"DevTitle")
+            settingDev.setOnClickListener{
+                val extra = FragmentNavigatorExtras(settingDev to "DevTitle")
+                nav().navigate(
+                    R.id.action_settingFragment_to_settingDevFragment,
+                    null, null,
+                    navigatorExtras = extra
+                )
+//                nav().navigate(SettingFragmentDirections.actionSettingFragmentToSettingDevFragment())
+            }
             settingItemThanks.setOnClickListener {
                 nav().navigate(SettingFragmentDirections.actionSettingFragmentToSettingLicenseFragment())
             }

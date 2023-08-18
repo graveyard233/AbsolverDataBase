@@ -121,6 +121,11 @@
 
     <string name="restart_app_in_time">一秒后重启应用</string>
 
+    <string name="develop_util">开发工具</string>
+    <string name="save_file_when_crash">收集崩溃日志</string>
+    <string name="log_level_print">日志打印等级</string>
+    <string name="log_level_write">日志写入等级</string>
+
 
     <string name="about_database">数据库相关</string>
     <string name="sync_moveDatabase_from_local">同步原版招式数据</string>

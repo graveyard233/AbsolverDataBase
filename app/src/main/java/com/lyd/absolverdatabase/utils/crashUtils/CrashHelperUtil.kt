@@ -74,11 +74,7 @@ object CrashHelperUtil {
                 }
             }
 
-            LLog.d(msg = "保存崩溃文件 $fileName $file")
-
             pw = PrintWriter(BufferedWriter(FileWriter(file)))
-
-
 
             pw.println(crashHead)
 

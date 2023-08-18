@@ -73,14 +73,19 @@ class App : Application(), ViewModelStoreOwner {
         }
 
         LLog.apply {
-            setDebug(true,true)
+            setDebug(isLoggable = true, methodNameEnable = true)
             addInterceptor(LogcatInterceptor())
             addInterceptor(LinearInterceptor().apply { isLoggable = {
                 !BuildConfig.DEBUG
             }})
             addInterceptor(PackToLogInterceptor())
-            addInterceptor(WriteInInterceptor())
+            addInterceptor(WriteInInterceptor().apply {
+                isLoggable = {
+                    it.data is String
+                }
+            })
         }
+        LLog.e(msg = "当前打印等级是 -> ${SettingRepository.logPrintLevel} LLog的等级是-> ${LLog.curPriority}")
         LLog.i(msg = "onCreate: this language -> $curLanguage")
         // 把初始化阶段的代码写在了manifest，交给startup来处理，不知道从哪里引入了startup的库，可能依赖混乱了吧，假如不想写在manifest，可以用下面的手动初始化也行，目的就是要拿到application
 //        AppInitializer.getInstance(applicationContext).initializeComponent(DataStoreInitializer::class.java)
@@ -90,7 +95,9 @@ class App : Application(), ViewModelStoreOwner {
             override fun onCrash(ex: Throwable) {
                 LLog.e(tag = "Crash", msg = ex)
 
-                CrashHelperUtil.dumpExceptionToFile(this@App,ex)
+                if (SettingRepository.isRecordCrashMsg){
+                    CrashHelperUtil.dumpExceptionToFile(this@App,ex)
+                }
             }
         })
     }

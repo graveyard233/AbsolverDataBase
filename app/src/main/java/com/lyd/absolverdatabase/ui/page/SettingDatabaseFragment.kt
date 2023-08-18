@@ -138,7 +138,7 @@ class SettingDatabaseFragment :BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition = TransitionInflater.from(requireContext())
-            .inflateTransition(R.transition.setting_database_shared)
+            .inflateTransition(R.transition.setting_shared)
     }
 
     override fun onCreateView(

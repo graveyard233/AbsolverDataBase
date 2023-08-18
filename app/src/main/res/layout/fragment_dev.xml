@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/setting_dev_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/develop_util"
+                    style="@style/SettingFragmentTitleText"
+                    app:drawableStartCompat="@drawable/ic_dev" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_split_line" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/setting_dev_switch_saveCrashFile"
+                    style="@style/SettingFragmentSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save_file_when_crash" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    android:paddingStart="20dp"
+                    android:paddingTop="7.5dp"
+                    android:text="@string/log_level_print"/>
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/setting_dev_slider_logLevel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:labelBehavior="withinBounds"
+                    android:value="3"
+                    android:stepSize="1"
+                    android:valueFrom="1"
+                    android:valueTo="6" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    android:paddingStart="20dp"
+                    android:paddingTop="7.5dp"
+                    android:text="@string/log_level_write"/>
+
+<!--
+                <com.google.android.material.slider.RangeSlider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:labelBehavior="withinBounds"
+                    android:stepSize="1"
+                    android:valueFrom="1"
+                    android:valueTo="6" />
+-->
+
+
+            </LinearLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

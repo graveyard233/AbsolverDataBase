@@ -138,6 +138,11 @@
 
     <string name="shake_click">Click Too Often</string>
 
+    <string name="develop_util">Dev</string>
+    <string name="save_file_when_crash">Save message when crash</string>
+    <string name="log_level_print">Log print level</string>
+    <string name="log_level_write">Log write level</string>
+
     <string name="about_app">About</string>
     <string name="author">Developer:graveyard233</string>
     <string name="repositoryText">Repository</string>

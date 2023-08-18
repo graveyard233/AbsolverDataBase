@@ -27,6 +27,9 @@
             app:exitAnim="@anim/slide_out_to_right"
             app:popEnterAnim="@anim/slide_enter_to_left"
             app:popExitAnim="@anim/slide_out_to_right" />
+        <action
+            android:id="@+id/action_settingFragment_to_settingDevFragment"
+            app:destination="@id/settingDevFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingConfigFragment"
@@ -43,4 +46,9 @@
         android:name="com.lyd.absolverdatabase.ui.page.SettingLicenseFragment"
         android:label="SettingLicenseFragment"
         tools:layout="@layout/fragment_setting_license"/>
+    <fragment
+        android:id="@+id/settingDevFragment"
+        android:name="com.lyd.absolverdatabase.ui.page.SettingDevFragment"
+        android:label="SettingDevFragment"
+        tools:layout="@layout/fragment_dev" />
 </navigation>

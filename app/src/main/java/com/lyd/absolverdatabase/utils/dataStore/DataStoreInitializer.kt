@@ -57,6 +57,15 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempShowSeqDetailWhenShared = async {
                     SettingRepository.isShowSeqDetailWhenSharedDeckPreference.getOrDefault()
                 }
+                val tempRecordCrashMsg = async {
+                    SettingRepository.isRecordCrashMsgPreference.getOrDefault()
+                }
+                val tempLogPrintLevel = async {
+                    SettingRepository.logPrintLevelPreference.getOrDefault()
+                }
+                val tempLogWriteLevel = async {
+                    SettingRepository.logWriteLevelPreference.getOrDefault()
+                }
                 SettingRepository.isDialogGaussianBlur = tempGaussianBlur.await()
                 SettingRepository.isNeedAskBeforeImport = tempAskBeforeImport.await()
                 SettingRepository.isUseCNEditionMod = tempUseCNEditionMod.await()
@@ -65,6 +74,9 @@ class DataStoreInitializer : Initializer<Unit> {
                 SettingRepository.useWhatTheme = tempUseWhatTheme.await()
                 SettingRepository.hadShowTipHowToEditDeckMsg = tempHadShowTipHowToEditDeckMsg.await()
                 SettingRepository.isShowSeqDetailWhenSharedDeck = tempShowSeqDetailWhenShared.await()
+                SettingRepository.isRecordCrashMsg = tempRecordCrashMsg.await()
+                SettingRepository.logPrintLevel = tempLogPrintLevel.await()
+                SettingRepository.logWriteLevel = tempLogWriteLevel.await()
 
                 when(SettingRepository.useNightMode){
                     true -> {
