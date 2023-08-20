@@ -13,7 +13,13 @@ object LLog {
     /**不打印日志的标志*/
     const val NONE = 1
     /**当前日志过滤等级,默认是[DEBUG],用于过滤logcat打印*/
-    var curPriority = DEBUG
+//    var curPriority = DEBUG
+
+    var minPrintPriority = DEBUG
+    var maxPrintPriority = ERROR
+
+    var minWritePriority = INFO
+    var maxWritePriority = ERROR
 
     private val interceptors = mutableListOf<Interceptor<in Nothing>>()
     private val chain = Chain(interceptors)

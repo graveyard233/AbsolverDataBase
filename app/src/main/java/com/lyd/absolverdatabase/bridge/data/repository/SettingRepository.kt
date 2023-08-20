@@ -37,15 +37,21 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     val isRecordCrashMsgPreference by booleanPreference(default = true)
 
     /**[LLog]的日志打印等级*/
-    var logPrintLevel :Int = 3
+    var logPrintLevel :Int = 36
         set(value) {
-            LLog.curPriority = value
+            LLog.minPrintPriority = value / 10
+            LLog.maxPrintPriority = value % 10
             field = value
         }
-    val logPrintLevelPreference by intPreference(default = 3)
+    val logPrintLevelPreference by intPreference(default = 36)
 
     /**[LLog]的日志写入等级*/
-    var logWriteLevel :Int = 4
-    val logWriteLevelPreference by intPreference(default = 4)
+    var logWriteLevel :Int = 46
+        set(value) {
+            LLog.minWritePriority = value / 10
+            LLog.maxWritePriority = value % 10
+            field = value
+        }
+    val logWriteLevelPreference by intPreference(default = 46)
 
 }

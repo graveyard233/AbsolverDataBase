@@ -84,8 +84,8 @@ class SettingState(private val repository :SettingRepository, private val state 
         }
     }
     val logPrintLevelFlow :StateFlow<Int> = repository.logPrintLevelPreference.asFlow().map {
-        it ?: 3
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),3)
+        it ?: 36
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),36)
     fun changeLogPrintLevel(@IntRange(from = 1, to = 6) level: Int){
         repository.logPrintLevel = level
         viewModelScope.launch {
@@ -93,9 +93,9 @@ class SettingState(private val repository :SettingRepository, private val state 
         }
     }
     val logWriteLevelFlow :StateFlow<Int> = repository.logWriteLevelPreference.asFlow().map {
-        it ?: 4
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),4)
-    fun changeLogWriteLevel(@IntRange(from = 3,to = 6) level: Int){
+        it ?: 46
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),46)
+    fun changeLogWriteLevel(@IntRange(from = 1,to = 6) level: Int){
         repository.logWriteLevel = level
         viewModelScope.launch {
             repository.logWriteLevelPreference.set { level }

@@ -51,12 +51,11 @@
                     android:paddingTop="7.5dp"
                     android:text="@string/log_level_print"/>
 
-                <com.google.android.material.slider.Slider
-                    android:id="@+id/setting_dev_slider_logLevel"
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/setting_dev_slider_logPrintLevel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:labelBehavior="withinBounds"
-                    android:value="3"
                     android:stepSize="1"
                     android:valueFrom="1"
                     android:valueTo="6" />
@@ -69,15 +68,14 @@
                     android:paddingTop="7.5dp"
                     android:text="@string/log_level_write"/>
 
-<!--
                 <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/setting_dev_slider_logWriteLevel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:labelBehavior="withinBounds"
                     android:stepSize="1"
                     android:valueFrom="1"
                     android:valueTo="6" />
--->
 
 
             </LinearLayout>
