@@ -149,14 +149,14 @@
     <string name="repositoryUrl">https://github.com/graveyard233/AbsolverDatabase</string>
     <string name="repositoryVersion">https://github.com/graveyard233/AbsolverDatabase/commits/dev</string>
     <string name="version">Version:%1$s</string>
-    <string name="support_author">If you think App is good,you can go to Github and give the project a START.</string>
+    <string name="support_author">If you think App works well,you can go to Github and give the project a START.</string>
     <string name="feedback">Feedback</string>
 
     <string name="feedback_snackbar_content">Email:%1$s</string>
 
     <string name="thanks_title">Thanks</string>
     <string name="thanks_content">Thank Ghost for the explanation of the card group screening logic, the original data table and editor prototype design support.\nThank China Edition production team for providing CEMod movement data and pictures, APP vector icon file.
-Thank the players of the CN service in QQ group for giving feedback and support to the APP test.\nThanks to third party open source libraries and blogs including but not limited to github, 掘金, wanandroid, 简书, CSDN for architectural and design guidance on this application.
+Thank the players of the CN service in QQ group for giving feedback and support to the APP test.\nThanks to third party open source libraries and blogs including but not limited to github, 掘金, wanandroid, stackoverflow, 简书, CSDN for architectural and design guidance on this application.
 Thank iconfont website vector icon support; Thanks to online format conversion sites that convert jpg, png to svg, we can make Style and StandSide ICONS.</string>
 
 

@@ -99,7 +99,9 @@ object LLog {
 
     private fun log(tempTag: String?, priority :Int = VERBOSE, message :Any, vararg args :Any){
         val thisTag = tempTag ?: createTag()
-        chain.proceed(tag = /*tempTag?: createTag()*/thisTag,priority = priority, message = message, args = args)
+        chain.proceed(tag = /*tempTag?: createTag()*/thisTag,priority = priority, message = message,
+            args = arrayOf(System.currentTimeMillis(),args)
+        )
     }
 
 

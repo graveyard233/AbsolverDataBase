@@ -4,10 +4,11 @@ import com.lyd.absolverdatabase.utils.logUtils.Chain
 import com.lyd.absolverdatabase.utils.logUtils.Interceptor
 import com.lyd.absolverdatabase.utils.logUtils.LLog
 import com.lyd.absolverdatabase.utils.logUtils.logExt.Log
+import com.lyd.absolverdatabase.utils.logUtils.logExt.LogItem
 
 // 以后这个只接收某些类型 只写入某些类型的信息
-class WriteInInterceptor : Interceptor<Log<*>>() {
-    override fun log(tag: String, log: Log<in Nothing>, priority: Int, chain: Chain, vararg args: Any) {
+class WriteInInterceptor : Interceptor<LogItem>() {
+    override fun log(tag: String, log: LogItem, priority: Int, chain: Chain, vararg args: Any) {
         if (
             isLoggable(log) && /*priority >= android.util.Log.INFO*/
             (LLog.minWritePriority <= priority && priority <= LLog.maxWritePriority) &&

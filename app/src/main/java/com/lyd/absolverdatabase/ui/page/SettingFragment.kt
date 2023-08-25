@@ -57,8 +57,14 @@ class SettingFragment : BaseFragment() {
 
         settingBinding?.apply {
 
+            ViewCompat.setTransitionName(settingTitleConfig,"ConfigTitle")
             settingTitleConfig.setOnClickListener {
-                nav().navigate(SettingFragmentDirections.actionSettingFragmentToSettingConfigFragment())
+                val extra = FragmentNavigatorExtras(settingTitleConfig to "ConfigTitle")
+                nav().navigate(
+                    R.id.action_settingFragment_to_settingConfigFragment,
+                    null,null,
+                    extra
+                )
             }
             ViewCompat.setTransitionName(settingTitleDatabase,"DatabaseTitle")
             settingTitleDatabase.setOnClickListener {

@@ -12,11 +12,7 @@
         tools:layout="@layout/fragment_setting">
         <action
             android:id="@+id/action_settingFragment_to_settingConfigFragment"
-            app:destination="@id/settingConfigFragment"
-            app:enterAnim="@anim/slide_enter_to_left"
-            app:exitAnim="@anim/slide_out_to_right"
-            app:popEnterAnim="@anim/slide_enter_to_left"
-            app:popExitAnim="@anim/slide_out_to_right" />
+            app:destination="@id/settingConfigFragment" />
         <action
             android:id="@+id/action_settingFragment_to_settingDatabaseFragment"
             app:destination="@id/settingDatabaseFragment" />

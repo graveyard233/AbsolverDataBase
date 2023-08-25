@@ -15,8 +15,8 @@ import java.util.Locale
 
 object CrashHelperUtil {
 
-    private val FILE_SUFFIX :String = ".txt"
-    private val formatStr = "yyyy-MM-dd_HH:mm:ss"
+    private const val FILE_SUFFIX :String = ".txt"
+    private const val formatStr = "yyyy-MM-dd_HH:mm:ss"
     private val dataFormat :SimpleDateFormat = SimpleDateFormat(formatStr, Locale.CHINA)
 
     private var crashTime = "crashTime"

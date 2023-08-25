@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
+import androidx.transition.TransitionInflater
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.lyd.absolverdatabase.R
@@ -39,6 +41,8 @@ class SettingConfigFragment :BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.setting_shared)
     }
 
     override fun onCreateView(
@@ -52,6 +56,8 @@ class SettingConfigFragment :BaseFragment() {
         configBinding?.lifecycleOwner = viewLifecycleOwner
 
         configBinding?.apply {
+            ViewCompat.setTransitionName(settingConfigTitle,"ConfigTitle")
+
             settingConfigSwitchGaussianBlur.apply {
                 setOnCheckedChangeListener { btn, isChecked ->
                     if (!btn.isPressed) return@setOnCheckedChangeListener

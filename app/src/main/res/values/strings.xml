@@ -146,14 +146,14 @@
     <string name="repositoryUrl">https://github.com/graveyard233/AbsolverDatabase</string>
     <string name="repositoryVersion">https://github.com/graveyard233/AbsolverDatabase/commits/dev</string>
     <string name="version">版本:%1$s</string>
-    <string name="support_author">如果觉得软件真好用，可以进Github给项目一个START</string>
+    <string name="support_author">如果觉得软件还不错，可以进Github给项目一个START</string>
     <string name="feedback">反馈</string>
 
     <string name="feedback_snackbar_content">邮箱:%1$s</string>
 
     <string name="thanks_title">致谢</string>
     <string name="thanks_content">感谢Ghost对卡组筛选逻辑的讲解，原版数据表格及编辑器原型设计支持。\n感谢China Edition制作组提供CEMod的招式数据与图片，APP矢量图标文件。
-感谢赦免者国服QQ群的玩家给予APP测试的反馈支持。\n感谢第三方开源库与包括但不限于github，掘金，wanandroid，简书，CSDN上博客对本应用的架构与设计指导。
+感谢赦免者国服QQ群的玩家给予APP测试的反馈支持。\n感谢第三方开源库与包括但不限于github，掘金，wanandroid，stackoverflow，简书，CSDN上博客对本应用的架构与设计指导。
 感谢iconfont网站的矢量图标支持；感谢在线格式转换网站将jpg，png转svg，才得以制作流派与站架图标。</string>
 
 
