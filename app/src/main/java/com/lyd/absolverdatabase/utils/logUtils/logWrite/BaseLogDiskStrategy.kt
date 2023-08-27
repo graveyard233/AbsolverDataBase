@@ -1,5 +1,7 @@
 package com.lyd.absolverdatabase.utils.logUtils.logWrite
 
+import com.lyd.absolverdatabase.utils.logUtils.LLog
+import com.lyd.absolverdatabase.utils.logUtils.logExt.LogItem
 import java.io.File
 
 // https://github.com/elvishew/xLog/blob/master/xlog/src/main/java/com/elvishew/xlog/printer/file/FilePrinter.java
@@ -9,17 +11,42 @@ abstract class BaseLogDiskStrategy(
     val logDirPath :String
 ) {
     companion object{
-        private const val logPrefix = "Log_"
-        private const val logSuffix = ".log"
+        internal const val logPrefix = "Log_"
+        internal const val logSuffix = ".log"
     }
 
-    private val currentLogFilePath :String? = null
+    private var currentLogFilePath :String? = null
 
-    internal fun internalGetLogWritePath() :String{
+    internal fun internalGetLogWritePath(logItem: LogItem) :String{
         val logDirFile = File(logDirPath)
         if (!logDirFile.exists() || !logDirFile.isDirectory){
             logDirFile.mkdirs() // 一定能成功，因为是操作应用专属的文件夹，不会有错误，且一定是能读能写，不会有权限问题
         }
-        return getLogWritePath()
+        return getLogWritePath(logItem)
     }
+
+    open fun getLogWritePath(logItem: LogItem):String{
+        val path = logDirPath
+        if (isLogFilePathAvailable(path,logItem.data)){
+            return path
+        } else {
+            if (!isAllowCreateLogFile(logItem.time)){
+                LLog.e(msg = "is not allow create log file")
+                return ""
+            }
+            var path :String = createLogFile(logItem)
+
+            currentLogFilePath = path
+            return currentLogFilePath!!
+        }
+    }
+
+
+
+    /**判断日志是否可以输出到文件中*/
+    abstract fun isLogFilePathAvailable(logFilePath :String, logBody :String) :Boolean
+
+    abstract fun isAllowCreateLogFile(logTime :Long) :Boolean
+
+    abstract fun createLogFile(logItem: LogItem): String
 }
