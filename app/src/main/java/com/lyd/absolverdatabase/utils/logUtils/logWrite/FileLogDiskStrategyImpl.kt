@@ -8,27 +8,29 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class FileLogDiskStrategyImpl(
-    private val logDirectory :String,
-    val logFileStoreSizeOfMB :Int = 5
+    logDirectory :String,
+    val logFileStoreSizeOfMB :Int = 5,
+    val logFileMaxNumber :Int = 5
 ): BaseLogDiskStrategy(logDirectory) {
 
     private val logFileNameDateFormat = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.CHINA)
     private var currentFilePathCache :FilePathCache? = null
 
 
-    override fun isLogFilePathAvailable(logFilePath: String, logBody: String): Boolean {
+    override fun isLogFilePathAvailable(logFilePath: String?, logBody: String): Boolean {
         return currentFilePathCache?.isMatch(logFilePath) == true
     }
 
     /**判断是否允许生成日志文件*/
     override fun isAllowCreateLogFile(logTime: Long): Boolean {
         checkAndClearLogFile()
-        return true
+        return true// 我这里没有处理存储空间不够的情况，所以直接返回true
     }
 
     override fun createLogFile(logItem: LogItem): String {
         var fileName = ""
         val currentLogFileCacheSize = currentFilePathCache?.getCurrentSize()
+        // 因为在createLogFile之前，先执行过isAllowCreateLogFile方法，已经清除过文件，所以这里可以直接生成新文件
         if (currentLogFileCacheSize != null && currentLogFileCacheSize > logFileStoreSizeOfMB * 1024 * 1024){
             fileName = getFileName(System.currentTimeMillis())
         } else {
@@ -37,7 +39,7 @@ class FileLogDiskStrategyImpl(
             })
 
             if (!fileArray.isNullOrEmpty()){
-                var fileList = fileArray.sortedBy {
+                val fileList = fileArray.sortedBy {
                     it.name
                 }
                 val lastFile = fileList.last()
@@ -58,7 +60,6 @@ class FileLogDiskStrategyImpl(
     }
 
     private fun checkAndClearLogFile() {
-//        TODO("Not yet implemented")
         val logDirFile = File(logDirPath)
         if (!logDirFile.exists() || !logDirFile.isDirectory){
             LLog.e(msg = "log dir not exit")
@@ -76,10 +77,12 @@ class FileLogDiskStrategyImpl(
             return
         }
         logList = logList.sortedBy { it.name }
-        var size = 0
-        var outSizeIndex = -1
-        for (i in logList.size -1 downTo 0){
-            val logFile = logList[i]
+        val needToDeleteNum = logList.size - (logFileMaxNumber - 1)
+        if (needToDeleteNum > 0){// 大于最大文件持有量才会执行删除
+            for (j in 0 until needToDeleteNum){
+                LLog.d(msg = "超过最大持有量，删除日志文件 ${logList[0].name}")
+                logList[0].delete()// 始终删除第一个
+            }
         }
     }
 
@@ -105,7 +108,7 @@ class FileLogDiskStrategyImpl(
             }
         }
 
-        fun isMatch(logFilePath: String) :Boolean{
+        fun isMatch(logFilePath: String?) :Boolean{
             if (curResetCount > MAX_RESET_COUNT || currentSize < 0){// 每50次，查一次文件大小
                 curResetCount = 0
                 currentSize = logFile.length()

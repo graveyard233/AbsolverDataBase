@@ -38,6 +38,7 @@ import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.ui.widgets.ColorShades
 import com.lyd.absolverdatabase.ui.widgets.SpacesItemDecoration
 import com.lyd.absolverdatabase.utils.*
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 import com.lyd.architecture.utils.Utils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.runBlocking
@@ -65,7 +66,7 @@ class DeckFragment :BaseFragment() {
     private val deckAdapter : DeckAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         DeckAdapter().apply {
             addOnItemChildClickListener(R.id.item_deck_constraint){adapter, view, position ->
-                Log.i(TAG, "onclick: ${getItem(position)}")
+                LLog.i(TAG, "onclick: ${getItem(position)}")
                 // 前往编辑界面，注意一定要把editState的forEdit的卡组置空
                 editState.fromDeckToEdit()
                 nav().navigate(DeckFragmentDirections.actionDeckFragmentToDeckEditFragment(getItem(position)!!))
@@ -86,7 +87,7 @@ class DeckFragment :BaseFragment() {
                     }
                 }
                 val deckForShareText = StringUtils.deck2MyJson(whatDeck, moreDetail = tempDetail)
-                Log.i(TAG, "长按分享的卡组代码: $deckForShareText")
+                LLog.i(TAG, "长按分享的卡组代码: $deckForShareText")
                 // 将卡组数据写入剪贴板
                 ClipUtil.copyText(deckForShareText)
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2 || Locale.getDefault().toLanguageTag().startsWith("zh")){
@@ -95,7 +96,7 @@ class DeckFragment :BaseFragment() {
                 return@addOnItemChildLongClickListener true// 返回true就不会出发onclick
             }
             addOnItemChildClickListener(R.id.item_deck_img_delete){adapter,view,position ->
-                Log.i(TAG, "应该删除这个卡组: ${getItem(position)}")
+                LLog.i(TAG, "应该删除这个卡组: ${getItem(position)}")
                 viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                     deckState.deleteOneDeck(
                         getItem(position)!!,
@@ -188,15 +189,15 @@ class DeckFragment :BaseFragment() {
                 // 这里要和动画分开，因为动画在这里启动会直接崩溃
                 // 因为onViewCreated的时候还没有attach到fragment，没坐标，解决方案是post启动
                 // 因为可以防止重复，所以可以在这里进行颜色变化和数据请求与筛选
-                Log.i(TAG, "choiceFlow collect: $position -> ${getDeckTypeByPosition(position)}")
+                LLog.i(TAG, "choiceFlow collect: $position -> ${getDeckTypeByPosition(position)}")
                 doColorChange(position,lastBgColor) // 暂时不要做颜色渐变，因为有时候会抽风，闪的厉害
                 deckState.queryDecksByDeckType(
                     getDeckTypeByPosition(position),
                     ifEmpty = {
-                        Log.w(TAG, "queryDecksByDeckType is empty")
+                        LLog.w(TAG, "queryDecksByDeckType is empty")
                     },
                     ifError = {
-                        Log.e(TAG, "queryDecksByDeckType error: $it")
+                        LLog.e(TAG, "queryDecksByDeckType error: $it")
                     }
                 )
             }
@@ -206,7 +207,10 @@ class DeckFragment :BaseFragment() {
             // TODO: 这里的接收方式有问题，我得换一种接收方式，因为没切换一次界面，我就会收到一次
             // tmd居然解决了，通过把appcompat从1.5.1升级到1.6.1，然后给lifecycleScope前面加上viewLifecycleOwner就搞定了
             deckState.deckSharedFlow.collectLatest {
-                Log.i(TAG, "receive: ${it.size}")
+                it.forEachIndexed { index, deck ->
+                    LLog.d(TAG,"deck from deckSharedFlow No.$index $deck")
+                }
+//                LLog.i(TAG, "deckSharedFlow receive: size->${it.size}")
                 deckAdapter.submitList(it)
             }
         }
@@ -311,7 +315,7 @@ class DeckFragment :BaseFragment() {
 
     private fun importDeck(){
         // 从剪贴板中读取数据
-        Log.i(TAG, "deckHeaderAdapter onLongClick: ${ClipUtil.readText()}")
+        LLog.d(TAG, "deckHeaderAdapter onLongClick: ${ClipUtil.readText()}")
         val tempText = ClipUtil.readText()
         if (tempText == "null"){
             showShortToast(getString(R.string.clipboard_is_empty))
@@ -323,20 +327,20 @@ class DeckFragment :BaseFragment() {
 //            deckToSaved = GsonUtils.fromJson<Deck>(ClipUtil.readText(),Deck::class.java)
 //                .apply { this.deckId = 0 }
         } catch (e: Exception) {
-            Log.e(TAG, "onLongClick: 错误的卡组代码数据")
+            LLog.e(TAG, "onLongClick: 错误的卡组代码数据")
             showShortToast(getString(R.string.error_deck_data))
             return
         }
         if (deckToSaved != null && deckToSaved.deckId == 0){
-            Log.i(TAG, "onLongClick: 获取卡组成功")
+            LLog.d(TAG, "onLongClick: 获取卡组成功")
             editState.saveDeckFromShared(
                 deckToSaved,
                 ifError = {
-                    Log.e(TAG, "onLongClick: 保存分享卡组失败 $it")
+                    LLog.e(TAG, "onLongClick: 保存分享卡组失败 $it")
                     showShortToast(getString(R.string.save_deck_by_shared_false,it))
                 },
                 ifSuccess = {
-                    Log.i(TAG, "onLongClick: 保存卡组成功，id为 $it")
+                    LLog.i(TAG, "onLongClick: 保存卡组成功，id为 $it")
                     // 这里应该刷新列表
                     viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                         // 不能通过setChoice来获取，而是得手动查询才行，因为stateFlow相同的数据不会触发collect

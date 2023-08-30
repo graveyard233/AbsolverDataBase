@@ -12,18 +12,20 @@ import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.UseTheme
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.isNightMode
+import com.lyd.absolverdatabase.utils.logUtils.LLog
+import com.lyd.absolverdatabase.utils.logUtils.LLogInitializer
 import kotlinx.coroutines.*
 import kotlin.system.measureTimeMillis
 
 /**
- * 用来初始化context的东西，现在没放在manifest里面用startup初始化，放在App中初始化
+ * 用来初始化context的东西，现在没放在manifest里面用startup初始化，放在App中初始化，依赖[LLogInitializer]
  * */
 class DataStoreInitializer : Initializer<Unit> {
 
     override fun create(context: Context) {
         IDataStoreOwner.application = context as Application
         /*CoroutineScope(Dispatchers.IO + SupervisorJob()).launch*/runBlocking {// 注意，这里的初始化时间在Application的OnCreate之后，想要更快得写在App里面
-            val timeCost1 = measureTimeMillis {
+            val timeCost = measureTimeMillis {
 
                 val tempGaussianBlur = async {
                     if (Build.VERSION.SDK_INT < /*31*/Build.VERSION_CODES.S){// 低于Android12不能使用高斯模糊
@@ -90,12 +92,12 @@ class DataStoreInitializer : Initializer<Unit> {
                 }
 
             }
-            Log.i("DataStoreInitializer", "create: 初始化配置参数 async 处理时间:$timeCost1")
+            LLog.i(javaClass.simpleName, "-----------SettingRepository 初始化配置参数 async 处理时间:$timeCost---------------")
 
         }
         when(SettingRepository.useWhatTheme){
             UseTheme.DefaultId ->{
-                Log.i("DataStoreInitializer", "create: 使用默认主题")
+                LLog.i("DataStoreInitializer", "create: 使用默认主题")
             }
             UseTheme.WallpaperId ->{
                 DynamicColors.applyToActivitiesIfAvailable(IDataStoreOwner.application)
@@ -119,5 +121,6 @@ class DataStoreInitializer : Initializer<Unit> {
         }
     }
 
-    override fun dependencies() = emptyList<Class<Initializer<*>>>()
+    // 依赖日志库启动
+    override fun dependencies() = listOf(LLogInitializer::class.java)/*emptyList<Class<Initializer<*>>>()*/
 }

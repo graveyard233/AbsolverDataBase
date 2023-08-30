@@ -23,6 +23,7 @@ import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.ui.widgets.DeckDetailDialog
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import com.lyd.absolverdatabase.utils.TimeUtils
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -58,7 +59,7 @@ class DeckEditFragment :BaseFragment() {
         dataBinding = FragmentDeckEditBinding.bind(view)
         dataBinding?.lifecycleOwner = viewLifecycleOwner
 
-        Log.i(TAG, "onCreateView: ${args.deckForEdit}")
+        LLog.d(TAG, "onCreateView: ${args.deckForEdit}")
 
         dataBinding?.apply {
             deckEditBarUpperRight.initClick(clickProxy = { view: View,clickWhatMove :Int ->
@@ -108,11 +109,11 @@ class DeckEditFragment :BaseFragment() {
                 editState.saveDeckInSaved(_deckForEdit.copy(updateTime = TimeUtils.curTime),
                     isForSave = true,
                     ifError = {
-                        Log.e(TAG, "saveDeckInSavedError: $it")
+                        LLog.e(TAG, "saveDeckInSavedError: $it")
                         showShortToast(it)
                     },
                     ifSuccess = {
-                        Log.i(TAG, "saveDeckInSavedSuccess: $it")
+                        LLog.i(TAG, "saveDeckInSavedSuccess: $it")
                         showShortToast(getString(R.string.save_deck_success,it))
                     })
             }
@@ -199,13 +200,13 @@ class DeckEditFragment :BaseFragment() {
                 if (deckInSave == DeckGenerate.generateEmptyDeck(isFromDeckToEdit = true)){
                     // 可以判断为是空卡组，是从deckFragment跳转进来的
                     _deckForEdit = args.deckForEdit
-                    Log.i(TAG, "deckInSaved: 从deckFragment跳转进来的，进行数据存储，然后返回")
+                    LLog.i(TAG, "deckInSaved: 从deckFragment跳转进来的，进行数据存储，然后返回")
                     editState.saveDeckInSaved(_deckForEdit.also { if (it.updateTime == 1L) it.updateTime = 0L})
                     return@collectLatest
                 } else {
                     // 不相等，是从其他界面切回来的，因为假如是从deckFragment跳转，则会将其设置为空卡组且isFromDeckToEdit = true
                     _deckForEdit = deckInSave
-                    Log.i(TAG, "deckInSaved: 不相等，是从其他界面切回来的")
+                    LLog.i(TAG, "deckInSaved: 不相等，是从其他界面切回来的")
                 }
                 // 这里应该触发招式序列list的变化，进行初始化，让bar自己判断需不需要变更bg
                 editState.updateAllSequence(_deckForEdit)

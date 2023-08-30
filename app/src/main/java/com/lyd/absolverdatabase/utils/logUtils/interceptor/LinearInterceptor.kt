@@ -27,16 +27,16 @@ class LinearInterceptor : Interceptor<Any>() {
         scope.launch(singleLogDispatcher) {
             channel.consumeEach { event ->
                 try {
-                    event.apply { chain.proceed(tag, message, priority, time) }
+                    event.apply { chain.proceed(tag, message, priority, listOf(time)) }
                 } catch (e: Exception) {
                 }
             }
         }
     }
 
-    override fun log(tag: String, message: Any, priority: Int, chain: Chain, vararg args: Any) {
+    override fun log(tag: String, message: Any, priority: Int, chain: Chain, args :List<Any>?) {
         if (isLoggable(message)) {
-            scope.launch { channel.send(Event(tag, message, priority, args[0] as Long, chain)) }
+            scope.launch { channel.send(Event(tag, message, priority, args?.get(0)!! as Long, chain)) }
         }
     }
 

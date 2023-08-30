@@ -12,11 +12,12 @@ abstract class BaseLogDiskStrategy(
 ) {
     companion object{
         internal const val logPrefix = "Log_"
-        internal const val logSuffix = ".log"
+        internal const val logSuffix = ".txt"
     }
 
     private var currentLogFilePath :String? = null
 
+    /**这个是暴露出去获取日志文件路径的方法*/
     internal fun internalGetLogWritePath(logItem: LogItem) :String{
         val logDirFile = File(logDirPath)
         if (!logDirFile.exists() || !logDirFile.isDirectory){
@@ -26,27 +27,39 @@ abstract class BaseLogDiskStrategy(
     }
 
     open fun getLogWritePath(logItem: LogItem):String{
-        val path = logDirPath
+        val path = getCurrentLogFilePath()
         if (isLogFilePathAvailable(path,logItem.data)){
-            return path
+            return path!!// 这里一定可以获取到路径，因为是null的话会返回false进不来，路径对不上也进不来，只有创建了路径缓存才有可能进得来
         } else {
             if (!isAllowCreateLogFile(logItem.time)){
-                LLog.e(msg = "is not allow create log file")
+                LLog.e(msg = "is not allow create log file")// 这里基本进不来
                 return ""
             }
-            var path :String = createLogFile(logItem)
+            val tempPath :String = createLogFile(logItem)
 
-            currentLogFilePath = path
-            return currentLogFilePath!!
+            setCurrentFilePath(tempPath)
+            return getCurrentLogFilePath()!!
         }
     }
 
 
 
     /**判断日志是否可以输出到文件中*/
-    abstract fun isLogFilePathAvailable(logFilePath :String, logBody :String) :Boolean
+    abstract fun isLogFilePathAvailable(logFilePath :String?, logBody :String) :Boolean
 
     abstract fun isAllowCreateLogFile(logTime :Long) :Boolean
 
     abstract fun createLogFile(logItem: LogItem): String
+
+    /**
+     * 获取当前正在被写入的日志文件路径
+     * @return 正在被写入的日志路径
+     */
+    fun getCurrentLogFilePath():String?{
+        return currentLogFilePath
+    }
+
+    private fun setCurrentFilePath(path:String?){
+        currentLogFilePath = path
+    }
 }

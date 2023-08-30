@@ -12,19 +12,19 @@ import java.io.StringWriter
 
 class LogcatInterceptor : Interceptor<Any>(){
 
-    override fun log(tag: String, message: Any, priority: Int, chain: Chain, vararg args: Any) {
+    override fun log(tag: String, message: Any, priority: Int, chain: Chain, args :List<Any>?) {
         if (
             isLoggable(message) &&
             (LLog.minPrintPriority <= priority && priority <= LLog.maxPrintPriority) &&
             /*LLog.curPriority != LLog.NONE*/!(LLog.minPrintPriority == LLog.NONE && LLog.maxPrintPriority == LLog.NONE)// 当最大最小的值都是NONE，则不输出logcat
             )
         {
-            Log.println(priority,tag,getFormatLog(message, *args))
+            Log.println(priority,tag,getFormatLog(message, args))
         }
         chain.proceed(tag, message, priority, args)
     }
 
-    private fun getFormatLog(message: Any, vararg args: Any): String =
+    private fun getFormatLog(message: Any, vararg args: Any?): String =
         if (message is Throwable){
             getStackTraceString(message)
         } else {

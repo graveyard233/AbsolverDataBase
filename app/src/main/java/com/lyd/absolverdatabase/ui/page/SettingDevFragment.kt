@@ -36,7 +36,7 @@ class SettingDevFragment :BaseFragment() {
     private lateinit var sliderLogWriteLevel :RangeSlider
 
     private val logLevelLabelFormat by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        LabelFormatter { value -> getLevelByInt(value) }
+        LabelFormatter { value -> LLog.getLevelByInt(value) }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,7 +100,7 @@ class SettingDevFragment :BaseFragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.logPrintLevelFlow.collectLatest {
                     sliderLogPrintLevel.values = it.toRangeList()
-                    LLog.i(msg = "LLog日志打印级别是:${getLevelByInt(it.toFloat() / 10)} ~ ${getLevelByInt(it.toFloat() % 10)}")
+                    LLog.i(msg = "LLog日志打印级别是:${LLog.getLevelByInt(it.toFloat() / 10)} ~ ${LLog.getLevelByInt(it.toFloat() % 10)}")
                 }
             }
         }
@@ -109,25 +109,11 @@ class SettingDevFragment :BaseFragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.logWriteLevelFlow.collectLatest {
                     sliderLogWriteLevel.values = it.toRangeList()
-                    LLog.i(msg = "LLog日志写入级别是:${getLevelByInt(it.toFloat() / 10)} ~ ${getLevelByInt(it.toFloat() % 10)}")
+                    LLog.i(msg = "LLog日志写入级别是:${LLog.getLevelByInt(it.toFloat() / 10)} ~ ${LLog.getLevelByInt(it.toFloat() % 10)}")
                 }
             }
         }
 
-    }
-
-
-    private fun getLevelByInt(level :Float) :String{
-        return when(level.toInt()){
-            Log.VERBOSE -> "V"
-            Log.DEBUG -> "DEBUG"
-            Log.INFO -> "INFO"
-            Log.WARN -> "WARN"
-            Log.ERROR -> "ERROR"
-
-            LLog.NONE -> "NONE"
-            else -> "something wrong"
-        }
     }
 
     private fun List<Float>.toRange() :Float{

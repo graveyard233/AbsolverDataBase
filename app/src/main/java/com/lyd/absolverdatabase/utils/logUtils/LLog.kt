@@ -1,6 +1,7 @@
 package com.lyd.absolverdatabase.utils.logUtils
 
 import android.os.Build
+import android.util.Log
 import java.util.regex.Pattern
 
 object LLog {
@@ -60,7 +61,7 @@ object LLog {
     fun v(
         tag :String? = null,
         msg :Any,
-        vararg args :Any
+        args :List<Any>? = null
     ) {
         log(tempTag = tag, priority = VERBOSE, message = msg,args = args)
     }
@@ -68,7 +69,7 @@ object LLog {
     fun d(
         tag :String? = null,
         msg :Any,
-        vararg args :Any
+        args :List<Any>? = null
     ) {
         log(tempTag = tag, priority = DEBUG, message = msg,args = args)
     }
@@ -76,7 +77,7 @@ object LLog {
     fun i(
         tag :String? = null,
         msg :Any,
-        vararg args :Any
+        args :List<Any>? = null
     ) {
         log(tempTag = tag, priority = INFO, message = msg,args = args)
     }
@@ -84,7 +85,7 @@ object LLog {
     fun w(
         tag :String? = null,
         msg :Any,
-        vararg args :Any
+        args :List<Any>? = null
     ) {
         log(tempTag = tag, priority = WARN, message = msg,args = args)
     }
@@ -92,15 +93,16 @@ object LLog {
     fun e(
         tag :String? = null,
         msg :Any,
-        vararg args :Any
+        args :List<Any>? = null
     ) {
         log(tempTag = tag, priority = ERROR, message = msg,args = args)
     }
 
-    private fun log(tempTag: String?, priority :Int = VERBOSE, message :Any, vararg args :Any){
+    private fun log(tempTag: String?, priority :Int = VERBOSE, message :Any, args :List<Any>?){
         val thisTag = tempTag ?: createTag()
-        chain.proceed(tag = /*tempTag?: createTag()*/thisTag,priority = priority, message = message,
-            args = arrayOf(System.currentTimeMillis(),args)
+        chain.proceed(
+            tag = /*tempTag?: createTag()*/thisTag, priority = priority, message = message,
+            args = listOf<Any>(System.currentTimeMillis()/*,args*/)// 现在暂时不使用args，使用的时候再把里面的参数放进来
         )
     }
 
@@ -126,6 +128,19 @@ object LLog {
             tag
         } else {
             tag.substring(0, MAX_TAG_LENGTH)
+        }
+    }
+
+    fun getLevelByInt(level :Float) :String{
+        return when(level.toInt()){
+            Log.VERBOSE -> "V"
+            Log.DEBUG -> "DEBUG"
+            Log.INFO -> "INFO"
+            Log.WARN -> "WARN"
+            Log.ERROR -> "ERROR"
+
+            LLog.NONE -> "NONE"
+            else -> "something wrong"
         }
     }
 

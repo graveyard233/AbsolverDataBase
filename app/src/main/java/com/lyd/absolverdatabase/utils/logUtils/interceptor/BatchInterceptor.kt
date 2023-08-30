@@ -21,7 +21,7 @@ class BatchInterceptor(
     private var flushJob: Job? = null
 
 
-    override fun log(tag: String, message: Any, priority: Int, chain: Chain, vararg args: Any) {
+    override fun log(tag: String, message: Any, priority: Int, chain: Chain, args :List<Any>?) {
         if (isLoggable(message)){
             list.add(message as Log<*>)
             if (isOkFlush()) {
@@ -35,7 +35,7 @@ class BatchInterceptor(
     private fun isOkFlush() = lastFlushTime != 0L && SystemClock.elapsedRealtime() - lastFlushTime >= waitTime || list.size >= size
 
     private fun flush(chain: Chain, tag: String, priority: Int){
-        chain.proceed(tag,list,priority)
+        chain.proceed(tag,list,priority,null)
 
         list.clear()
         lastFlushTime = SystemClock.elapsedRealtime()
