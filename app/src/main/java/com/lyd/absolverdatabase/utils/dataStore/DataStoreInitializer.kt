@@ -121,6 +121,6 @@ class DataStoreInitializer : Initializer<Unit> {
         }
     }
 
-    // 依赖日志库启动
+    // 依赖日志库启动，而manifest中并不需要写上LLogInitializer，只用写自己，因为startup读取dependencies列表时会发现LLogInitializer
     override fun dependencies() = listOf(LLogInitializer::class.java)/*emptyList<Class<Initializer<*>>>()*/
 }

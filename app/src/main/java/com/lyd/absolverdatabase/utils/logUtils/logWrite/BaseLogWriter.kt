@@ -4,9 +4,20 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import android.os.Message
+
 import com.lyd.absolverdatabase.utils.logUtils.LLog
 import com.lyd.absolverdatabase.utils.logUtils.logExt.LogItem
+
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.launch
+
 import java.io.File
+import java.util.concurrent.Executors
 
 abstract class BaseLogWriter {
     companion object{
@@ -51,13 +62,26 @@ abstract class BaseLogWriter {
         private val logDiskStrategy: BaseLogDiskStrategy,
         private val logFormatStrategy :BaseFormatStrategy
     ) :Handler(looper){
+
+        private val writeDispatcher = Executors.newFixedThreadPool(1).asCoroutineDispatcher()
+        private val writeScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+        private val channel = Channel<LogItem>(25)// 降低多线程并发写入风险，保证每一次写入都没东西占用这个文件
+        init {
+            writeScope.launch(writeDispatcher){
+                    channel.consumeEach {
+                        logWrite(it)// 一般的打印，在测试中(Pixel5)会耗时0-3毫秒，所以没看到背压现象
+                    }
+            }
+        }
+
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             when(msg.what){
                 ITEM_WHAT ->{
                     val logItem :LogItem? = msg.data.getParcelable(ITEM_KEY)
                     logItem?.let {
-                        logWrite(logItem)
+//                        logWrite(logItem)// 直接写也可以，一般很少有并发现象
+                        writeScope.launch { channel.send(it) }
                     }
                 }
                 ITEMS_WHAT ->{
@@ -78,19 +102,26 @@ abstract class BaseLogWriter {
             }
             val logFile = File(logFilePath)
             try {
-                if (!logFile.exists() || !logFile.isFile){
-                    if (!logFile.createNewFile()){
+                if (!logFile.exists() || !logFile.isFile) {
+                    if (!logFile.createNewFile()) {
                         return
                     }
                 }
-                logFile.appendText(logFormatStrategy.format(item.time,item.tag,item.logLevel,item.data))
+                logFile.appendText(
+                    logFormatStrategy.format(
+                        item.time,
+                        item.tag,
+                        item.logLevel,
+                        item.data
+                    )
+                )
             } catch (e :Exception){
                 LLog.e(msg = e.message!!)
                 e.printStackTrace()
                 throw RuntimeException(e)
             }
         }
-        fun logWrite(items :List<LogItem>){
+        private fun logWrite(items :List<LogItem>){
             if (items.isEmpty())
                 return
             val logFilePath = logDiskStrategy.internalGetLogWritePath(items[0])

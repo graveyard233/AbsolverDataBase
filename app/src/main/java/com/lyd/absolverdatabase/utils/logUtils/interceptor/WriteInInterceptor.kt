@@ -19,7 +19,6 @@ class WriteInInterceptor(
             )
         {
             // 将日志写入本地文件
-//            android.util.Log.i("WriteInInterceptor", "log: 写入本地 $log")
             logWriter.writeIn(log)
         }
     }

@@ -24,6 +24,7 @@ import com.lyd.absolverdatabase.bridge.state.MoveRecycleViewModelFactory
 import com.lyd.absolverdatabase.ui.adapter.MoveItemAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.utils.SideUtil
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
@@ -102,7 +103,7 @@ class MoveRecycleFragment :BaseFragment()
             adapter = moveAdapter
         }
 
-        Log.i(TAG, "onCreateView: side ${SideUtil.getSideByInt(whatEndSide)}")
+        LLog.i(TAG, "onCreateView: side ${SideUtil.getSideByInt(whatEndSide)}")
 
         return view
     }
@@ -114,7 +115,7 @@ class MoveRecycleFragment :BaseFragment()
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.sideLimitFlow.collectLatest { it ->// 在这里要改变_limit和_sideList
-                    Log.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)}: 接受到招式限制 $it")
+                    LLog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)}: 接受到招式限制 $it")
                     // 变化玩limit之后，需要实现实时筛选对应起始站架的招式
                     synchronized(_limit){
                         _limit = it
@@ -142,20 +143,20 @@ class MoveRecycleFragment :BaseFragment()
             // TODO: 如果是徒手卡组，则判断起始站架，寻找所有和原本站架和镜像站架相关的招式，找到之后将不和原本站架相同的招式的结束站架和左右全部转成镜像的数据
             // TODO: 最后再根据结束站架分发list
             editState.filterOptionFlow.collectLatest {// 在这里要改变_filter，按照_sideList来筛选输出
-                Log.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} 接受到筛选数据: Toward->${it.attackToward.name}" +
+                LLog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} 接受到筛选数据: Toward->${it.attackToward.name}" +
                         " Altitude->${it.attackAltitude.name} Direction->${it.attackDirection.name}")
                 if (_filter.isFilterSame(it)){
                     // 一样的数据，不用变动
-                    Log.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 数据和内部的一样，不需要动_filter")
+                    LLog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 数据和内部的一样，不需要动_filter")
                     if (isFirstEnter){
-                        Log.i(TAG, "filterOptionFlow: isFirst->$isFirstEnter 第一次进来，还是要获取数据")
+                        LLog.i(TAG, "filterOptionFlow: isFirst->$isFirstEnter 第一次进来，还是要获取数据")
                         isFirstEnter = false
                         val resultList = filterByOpt(_sideList,_filter)
                         moveAdapter.submitList(resultList)
                     }
                 } else {
                     // 不一样，要重新筛选
-                    Log.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 不一样，_filter要重新设置")
+                    LLog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 不一样，_filter要重新设置")
                     synchronized(_filter){
                         _filter.changeAll(it)
                     }
@@ -164,7 +165,7 @@ class MoveRecycleFragment :BaseFragment()
                     resultList.filter { select ->
                         select.isMirror == 1
                     }.forEach {temp->
-                        Log.i(TAG, "list中镜像的招式有: $temp")
+                        LLog.i(TAG, "list中镜像的招式有: $temp")
                     }
                     moveAdapter.submitList(resultList)
 //                    filterList(_sideList,_filter)
@@ -176,7 +177,7 @@ class MoveRecycleFragment :BaseFragment()
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.i(TAG, "onDestroyView:  side ${SideUtil.getSideByInt(whatEndSide)}")
+        LLog.i(TAG, "onDestroyView:  side ${SideUtil.getSideByInt(whatEndSide)}")
     }
 
 
@@ -237,24 +238,24 @@ class MoveRecycleFragment :BaseFragment()
                 }
                 val tempForSelect = when(it){
                     is SideLimit.noLimit -> {
-                        Log.i(TAG, "noLimit: ${it.msg}")
+                        LLog.i(TAG, "noLimit: ${it.msg}")
                         moveRecycleState.moveListWithMirror(null,whatEndSide,tempCanHand)
                     }
                     is SideLimit.limitAll -> {
-                        Log.i(TAG, "limitAll: start:${it.startSide} end:${it.endSide}")
+                        LLog.i(TAG, "limitAll: start:${it.startSide} end:${it.endSide}")
                         moveRecycleState.moveListWithMirror(SideUtil.getIntBySide(it.startSide),SideUtil.getIntBySide(it.endSide),tempCanHand)
                     }
                     is SideLimit.limitStart -> {
-                        Log.i(TAG, "limitStart: start:${it.startSide}")
+                        LLog.i(TAG, "limitStart: start:${it.startSide}")
                         moveRecycleState.moveListWithMirror(SideUtil.getIntBySide(it.startSide),whatEndSide,tempCanHand)
                     }
                     is SideLimit.limitEnd -> {
-                        Log.i(TAG, "limitEnd: end:${it.endSide}")
+                        LLog.i(TAG, "limitEnd: end:${it.endSide}")
                         moveRecycleState.moveListWithMirror(null, endInt = whatEndSide,tempCanHand)
 
                     }
                     is SideLimit.optLimit -> {
-                        Log.w(TAG, "optLimit: ${it.startSide}")
+                        LLog.w(TAG, "optLimit: ${it.startSide}")
                         // TODO: 2023/6/4 这里要做一个专门给自选序列一个专门的筛选方法
                         // TODO: 2023/6/9 这个数据还有点问题
                         moveRecycleState.optListWithMirror(SideUtil.getIntBySide(it.startSide),whatEndSide,tempCanHand)

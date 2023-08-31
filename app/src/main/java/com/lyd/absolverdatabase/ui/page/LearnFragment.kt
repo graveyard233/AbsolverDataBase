@@ -24,6 +24,7 @@ import com.lyd.absolverdatabase.ui.adapter.SearchVideoAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.utils.FirstUtil
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 import kotlinx.coroutines.flow.collectLatest
 
 class LearnFragment : BaseFragment() {
@@ -114,14 +115,14 @@ class LearnFragment : BaseFragment() {
 
         // 初始化列表
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            Log.i(TAG, "我先拿cookie: ${learnState.getCookie()}")// 依靠协程，按序执行
+            LLog.i(TAG, "我先拿cookie: ${learnState.getCookie()}")// 依靠协程，按序执行
 
             if (checkItem == 1){
                 if (learnState.searchVideoSharedFlow.replayCache.isNotEmpty() &&
                     learnState.searchVideoSharedFlow.replayCache[0].isNotEmpty()){
-                    Log.i(TAG, "有缓存数据，不需要进行网络请求")
+                    LLog.i(TAG, "有缓存数据，不需要进行网络请求")
                 } else{
-                    Log.i(TAG, "无缓存数据")
+                    LLog.i(TAG, "无缓存数据")
                     request(checkItem,FirstUtil.isLearnVideoSearchFirst())
                 }
             } else if (checkItem == 0){
@@ -140,7 +141,7 @@ class LearnFragment : BaseFragment() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             learnState.searchVideoSharedFlow.collectLatest{
-                Log.i(TAG, "onViewCreated: receive searchVideoSharedFlow 数量${it.size}")
+                LLog.i(TAG, "onViewCreated: receive searchVideoSharedFlow 数量${it.size}")
 //                it.forEach {video ->
 //                    Log.i(TAG, "onViewCreated: ${video.title}")
 //                }
@@ -220,7 +221,7 @@ class LearnFragment : BaseFragment() {
     private fun request(searchWhich :Int = 0,isManualRefresh :Boolean = false){
         when(searchWhich){
             0 ->{
-                Log.i(TAG, "request: 搜索老G视频")
+                LLog.i(TAG, "request: 搜索老G视频")
                 lifecycleScope.launchWhenStarted {
                     learnState.getLearnVideo(learnMap,
                         ifError = whenLoadError)

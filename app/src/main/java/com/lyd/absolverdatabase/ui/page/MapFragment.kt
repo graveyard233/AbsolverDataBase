@@ -11,6 +11,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.lyd.absolverdatabase.MainActivity
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.ui.base.BaseFragment
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 
 class MapFragment :BaseFragment(){
 
@@ -51,7 +52,7 @@ class MapFragment :BaseFragment(){
                 }
             })
         } catch (e: Exception) {
-            Log.e(TAG, "onViewCreated: ", e)
+            LLog.e(TAG, e)
         }
 
         // 这里完成数据的监听

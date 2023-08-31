@@ -13,6 +13,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Archive
 import com.lyd.absolverdatabase.utils.TimeUtils.toDateStr
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 
 class LearnVideoAdapter : BaseQuickAdapter<Archive, LearnVideoAdapter.VH>() {
 
@@ -29,7 +30,7 @@ class LearnVideoAdapter : BaseQuickAdapter<Archive, LearnVideoAdapter.VH>() {
             holder.author.text = context.resources.getString(R.string.item_learn_author,"Ghost-O")
 
             holder.videoMsg.text = context.resources.getString(R.string.item_learn_videoMsg,stat.view,(pubdate * 1000).toDateStr("yyyy/MM/dd"))
-            Log.i("TAG", "onBindViewHolder: ${holder.videoMsg.text}")
+            LLog.v("LearnVideoAdapter", "onBindViewHolder: ${holder.videoMsg.text}")
         }
     }
 

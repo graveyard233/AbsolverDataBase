@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 
 object AssetsUtil {
 
@@ -24,7 +25,7 @@ object AssetsUtil {
                 tempBitmap = BitmapFactory.decodeStream(it)
             }
         }catch (e :Exception){
-            Log.e(TAG, "getBitmapByMoveId: ", e)
+            LLog.e(TAG, e)
         }
         return tempBitmap
     }

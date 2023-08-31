@@ -23,6 +23,7 @@ import com.lyd.absolverdatabase.bridge.state.SettingViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentSettingConfigBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.utils.isNightMode
+import com.lyd.absolverdatabase.utils.logUtils.LLog
 import com.lyd.absolverdatabase.utils.restartApp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -157,7 +158,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.askBeforeImportDeckFlow.collectLatest {
-                    Log.i(TAG, "askBeforeImportDeckFlow: flow->$it isChecked->${configBinding?.settingConfigSwitchAskBeforeImport?.isChecked}")
+                    LLog.i(TAG, "askBeforeImportDeckFlow: flow->$it")
                     configBinding?.settingConfigSwitchAskBeforeImport?.isChecked = it
 //                    Log.i(TAG, "askBeforeImportDeckFlow: ${SettingRepository.isNeedAskBeforeImportPreference.getOrDefault()}")
                 }
@@ -166,7 +167,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.showSeqDetailWhenSharedDeckFlow.collectLatest {
-                    Log.i(TAG, "showSeqDetailWhenSharedDeckFlow: 接收到数据 $it")
+                    LLog.i(TAG, "showSeqDetailWhenSharedDeckFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchShowSeqDetail?.isChecked = it
                 }
             }
@@ -174,7 +175,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.dialogGaussianBlurFlow.collectLatest {
-                    Log.i(TAG, "dialogGaussianBlurFlow: 接收到数据 $it")
+                    LLog.i(TAG, "dialogGaussianBlurFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchGaussianBlur?.isChecked = it
                 }
             }
@@ -183,7 +184,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useCNEditionModFlow.collectLatest {
-                    Log.i(TAG, "useCNEditionModFlow: 接收到数据 $it")
+                    LLog.i(TAG, "useCNEditionModFlow: 接收到数据 $it")
                     configBinding?.apply {
                         settingConfigSwitchUseCNEditionMod.isChecked = it
                         settingConfigSwitchShowMoreMoveCEInfo.visibility = if (it) View.VISIBLE else View.GONE
@@ -196,7 +197,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.showMoreMoveCEInfoFlow.collectLatest {
-                    Log.i(TAG, "showMoreMoveCEInfoFlow: 接收到数据 $it")
+                    LLog.i(TAG, "showMoreMoveCEInfoFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchShowMoreMoveCEInfo?.isChecked = it
                 }
             }
@@ -204,7 +205,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useNightModeFlow.collectLatest {
-                    Log.i(TAG, "useNightModeFlow: 接收到数据 $it")
+                    LLog.i(TAG, "useNightModeFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchUseNightMode?.apply {
                         isChecked = it
                         text = if (it) getString(R.string.nightMode_yes) else getString(R.string.nightMode_follow_system)
@@ -225,7 +226,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useWhatThemeFlow.collectLatest {
-                    Log.i(TAG, "useWhatThemeFlow: 接收到数据 $it")
+                    LLog.i(TAG, "useWhatThemeFlow: 接收到数据 $it")
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ){
                         configBinding?.settingConfigChipGroupTheme?.check(R.id.settingConfig_chip_default)
                         return@collectLatest
