@@ -19,10 +19,8 @@ class LLogInitializer : Initializer<LLog> {
             LLog.apply {
                 setDebug(isLoggable = true, methodNameEnable = true)
                 addInterceptor(LogcatInterceptor())
-                addInterceptor(LinearInterceptor().apply {
-                    isLoggable = {
-                        !BuildConfig.DEBUG
-                    }
+                addInterceptor(LinearInterceptor(),isLoggable = {
+                    BuildConfig.DEBUG
                 })
                 addInterceptor(PackToLogInterceptor())
                 addInterceptor(
@@ -31,15 +29,12 @@ class LLogInitializer : Initializer<LLog> {
                             formatStrategy = LogWriteDefaultFormatStrategy(),
                             diskStrategy = FileLogDiskStrategyImpl(
                                 logDirectory = context.getExternalFilesDir("log")!!.absolutePath,
-                                logFileStoreSizeOfMB = 5,
+                                logFileStoreSizeOfMB = 2,
                                 logFileMaxNumber = 4
                             )
                         )
-                    ).apply {
-                        isLoggable = {
-                            it.data is String
-                        }
-                    })
+                    )
+                )
             }
         }
         LLog.i(tag = javaClass.simpleName, msg = "---------LLog 初始化完成 耗时$timeCost--------------")

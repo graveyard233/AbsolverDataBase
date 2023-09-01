@@ -32,6 +32,10 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     var isShowSeqDetailWhenSharedDeck :Boolean = false
     val isShowSeqDetailWhenSharedDeckPreference by booleanPreference(default = false)
 
+    /**使用Android原生分享控件*/
+    var isUseShareSheetWhenSharedDeck :Boolean = true
+    val isUseShareSheetWhenSharedDeckPreference by booleanPreference(default = true)
+
     /**崩溃时是否记录崩溃信息*/
     var isRecordCrashMsg :Boolean = false
     val isRecordCrashMsgPreference by booleanPreference(default = true)

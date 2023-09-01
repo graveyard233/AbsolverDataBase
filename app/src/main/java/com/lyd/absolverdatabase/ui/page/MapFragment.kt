@@ -11,7 +11,7 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.lyd.absolverdatabase.MainActivity
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.ui.base.BaseFragment
-import com.lyd.absolverdatabase.utils.logUtils.LLog
+
 
 class MapFragment :BaseFragment(){
 
@@ -52,7 +52,7 @@ class MapFragment :BaseFragment(){
                 }
             })
         } catch (e: Exception) {
-            LLog.e(TAG, e)
+            llog.e(TAG, "打开地图失败",e)
         }
 
         // 这里完成数据的监听

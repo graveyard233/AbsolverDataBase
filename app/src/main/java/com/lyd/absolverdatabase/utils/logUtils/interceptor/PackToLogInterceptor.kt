@@ -2,7 +2,6 @@ package com.lyd.absolverdatabase.utils.logUtils.interceptor
 
 import com.lyd.absolverdatabase.utils.logUtils.Chain
 import com.lyd.absolverdatabase.utils.logUtils.Interceptor
-import com.lyd.absolverdatabase.utils.logUtils.logExt.Log
 import com.lyd.absolverdatabase.utils.logUtils.logExt.LogItem
 import java.util.UUID
 

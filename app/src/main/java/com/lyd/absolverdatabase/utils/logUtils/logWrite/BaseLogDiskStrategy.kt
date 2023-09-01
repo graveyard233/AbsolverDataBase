@@ -36,12 +36,23 @@ abstract class BaseLogDiskStrategy(
                 return ""
             }
             val tempPath :String = createLogFile(logItem)
+            appendLogHeadToNewFile(logHeadInfo(),tempPath)
 
             setCurrentFilePath(tempPath)
             return getCurrentLogFilePath()!!
         }
     }
 
+    private fun appendLogHeadToNewFile(logHead: String?, filePath: String) {
+        if (filePath.isNotEmpty() && !logHead.isNullOrEmpty()){
+            val file = File(filePath)
+            if (!file.exists() || !file.isFile){
+                if (file.createNewFile()){
+                    file.appendText(logHead)// 写入文件头
+                }
+            }
+        }
+    }
 
 
     /**判断日志是否可以输出到文件中*/
@@ -50,6 +61,8 @@ abstract class BaseLogDiskStrategy(
     abstract fun isAllowCreateLogFile(logTime :Long) :Boolean
 
     abstract fun createLogFile(logItem: LogItem): String
+
+    abstract fun logHeadInfo() :String?
 
     /**
      * 获取当前正在被写入的日志文件路径

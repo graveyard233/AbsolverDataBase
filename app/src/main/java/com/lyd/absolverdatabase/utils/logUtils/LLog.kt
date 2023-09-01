@@ -2,7 +2,11 @@ package com.lyd.absolverdatabase.utils.logUtils
 
 import android.os.Build
 import android.util.Log
+import java.io.PrintWriter
+import java.io.StringWriter
+
 import java.util.regex.Pattern
+import kotlin.Exception
 
 object LLog {
     private const val VERBOSE = 2
@@ -85,24 +89,32 @@ object LLog {
     fun w(
         tag :String? = null,
         msg :Any,
+        exception :Exception ?= null,
         args :List<Any>? = null
     ) {
-        log(tempTag = tag, priority = WARN, message = msg,args = args)
+        log(tempTag = tag, priority = WARN, message = msg, ex = exception, args = args)
     }
     @JvmStatic
     fun e(
         tag :String? = null,
         msg :Any,
+        exception :Exception ?= null,
         args :List<Any>? = null
     ) {
-        log(tempTag = tag, priority = ERROR, message = msg,args = args)
+        log(tempTag = tag, priority = ERROR, message = msg, ex = exception, args = args)
     }
 
-    private fun log(tempTag: String?, priority :Int = VERBOSE, message :Any, args :List<Any>?){
+    private fun log(tempTag: String?, priority :Int = VERBOSE, message :Any,ex: Exception? = null, args :List<Any>?){
         val thisTag = tempTag ?: createTag()
+        var tempMsg :String? = null
+        if (priority == WARN || priority == ERROR){
+            if (ex != null){
+                tempMsg = "${message.toString()}:\n     ${getStackTraceString(ex)}"
+            }
+        }
         chain.proceed(
-            tag = /*tempTag?: createTag()*/thisTag, priority = priority, message = message,
-            args = listOf<Any>(System.currentTimeMillis()/*,args*/)// 现在暂时不使用args，使用的时候再把里面的参数放进来
+            tag = /*tempTag?: createTag()*/thisTag, priority = priority, message = tempMsg ?: message,
+            args = listOf<Any>(System.currentTimeMillis())// 现在暂时不使用args，使用的时候再把里面的参数放进来
         )
     }
 
@@ -129,6 +141,14 @@ object LLog {
         } else {
             tag.substring(0, MAX_TAG_LENGTH)
         }
+    }
+
+    private fun getStackTraceString(t: Throwable): String {
+        val sw = StringWriter(256)
+        val pw = PrintWriter(sw,false)
+        t.printStackTrace(pw)
+        pw.flush()
+        return sw.toString()
     }
 
     fun getLevelByInt(level :Float) :String{

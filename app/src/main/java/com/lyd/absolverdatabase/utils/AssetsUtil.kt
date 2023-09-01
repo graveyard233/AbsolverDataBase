@@ -25,7 +25,7 @@ object AssetsUtil {
                 tempBitmap = BitmapFactory.decodeStream(it)
             }
         }catch (e :Exception){
-            LLog.e(TAG, e)
+            LLog.e(TAG, "获取bitmap出错",e)
         }
         return tempBitmap
     }

@@ -67,7 +67,7 @@
 
                 <include
                     android:id="@+id/moveSelect_include"
-                    layout="@layout/bar_move_msg"
+                    layout="@layout/bar_move_detail"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="3"/>

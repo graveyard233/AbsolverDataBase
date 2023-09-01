@@ -1,5 +1,7 @@
 package com.lyd.absolverdatabase.utils.logUtils.logWrite
 
+import android.os.Build
+import com.lyd.absolverdatabase.BuildConfig
 import com.lyd.absolverdatabase.utils.logUtils.LLog
 import com.lyd.absolverdatabase.utils.logUtils.logExt.LogItem
 import java.io.File
@@ -57,6 +59,16 @@ class FileLogDiskStrategyImpl(
         val tempFilePath = FilePathCache(logFileStoreSizeOfMB * 1024 * 1024L,path)
         currentFilePathCache = tempFilePath
         return tempFilePath.filePath
+    }
+
+    override fun logHeadInfo(): String? {
+        return "AppId:${BuildConfig.APPLICATION_ID}" +
+                "\nBuildType:${BuildConfig.BUILD_TYPE}" +
+                "\n应用版本:${BuildConfig.VERSION_NAME}-${BuildConfig.VERSION_CODE}" +
+                "\n设备品牌:${Build.BRAND}" +
+                "\n手机型号:${Build.MODEL}" +
+                "\n系统版本:${Build.VERSION.SDK_INT}" +
+                "\n\n"
     }
 
     private fun checkAndClearLogFile() {

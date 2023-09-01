@@ -29,7 +29,7 @@ import com.lyd.absolverdatabase.databinding.FragmentSettingDatabaseBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.utils.TimeUtils
-import com.lyd.absolverdatabase.utils.logUtils.LLog
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -102,7 +102,7 @@ class SettingDatabaseFragment :BaseFragment() {
                     if (request.url.toString().startsWith("https://ev.csdn.net")){
                         checkTimeFirst++
                         if (checkTimeFirst == 2){
-                            LLog.i(TAG, "shouldInterceptRequest: 可以拿HTML代码了")
+                            llog.i(TAG, "shouldInterceptRequest: 可以拿HTML代码了")
                             CoroutineScope(Dispatchers.IO).launch {
                                 delay(1000)
                                 agentWeb?.jsAccessEntrace?.quickCallJs("getHtmlCode",
@@ -201,7 +201,7 @@ class SettingDatabaseFragment :BaseFragment() {
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useCNEditionModFlow.collectLatest {
-                    LLog.i(TAG, "useCNEditionModFlow: 接收到数据 $it")
+                    llog.i(TAG, "useCNEditionModFlow: 接收到数据 $it")
                     setDbBinding?.settingDatabaseDatabaseLinear?.visibility = if (it) View.VISIBLE else View.GONE
                  }
             }
@@ -212,7 +212,7 @@ class SettingDatabaseFragment :BaseFragment() {
 
     private fun initWebView(){
         setDbBinding?.apply {
-            LLog.i(TAG, "initWebView 加载url")
+            llog.i(TAG, "initWebView 加载url")
             agentWeb = AgentWeb.with(this@SettingDatabaseFragment)
                 .setAgentWebParent(settingDatabaseWebLinear, ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT))
                 .useDefaultIndicator()

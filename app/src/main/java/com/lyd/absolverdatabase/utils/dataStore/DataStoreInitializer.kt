@@ -59,6 +59,9 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempShowSeqDetailWhenShared = async {
                     SettingRepository.isShowSeqDetailWhenSharedDeckPreference.getOrDefault()
                 }
+                val tempUseShareSheetWhenShared = async {
+                    SettingRepository.isUseShareSheetWhenSharedDeckPreference.getOrDefault()
+                }
                 val tempRecordCrashMsg = async {
                     SettingRepository.isRecordCrashMsgPreference.getOrDefault()
                 }
@@ -76,6 +79,7 @@ class DataStoreInitializer : Initializer<Unit> {
                 SettingRepository.useWhatTheme = tempUseWhatTheme.await()
                 SettingRepository.hadShowTipHowToEditDeckMsg = tempHadShowTipHowToEditDeckMsg.await()
                 SettingRepository.isShowSeqDetailWhenSharedDeck = tempShowSeqDetailWhenShared.await()
+                SettingRepository.isUseShareSheetWhenSharedDeck = tempUseShareSheetWhenShared.await()
                 SettingRepository.isRecordCrashMsg = tempRecordCrashMsg.await()
                 SettingRepository.logPrintLevel = tempLogPrintLevel.await()
                 SettingRepository.logWriteLevel = tempLogWriteLevel.await()

@@ -23,7 +23,6 @@ import com.lyd.absolverdatabase.bridge.state.SettingViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentSettingConfigBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.utils.isNightMode
-import com.lyd.absolverdatabase.utils.logUtils.LLog
 import com.lyd.absolverdatabase.utils.restartApp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -77,6 +76,10 @@ class SettingConfigFragment :BaseFragment() {
             settingConfigSwitchShowSeqDetail.setOnCheckedChangeListener { btn, isChecked ->
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeShowSeqDetailWhenSharedDeck(isChecked)
+            }
+            settingConfigSwitchUseShareSheet.setOnCheckedChangeListener { btn, isChecked ->
+                if (!btn.isPressed) return@setOnCheckedChangeListener
+                settingState.changeUseShareSheetWhenSharedDeck(isChecked)
             }
             settingConfigSwitchUseCNEditionMod.setOnCheckedChangeListener { btn, isChecked ->
                 if (!btn.isPressed) return@setOnCheckedChangeListener
@@ -158,7 +161,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.askBeforeImportDeckFlow.collectLatest {
-                    LLog.i(TAG, "askBeforeImportDeckFlow: flow->$it")
+                    llog.i(TAG, "askBeforeImportDeckFlow: flow->$it")
                     configBinding?.settingConfigSwitchAskBeforeImport?.isChecked = it
 //                    Log.i(TAG, "askBeforeImportDeckFlow: ${SettingRepository.isNeedAskBeforeImportPreference.getOrDefault()}")
                 }
@@ -167,15 +170,23 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.showSeqDetailWhenSharedDeckFlow.collectLatest {
-                    LLog.i(TAG, "showSeqDetailWhenSharedDeckFlow: 接收到数据 $it")
+                    llog.i(TAG, "showSeqDetailWhenSharedDeckFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchShowSeqDetail?.isChecked = it
+                }
+            }
+        }
+        lifecycleScope.launch{
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.useShareSheetWhenSharedDeckFlow.collectLatest {
+                    llog.i(TAG,"useShareSheetWhenSharedDeckFlow: 接收到数据 $it")
+                    configBinding?.settingConfigSwitchUseShareSheet?.isChecked = it
                 }
             }
         }
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.dialogGaussianBlurFlow.collectLatest {
-                    LLog.i(TAG, "dialogGaussianBlurFlow: 接收到数据 $it")
+                    llog.i(TAG, "dialogGaussianBlurFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchGaussianBlur?.isChecked = it
                 }
             }
@@ -184,7 +195,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useCNEditionModFlow.collectLatest {
-                    LLog.i(TAG, "useCNEditionModFlow: 接收到数据 $it")
+                    llog.i(TAG, "useCNEditionModFlow: 接收到数据 $it")
                     configBinding?.apply {
                         settingConfigSwitchUseCNEditionMod.isChecked = it
                         settingConfigSwitchShowMoreMoveCEInfo.visibility = if (it) View.VISIBLE else View.GONE
@@ -197,7 +208,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.showMoreMoveCEInfoFlow.collectLatest {
-                    LLog.i(TAG, "showMoreMoveCEInfoFlow: 接收到数据 $it")
+                    llog.i(TAG, "showMoreMoveCEInfoFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchShowMoreMoveCEInfo?.isChecked = it
                 }
             }
@@ -205,7 +216,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useNightModeFlow.collectLatest {
-                    LLog.i(TAG, "useNightModeFlow: 接收到数据 $it")
+                    llog.i(TAG, "useNightModeFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchUseNightMode?.apply {
                         isChecked = it
                         text = if (it) getString(R.string.nightMode_yes) else getString(R.string.nightMode_follow_system)
@@ -226,7 +237,7 @@ class SettingConfigFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useWhatThemeFlow.collectLatest {
-                    LLog.i(TAG, "useWhatThemeFlow: 接收到数据 $it")
+                    llog.i(TAG, "useWhatThemeFlow: 接收到数据 $it")
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ){
                         configBinding?.settingConfigChipGroupTheme?.check(R.id.settingConfig_chip_default)
                         return@collectLatest

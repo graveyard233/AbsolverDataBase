@@ -134,7 +134,7 @@
 
             <include
                 android:id="@+id/moveSelect_include"
-                layout="@layout/bar_move_msg"
+                layout="@layout/bar_move_detail"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/guidline_land_moveMsg_bottom"

@@ -49,6 +49,47 @@
                     android:textAppearance="?textAppearanceBodyLarge"
                     android:paddingStart="20dp"
                     android:paddingTop="7.5dp"
+                    android:text="@string/crash_file_path"/>
+                <TextView
+                    android:id="@+id/setting_dev_text_crashDirPath"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceBodyMedium"
+                    android:paddingStart="20dp"
+                    android:paddingTop="2dp"
+                    tools:text="///stroage/Android/data/com.lyd.AbsolverDatabase/files/crash"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingTop="7.5dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/setting_dev_text_crashFilesMsg"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAppearance="?textAppearanceBodyLarge"
+                        android:text="@string/crash_files_msg"
+                        tools:text="崩溃日志数量:1,共3MB"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/setting_dev_btn_cleanCrashFiles"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        app:icon="@drawable/ic_delete_file"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/clear_files"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    android:paddingStart="20dp"
+                    android:paddingTop="7.5dp"
                     android:text="@string/log_level_print"/>
 
                 <com.google.android.material.slider.RangeSlider
@@ -77,6 +118,46 @@
                     android:valueFrom="1"
                     android:valueTo="6" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    android:paddingStart="20dp"
+                    android:paddingTop="7.5dp"
+                    android:text="@string/log_file_path"/>
+                <TextView
+                    android:id="@+id/setting_dev_text_logDirPath"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceBodyMedium"
+                    android:paddingStart="20dp"
+                    android:paddingTop="2dp"
+                    tools:text="///stroage/Android/data/com.lyd.AbsolverDatabase/files/log"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="20dp"
+                    android:paddingTop="7.5dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/setting_dev_text_logFilesMsg"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAppearance="?textAppearanceBodyLarge"
+                        android:text="@string/log_files_msg"
+                        tools:text="日志数量:1,共3MB"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/setting_dev_btn_cleanLogFiles"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        app:icon="@drawable/ic_delete_file"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/clear_files"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

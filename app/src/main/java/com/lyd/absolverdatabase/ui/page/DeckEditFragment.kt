@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.IntRange
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.lyd.absolverdatabase.App
@@ -23,7 +25,7 @@ import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.ui.widgets.DeckDetailDialog
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import com.lyd.absolverdatabase.utils.TimeUtils
-import com.lyd.absolverdatabase.utils.logUtils.LLog
+
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -59,7 +61,7 @@ class DeckEditFragment :BaseFragment() {
         dataBinding = FragmentDeckEditBinding.bind(view)
         dataBinding?.lifecycleOwner = viewLifecycleOwner
 
-        LLog.d(TAG, "onCreateView: ${args.deckForEdit}")
+        llog.d(TAG, "onCreateView: ${args.deckForEdit}")
 
         dataBinding?.apply {
             deckEditBarUpperRight.initClick(clickProxy = { view: View,clickWhatMove :Int ->
@@ -109,11 +111,11 @@ class DeckEditFragment :BaseFragment() {
                 editState.saveDeckInSaved(_deckForEdit.copy(updateTime = TimeUtils.curTime),
                     isForSave = true,
                     ifError = {
-                        LLog.e(TAG, "saveDeckInSavedError: $it")
+                        llog.e(TAG, "saveDeckInSavedError: $it")
                         showShortToast(it)
                     },
                     ifSuccess = {
-                        LLog.i(TAG, "saveDeckInSavedSuccess: $it")
+                        llog.i(TAG, "saveDeckInSavedSuccess: $it")
                         showShortToast(getString(R.string.save_deck_success,it))
                     })
             }
@@ -142,50 +144,59 @@ class DeckEditFragment :BaseFragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            editState.sequenceUpperRight.collectLatest {
-                dataBinding?.deckEditBarUpperRight?.updateMoves(it)
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                editState.sequenceUpperRight.collectLatest {
+                    dataBinding?.deckEditMsgBarUpperRight?.updateMsg(it)
+                    dataBinding?.deckEditBarUpperRight?.updateMoves(it)
+                }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            editState.sequenceUpperLeft.collectLatest {
-                dataBinding?.deckEditBarUpperLeft?.updateMoves(it)
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                editState.sequenceUpperLeft.collectLatest {
+                    dataBinding?.deckEditBarUpperLeft?.updateMoves(it)
+                }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            editState.sequenceLowerLeft.collectLatest {
-                dataBinding?.deckEditBarLowerLeft?.updateMoves(it)
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                editState.sequenceLowerLeft.collectLatest {
+                    dataBinding?.deckEditBarLowerLeft?.updateMoves(it)
+                }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            editState.sequenceLowerRight.collectLatest {
-                dataBinding?.deckEditBarLowerRight?.updateMoves(it)
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                editState.sequenceLowerRight.collectLatest {
+                    dataBinding?.deckEditBarLowerRight?.updateMoves(it)
+                }
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launch {
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.optUpperRight.collectLatest {
                     dataBinding?.deckEditOptionalUpperRight?.updateMove(it)
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launch {
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.optUpperLeft.collectLatest {
                     dataBinding?.deckEditOptionalUpperLeft?.updateMove(it)
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launch {
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.optLowerLift.collectLatest {
                     dataBinding?.deckEditOptionalLowerLeft?.updateMove(it)
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launch {
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.optLowerRight.collectLatest {
                     dataBinding?.deckEditOptionalLowerRight?.updateMove(it)
                 }
@@ -200,13 +211,13 @@ class DeckEditFragment :BaseFragment() {
                 if (deckInSave == DeckGenerate.generateEmptyDeck(isFromDeckToEdit = true)){
                     // 可以判断为是空卡组，是从deckFragment跳转进来的
                     _deckForEdit = args.deckForEdit
-                    LLog.i(TAG, "deckInSaved: 从deckFragment跳转进来的，进行数据存储，然后返回")
+                    llog.i(TAG, "deckInSaved: 从deckFragment跳转进来的，进行数据存储，然后返回")
                     editState.saveDeckInSaved(_deckForEdit.also { if (it.updateTime == 1L) it.updateTime = 0L})
                     return@collectLatest
                 } else {
                     // 不相等，是从其他界面切回来的，因为假如是从deckFragment跳转，则会将其设置为空卡组且isFromDeckToEdit = true
                     _deckForEdit = deckInSave
-                    LLog.i(TAG, "deckInSaved: 不相等，是从其他界面切回来的")
+                    llog.i(TAG, "deckInSaved: 不相等，是从其他界面切回来的")
                 }
                 // 这里应该触发招式序列list的变化，进行初始化，让bar自己判断需不需要变更bg
                 editState.updateAllSequence(_deckForEdit)

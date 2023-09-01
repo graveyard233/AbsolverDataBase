@@ -74,6 +74,15 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.isShowSeqDetailWhenSharedDeckPreference.set { boolean }
         }
     }
+    val useShareSheetWhenSharedDeckFlow :StateFlow<Boolean> = repository.isUseShareSheetWhenSharedDeckPreference.asFlow().map {
+        it ?: true
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),true)
+    fun changeUseShareSheetWhenSharedDeck(boolean: Boolean){
+        repository.isUseShareSheetWhenSharedDeck = boolean
+        viewModelScope.launch {
+            repository.isUseShareSheetWhenSharedDeckPreference.set { boolean }
+        }
+    }
     val recordCrashMsgFlow :StateFlow<Boolean> = repository.isRecordCrashMsgPreference.asFlow().map {
         it ?: true
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),true)

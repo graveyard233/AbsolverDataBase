@@ -33,6 +33,7 @@
     <string name="sword">剑</string>
 
     <string name="has_copy_deck_code">已复制卡组代码</string>
+    <string name="share_deck">分享卡组</string>
     <string name="need_to_import_deck_from_clip">需要导入复制的卡组吗</string>
     <string name="clipboard_is_empty">剪贴板为空</string>
     <string name="error_deck_data">错误的卡组代码</string>
@@ -104,6 +105,7 @@
     <string name="dialogGaussianBlur">高斯模糊</string>
     <string name="ask_before_import">在导入卡组前弹窗</string>
     <string name="show_seq_detail_when_shared_deck">分享卡组时附带招式名称</string>
+    <string name="use_shareSheet_when_shared_deck">分享时使用Android ShareSheet</string>
     <string name="use_CNEditionMod">启用China Edition Mod</string>
     <string name="show_more_moveCE_info">显示CEMod招式更多数据</string>
     <string name="nightMode_yes">夜间模式:启用</string>
@@ -123,8 +125,14 @@
 
     <string name="develop_util">开发工具</string>
     <string name="save_file_when_crash">收集崩溃日志</string>
+    <string name="crash_file_path">崩溃日志路径</string>
+    <string name="crash_files_msg">崩溃日志数量:%1$d,共%2$s</string>
+    <string name="clear_files">清理</string>
+    <string name="clear_files_false">删除失败</string>
     <string name="log_level_print">日志打印等级</string>
     <string name="log_level_write">日志写入等级</string>
+    <string name="log_file_path">日志文件路径</string>
+    <string name="log_files_msg">日志数量:%1$d,共%2$s</string>
 
 
     <string name="about_database">数据库相关</string>

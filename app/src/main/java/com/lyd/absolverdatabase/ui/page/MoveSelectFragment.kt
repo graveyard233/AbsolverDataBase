@@ -35,7 +35,7 @@ import com.lyd.absolverdatabase.utils.MoveGenerate
 import com.lyd.absolverdatabase.utils.SideUtil
 import com.lyd.absolverdatabase.utils.getResourceColor
 import com.lyd.absolverdatabase.utils.isNightMode
-import com.lyd.absolverdatabase.utils.logUtils.LLog
+
 import com.lyd.architecture.utils.ScreenUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -299,7 +299,7 @@ class MoveSelectFragment :BaseFragment(){
                 adapter = spinnerTowardAdapter
                 onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {// 当选择和上次选的一样就不会触发这个回调
-                        LLog.i(TAG, "on attackToward Selected: ${spinnerTowardAdapter.getItem(p2)}")
+                        llog.i(TAG, "on attackToward Selected: ${spinnerTowardAdapter.getItem(p2)}")
                         filterOption.attackToward = AttackTowardOption.getOptions()[p2]
                         doAfterChangeFilterManual()
                     }
@@ -312,7 +312,7 @@ class MoveSelectFragment :BaseFragment(){
                 adapter = spinnerAltitudeAdapter
                 onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        LLog.i(TAG, "on attackAltitude Selected: ${spinnerAltitudeAdapter.getItem(p2)}")
+                        llog.i(TAG, "on attackAltitude Selected: ${spinnerAltitudeAdapter.getItem(p2)}")
                         filterOption.attackAltitude = AttackAltitudeOption.getOptions()[p2]
                         doAfterChangeFilterManual()
                     }
@@ -325,7 +325,7 @@ class MoveSelectFragment :BaseFragment(){
                 adapter = spinnerDirectionAdapter
                 onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        LLog.i(TAG, "on attackDirection Selected: ${spinnerDirectionAdapter.getItem(p2)}")
+                        llog.i(TAG, "on attackDirection Selected: ${spinnerDirectionAdapter.getItem(p2)}")
                         filterOption.attackDirection = AttackDirectionOption.getOptions()[p2]
                         doAfterChangeFilterManual()
                     }
@@ -398,14 +398,14 @@ class MoveSelectFragment :BaseFragment(){
             }
 
         } catch (e :Exception){
-            LLog.e(TAG, e)
+            llog.e(TAG,"延迟加载bar出了问题", e)
         }
 
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.moveBeClickFlow.collectLatest {
                     if (seqPack != null){// 只有序列攻击才要设置选择边框
-                        LLog.i(TAG, "onViewCreated: 接受到选择边框变化->$it")
+                        llog.i(TAG, "onViewCreated: 接受到选择边框变化->$it")
                         setMoveInBarBeSelect(it)
                         editState.watchWhatMsgInBar(it)// 点击moveBar里面的数据也能看到数据
                     }
@@ -420,11 +420,11 @@ class MoveSelectFragment :BaseFragment(){
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.filterOptionFlow.collectLatest {
                     if (filterOption.changeBy.get() == 0){
-                        LLog.i(TAG, "filterOptionFlow: 非手动，从其他界面进来的，应该变更spinner布局")
+                        llog.i(TAG, "filterOptionFlow: 非手动，从其他界面进来的，应该变更spinner布局")
                         filterOption.changeAll(it)
                         tryChangeSpinner(it)
                     } else if (filterOption.changeBy.get() == 1) {
-                        LLog.i(TAG, "filterOptionFlow : 是手动改变的，不是其他界面切回来的，不用变更布局")
+                        llog.i(TAG, "filterOptionFlow : 是手动改变的，不是其他界面切回来的，不用变更布局")
                         filterOption.changeBy.set(0)
                     }
 
@@ -437,7 +437,7 @@ class MoveSelectFragment :BaseFragment(){
                 editState.watchMsgInBarFlow.collectLatest {
                     when(it){
                         in 0..2 ->{
-                            LLog.i(TAG, "watchMsgInBarFlow: 消息的第一次消费")
+                            llog.i(TAG, "watchMsgInBarFlow: 消息的第一次消费")
                             if (seqPack != null){//
                                 if (seqPack!!.idList[it] != -1){// 说明选中的框有招式
                                     val tempForSelect = MoveForSelect(
@@ -463,7 +463,7 @@ class MoveSelectFragment :BaseFragment(){
                             editState.watchWhatMsgInBar(-1)// 重新设置成其他数据,确保这个消息是一次性的
                         }
                         else->{
-                            LLog.i(TAG, "watchMsgInBarFlow: 消息已经消费过了，就别设置了")
+                            llog.i(TAG, "watchMsgInBarFlow: 消息已经消费过了，就别设置了")
                         }
                     }
                 }
@@ -475,13 +475,13 @@ class MoveSelectFragment :BaseFragment(){
                 editState.moveForSelectFlow.collectLatest {// 接收到数据，首先更新数据部分的文本，然后更新站架信息，最后更新pack的数据，最后找机会变更viewModel
                     when(it){
                         is MoveMsgState.SelectNull -> {
-                            LLog.d(TAG, "moveForSelectFlow: 接收到 null 的选择")
+                            llog.d(TAG, "moveForSelectFlow: 接收到 null 的选择")
                             if (it.isEnterFromEdit){
-                                LLog.i(TAG, "moveForSelectFlow: 从editFragment进来的")
+                                llog.i(TAG, "moveForSelectFlow: 从editFragment进来的")
                                 return@collectLatest
                             }
                             if (seqPack != null){
-                                LLog.i(TAG, "moveForSelectFlow->: 第${editState.moveBeClickFlow.value}个置空")
+                                llog.i(TAG, "moveForSelectFlow->: 第${editState.moveBeClickFlow.value}个置空")
                                 seqPack!!.updateOne(editState.moveBeClickFlow.value,null)
                                 if (moveImgList.isEmpty()){
                                     return@collectLatest
@@ -574,7 +574,7 @@ class MoveSelectFragment :BaseFragment(){
                                     }
                                 }
                                 seqPack!!.updateOne(editState.moveBeClickFlow.value,it.moveForSelect)
-                                LLog.i(TAG, "moveForSelectFlow: idList:${seqPack!!.idList} isMirrorList:${seqPack!!.isMirrorList}")
+                                llog.i(TAG, "moveForSelectFlow: idList:${seqPack!!.idList} isMirrorList:${seqPack!!.isMirrorList}")
                                 // 这里要更新editState里面存在saveState中的deck数据就行
                             }else if (optionPack != null){// 起始站架已经定死，所以只用修改结束站架
                                 move0?.apply {
@@ -596,12 +596,12 @@ class MoveSelectFragment :BaseFragment(){
                                     if (SettingRepository.isUseCNEditionMod){ it.moveForSelect.moveCE.endSide } else { it.moveForSelect.moveOrigin.endSide }
                                 )))
                                 optionPack!!.updateOptByMoveForSelect(moveForSelect = it.moveForSelect)
-                                LLog.i(TAG, "moveForSelectFlow: ${optionPack!!}")
+                                llog.i(TAG, "moveForSelectFlow: ${optionPack!!}")
                             }
                             updateDeckInSaveState()
                         }
                         else -> {
-                            LLog.i(TAG, "moveForSelectFlow: 不知道是什么类型")
+                            llog.i(TAG, "moveForSelectFlow: 不知道是什么类型")
                         }
                     }
                 }
@@ -710,7 +710,7 @@ class MoveSelectFragment :BaseFragment(){
     }
     // 长按招式框，可以把这个框和对应的seqPack还有editState里面的deck的数据也一起变更了
     private fun whenLongClickMove(moveIndex: Int = 0){
-        LLog.i(TAG, "whenLongClickMove: $moveIndex 触发了长按删除")
+        llog.i(TAG, "whenLongClickMove: $moveIndex 触发了长按删除")
         editState.selectWhatMoveInSeq(moveIndex)
         editState.selectNull()
     }
@@ -959,7 +959,7 @@ class MoveSelectFragment :BaseFragment(){
 
     private fun doAfterChangeFilterManual(){// 应该在发射这里进行拦截，确保collect的时候总会更新，然后recycle那边也不会收到很多次
         if (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - launchFilterTime) < 0.8 && launchFilterTime != 0L){
-            LLog.i(TAG, "doAfterChangeFilterManual: 过于频繁，放弃")
+            llog.i(TAG, "doAfterChangeFilterManual: 过于频繁，放弃")
         } else {
             launchFilterTime = System.currentTimeMillis();
             editState.changeFilter(filterOption.apply { changeBy.set(1) })
@@ -972,21 +972,21 @@ class MoveSelectFragment :BaseFragment(){
             moveSelectSpinnerToward?.apply {
                 if (AttackTowardOption.getOptions()[selectedItemPosition] != filter.attackToward){
                     // 不同就要更新界面
-                    LLog.d(TAG, "tryChangeSpinner: attackToward 不一样，更新")
+                    llog.d(TAG, "tryChangeSpinner: attackToward 不一样，更新")
                     setSelection(filterOption.attackToward.num)
                 }
             }
             moveSelectSpinnerAltitude?.apply {
                 if (AttackAltitudeOption.getOptions()[selectedItemPosition] != filter.attackAltitude){
                     // 不同就要更新界面
-                    LLog.d(TAG, "tryChangeSpinner: attackAltitude 不一样，更新")
+                    llog.d(TAG, "tryChangeSpinner: attackAltitude 不一样，更新")
                     setSelection(filterOption.attackAltitude.num)
                 }
             }
             moveSelectSpinnerDirection?.apply {
                 if (AttackDirectionOption.getOptions()[selectedItemPosition] != filter.attackDirection){
                     // 不同就要更新界面
-                    LLog.d(TAG, "tryChangeSpinner: attackDirection 不一样，更新")
+                    llog.d(TAG, "tryChangeSpinner: attackDirection 不一样，更新")
                     setSelection(filterOption.attackDirection.num)
                 }
             }

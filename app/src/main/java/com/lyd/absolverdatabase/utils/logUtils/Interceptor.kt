@@ -3,7 +3,7 @@ package com.lyd.absolverdatabase.utils.logUtils
 abstract class Interceptor<T> {
     /**
      * 日志处理逻辑
-     * @param args 第一个位置一般放日志的打印时间
+     * @param args 第一个位置一般放日志的打印时间,第二个位置放exception
      * */
     abstract fun log(tag :String, message :T, priority :Int, chain: Chain, args :List<Any>?)
     // 是否启动当前拦截器

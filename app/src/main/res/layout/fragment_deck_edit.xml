@@ -102,6 +102,14 @@
                 app:layout_constraintGuide_percent="0.6" />
 
 
+            <com.lyd.absolverdatabase.ui.widgets.MovesMsgBar
+                android:id="@+id/deckEdit_msgBar_upperRight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/deckEdit_horizontal_line_5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <com.lyd.absolverdatabase.ui.widgets.MovesBar
                 android:id="@+id/deckEdit_bar_upperRight"
                 android:layout_width="0dp"

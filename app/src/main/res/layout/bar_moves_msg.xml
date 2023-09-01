@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bar_moves_msg_line_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bar_moves_msg_line_30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bar_moves_msg_line_40"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bar_moves_msg_line_60"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bar_moves_msg_line_70"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/bar_moves_msg_line_90"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/bar_moves_msg_line_10"
+        app:layout_constraintEnd_toStartOf="@+id/bar_moves_msg_line_30"
+        app:layout_constraintTop_toTopOf="parent" >
+        <TextView
+            android:id="@+id/bar_moves_msg_text0_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceLabelSmall"
+            android:layout_gravity="center"
+            android:gravity="start|bottom"
+            tools:text="+11/+7"/>
+        <TextView
+            android:id="@+id/bar_moves_msg_text0_right"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="?textAppearanceLabelSmall"
+            android:layout_gravity="center"
+            android:gravity="end|bottom"
+            tools:text="12帧"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/bar_moves_msg_line_40"
+        app:layout_constraintEnd_toStartOf="@+id/bar_moves_msg_line_60"
+        app:layout_constraintTop_toTopOf="parent" >
+        <TextView
+            android:id="@+id/bar_moves_msg_text1_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceLabelSmall"
+            android:layout_gravity="center"
+            android:gravity="start|bottom"
+            tools:text="+11/+7"/>
+        <TextView
+            android:id="@+id/bar_moves_msg_text1_right"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="?textAppearanceLabelSmall"
+            android:layout_gravity="center"
+            android:gravity="end|bottom"
+            tools:text="12帧"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/bar_moves_msg_line_70"
+        app:layout_constraintEnd_toStartOf="@+id/bar_moves_msg_line_90"
+        app:layout_constraintTop_toTopOf="parent" >
+        <TextView
+            android:id="@+id/bar_moves_msg_text2_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceLabelSmall"
+            android:layout_gravity="center"
+            android:gravity="start|bottom"
+            tools:text="+11/+7"/>
+        <TextView
+            android:id="@+id/bar_moves_msg_text2_right"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="?textAppearanceLabelSmall"
+            android:layout_gravity="center"
+            android:gravity="end|bottom"
+            tools:text="12帧"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

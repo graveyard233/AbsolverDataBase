@@ -64,6 +64,13 @@
                         android:text="@string/show_seq_detail_when_shared_deck"/>
 
                     <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingConfig_switch_useShareSheet"
+                        style="@style/SettingFragmentSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/use_shareSheet_when_shared_deck"/>
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
                         android:id="@+id/settingConfig_switch_useCNEditionMod"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
