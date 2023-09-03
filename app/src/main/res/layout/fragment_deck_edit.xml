@@ -103,7 +103,7 @@
 
 
             <com.lyd.absolverdatabase.ui.widgets.MovesMsgBar
-                android:id="@+id/deckEdit_msgBar_upperRight"
+                android:id="@+id/deckEdit_msgsBar_upperRight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@+id/deckEdit_horizontal_line_5"
@@ -120,6 +120,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/deckEdit_horizontal_line_5" />
 
+            <com.lyd.absolverdatabase.ui.widgets.MovesMsgBar
+                android:id="@+id/deckEdit_msgsBar_upperLeft"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/deckEdit_horizontal_line_20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <com.lyd.absolverdatabase.ui.widgets.MovesBar
                 android:id="@+id/deckEdit_bar_upperLeft"
                 android:layout_width="0dp"
@@ -130,6 +138,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/deckEdit_horizontal_line_20" />
 
+            <com.lyd.absolverdatabase.ui.widgets.MovesMsgBar
+                android:id="@+id/deckEdit_msgsBar_lowerLeft"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/deckEdit_horizontal_line_35"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <com.lyd.absolverdatabase.ui.widgets.MovesBar
                 android:id="@+id/deckEdit_bar_lowerLeft"
                 android:layout_width="0dp"
@@ -139,6 +155,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/deckEdit_horizontal_line_35" />
+
+            <com.lyd.absolverdatabase.ui.widgets.MovesMsgBar
+                android:id="@+id/deckEdit_msgsBar_lowerRight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/deckEdit_horizontal_line_50"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <com.lyd.absolverdatabase.ui.widgets.MovesBar
                 android:id="@+id/deckEdit_bar_lowerRight"
@@ -178,6 +202,13 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.97" />
 
+            <com.lyd.absolverdatabase.ui.widgets.OneMoveMsgBar
+                android:id="@+id/deckEdit_optional_msg_upperRight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/deckEdit_optional_upperRight"
+                app:layout_constraintEnd_toStartOf="@+id/guideline16"
+                app:layout_constraintStart_toStartOf="@+id/guideline17" />
             <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
                 android:id="@+id/deckEdit_optional_upperRight"
                 android:layout_width="0dp"
@@ -189,6 +220,13 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline17"
                 app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
+            <com.lyd.absolverdatabase.ui.widgets.OneMoveMsgBar
+                android:id="@+id/deckEdit_optional_msg_upperLeft"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/guideline6"
+                app:layout_constraintEnd_toStartOf="@+id/guideline22"
+                app:layout_constraintStart_toStartOf="@+id/guideline21" />
             <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
                 android:id="@+id/deckEdit_optional_upperLeft"
                 android:layout_width="0dp"
@@ -200,6 +238,13 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline21"
                 app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
+            <com.lyd.absolverdatabase.ui.widgets.OneMoveMsgBar
+                android:id="@+id/deckEdit_optional_msg_lowerLeft"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/guideline13"
+                app:layout_constraintEnd_toStartOf="@+id/guideline16"
+                app:layout_constraintStart_toStartOf="@+id/guideline17" />
             <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
                 android:id="@+id/deckEdit_optional_lowerLeft"
                 android:layout_width="0dp"
@@ -211,6 +256,13 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline17"
                 app:layout_constraintTop_toTopOf="@+id/guideline13" />
 
+            <com.lyd.absolverdatabase.ui.widgets.OneMoveMsgBar
+                android:id="@+id/deckEdit_optional_msg_lowerRight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/guideline13"
+                app:layout_constraintEnd_toStartOf="@+id/guideline22"
+                app:layout_constraintStart_toStartOf="@+id/guideline21" />
             <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
                 android:id="@+id/deckEdit_optional_lowerRight"
                 android:layout_width="0dp"

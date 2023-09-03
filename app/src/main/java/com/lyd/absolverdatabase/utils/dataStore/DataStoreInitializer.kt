@@ -37,6 +37,15 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempAskBeforeImport = async {
                     SettingRepository.isNeedAskBeforeImportPreference.getOrDefault()
                 }
+                val tempShowSeqDetailWhenShared = async {
+                    SettingRepository.isShowSeqDetailWhenSharedDeckPreference.getOrDefault()
+                }
+                val tempUseShareSheetWhenShared = async {
+                    SettingRepository.isUseShareSheetWhenSharedDeckPreference.getOrDefault()
+                }
+                val tempShowMovesMsgInDeckEdit = async {
+                    SettingRepository.isShowMovesMsgInDeckEditPreference.getOrDefault()
+                }
                 val tempUseCNEditionMod = async {
                     SettingRepository.isUseCNEditionModPreference.getOrDefault()
                 }
@@ -53,15 +62,7 @@ class DataStoreInitializer : Initializer<Unit> {
                         SettingRepository.useWhatThemePreference.getOrDefault()
                     }
                 }
-                val tempHadShowTipHowToEditDeckMsg = async {
-                    SettingRepository.hadShowTipHowToEditDeckMsgPreference.getOrDefault()
-                }
-                val tempShowSeqDetailWhenShared = async {
-                    SettingRepository.isShowSeqDetailWhenSharedDeckPreference.getOrDefault()
-                }
-                val tempUseShareSheetWhenShared = async {
-                    SettingRepository.isUseShareSheetWhenSharedDeckPreference.getOrDefault()
-                }
+
                 val tempRecordCrashMsg = async {
                     SettingRepository.isRecordCrashMsgPreference.getOrDefault()
                 }
@@ -71,18 +72,25 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempLogWriteLevel = async {
                     SettingRepository.logWriteLevelPreference.getOrDefault()
                 }
+
+                val tempHadShowTipHowToEditDeckMsg = async {
+                    SettingRepository.hadShowTipHowToEditDeckMsgPreference.getOrDefault()
+                }
                 SettingRepository.isDialogGaussianBlur = tempGaussianBlur.await()
                 SettingRepository.isNeedAskBeforeImport = tempAskBeforeImport.await()
+                SettingRepository.isShowSeqDetailWhenSharedDeck = tempShowSeqDetailWhenShared.await()
+                SettingRepository.isUseShareSheetWhenSharedDeck = tempUseShareSheetWhenShared.await()
+                SettingRepository.isShowMovesMsgInDeckEdit = tempShowMovesMsgInDeckEdit.await()
                 SettingRepository.isUseCNEditionMod = tempUseCNEditionMod.await()
                 SettingRepository.isShowMoreMoveCEInfo = tempShowMoreMoveCEInfo.await()
                 SettingRepository.useNightMode = tempUseNightMode.await()
                 SettingRepository.useWhatTheme = tempUseWhatTheme.await()
-                SettingRepository.hadShowTipHowToEditDeckMsg = tempHadShowTipHowToEditDeckMsg.await()
-                SettingRepository.isShowSeqDetailWhenSharedDeck = tempShowSeqDetailWhenShared.await()
-                SettingRepository.isUseShareSheetWhenSharedDeck = tempUseShareSheetWhenShared.await()
+
                 SettingRepository.isRecordCrashMsg = tempRecordCrashMsg.await()
                 SettingRepository.logPrintLevel = tempLogPrintLevel.await()
                 SettingRepository.logWriteLevel = tempLogWriteLevel.await()
+
+                SettingRepository.hadShowTipHowToEditDeckMsg = tempHadShowTipHowToEditDeckMsg.await()
 
                 when(SettingRepository.useNightMode){
                     true -> {

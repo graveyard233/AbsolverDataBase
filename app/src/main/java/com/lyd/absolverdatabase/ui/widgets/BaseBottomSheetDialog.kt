@@ -18,7 +18,7 @@ import com.lyd.absolverdatabase.utils.isNightMode
 import com.lyd.absolverdatabase.utils.setNavigationBarTransparentCompat
 
 abstract class BaseBottomSheetDialog(context: Context) : BottomSheetDialog(context) {
-
+    protected val TAG = javaClass.simpleName
     abstract fun createView(inflater: LayoutInflater): View
 
     @RequiresApi(Build.VERSION_CODES.R)

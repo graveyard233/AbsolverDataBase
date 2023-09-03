@@ -5,7 +5,8 @@ import java.util.concurrent.atomic.AtomicInteger
 data class FilterOption(
     var attackToward: AttackTowardOption,
     var attackAltitude: AttackAltitudeOption,
-    var attackDirection: AttackDirectionOption
+    var attackDirection: AttackDirectionOption,
+    var strengthList: MutableList<Boolean>// 代表着力度筛选
 ) {
 //    var effect :String = MoveEffect.NULL.toString()
 //    var startFrame :Int ?= 0
@@ -15,12 +16,26 @@ data class FilterOption(
         attackToward = tempFilter.attackToward
         attackAltitude = tempFilter.attackAltitude
         attackDirection = tempFilter.attackDirection
+        strengthList = mutableListOf(tempFilter.strengthList[0],tempFilter.strengthList[1],tempFilter.strengthList[2])
     }
 
     fun isFilterSame(otherFilter :FilterOption) :Boolean{
-        return this.attackToward.num == otherFilter.attackToward.num &&
+        var tempFlag = 0
+        if (!(this.attackToward.num == otherFilter.attackToward.num &&
+            this.attackAltitude.num == otherFilter.attackAltitude.num &&
+            this.attackDirection.num == otherFilter.attackDirection.num)){
+            tempFlag++
+        }
+
+        this.strengthList.forEachIndexed { index, b ->
+            if (otherFilter.strengthList[index] != b){
+                tempFlag++
+            }
+        }
+
+        return tempFlag == 0/*this.attackToward.num == otherFilter.attackToward.num &&
                 this.attackAltitude.num == otherFilter.attackAltitude.num &&
-                this.attackDirection.num == otherFilter.attackDirection.num
+                this.attackDirection.num == otherFilter.attackDirection.num*/
     }
 }
 

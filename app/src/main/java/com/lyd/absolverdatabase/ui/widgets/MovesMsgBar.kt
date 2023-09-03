@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
 import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 
 class MovesMsgBar :ConstraintLayout{
 
@@ -33,6 +34,9 @@ class MovesMsgBar :ConstraintLayout{
 
 
     fun updateMsg(boxes: List<MoveBox>){
+        if (!SettingRepository.isShowMovesMsgInDeckEdit){
+            return
+        }
         boxes.forEachIndexed { index, box ->
             when(index){
                 0->{
@@ -55,12 +59,14 @@ class MovesMsgBar :ConstraintLayout{
             return
         }
         box.moveOrigin?.apply {
-            left.text = "+$hitAdvantageFrame/${if (defenseAdvantageFrame > 0) "+" else ""}$defenseAdvantageFrame"
-            right.text = "${startFrame}帧"
+            left.text = context.getString(R.string.move_msg_bar_advantageFrame,hitAdvantageFrame,
+                "${if (defenseAdvantageFrame > 0) "+" else ""}$defenseAdvantageFrame")
+            right.text = context.getString(R.string.move_msg_bar_startFrame,startFrame)
         }
         box.moveCE?.apply {
-            left.text = "+$hitAdvantageFrame/${if (defenseAdvantageFrame > 0) "+" else ""}$defenseAdvantageFrame"
-            right.text = "${startFrame}帧"
+            left.text = context.getString(R.string.move_msg_bar_advantageFrame,hitAdvantageFrame,
+                "${if (defenseAdvantageFrame > 0) "+" else ""}$defenseAdvantageFrame")
+            right.text = context.getString(R.string.move_msg_bar_startFrame,startFrame)
         }
     }
 

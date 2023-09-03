@@ -65,12 +65,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline_moveMsg_top">
 
-                <include
-                    android:id="@+id/moveSelect_include"
-                    layout="@layout/bar_move_detail"
+                <com.aitsuki.swipe.SwipeLayout
+                    android:id="@+id/moveSelect_swipeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="3"/>
+                    android:layout_weight="3"
+                    app:autoClose="true"
+                    app:preview="right"
+                    app:designer="@string/overlay_designer">
+
+                    <include
+                        android:id="@+id/moveSelect_include"
+                        layout="@layout/bar_move_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/moveSelect_btn_more_filter"
+                        android:layout_gravity="end|center_vertical"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:icon="@drawable/ic_more_filter_for_moves" />
+
+                </com.aitsuki.swipe.SwipeLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -132,15 +132,34 @@
                 app:layout_constraintGuide_percent="0.4" />
 
 
-            <include
-                android:id="@+id/moveSelect_include"
-                layout="@layout/bar_move_detail"
+            <com.aitsuki.swipe.SwipeLayout
+                android:id="@+id/moveSelect_swipeLayout"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                app:autoClose="true"
+                app:preview="right"
+                app:designer="@string/overlay_designer"
                 app:layout_constraintBottom_toTopOf="@+id/guidline_land_moveMsg_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guidline_moveMsg_top" />
+                app:layout_constraintTop_toTopOf="@+id/guidline_moveMsg_top" >
+
+                <include
+                    android:id="@+id/moveSelect_include"
+                    layout="@layout/bar_move_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/moveSelect_btn_more_filter"
+                    android:layout_gravity="end|center_vertical"
+                    style="?attr/materialIconButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_more_filter_for_moves" />
+
+            </com.aitsuki.swipe.SwipeLayout>
+
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guidline_land_moveMsg_bottom"

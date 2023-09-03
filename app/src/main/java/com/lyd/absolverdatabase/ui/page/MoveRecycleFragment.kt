@@ -37,6 +37,11 @@ import kotlinx.coroutines.withContext
 class MoveRecycleFragment :BaseFragment()
 {
 
+    companion object{
+        @JvmStatic
+        private val strengthSet :Set<Int> = setOf(1,2,3)
+    }
+
     private var whatEndSide :Int = 0
 
     // 由于创建了很多个Fragment，所以这个也不是唯一的
@@ -45,7 +50,8 @@ class MoveRecycleFragment :BaseFragment()
     }
 
     private val _filter :FilterOption by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        FilterOption(attackToward = AttackTowardOption.all(), attackAltitude = AttackAltitudeOption.all(), attackDirection = AttackDirectionOption.all())
+        FilterOption(attackToward = AttackTowardOption.all(), attackAltitude = AttackAltitudeOption.all(), attackDirection = AttackDirectionOption.all(),
+            strengthList = mutableListOf(true,true,true))
     }
 
     // 这个是唯一的，所以通过这个来设置筛选的选项，所以这个state用来观察筛选flow
@@ -132,43 +138,45 @@ class MoveRecycleFragment :BaseFragment()
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            // TODO: 准备改成结束在，别人依靠的是在editFragment或者其他数据拿到起始占位，然后这里找的是结束站位的招式
-            // TODO: 现在的问题是我也需要按起始站架来筛选招式，tab只是限制了结束站架，然而选择的框是限制起始站架
-            // TODO: 招式是可以镜像的（只适用于徒手卡组，剑卡除外），以直拳为例，可以右上->左上,也可以左上->右上，然后左右也是有镜像的，同样是根据是否启用镜像来确认是否反转显示的
-            // 又因为我要根据每个序列的招式进行筛选，起始站架和结束站架都是不一样的，所以我需要在这里持有徒手或剑卡的所有数据，然后在这里进行筛选
-            // whatSide 还是当成结束站架
-            // 外面会传入一个flow，是起始站架，然后根据这个进行筛选招式
-            // TODO: 首先判断是不是找剑卡，假如不是，那就是找徒手卡组
-            // TODO: 如果是徒手卡组，则判断起始站架，寻找所有和原本站架和镜像站架相关的招式，找到之后将不和原本站架相同的招式的结束站架和左右全部转成镜像的数据
-            // TODO: 最后再根据结束站架分发list
-            editState.filterOptionFlow.collectLatest {// 在这里要改变_filter，按照_sideList来筛选输出
-                llog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} 接受到筛选数据: Toward->${it.attackToward.name}" +
-                        " Altitude->${it.attackAltitude.name} Direction->${it.attackDirection.name}")
-                if (_filter.isFilterSame(it)){
-                    // 一样的数据，不用变动
-                    llog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 数据和内部的一样，不需要动_filter")
-                    if (isFirstEnter){
-                        llog.i(TAG, "filterOptionFlow: isFirst->$isFirstEnter 第一次进来，还是要获取数据")
-                        isFirstEnter = false
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                // TODO: 准备改成结束在，别人依靠的是在editFragment或者其他数据拿到起始占位，然后这里找的是结束站位的招式
+                // TODO: 现在的问题是我也需要按起始站架来筛选招式，tab只是限制了结束站架，然而选择的框是限制起始站架
+                // TODO: 招式是可以镜像的（只适用于徒手卡组，剑卡除外），以直拳为例，可以右上->左上,也可以左上->右上，然后左右也是有镜像的，同样是根据是否启用镜像来确认是否反转显示的
+                // 又因为我要根据每个序列的招式进行筛选，起始站架和结束站架都是不一样的，所以我需要在这里持有徒手或剑卡的所有数据，然后在这里进行筛选
+                // whatSide 还是当成结束站架
+                // 外面会传入一个flow，是起始站架，然后根据这个进行筛选招式
+                // TODO: 首先判断是不是找剑卡，假如不是，那就是找徒手卡组
+                // TODO: 如果是徒手卡组，则判断起始站架，寻找所有和原本站架和镜像站架相关的招式，找到之后将不和原本站架相同的招式的结束站架和左右全部转成镜像的数据
+                // TODO: 最后再根据结束站架分发list
+                editState.filterOptionFlow.collectLatest {// 在这里要改变_filter，按照_sideList来筛选输出
+                    llog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} 接受到筛选数据: Toward->${it.attackToward.name}" +
+                            " Altitude->${it.attackAltitude.name} Direction->${it.attackDirection.name}")
+                    if (_filter.isFilterSame(it)){
+                        // 一样的数据，不用变动
+                        llog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 数据和内部的一样，不需要动_filter")
+                        if (isFirstEnter){
+                            llog.i(TAG, "filterOptionFlow: isFirst->$isFirstEnter 第一次进来，还是要获取数据")
+                            isFirstEnter = false
+                            val resultList = filterByOpt(_sideList,_filter)
+                            moveAdapter.submitList(resultList)
+                        }
+                    } else {
+                        // 不一样，要重新筛选
+                        llog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 不一样，_filter要重新设置")
+                        synchronized(_filter){
+                            _filter.changeAll(it)
+                        }
+                        // 根据sideList来进行筛选
                         val resultList = filterByOpt(_sideList,_filter)
+                        resultList.filter { select ->
+                            select.isMirror == 1
+                        }.forEach {temp->
+                            llog.i(TAG, "list中镜像的招式有: $temp")
+                        }
                         moveAdapter.submitList(resultList)
-                    }
-                } else {
-                    // 不一样，要重新筛选
-                    llog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 不一样，_filter要重新设置")
-                    synchronized(_filter){
-                        _filter.changeAll(it)
-                    }
-                    // 根据sideList来进行筛选
-                    val resultList = filterByOpt(_sideList,_filter)
-                    resultList.filter { select ->
-                        select.isMirror == 1
-                    }.forEach {temp->
-                        llog.i(TAG, "list中镜像的招式有: $temp")
-                    }
-                    moveAdapter.submitList(resultList)
 //                    filterList(_sideList,_filter)
+                    }
                 }
             }
         }
@@ -283,6 +291,11 @@ class MoveRecycleFragment :BaseFragment()
     /**执行完[filterBySideLimit]后再执行这个，按选项筛选，输出[MoveForSelect]的list，以便标记招式，所以筛选都按这个流程走*/
     private suspend fun filterByOpt(sideList: MutableList<MoveForSelect>, option: FilterOption) :List<MoveForSelect>{
         return withContext(Dispatchers.Default){
+            val tempStrengthSet = strengthSet.toMutableSet()
+            option.strengthList.forEachIndexed { index, b ->
+                if (!b){ tempStrengthSet.remove(index + 1) }
+            }
+            llog.i(TAG,"side ${SideUtil.getSideByInt(whatEndSide)} strengthSet :$tempStrengthSet")
             if (SettingRepository.isUseCNEditionMod){
                 sideList.filter {
                     when(option.attackToward){
@@ -303,6 +316,12 @@ class MoveRecycleFragment :BaseFragment()
                         is AttackDirectionOption.vertical -> { it.moveCE.attackDirection == AttackDirection.VERTICAL }
                         is AttackDirectionOption.poke -> { it.moveCE.attackDirection == AttackDirection.POKE }
                         is AttackDirectionOption.all -> true
+                    }
+                }.filter {
+                    if (option.strengthList[0] && option.strengthList[1] && option.strengthList[2]){// 只有全部都为真才不需要筛选力度
+                        true
+                    } else {
+                        tempStrengthSet.contains(it.moveCE.strength)
                     }
                 }
             } else {
@@ -325,6 +344,12 @@ class MoveRecycleFragment :BaseFragment()
                         is AttackDirectionOption.vertical -> { it.moveOrigin.attackDirection == AttackDirection.VERTICAL }
                         is AttackDirectionOption.poke -> { it.moveOrigin.attackDirection == AttackDirection.POKE }
                         is AttackDirectionOption.all -> true
+                    }
+                }.filter {
+                    if (option.strengthList[0] && option.strengthList[1] && option.strengthList[2]){// 只有全部都为真才不需要筛选力度
+                        true
+                    } else {
+                        tempStrengthSet.contains(it.moveOrigin.strength)
                     }
                 }
             }

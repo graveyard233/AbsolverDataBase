@@ -18,7 +18,6 @@ import com.lyd.absolverdatabase.utils.TimeUtils.toDateStr
 import java.util.Date
 
 class DeckDetailDialog(activity: Activity) : BaseBottomSheetDialog(activity) {
-    private val TAG = javaClass.simpleName
 
     var mDeck : Deck? = null
 

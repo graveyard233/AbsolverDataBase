@@ -47,6 +47,8 @@
     <string name="how_to_edit_deckMsg_title">How to edit deck message</string>
     <string name="how_To_edit_deckMsg_msg">Long press the blank area to open the editing window</string>
     <string name="save_deck_success">Save deck(ID=%1$s) success</string>
+    <string name="move_msg_bar_advantageFrame">+%1$d/%2$s</string>
+    <string name="move_msg_bar_startFrame">%1$dF</string>
 
     <string name="deck_name">Deck Name</string>
     <string name="deck_note">Deck Note</string>
@@ -108,6 +110,7 @@
     <string name="ask_before_import">Show Dialog Before Import Deck</string>
     <string name="show_seq_detail_when_shared_deck">Show move name when sharing deck</string>
     <string name="use_shareSheet_when_shared_deck">Use ShareSheet when sharing deck</string>
+    <string name="show_movesMsg_in_deckEdit">Show moves message in DeckEdit</string>
     <string name="use_CNEditionMod">Use China Edition Mod</string>
     <string name="show_more_moveCE_info">Show CEMod More Information</string>
     <string name="nightMode_yes">NightMode:Enable</string>

@@ -81,6 +81,10 @@ class SettingConfigFragment :BaseFragment() {
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeUseShareSheetWhenSharedDeck(isChecked)
             }
+            settingConfigSwitchShowMovesMsgInDeckEdit.setOnCheckedChangeListener{ btn, isChecked ->
+                if (!btn.isPressed) return@setOnCheckedChangeListener
+                settingState.changeShowMovesMsgInDeckEdit(isChecked)
+            }
             settingConfigSwitchUseCNEditionMod.setOnCheckedChangeListener { btn, isChecked ->
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeUseCNEditionMod(isChecked)
@@ -160,10 +164,17 @@ class SettingConfigFragment :BaseFragment() {
         // 在这里进行flow的监听
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.dialogGaussianBlurFlow.collectLatest {
+                    llog.i(TAG, "dialogGaussianBlurFlow: 接收到数据 $it")
+                    configBinding?.settingConfigSwitchGaussianBlur?.isChecked = it
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.askBeforeImportDeckFlow.collectLatest {
                     llog.i(TAG, "askBeforeImportDeckFlow: flow->$it")
                     configBinding?.settingConfigSwitchAskBeforeImport?.isChecked = it
-//                    Log.i(TAG, "askBeforeImportDeckFlow: ${SettingRepository.isNeedAskBeforeImportPreference.getOrDefault()}")
                 }
             }
         }
@@ -183,14 +194,13 @@ class SettingConfigFragment :BaseFragment() {
                 }
             }
         }
-        lifecycleScope.launch {
+        lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                settingState.dialogGaussianBlurFlow.collectLatest {
-                    llog.i(TAG, "dialogGaussianBlurFlow: 接收到数据 $it")
-                    configBinding?.settingConfigSwitchGaussianBlur?.isChecked = it
+                settingState.showMovesMsgInDeckEditFlow.collectLatest {
+                    llog.i(TAG,"showMovesMsgInDeckEditFlow: 接收到数据 $it")
+                    configBinding?.settingConfigSwitchShowMovesMsgInDeckEdit?.isChecked = it
                 }
             }
-
         }
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){

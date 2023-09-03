@@ -54,7 +54,8 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline29"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <Space
+                <com.lyd.absolverdatabase.ui.widgets.MovesMsgBar
+                    android:id="@+id/deckEdit_msgsBar_upperRight"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.5"/>
@@ -69,7 +70,13 @@
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="0.5" />
+                <com.lyd.absolverdatabase.ui.widgets.MovesMsgBar
+                    android:id="@+id/deckEdit_msgsBar_upperLeft"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"/>
+
 
                 <com.lyd.absolverdatabase.ui.widgets.MovesBar
                     android:id="@+id/deckEdit_bar_upperLeft"
@@ -81,7 +88,12 @@
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="0.5" />
+                <com.lyd.absolverdatabase.ui.widgets.MovesMsgBar
+                    android:id="@+id/deckEdit_msgsBar_lowerLeft"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"/>
 
                 <com.lyd.absolverdatabase.ui.widgets.MovesBar
                     android:id="@+id/deckEdit_bar_lowerLeft"
@@ -93,7 +105,13 @@
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="0.5" />
+                <com.lyd.absolverdatabase.ui.widgets.MovesMsgBar
+                    android:id="@+id/deckEdit_msgsBar_lowerRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"/>
+
 
                 <com.lyd.absolverdatabase.ui.widgets.MovesBar
                     android:id="@+id/deckEdit_bar_lowerRight"
@@ -122,7 +140,12 @@
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="0.5" />
+                <com.lyd.absolverdatabase.ui.widgets.OneMoveMsgBar
+                    android:id="@+id/deckEdit_optional_msg_upperRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"/>
 
                 <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
                     android:id="@+id/deckEdit_optional_upperRight"
@@ -135,7 +158,12 @@
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="0.5" />
+                <com.lyd.absolverdatabase.ui.widgets.OneMoveMsgBar
+                    android:id="@+id/deckEdit_optional_msg_upperLeft"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"/>
 
                 <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
                     android:id="@+id/deckEdit_optional_upperLeft"
@@ -148,7 +176,12 @@
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="0.5" />
+                <com.lyd.absolverdatabase.ui.widgets.OneMoveMsgBar
+                    android:id="@+id/deckEdit_optional_msg_lowerLeft"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"/>
 
                 <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
                     android:id="@+id/deckEdit_optional_lowerLeft"
@@ -161,7 +194,12 @@
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    android:layout_weight="0.5" />
+                <com.lyd.absolverdatabase.ui.widgets.OneMoveMsgBar
+                    android:id="@+id/deckEdit_optional_msg_lowerRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"/>
 
                 <com.lyd.absolverdatabase.ui.widgets.OneMoveBar
                     android:id="@+id/deckEdit_optional_lowerRight"

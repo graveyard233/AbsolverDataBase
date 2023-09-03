@@ -276,18 +276,35 @@ class DeckEditState(private val repository: DeckEditRepository,
 
     /**给moveSelectFragment用的筛选类*/
     private val _filterOptionFlow :MutableStateFlow<FilterOption> = MutableStateFlow(FilterOption(AttackTowardOption.all(),
-        AttackAltitudeOption.all(), AttackDirectionOption.all()))
+        AttackAltitudeOption.all(), AttackDirectionOption.all(),strengthList = mutableListOf(true,false,true)))
     val filterOptionFlow = _filterOptionFlow.asStateFlow()
     fun changeFilter(filter :FilterOption){
         viewModelScope.launch(Dispatchers.IO){
             Log.i(TAG, "changeFilter: 发射filter")
-            _filterOptionFlow.update { filter.copy() }// 注意，这里要发copy，不然stateFlow会看是同一个引用然后不更新
+            _filterOptionFlow.emit(
+                FilterOption(
+                    attackToward = filter.attackToward,
+                    attackAltitude = filter.attackAltitude,
+                    attackDirection = filter.attackDirection,
+                    strengthList = MutableList(3){
+                        when(it){
+                            0 ->filter.strengthList[0]
+                            1 ->filter.strengthList[1]
+                            2 ->filter.strengthList[2]
+                            else ->true
+                        }
+                    }
+                )
+            ) //{}// 注意，这里要发copy，不然stateFlow会看是同一个引用然后不更新
+            // 现在这里copy也可能接受不到，可能是list的原因，直接新建一个吧
         }
     }
     fun initFilterOption(){
         viewModelScope.launch(Dispatchers.IO){
             _filterOptionFlow.update { FilterOption(AttackTowardOption.all(),
-                AttackAltitudeOption.all(), AttackDirectionOption.all()) }
+                AttackAltitudeOption.all(), AttackDirectionOption.all(),
+                strengthList = mutableListOf(true,true,true))
+            }
         }
     }
 

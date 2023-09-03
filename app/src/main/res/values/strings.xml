@@ -45,6 +45,8 @@
     <string name="how_to_edit_deckMsg_title">如何编辑卡组信息</string>
     <string name="how_To_edit_deckMsg_msg">长按空白区域可打开编辑界面弹窗</string>
     <string name="save_deck_success">成功保存ID为%1$s的卡组</string>
+    <string name="move_msg_bar_advantageFrame">+%1$d/%2$s</string>
+    <string name="move_msg_bar_startFrame">%1$d帧</string>
 
     <string name="deck_name">卡组名称</string>
     <string name="deck_note">卡组说明</string>
@@ -106,6 +108,7 @@
     <string name="ask_before_import">在导入卡组前弹窗</string>
     <string name="show_seq_detail_when_shared_deck">分享卡组时附带招式名称</string>
     <string name="use_shareSheet_when_shared_deck">分享时使用Android ShareSheet</string>
+    <string name="show_movesMsg_in_deckEdit">卡组编辑界面显示简单招式属性</string>
     <string name="use_CNEditionMod">启用China Edition Mod</string>
     <string name="show_more_moveCE_info">显示CEMod招式更多数据</string>
     <string name="nightMode_yes">夜间模式:启用</string>

@@ -18,6 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.viewpager2.widget.ViewPager2
+import com.aitsuki.swipe.SwipeLayout
 import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.tabs.TabLayoutMediator
@@ -30,6 +31,7 @@ import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentMoveSelectBinding
 import com.lyd.absolverdatabase.ui.adapter.MovePagerAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
+import com.lyd.absolverdatabase.ui.widgets.MovesFilterDialog
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.MoveGenerate
 import com.lyd.absolverdatabase.utils.SideUtil
@@ -90,12 +92,31 @@ class MoveSelectFragment :BaseFragment(){
     }
 
     private val filterOption :FilterOption by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        FilterOption(attackToward = AttackTowardOption.all(), attackAltitude = AttackAltitudeOption.all(), attackDirection = AttackDirectionOption.all())
+        FilterOption(
+            attackToward = AttackTowardOption.all(),
+            attackAltitude = AttackAltitudeOption.all(),
+            attackDirection = AttackDirectionOption.all(),
+            strengthList = mutableListOf(true,true,true)
+        )
     }
     private var launchFilterTime :Long = 0L
 
     private val movePagerAdapter :MovePagerAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         MovePagerAdapter(this@MoveSelectFragment)
+    }
+
+    private val movesFilterBottomSheetDialog :MovesFilterDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        MovesFilterDialog(requireActivity()).apply {
+            setOnDismissListener {
+                if (this.hasReallyChanged()){
+                    llog.d(TAG,"某些属性已经改变")
+                    editState.changeFilter(filterOption)
+                } else {
+                    llog.d(TAG,"并没有改变")
+                }
+                dataBinding?.moveSelectSwipeLayout?.closeMenu()
+            }
+        }
     }
 
     // 采用包的形式，一起打包招式和id，用起来更加方便，使用update方法，同时更新招式和id字段，也更加便利
@@ -262,9 +283,18 @@ class MoveSelectFragment :BaseFragment(){
                 } else {
                     guideline15?.setGuidelinePercent(0.46F)
                     val newLayout = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT,0,4F)
-                    view.findViewById<ViewGroup>(R.id.moveSelect_include).layoutParams = newLayout
+                    view.findViewById<ViewGroup>(R.id.moveSelect_swipeLayout).layoutParams = newLayout
                 }
             }
+            moveSelectSwipeLayout.addListener(object :SwipeLayout.Listener{
+                override fun onMenuOpened(menuView: View) {
+                    super.onMenuOpened(menuView)
+                    movesFilterBottomSheetDialog.apply { initFilter(filterOption) }.show()
+                }
+            })
+//            moveSelectBtnMoreFilter.setOnClickListener {
+//                movesFilterBottomSheetDialog.apply { initFilter(filterOption) }.show()
+//            }
             moveSelectPager?.apply {
                 adapter = movePagerAdapter
                 registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
@@ -961,7 +991,7 @@ class MoveSelectFragment :BaseFragment(){
         if (TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - launchFilterTime) < 0.8 && launchFilterTime != 0L){
             llog.i(TAG, "doAfterChangeFilterManual: 过于频繁，放弃")
         } else {
-            launchFilterTime = System.currentTimeMillis();
+            launchFilterTime = System.currentTimeMillis()
             editState.changeFilter(filterOption.apply { changeBy.set(1) })
         }
 

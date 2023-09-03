@@ -29,6 +29,33 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.isNeedAskBeforeImportPreference.set { boolean }
         }
     }
+    val showSeqDetailWhenSharedDeckFlow :StateFlow<Boolean> = repository.isShowSeqDetailWhenSharedDeckPreference.asFlow().map {
+        it ?: false
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
+    fun changeShowSeqDetailWhenSharedDeck(boolean: Boolean){
+        repository.isShowSeqDetailWhenSharedDeck = boolean
+        viewModelScope.launch {
+            repository.isShowSeqDetailWhenSharedDeckPreference.set { boolean }
+        }
+    }
+    val useShareSheetWhenSharedDeckFlow :StateFlow<Boolean> = repository.isUseShareSheetWhenSharedDeckPreference.asFlow().map {
+        it ?: true
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),true)
+    fun changeUseShareSheetWhenSharedDeck(boolean: Boolean){
+        repository.isUseShareSheetWhenSharedDeck = boolean
+        viewModelScope.launch {
+            repository.isUseShareSheetWhenSharedDeckPreference.set { boolean }
+        }
+    }
+    val showMovesMsgInDeckEditFlow :StateFlow<Boolean> = repository.isShowMovesMsgInDeckEditPreference.asFlow().map {
+        it ?: false
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
+    fun changeShowMovesMsgInDeckEdit(boolean: Boolean){
+        repository.isShowMovesMsgInDeckEdit = boolean
+        viewModelScope.launch {
+            repository.isShowMovesMsgInDeckEditPreference.set { boolean }
+        }
+    }
     val useCNEditionModFlow :StateFlow<Boolean> = repository.isUseCNEditionModPreference.asFlow().map {
         it ?: false
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
@@ -65,24 +92,8 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.useWhatThemePreference.set { whatTheme }
         }
     }
-    val showSeqDetailWhenSharedDeckFlow :StateFlow<Boolean> = repository.isShowSeqDetailWhenSharedDeckPreference.asFlow().map {
-        it ?: false
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
-    fun changeShowSeqDetailWhenSharedDeck(boolean: Boolean){
-        repository.isShowSeqDetailWhenSharedDeck = boolean
-        viewModelScope.launch {
-            repository.isShowSeqDetailWhenSharedDeckPreference.set { boolean }
-        }
-    }
-    val useShareSheetWhenSharedDeckFlow :StateFlow<Boolean> = repository.isUseShareSheetWhenSharedDeckPreference.asFlow().map {
-        it ?: true
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),true)
-    fun changeUseShareSheetWhenSharedDeck(boolean: Boolean){
-        repository.isUseShareSheetWhenSharedDeck = boolean
-        viewModelScope.launch {
-            repository.isUseShareSheetWhenSharedDeckPreference.set { boolean }
-        }
-    }
+
+
     val recordCrashMsgFlow :StateFlow<Boolean> = repository.isRecordCrashMsgPreference.asFlow().map {
         it ?: true
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),true)

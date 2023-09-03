@@ -6,11 +6,24 @@ import com.lyd.absolverdatabase.utils.logUtils.LLog
 object SettingRepository :DataStoreOwner(name = "setting") {
     private const val TAG = "SettingRepository"
 
+    /*---------------------------可配置项页面部分，按序排列----------------------------------*/
+
     var isDialogGaussianBlur :Boolean = true
     val isDialogGaussianBlurPreference by booleanPreference(default = true)
 
     var isNeedAskBeforeImport :Boolean = true
     val isNeedAskBeforeImportPreference by booleanPreference(default = true)
+
+    /**分享卡组时是否增加详细信息*/
+    var isShowSeqDetailWhenSharedDeck :Boolean = false
+    val isShowSeqDetailWhenSharedDeckPreference by booleanPreference(default = false)
+
+    /**使用Android原生分享控件*/
+    var isUseShareSheetWhenSharedDeck :Boolean = true
+    val isUseShareSheetWhenSharedDeckPreference by booleanPreference(default = true)
+
+    var isShowMovesMsgInDeckEdit :Boolean = false
+    val isShowMovesMsgInDeckEditPreference by booleanPreference(default = false)
 
     var isUseCNEditionMod :Boolean = false
     val isUseCNEditionModPreference by booleanPreference(default = false)
@@ -24,18 +37,8 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     var useWhatTheme :Int = 1
     val useWhatThemePreference by intPreference(default = 1)
 
-    /**提示如何编辑卡组的详细信息*/
-    var hadShowTipHowToEditDeckMsg :Boolean = true
-    val hadShowTipHowToEditDeckMsgPreference by booleanPreference(default = true)
 
-    /**分享卡组时是否增加详细信息*/
-    var isShowSeqDetailWhenSharedDeck :Boolean = false
-    val isShowSeqDetailWhenSharedDeckPreference by booleanPreference(default = false)
-
-    /**使用Android原生分享控件*/
-    var isUseShareSheetWhenSharedDeck :Boolean = true
-    val isUseShareSheetWhenSharedDeckPreference by booleanPreference(default = true)
-
+    /*-----------------------------开发者页面部分----------------------------------*/
     /**崩溃时是否记录崩溃信息*/
     var isRecordCrashMsg :Boolean = false
     val isRecordCrashMsgPreference by booleanPreference(default = true)
@@ -57,5 +60,11 @@ object SettingRepository :DataStoreOwner(name = "setting") {
             field = value
         }
     val logWriteLevelPreference by intPreference(default = 46)
+
+    /*--------------------------其他部分---------------------------------------*/
+
+    /**提示如何编辑卡组的详细信息*/
+    var hadShowTipHowToEditDeckMsg :Boolean = true
+    val hadShowTipHowToEditDeckMsgPreference by booleanPreference(default = true)
 
 }

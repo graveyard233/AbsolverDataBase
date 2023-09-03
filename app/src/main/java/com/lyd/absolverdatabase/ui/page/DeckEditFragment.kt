@@ -1,7 +1,6 @@
 package com.lyd.absolverdatabase.ui.page
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,7 @@ class DeckEditFragment :BaseFragment() {
             .setTitle(getString(R.string.how_to_edit_deckMsg_title))
             .setMessage(getString(R.string.how_To_edit_deckMsg_msg))
     }
-    private val deckDetailDialog :DeckDetailDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+    private val deckDetailBottomSheetDialog :DeckDetailDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         DeckDetailDialog(requireActivity())
     }
 
@@ -125,7 +124,7 @@ class DeckEditFragment :BaseFragment() {
         dataBinding?.apply {
             deckEditConstrainBg?.setOnLongClickListener {view ->
                 // 这一步，我把这个_deckForEdit中的deck传进了dialog，然后里面的修改也会改变外面的值，注意不要用args.deckForEdit这个数据，对象不一样
-                deckDetailDialog.apply { mDeck = _deckForEdit }.show()
+                deckDetailBottomSheetDialog.apply { mDeck = _deckForEdit }.show()
                 return@setOnLongClickListener true
             }
         }
@@ -147,29 +146,40 @@ class DeckEditFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.sequenceUpperRight.collectLatest {
-                    dataBinding?.deckEditMsgBarUpperRight?.updateMsg(it)
-                    dataBinding?.deckEditBarUpperRight?.updateMoves(it)
+                    dataBinding?.apply {
+                        deckEditMsgsBarUpperRight.updateMsg(it)
+                        deckEditBarUpperRight.updateMoves(it)
+                    }
                 }
             }
         }
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.sequenceUpperLeft.collectLatest {
-                    dataBinding?.deckEditBarUpperLeft?.updateMoves(it)
+                    dataBinding?.apply {
+                        deckEditBarUpperLeft.updateMoves(it)
+                        deckEditMsgsBarUpperLeft.updateMsg(it)
+                    }
                 }
             }
         }
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.sequenceLowerLeft.collectLatest {
-                    dataBinding?.deckEditBarLowerLeft?.updateMoves(it)
+                    dataBinding?.apply {
+                        deckEditBarLowerLeft.updateMoves(it)
+                        deckEditMsgsBarLowerLeft.updateMsg(it)
+                    }
                 }
             }
         }
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.sequenceLowerRight.collectLatest {
-                    dataBinding?.deckEditBarLowerRight?.updateMoves(it)
+                    dataBinding?.apply {
+                        deckEditBarLowerRight.updateMoves(it)
+                        deckEditMsgsBarLowerRight.updateMsg(it)
+                    }
                 }
             }
         }
@@ -177,28 +187,40 @@ class DeckEditFragment :BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.optUpperRight.collectLatest {
-                    dataBinding?.deckEditOptionalUpperRight?.updateMove(it)
+                    dataBinding?.apply {
+                        deckEditOptionalUpperRight.updateMove(it)
+                        deckEditOptionalMsgUpperRight.updateOneMsg(it)
+                    }
                 }
             }
         }
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.optUpperLeft.collectLatest {
-                    dataBinding?.deckEditOptionalUpperLeft?.updateMove(it)
+                    dataBinding?.apply {
+                        deckEditOptionalUpperLeft.updateMove(it)
+                        deckEditOptionalMsgUpperLeft.updateOneMsg(it)
+                    }
                 }
             }
         }
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.optLowerLift.collectLatest {
-                    dataBinding?.deckEditOptionalLowerLeft?.updateMove(it)
+                    dataBinding?.apply {
+                        deckEditOptionalLowerLeft.updateMove(it)
+                        deckEditOptionalMsgLowerLeft.updateOneMsg(it)
+                    }
                 }
             }
         }
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.optLowerRight.collectLatest {
-                    dataBinding?.deckEditOptionalLowerRight?.updateMove(it)
+                    dataBinding?.apply {
+                        deckEditOptionalLowerRight.updateMove(it)
+                        deckEditOptionalMsgLowerRight.updateOneMsg(it)
+                    }
                 }
             }
         }
