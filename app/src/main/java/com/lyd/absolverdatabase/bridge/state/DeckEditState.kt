@@ -16,7 +16,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.Locale
-import kotlin.system.measureTimeMillis
 
 /**用于[DeckEditFragment]和[MoveSelectFragment]，在这里写的函数要标注好给哪个fragment用*/
 class DeckEditState(private val repository: DeckEditRepository,
@@ -276,7 +275,17 @@ class DeckEditState(private val repository: DeckEditRepository,
 
     /**给moveSelectFragment用的筛选类*/
     private val _filterOptionFlow :MutableStateFlow<FilterOption> = MutableStateFlow(FilterOption(AttackTowardOption.all(),
-        AttackAltitudeOption.all(), AttackDirectionOption.all(),strengthList = mutableListOf(true,false,true)))
+        AttackAltitudeOption.all(), AttackDirectionOption.all(),
+        strengthList = mutableListOf(true,false,true),
+        rangeRange = FilterOption.defRange,
+        effectSet = hashSetOf(MoveEffect.STOP.name,MoveEffect.DODGE_UP.name,MoveEffect.DODGE_LOW.name,MoveEffect.DODGE_SIDE.name,MoveEffect.BREAK_DEFENCES.name,MoveEffect.SUPER_ARMOR.name,
+            MoveEffect.BLOCK_COUNTER.name,MoveEffect.DOUBLE_ATTACK.name,MoveEffect.TRIPLE_ATTACK.name,MoveEffect.MID_LINE.name,MoveEffect.MENTAL_BLOW.name,MoveEffect.NULL.name),
+        startFrameRange = FilterOption.defStartF,
+        phyWeaknessRange = FilterOption.defPhyWeakness,
+        phyOutputRange = FilterOption.defPhyOutput,
+        hitAdvRange = FilterOption.defHitAdv,
+        defAdvRange = FilterOption.defDefAdv
+    ))
     val filterOptionFlow = _filterOptionFlow.asStateFlow()
     fun changeFilter(filter :FilterOption){
         viewModelScope.launch(Dispatchers.IO){
@@ -293,7 +302,14 @@ class DeckEditState(private val repository: DeckEditRepository,
                             2 ->filter.strengthList[2]
                             else ->true
                         }
-                    }
+                    },
+                    rangeRange = filter.rangeRange,
+                    effectSet = HashSet<String>().apply { addAll(filter.effectSet) },
+                    startFrameRange = filter.startFrameRange,
+                    phyWeaknessRange = filter.phyWeaknessRange,
+                    phyOutputRange = filter.phyOutputRange,
+                    hitAdvRange = filter.hitAdvRange,
+                    defAdvRange = filter.defAdvRange
                 )
             ) //{}// 注意，这里要发copy，不然stateFlow会看是同一个引用然后不更新
             // 现在这里copy也可能接受不到，可能是list的原因，直接新建一个吧
@@ -303,7 +319,16 @@ class DeckEditState(private val repository: DeckEditRepository,
         viewModelScope.launch(Dispatchers.IO){
             _filterOptionFlow.update { FilterOption(AttackTowardOption.all(),
                 AttackAltitudeOption.all(), AttackDirectionOption.all(),
-                strengthList = mutableListOf(true,true,true))
+                strengthList = mutableListOf(true,true,true),
+                rangeRange = FilterOption.defRange,
+                effectSet = hashSetOf(MoveEffect.STOP.name,MoveEffect.DODGE_UP.name,MoveEffect.DODGE_LOW.name,MoveEffect.DODGE_SIDE.name,MoveEffect.BREAK_DEFENCES.name,MoveEffect.SUPER_ARMOR.name,
+                    MoveEffect.BLOCK_COUNTER.name,MoveEffect.DOUBLE_ATTACK.name,MoveEffect.TRIPLE_ATTACK.name,MoveEffect.MID_LINE.name,MoveEffect.MENTAL_BLOW.name,MoveEffect.NULL.name),
+                startFrameRange = FilterOption.defStartF,
+                phyWeaknessRange = FilterOption.defPhyWeakness,
+                phyOutputRange = FilterOption.defPhyOutput,
+                hitAdvRange = FilterOption.defHitAdv,
+                defAdvRange = FilterOption.defDefAdv
+                )
             }
         }
     }

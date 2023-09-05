@@ -3,7 +3,9 @@ package com.lyd.absolverdatabase.bridge.state
 import androidx.annotation.IntRange
 import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.lyd.absolverdatabase.bridge.data.bean.FilterItem
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
+import com.lyd.absolverdatabase.utils.GsonUtils
 import com.lyd.absolverdatabase.utils.logUtils.LLog
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -56,6 +58,15 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.isShowMovesMsgInDeckEditPreference.set { boolean }
         }
     }
+    val showWhatMsgInDeckEditFlow :StateFlow<Int> = repository.showWhatMsgInDeckEditPreference.asFlow().map {
+        it ?: 1
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),1)
+    fun changeShowWhatMsgInDeck(whatMsg: Int){
+        repository.showWhatMsgInDeckEdit = whatMsg
+        viewModelScope.launch {
+            repository.showWhatMsgInDeckEditPreference.set { whatMsg }
+        }
+    }
     val useCNEditionModFlow :StateFlow<Boolean> = repository.isUseCNEditionModPreference.asFlow().map {
         it ?: false
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
@@ -81,6 +92,14 @@ class SettingState(private val repository :SettingRepository, private val state 
         repository.useNightMode = boolean
         viewModelScope.launch {
             repository.useNightModePreference.set { boolean }
+        }
+    }
+    /**由于recyclerView被更改后filterList同时也会被更改，所以这里并不需要flow来动态改变recyclerView的排序*/
+    fun changeMovesFilterJson(list :List<FilterItem>){
+        val tempJson = GsonUtils.toJson(list)
+        repository.movesFilterListJson = tempJson
+        viewModelScope.launch{
+            repository.movesFilterListJsonPreference.set { tempJson }
         }
     }
     val useWhatThemeFlow :StateFlow<Int> = repository.useWhatThemePreference.asFlow().map {

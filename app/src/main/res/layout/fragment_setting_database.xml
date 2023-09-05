@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/sync_moveDatabase_from_local"
                         style="@style/SettingFragmentItemText"
-                        app:drawableStartCompat="@drawable/ic_sync_move_origin"/>
+                        app:drawableStartCompat="@drawable/ic_sync_from_local"/>
 
                     <LinearLayout
                         android:id="@+id/settingDatabase_database_linear"

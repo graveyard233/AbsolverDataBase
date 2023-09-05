@@ -59,6 +59,15 @@
 		<item name="android:textAppearance">?textAppearanceBodyMedium</item>
 	</style>
 
+	<style name="MovesMsgLeftText">
+		<item name="android:textAppearance">?textAppearanceLabelLarge</item>
+		<item name="android:layout_gravity">center</item>
+		<item name="android:maxLines">1</item>
+		<item name="android:autoSizeTextType">uniform</item>
+		<item name="android:autoSizeMaxTextSize">14sp</item>
+		<item name="android:autoSizeMinTextSize">6sp</item>
+	</style>
+
 <!--	<style name="WidgetsSectionItem">-->
 <!--		<item name="android:textAppearance">?textAppearanceTitleSmall</item>-->
 <!--		<item name="android:textColor">?android:textColorSecondary</item>-->

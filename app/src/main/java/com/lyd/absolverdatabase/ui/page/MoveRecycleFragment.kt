@@ -1,7 +1,6 @@
 package com.lyd.absolverdatabase.ui.page
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +50,16 @@ class MoveRecycleFragment :BaseFragment()
 
     private val _filter :FilterOption by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         FilterOption(attackToward = AttackTowardOption.all(), attackAltitude = AttackAltitudeOption.all(), attackDirection = AttackDirectionOption.all(),
-            strengthList = mutableListOf(true,true,true))
+            strengthList = mutableListOf(true,true,true),
+            rangeRange = FilterOption.defRange,
+            effectSet = hashSetOf(MoveEffect.STOP.name,MoveEffect.DODGE_UP.name,MoveEffect.DODGE_LOW.name,MoveEffect.DODGE_SIDE.name,MoveEffect.BREAK_DEFENCES.name,MoveEffect.SUPER_ARMOR.name,
+                MoveEffect.BLOCK_COUNTER.name,MoveEffect.DOUBLE_ATTACK.name,MoveEffect.TRIPLE_ATTACK.name,MoveEffect.MID_LINE.name,MoveEffect.MENTAL_BLOW.name,MoveEffect.NULL.name),
+            startFrameRange = FilterOption.defStartF,
+            phyWeaknessRange = FilterOption.defPhyWeakness,
+            phyOutputRange = FilterOption.defPhyOutput,
+            hitAdvRange = FilterOption.defHitAdv,
+            defAdvRange = FilterOption.defDefAdv
+        )
     }
 
     // 这个是唯一的，所以通过这个来设置筛选的选项，所以这个state用来观察筛选flow
@@ -295,9 +303,20 @@ class MoveRecycleFragment :BaseFragment()
             option.strengthList.forEachIndexed { index, b ->
                 if (!b){ tempStrengthSet.remove(index + 1) }
             }
+            val tempRangeRangeList = FilterOption.range2ListForRange(option.rangeRange)
             llog.i(TAG,"side ${SideUtil.getSideByInt(whatEndSide)} strengthSet :$tempStrengthSet")
+            val tempStartFRangeList = FilterOption.range2ListForStartF(option.startFrameRange)
+            llog.d(TAG,"StartFRangeList->$tempStartFRangeList")
+            val tempPhyWeaknessRangeList = FilterOption.range2ListForWeakness(option.phyWeaknessRange)
+            llog.d(TAG,"PhyWeaknessList->$tempPhyWeaknessRangeList")
+            val tempPhyOutputRangeList = FilterOption.range2ListForOutput(option.phyOutputRange)
+            llog.d(TAG,"PhyOutputList->$tempPhyOutputRangeList")
+            val tempHitAdvRangeList = FilterOption.range2ListForHitAdv(option.hitAdvRange)
+            llog.d(TAG,"HitAdvList->$tempHitAdvRangeList")
+            val tempDefAdvRangeList = FilterOption.range2ListForDefAdv(option.defAdvRange)
+            llog.d(TAG,"DefAdvRangeList->$tempDefAdvRangeList")
             if (SettingRepository.isUseCNEditionMod){
-                sideList.filter {
+                sideList.asSequence().filter {
                     when(option.attackToward){
                         is AttackTowardOption.left -> { it.moveCE.attackToward == AttackToward.LEFT }
                         is AttackTowardOption.right -> { it.moveCE.attackToward == AttackToward.RIGHT }
@@ -314,7 +333,7 @@ class MoveRecycleFragment :BaseFragment()
                     when(option.attackDirection){
                         is AttackDirectionOption.horizontal -> { it.moveCE.attackDirection == AttackDirection.HORIZONTAL }
                         is AttackDirectionOption.vertical -> { it.moveCE.attackDirection == AttackDirection.VERTICAL }
-                        is AttackDirectionOption.poke -> { it.moveCE.attackDirection == AttackDirection.POKE }
+                        is AttackDirectionOption.thrust -> { it.moveCE.attackDirection == AttackDirection.THRUST }
                         is AttackDirectionOption.all -> true
                     }
                 }.filter {
@@ -323,9 +342,65 @@ class MoveRecycleFragment :BaseFragment()
                     } else {
                         tempStrengthSet.contains(it.moveCE.strength)
                     }
-                }
+                }.filter {
+                    if (option.rangeRange == FilterOption.defRange){
+                        true
+                    } else {
+                        when(((it.moveCE.attackRange * 100).toInt() / 100.00)){
+                            in (tempRangeRangeList[0]..tempRangeRangeList[1]) ->{
+                                true
+                            }
+
+                            else -> false
+                        }
+                    }
+                }.filter {
+                    if (option.effectSet.size == 12){
+                        true
+                    } else {
+                        val tempEffectList = it.moveCE.effect.split(",")
+                        var tempEffectFlag = 0
+                        for (index in tempEffectList.indices){
+                            if (option.effectSet.contains(tempEffectList[index])){
+                                tempEffectFlag++
+                                break
+                            }
+                        }
+                        tempEffectFlag != 0
+                    }
+                }.filter {
+                    if (option.startFrameRange == FilterOption.defStartF){
+                        true
+                    } else {
+                        tempStartFRangeList[0] <= it.moveCE.startFrame && it.moveCE.startFrame <= tempStartFRangeList[1]
+                    }
+                }.filter {
+                    if (option.phyWeaknessRange == FilterOption.defPhyWeakness){
+                        true
+                    } else {
+                        tempPhyWeaknessRangeList[0] <= it.moveCE.physicalWeakness && it.moveCE.physicalWeakness <= tempPhyWeaknessRangeList[1]
+                    }
+                }.filter {
+                    if (option.phyOutputRange == FilterOption.defPhyOutput){
+                        true
+                    } else {
+                        tempPhyOutputRangeList[0] <= it.moveCE.physicalOutput && it.moveCE.physicalOutput <= tempPhyOutputRangeList[1]
+                    }
+                }.filter {
+                    if (option.hitAdvRange == FilterOption.defHitAdv){
+                        true
+                    } else {
+                        tempHitAdvRangeList[0] <= it.moveCE.hitAdvantageFrame && it.moveCE.hitAdvantageFrame <= tempHitAdvRangeList[1]
+                    }
+                }.filter {
+                    if (option.defAdvRange == FilterOption.defDefAdv){
+                        true
+                    } else {
+                        tempDefAdvRangeList[0] <= it.moveCE.defenseAdvantageFrame && it.moveCE.defenseAdvantageFrame <= tempDefAdvRangeList[1]
+                    }
+                }.toList()
             } else {
-                sideList.filter {
+                sideList.asSequence().filter {
                     when(option.attackToward){
                         is AttackTowardOption.left -> { it.moveOrigin.attackToward == AttackToward.LEFT }
                         is AttackTowardOption.right -> { it.moveOrigin.attackToward == AttackToward.RIGHT }
@@ -342,7 +417,7 @@ class MoveRecycleFragment :BaseFragment()
                     when(option.attackDirection){
                         is AttackDirectionOption.horizontal -> { it.moveOrigin.attackDirection == AttackDirection.HORIZONTAL }
                         is AttackDirectionOption.vertical -> { it.moveOrigin.attackDirection == AttackDirection.VERTICAL }
-                        is AttackDirectionOption.poke -> { it.moveOrigin.attackDirection == AttackDirection.POKE }
+                        is AttackDirectionOption.thrust -> { it.moveOrigin.attackDirection == AttackDirection.THRUST }
                         is AttackDirectionOption.all -> true
                     }
                 }.filter {
@@ -351,7 +426,62 @@ class MoveRecycleFragment :BaseFragment()
                     } else {
                         tempStrengthSet.contains(it.moveOrigin.strength)
                     }
-                }
+                }.filter {
+                    if (option.rangeRange == FilterOption.defRange){
+                        true
+                    } else {
+                        when(((it.moveOrigin.attackRange * 100).toInt() / 100.00)){
+                            in (tempRangeRangeList[0]..tempRangeRangeList[1]) ->{
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                }.filter {
+                    if (option.effectSet.size == 12){
+                        true
+                    } else {
+                        val tempEffectList = it.moveOrigin.effect.split(",")
+                        var tempEffectFlag = 0
+                        for (index in tempEffectList.indices){
+                            if (option.effectSet.contains(tempEffectList[index])){
+                                tempEffectFlag++
+                                break
+                            }
+                        }
+                        tempEffectFlag != 0
+                    }
+                }.filter {
+                    if (option.startFrameRange == FilterOption.defStartF){
+                        true
+                    } else {
+                        tempStartFRangeList[0] <= it.moveOrigin.startFrame && it.moveOrigin.startFrame <= tempStartFRangeList[1]
+                    }
+                }.filter {
+                    if (option.phyWeaknessRange == FilterOption.defPhyWeakness){
+                        true
+                    } else {
+                        tempPhyWeaknessRangeList[0] <= it.moveOrigin.physicalWeakness && it.moveOrigin.physicalWeakness <= tempPhyWeaknessRangeList[1]
+                    }
+                }.filter {
+                    if (option.phyOutputRange == FilterOption.defPhyOutput){
+                        true
+                    } else {
+                        tempPhyOutputRangeList[0] <= it.moveOrigin.physicalOutput && it.moveOrigin.physicalOutput <= tempPhyOutputRangeList[1]
+                    }
+                }.filter {
+                    if (option.hitAdvRange == FilterOption.defHitAdv){
+                        true
+                    } else {
+                        tempHitAdvRangeList[0] <= it.moveOrigin.hitAdvantageFrame && it.moveOrigin.hitAdvantageFrame <= tempHitAdvRangeList[1]
+                    }
+                }.filter {
+                    if (option.defAdvRange == FilterOption.defDefAdv){
+                        true
+                    } else {
+                        tempDefAdvRangeList[0] <= it.moveOrigin.defenseAdvantageFrame && it.moveOrigin.defenseAdvantageFrame <= tempDefAdvRangeList[1]
+                    }
+                }.toList()
             }
         }
     }

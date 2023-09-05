@@ -21,6 +21,7 @@ import com.lyd.absolverdatabase.bridge.state.SettingState
 import com.lyd.absolverdatabase.bridge.state.SettingViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentSettingBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
+import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.utils.ClipUtil
 
 class SettingFragment : BaseFragment() {
@@ -35,6 +36,18 @@ class SettingFragment : BaseFragment() {
             .setAction(R.string.copy) {
                 ClipUtil.copyText("1991206268@qq.com")
             }
+    }
+
+    private val dialogHowToUse by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        BaseDialogBuilder(requireContext())
+            .setTitle(R.string.how_to_use_title)
+            .setIcon(R.drawable.ic_about)
+            .setCancelable(false)
+            .setPositiveButton(R.string.how_to_use_positive){ dialog,_->
+                dialog.dismiss()
+            }
+            .setMessage(R.string.how_to_use_content)
+            .create()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,9 +92,10 @@ class SettingFragment : BaseFragment() {
 //                        .build(),
                     navigatorExtras = extra)
             }
-            ViewCompat.setTransitionName(settingDev,"DevTitle")
-            settingDev.setOnClickListener{
-                val extra = FragmentNavigatorExtras(settingDev to "DevTitle")
+            settingTitleAbout.setOnClickListener { dialogHowToUse.show() }
+            ViewCompat.setTransitionName(settingTitleDev,"DevTitle")
+            settingTitleDev.setOnClickListener{
+                val extra = FragmentNavigatorExtras(settingTitleDev to "DevTitle")
                 nav().navigate(
                     R.id.action_settingFragment_to_settingDevFragment,
                     null, null,

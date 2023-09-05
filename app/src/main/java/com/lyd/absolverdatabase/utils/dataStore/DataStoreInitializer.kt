@@ -46,6 +46,9 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempShowMovesMsgInDeckEdit = async {
                     SettingRepository.isShowMovesMsgInDeckEditPreference.getOrDefault()
                 }
+                val tempShowWhatMsgInDeckEdit = async {
+                    SettingRepository.showWhatMsgInDeckEditPreference.getOrDefault()
+                }
                 val tempUseCNEditionMod = async {
                     SettingRepository.isUseCNEditionModPreference.getOrDefault()
                 }
@@ -54,6 +57,9 @@ class DataStoreInitializer : Initializer<Unit> {
                 }
                 val tempUseNightMode = async {
                     SettingRepository.useNightModePreference.getOrDefault()
+                }
+                val tempMovesFilterListJson = async {
+                    SettingRepository.movesFilterListJsonPreference.getOrDefault()
                 }
                 val tempUseWhatTheme = async {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S){// 低于Android12不能使用动态主题，只能使用默认主题
@@ -81,9 +87,11 @@ class DataStoreInitializer : Initializer<Unit> {
                 SettingRepository.isShowSeqDetailWhenSharedDeck = tempShowSeqDetailWhenShared.await()
                 SettingRepository.isUseShareSheetWhenSharedDeck = tempUseShareSheetWhenShared.await()
                 SettingRepository.isShowMovesMsgInDeckEdit = tempShowMovesMsgInDeckEdit.await()
+                SettingRepository.showWhatMsgInDeckEdit = tempShowWhatMsgInDeckEdit.await()
                 SettingRepository.isUseCNEditionMod = tempUseCNEditionMod.await()
                 SettingRepository.isShowMoreMoveCEInfo = tempShowMoreMoveCEInfo.await()
                 SettingRepository.useNightMode = tempUseNightMode.await()
+                SettingRepository.movesFilterListJson = tempMovesFilterListJson.await()
                 SettingRepository.useWhatTheme = tempUseWhatTheme.await()
 
                 SettingRepository.isRecordCrashMsg = tempRecordCrashMsg.await()

@@ -55,29 +55,52 @@ Designed according to the Material Design 3 specification, provide background im
 
 # Use
 
-Click the text on the right side of the deck interface to switch the type, and all card groups are sorted by update time
+The bottom menu navigation bar is divided into teach module, data module, card module and setting module. 
+## Teach Module
+- Browse Ghost beginner teaching videos by default, click on the top picture to pop up a pop-up window, you can switch the list.Another list displays the latest videos related to Absolver on Bilibili, with a default load of 20
 
-Create a new deck: Click on the plus image in the deck browsing interface
+## Data Module
+- Default display map interface(fragment), can be zoomed in or out to view
+- Color palette interface displays Material dynamic theme colors in devices according to your wallpaper
+- Tip interface displays some data of the game
 
-Import deck: Long press and hold the plus image in the deck browsing interface. By default, there is a pop-up prompt that will read the data from the clipboard
+## Card Module
 
-Share deck: Long press and hold the deck item in the deck browsing interface to write deck data to the clipboard
+### Decks Interface
+- On the right, filter the decks in the database by category (bare handed, boxed, sword), and on the left, list these decks in descending order of update time
+- Click the deck to enter the card deck edit interface
+- Long press the deck to copy the deck code(just like hearthstone deck code)
+- Click on the top icon to create a new deck
+- Long press the top icon to import the deck based on the code in the clipboard
+- Side slide deck item, click (X) to delete deck
 
-Delete deck: Left swipe the deck item and click the Delete icon
+### Deck Edit Interface
+- All operations on this interface will not be written to the database unless actively saved
+- Long press the move box to delete the move inside the box (temporary)
+- Click the save icon to save this edit (cannot be rolled back)
+- Click the move icon to enter the move selection interface
+- Long press the blank area to evoke the bottom pop-up window for editing card group names, etc
 
-To add a new move to the attack sequence: Click the plus icon and click the move after filtering. The move will be temporarily stored in the sequence
+### Move Select Interface
+- At the top is the move sequence, long press and hold the move within the sequence to delete it
+- Click on the move to enter the editing status of the selected box
+- The middle section contains move data and basic filtering items, and swiping the data column can open the advanced filtering pop-up window
+- The bottom is lists of moves, distinguished by the end of the stand side, if it is used in other place, there is an icon in the upper left corner of the picture (App does not handle the case of repeated selection)
 
-Removes a move from the attack sequence: Long press the move image in the sequence
+## Setting Module
+- Can be used to learn about project repositories, application versions and ways to submit suggestions
 
-Edit deck's name, etc. : Long press the blank area in the deck editing interface, the bottom pop-up window will pop up
+### Config Interface
+- Set various configurations for the application, with Gaussian blur and dynamic theme colors only available on Android 12 and above
+- Advanced filtering can be enabled or disabled, long press to drag in order, sorted from left to right and from top to bottom
+- It is not recommended to turn on more data display switches in CEMod, as it will calculate and adjust the UI after opening, which can cause obvious lag phenomenon
 
-Save the deck: Click the save icon in the card group editing interface; Note that only after saving is written to the database, the deck set will not be updated if not saved
+### Database interface
+- Except for cloud synchronous CEMod method, all method will use local code to update moves data
+- Cloud synchronous CE data is obtained through webView analysis of web pages, which carries the risk of failure
 
-Browse the latest video from Bilibili: Teaching interface Click the big picture above, the selection pop-up window will pop up
-
-Configuration items: On the Settings screen, click the Config item
-
-Move Data synchronization: Click Database related on the Settings screen
+### Development interface
+- Interface for adjusting log printing,write level and control crash log
 
 # Screenshot
 

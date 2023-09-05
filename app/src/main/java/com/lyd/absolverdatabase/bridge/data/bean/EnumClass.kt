@@ -43,7 +43,7 @@ enum class AttackAltitude {
 }
 /**攻击走向*/
 enum class AttackDirection {
-    HORIZONTAL, VERTICAL, POKE
+    HORIZONTAL, VERTICAL, THRUST
 }
 enum class MoveEffect(val str: String) {
     STOP("停止"),// 停止

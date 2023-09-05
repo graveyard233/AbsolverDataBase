@@ -112,7 +112,7 @@ class SettingDevFragment :BaseFragment() {
             btnCleanLogFiles = findViewById(R.id.setting_dev_btn_cleanLogFiles)
 
 
-            textLogDirPath?.text = requireContext().getExternalFilesDir("crash")!!.absolutePath
+            textLogDirPath?.text = requireContext().getExternalFilesDir("log")!!.absolutePath
             btnCleanLogFiles.setOnClickListener {
                 if (FileUtils.deleteAllInDir(requireContext().getExternalFilesDir("log")!!.absolutePath)){
                     initLogFilesMsg()

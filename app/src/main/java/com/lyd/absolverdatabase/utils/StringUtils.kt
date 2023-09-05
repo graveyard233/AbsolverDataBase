@@ -64,8 +64,8 @@ object StringUtils {
 
     /**将卡组按照我的方法压缩成文本*/
     fun deck2MyJson(deck :Deck,moreDetail :String = "") :String{
-        sb.clear()
         sb.apply {
+            clear()
 //            append("$idTagS${deck.deckId}$idTagE")// 因为id总要变成-2，所以这里没有必要写上卡组id
             if (SettingRepository.isShowSeqDetailWhenSharedDeck && moreDetail.isNotEmpty()){// 如果要显示招式名称
                 append(moreDetail)
@@ -272,6 +272,5 @@ object StringUtils {
         0 -> 1
         else -> log10(abs(toDouble())).toInt() + 1
     }
-
 
 }

@@ -19,9 +19,7 @@ class LLogInitializer : Initializer<LLog> {
             LLog.apply {
                 setDebug(isLoggable = true, methodNameEnable = true)
                 addInterceptor(LogcatInterceptor())
-                addInterceptor(LinearInterceptor(),isLoggable = {
-                    BuildConfig.DEBUG
-                })
+                addInterceptor(LinearInterceptor())
                 addInterceptor(PackToLogInterceptor())
                 addInterceptor(
                     WriteInInterceptor(

@@ -238,75 +238,105 @@
             android:id="@+id/msg_ceMod_morePart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:visibility="gone"
             tools:visibility="visible">
 
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
+<!--            <Space-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"/>-->
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/msg_ceMode_strengthBonus"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:textAppearance="?textAppearanceBodyMedium"
+                    android:maxLines="1"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeMinTextSize="6sp"
                     tools:text="力量:A" />
 
                 <TextView
                     android:id="@+id/msg_ceMode_agilityBonus"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:textAppearance="?textAppearanceBodyMedium"
+                    android:maxLines="1"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeMinTextSize="6sp"
                     tools:text="敏捷:B" />
 
                 <TextView
                     android:id="@+id/msg_ceMode_flexibleBonus"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:textAppearance="?textAppearanceBodyMedium"
+                    android:maxLines="1"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeMinTextSize="6sp"
                     tools:text="机动:C" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/msg_ceMode_cancelPoint"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:textAppearance="?textAppearanceBodyMedium"
+                    android:maxLines="1"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeMinTextSize="6sp"
                     tools:text="取消点:5" />
 
                 <TextView
                     android:id="@+id/msg_ceMode_hitFrame"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:textAppearance="?textAppearanceBodyMedium"
+                    android:maxLines="1"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeMinTextSize="6sp"
                     tools:text="打击帧:7" />
 
                 <TextView
                     android:id="@+id/msg_ceMode_yellowAttackFrame"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:textAppearance="?textAppearanceBodyMedium"
+                    android:maxLines="1"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeMinTextSize="6sp"
                     tools:text="黄攻帧:2" />
 
             </LinearLayout>

@@ -26,7 +26,10 @@
     <string name="tab_tip">Tip</string>
     <string name="tab_other">其他</string>
 
+    <string name="todo_text">我还不知道在这放什么。\n如果你有好的想法，可联系我</string>
+
     <string name="attack_detail">攻击细节</string>
+    <string name="style_in_CE_detail">流派技</string>
     
     <string name="bare_handed">徒手</string>
     <string name="glove">拳套</string>
@@ -43,9 +46,9 @@
     <string name="item_deck_aboutTime">更新时间:%1$s</string>
 
     <string name="how_to_edit_deckMsg_title">如何编辑卡组信息</string>
-    <string name="how_To_edit_deckMsg_msg">长按空白区域可打开编辑界面弹窗</string>
+    <string name="how_To_edit_deckMsg_msg">长按空白区域可打开编辑界面弹窗(招式选择界面也一样);长按招式框格可以删除对应招式</string>
     <string name="save_deck_success">成功保存ID为%1$s的卡组</string>
-    <string name="move_msg_bar_advantageFrame">+%1$d/%2$s</string>
+    <string name="move_msg_bar_advantageFrame">+%1$d/%2$s&#160;</string>
     <string name="move_msg_bar_startFrame">%1$d帧</string>
 
     <string name="deck_name">卡组名称</string>
@@ -70,7 +73,7 @@
 
     <string name="attackDirection_horizontal">横向</string>
     <string name="attackDirection_vertical">纵向</string>
-    <string name="attackDirection_poke">戳击</string>
+    <string name="attackDirection_thrust">戳击</string>
     <string name="attackDirection_all">全部走向</string>
 
     <string name="moveEffect_stop">停止</string>
@@ -103,16 +106,30 @@
     <string name="moveCEMsg_hitFrame">打击帧:%1$s</string>
     <string name="moveCEMsg_yellowAttackFrame">黄攻帧:%1$d</string>
 
+    <string name="movesFilter_strength">力度</string>
+    <string name="movesFilter_range">范围</string>
+    <string name="movesFilter_effect">特效</string>
+    <string name="movesFilter_selectAll">全选</string>
+    <string name="movesFilter_clearAll">清空</string>
+    <string name="movesFilter_startFrame">起手帧数</string>
+    <string name="movesFilter_phyWeakness">削体</string>
+    <string name="movesFilter_phyOutput">耗体</string>
+    <string name="movesFilter_hitAdvantage">命中优势帧</string>
+    <string name="movesFilter_defAdvantage">防御优势帧</string>
+
     <string name="config_setting">可配置项</string>
     <string name="dialogGaussianBlur">高斯模糊</string>
     <string name="ask_before_import">在导入卡组前弹窗</string>
     <string name="show_seq_detail_when_shared_deck">分享卡组时附带招式名称</string>
     <string name="use_shareSheet_when_shared_deck">分享时使用Android ShareSheet</string>
     <string name="show_movesMsg_in_deckEdit">卡组编辑界面显示简单招式属性</string>
+    <string name="frame">帧数</string>
+    <string name="trend">走向</string>
     <string name="use_CNEditionMod">启用China Edition Mod</string>
     <string name="show_more_moveCE_info">显示CEMod招式更多数据</string>
     <string name="nightMode_yes">夜间模式:启用</string>
     <string name="nightMode_follow_system">夜间模式:跟随系统</string>
+    <string name="advance_filter">高级筛选</string>
     <string name="choose_theme">主题选择</string>
     <string name="theme_default">默认</string>
     <string name="theme_wallpaper">壁纸动态</string>
@@ -160,7 +177,52 @@
     <string name="support_author">如果觉得软件还不错，可以进Github给项目一个START</string>
     <string name="feedback">反馈</string>
 
-    <string name="feedback_snackbar_content">邮箱:%1$s</string>
+    <string name="feedback_snackbar_content">Issue,Pull request或邮箱:%1$s</string>
+    <string name="how_to_use_title">使用说明</string>
+    <string name="how_to_use_positive">我真的明白如何使用了</string>
+    <string name="how_to_use_content">
+        # 总览\n
+        本应用是为赦免者玩家打造的现代化Android应用，可在Android 10及以上的版本运行，提供对卡组进行增删改查，浏览与筛选招式等功能\n
+        主要采用Material 3规范设计，UI参考了Ghost的卡组编辑器；提供动态颜色获取和多种主题色切换；适配夜间与横屏模式\n
+        底部菜单导航栏分为教学模块，数据模块，卡组模块和设置模块。本说明文档将以模块分别讲解\n
+        ## 教学模块\n
+        - 默认浏览Ghost新手教学视频，点击顶部图片弹出弹窗，可切换列表。另一列表展示B站最新的赦免者相关视频，默认加载20个\n
+        ## 数据模块\n
+        - 默认展示地图界面，可放大缩小查看\n
+        - 调色板界面根据手机壁纸展示Material动态主题色\n
+        - Tip界面展示游戏的一些数据\n
+        ## 卡组模块\n
+        ### 卡组浏览界面\n
+        - 右侧按类别(徒手，拳套，剑)筛选数据库中的卡组，左侧列表展示此类卡组(按卡组更新时间降序排列)\n
+        - 点击卡组可进入卡组编辑界面\n
+        - 长按卡组可复制卡组代码(和炉石卡组代码用法类似)\n
+        - 点击顶部图标可新建卡组\n
+        - 长按顶部图标可根据剪贴板内的代码复制卡组\n
+        - 侧滑卡组子项，点击(X)可以删除卡组\n
+        ### 卡组编辑界面\n
+        - 本界面一切操作，不主动保存的话，不会写入数据库\n
+        - 长按招式框可删除框内招式(临时)\n
+        - 点击保存图标可以保存本次编辑(无法回滚)\n
+        - 点击招式图标可进入招式选择界面\n
+        - 长按空白区域可唤起底部弹窗，用于编辑卡组名等\n
+        ### 招式选择界面\n
+        - 顶部为招式序列，长按序列内招式可将其删除\n
+        - 点击招式即进入选中框的编辑状态\n
+        - 中间部分为招式数据和初级筛选项，侧滑数据那栏可以打开高级筛选弹窗\n
+        - 底部为招式列表，按结束站架区分，若已使用则在图片左上角有图标提示(应用不处理重复选中的情况)\n
+        ## 设置模块\n
+        - 可用于了解项目仓库，应用版本和提交建议的方式\n
+        ### 可配置项界面\n
+        - 设置应用各种配置，其中高斯模糊和动态主题色仅在Android12及以上可用\n
+        - 高级筛选可开启或停用高级筛选项，长按可拖动顺序，按从左到右，从上到下排序\n
+        - 不推荐打开CEMod的更多数据展示开关，因为打开后会计算并调整UI，会造成明显的卡顿现象\n
+        ### 数据库相关界面\n
+        - 除云端同步CEMod方法外，都是本地代码更新招式数据\n
+        - 云端同步CE数据是通过webView分析网页的方式获取数据，有失败的风险\n
+        ### 开发工具界面\n
+        - 用于调整日志打印，写入等级，控制崩溃日志的界面\n
+    </string>
+
 
     <string name="thanks_title">致谢</string>
     <string name="thanks_content">感谢Ghost对卡组筛选逻辑的讲解，原版数据表格及编辑器原型设计支持。\n感谢China Edition制作组提供CEMod的招式数据与图片，APP矢量图标文件。

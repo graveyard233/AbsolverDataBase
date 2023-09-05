@@ -70,7 +70,7 @@
                         android:background="@color/grey_split_line" />
 
                     <TextView
-                        android:id="@+id/setting_dev"
+                        android:id="@+id/setting_title_dev"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/develop_util"
@@ -85,11 +85,14 @@
                         android:background="@color/grey_split_line" />
 
                     <TextView
+                        android:id="@+id/setting_title_about"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/about_app"
                         style="@style/SettingFragmentTitleText"
-                        app:drawableStartCompat="@drawable/ic_about" />
+                        app:drawableStartCompat="@drawable/ic_about"
+                        android:clickable="true"
+                        android:background="?selectableItemBackground"/>
 
                     <View
                         android:layout_width="wrap_content"

@@ -28,7 +28,10 @@
     <string name="tab_tip">Tip</string>
     <string name="tab_other">Other</string>
 
+    <string name="todo_text">I don\'t know what to put here yet.\nContact me if you have a good idea.</string>
+
     <string name="attack_detail">Attack detail</string>
+    <string name="style_in_CE_detail">Style in CE Mod</string>
 
     <string name="bare_handed">Hand</string>
     <string name="glove">Glove</string>
@@ -45,9 +48,10 @@
     <string name="item_deck_aboutTime">Update Time:%1$s</string>
 
     <string name="how_to_edit_deckMsg_title">How to edit deck message</string>
-    <string name="how_To_edit_deckMsg_msg">Long press the blank area to open the editing window</string>
+    <string name="how_To_edit_deckMsg_msg">Long press the blank area to open the editing window;\n
+        Long press the move image to remove the move from attack sequence(the same applies to the moveSelect)</string>
     <string name="save_deck_success">Save deck(ID=%1$s) success</string>
-    <string name="move_msg_bar_advantageFrame">+%1$d/%2$s</string>
+    <string name="move_msg_bar_advantageFrame">+%1$d/%2$s&#160;</string>
     <string name="move_msg_bar_startFrame">%1$dF</string>
 
     <string name="deck_name">Deck Name</string>
@@ -70,9 +74,9 @@
     <string name="attackAltitude_all">All</string>
     <string name="altitude">&#160;</string>
 
-    <string name="attackDirection_horizontal">Horizontal</string>
-    <string name="attackDirection_vertical">Vertical</string>
-    <string name="attackDirection_poke">Poke</string>
+    <string name="attackDirection_horizontal">Horiz</string>
+    <string name="attackDirection_vertical">Vert</string>
+    <string name="attackDirection_thrust">Thrust</string>
     <string name="attackDirection_all">All</string>
 
     <string name="moveEffect_stop">Stop</string>
@@ -95,8 +99,8 @@
     <string name="moveMsg_startFrame">StartFrame:%1$d</string>
     <string name="moveMsg_phyOutput">PhyOutput:%1$1.2f</string>
     <string name="moveMsg_phyWeakness">PhyWeakness:%1$1.2f</string>
-    <string name="moveMsg_hitAdvantage">HitAdvantage:%1$d</string>
-    <string name="moveMsg_defenseAdvantage">DefenseAdvantage:%1$d</string>
+    <string name="moveMsg_hitAdvantage">Hit Adv:%1$d</string>
+    <string name="moveMsg_defenseAdvantage">Guard Adv:%1$d</string>
 
     <string name="moveCEMsg_strengthBonus">StrengthBonus:%1$s</string>
     <string name="moveCEMsg_agilityBonus">AgilityBonus:%1$s</string>
@@ -105,16 +109,31 @@
     <string name="moveCEMsg_hitFrame">HitFrame:%1$s</string>
     <string name="moveCEMsg_yellowAttackFrame">YellowAttackFrame:%1$d</string>
 
+    <string name="movesFilter_strength">Strength</string>
+    <string name="movesFilter_range">Range</string>
+    <string name="movesFilter_effect">Effect</string>
+    <string name="movesFilter_selectAll">SelectAll</string>
+    <string name="movesFilter_clearAll">Clear</string>
+    <string name="movesFilter_startFrame">StartFrame</string>
+    <string name="movesFilter_phyWeakness">PhyWeakness</string>
+    <string name="movesFilter_phyOutput">PhyOutput</string>
+    <string name="movesFilter_hitAdvantage">HitAdvantage</string>
+    <string name="movesFilter_defAdvantage">GuardAdvantage</string>
+
+
     <string name="config_setting">Config</string>
     <string name="dialogGaussianBlur">Gaussian Blur</string>
     <string name="ask_before_import">Show Dialog Before Import Deck</string>
     <string name="show_seq_detail_when_shared_deck">Show move name when sharing deck</string>
     <string name="use_shareSheet_when_shared_deck">Use ShareSheet when sharing deck</string>
     <string name="show_movesMsg_in_deckEdit">Show moves message in DeckEdit</string>
+    <string name="frame">Frame</string>
+    <string name="trend">Trend</string>
     <string name="use_CNEditionMod">Use China Edition Mod</string>
     <string name="show_more_moveCE_info">Show CEMod More Information</string>
     <string name="nightMode_yes">NightMode:Enable</string>
     <string name="nightMode_follow_system">NightMode:Follow System</string>
+    <string name="advance_filter">Advance Filter</string>
     <string name="choose_theme">Theme</string>
     <string name="theme_default">Default</string>
     <string name="theme_wallpaper">Wallpaper</string>
@@ -160,10 +179,54 @@
     <string name="repositoryUrl">https://github.com/graveyard233/AbsolverDatabase</string>
     <string name="repositoryVersion">https://github.com/graveyard233/AbsolverDatabase/commits/dev</string>
     <string name="version">Version:%1$s</string>
-    <string name="support_author">If you think App works well,you can go to Github and give the project a START.</string>
+    <string name="support_author">If you think App works well,you can give the project a START in Github.</string>
     <string name="feedback">Feedback</string>
 
-    <string name="feedback_snackbar_content">Email:%1$s</string>
+    <string name="feedback_snackbar_content">Issue,Pull request or Email:%1$s</string>
+    <string name="how_to_use_title">How To Use</string>
+    <string name="how_to_use_positive">I really know how to use it</string>
+    <string name="how_to_use_content">
+        # Overview\n
+        A modern Android app for Absolver players,which can run in Android 10and above version and provide functions such as adding, deleting, correcting and checking decks,browsing and filtering moves\n
+        Mainly designed using the Material 3 specification, with the UI referencing Ghost\'s card deck editor; Provide dynamic color obtain and multiple theme color switching;Suitable for night and landscape mode\n
+        The bottom menu navigation bar is divided into teach module, data module, card module and setting module. This instruction document will explain each module separately\n
+        ## Teach Module\n
+        - Browse Ghost beginner teaching videos by default, click on the top picture to pop up a pop-up window, you can switch the list.Another list displays the latest videos related to Absolver on Bilibili, with a default load of 20\n
+        ## Data Module\n
+        - Default display map interface(fragment), can be zoomed in or out to view\n
+        - Color palette interface displays Material dynamic theme colors in devices according to your wallpaper\n
+        - Tip interface displays some data of the game\n
+        ## Card Module\n
+        ### Decks Interface\n
+        - On the right, filter the decks in the database by category (bare handed, boxed, sword), and on the left, list these decks in descending order of update time\n
+        - Click the deck to enter the card deck edit interface\n
+        - Long press the deck to copy the deck code(just like hearthstone deck code)\n
+        - Click on the top icon to create a new deck\n
+        - Long press the top icon to import the deck based on the code in the clipboard\n
+        - Side slide deck item, click (X) to delete deck\n
+        ### Deck Edit Interface\n
+        - All operations on this interface will not be written to the database unless actively saved\n
+        - Long press the move box to delete the move inside the box (temporary)\n
+        - Click the save icon to save this edit (cannot be rolled back)\n
+        - Click the move icon to enter the move selection interface\n
+        - Long press the blank area to evoke the bottom pop-up window for editing card group names, etc\n
+        ### Move Select Interface\n
+        - At the top is the move sequence, long press and hold the move within the sequence to delete it\n
+        - Click on the move to enter the editing status of the selected box\n
+        - The middle section contains move data and basic filtering items, and swiping the data column can open the advanced filtering pop-up window\n
+        - The bottom is lists of moves, distinguished by the end of the stand side, if it is used in other place, there is an icon in the upper left corner of the picture (App does not handle the case of repeated selection)\n
+        ## Setting Module\n
+        - Can be used to learn about project repositories, application versions and ways to submit suggestions\n
+        ### Config Interface\n
+        - Set various configurations for the application, with Gaussian blur and dynamic theme colors only available on Android 12 and above\n
+        - Advanced filtering can be enabled or disabled, long press to drag in order, sorted from left to right and from top to bottom\n
+        - It is not recommended to turn on more data display switches in CEMod, as it will calculate and adjust the UI after opening, which can cause obvious lag phenomenon\n
+        ### Database interface\n
+        - Except for cloud synchronous CEMod method, all method will use local code to update moves data\n
+        - Cloud synchronous CE data is obtained through webView analysis of web pages, which carries the risk of failure\n
+        ### Development interface\n
+        - Interface for adjusting log printing,write level and control crash log\n
+    </string>
 
     <string name="thanks_title">Thanks</string>
     <string name="thanks_content">Thank Ghost for the explanation of the card group screening logic, the original data table and editor prototype design support.\nThank China Edition production team for providing CEMod movement data and pictures, APP vector icon file.

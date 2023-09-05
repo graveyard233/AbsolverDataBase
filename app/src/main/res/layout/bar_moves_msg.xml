@@ -59,8 +59,7 @@
             android:id="@+id/bar_moves_msg_text0_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?textAppearanceLabelSmall"
-            android:layout_gravity="center"
+            style="@style/MovesMsgLeftText"
             android:gravity="start|bottom"
             tools:text="+11/+7"/>
         <TextView
@@ -68,8 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAppearance="?textAppearanceLabelSmall"
-            android:layout_gravity="center"
+            style="@style/MovesMsgLeftText"
             android:gravity="end|bottom"
             tools:text="12帧"/>
     </LinearLayout>
@@ -87,8 +85,7 @@
             android:id="@+id/bar_moves_msg_text1_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?textAppearanceLabelSmall"
-            android:layout_gravity="center"
+            style="@style/MovesMsgLeftText"
             android:gravity="start|bottom"
             tools:text="+11/+7"/>
         <TextView
@@ -96,8 +93,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAppearance="?textAppearanceLabelSmall"
-            android:layout_gravity="center"
+            style="@style/MovesMsgLeftText"
             android:gravity="end|bottom"
             tools:text="12帧"/>
     </LinearLayout>
@@ -114,8 +110,7 @@
             android:id="@+id/bar_moves_msg_text2_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?textAppearanceLabelSmall"
-            android:layout_gravity="center"
+            style="@style/MovesMsgLeftText"
             android:gravity="start|bottom"
             tools:text="+11/+7"/>
         <TextView
@@ -123,8 +118,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textAppearance="?textAppearanceLabelSmall"
-            android:layout_gravity="center"
+            style="@style/MovesMsgLeftText"
             android:gravity="end|bottom"
             tools:text="12帧"/>
     </LinearLayout>

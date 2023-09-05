@@ -1,8 +1,6 @@
 package com.lyd.absolverdatabase.ui.page
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +9,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.constraintlayout.widget.Guideline
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -82,7 +79,7 @@ class MoveSelectFragment :BaseFragment(){
         )
     }
     private val spinnerDirectionAdapter :ArrayAdapter<String> by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        ArrayAdapter<String>(requireContext(),com.google.android.material.R.layout.support_simple_spinner_dropdown_item,listOf(getString(R.string.attackDirection_horizontal),getString(R.string.attackDirection_vertical),getString(R.string.attackDirection_poke),getString(R.string.attackDirection_all))
+        ArrayAdapter<String>(requireContext(),com.google.android.material.R.layout.support_simple_spinner_dropdown_item,listOf(getString(R.string.attackDirection_horizontal),getString(R.string.attackDirection_vertical),getString(R.string.attackDirection_thrust),getString(R.string.attackDirection_all))
 //            if (Locale.getDefault().toLanguageTag().startsWith("zh")) {
 //                AttackDirectionOption.getOptionStr()
 //            } else {
@@ -96,7 +93,15 @@ class MoveSelectFragment :BaseFragment(){
             attackToward = AttackTowardOption.all(),
             attackAltitude = AttackAltitudeOption.all(),
             attackDirection = AttackDirectionOption.all(),
-            strengthList = mutableListOf(true,true,true)
+            strengthList = mutableListOf(true,true,true),
+            rangeRange = FilterOption.defRange,
+            effectSet = hashSetOf(MoveEffect.STOP.name,MoveEffect.DODGE_UP.name,MoveEffect.DODGE_LOW.name,MoveEffect.DODGE_SIDE.name,MoveEffect.BREAK_DEFENCES.name,MoveEffect.SUPER_ARMOR.name,
+                MoveEffect.BLOCK_COUNTER.name,MoveEffect.DOUBLE_ATTACK.name,MoveEffect.TRIPLE_ATTACK.name,MoveEffect.MID_LINE.name,MoveEffect.MENTAL_BLOW.name,MoveEffect.NULL.name),
+            startFrameRange = FilterOption.defStartF,
+            phyWeaknessRange = FilterOption.defPhyWeakness,
+            phyOutputRange = FilterOption.defPhyOutput,
+            hitAdvRange = FilterOption.defHitAdv,
+            defAdvRange = FilterOption.defDefAdv
         )
     }
     private var launchFilterTime :Long = 0L
@@ -805,7 +810,7 @@ class MoveSelectFragment :BaseFragment(){
                 when (tempMove.attackDirection) {
                     AttackDirection.HORIZONTAL -> getString(R.string.attackDirection_horizontal)
                     AttackDirection.VERTICAL -> getString(R.string.attackDirection_vertical)
-                    AttackDirection.POKE -> getString(R.string.attackDirection_poke)
+                    AttackDirection.THRUST -> getString(R.string.attackDirection_thrust)
                 }
             }".let {
                 msgAttackTowardDetail.text = it
@@ -909,7 +914,7 @@ class MoveSelectFragment :BaseFragment(){
                 when (tempMove.attackDirection) {
                     AttackDirection.HORIZONTAL -> getString(R.string.attackDirection_horizontal)
                     AttackDirection.VERTICAL -> getString(R.string.attackDirection_vertical)
-                    AttackDirection.POKE -> getString(R.string.attackDirection_poke)
+                    AttackDirection.THRUST -> getString(R.string.attackDirection_thrust)
                 }
             }".let {
                 msgAttackTowardDetail.text = it

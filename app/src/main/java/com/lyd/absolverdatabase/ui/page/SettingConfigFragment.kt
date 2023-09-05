@@ -2,7 +2,6 @@ package com.lyd.absolverdatabase.ui.page
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,16 +11,25 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
+import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
+import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.lyd.absolverdatabase.R
+import com.lyd.absolverdatabase.bridge.data.bean.FilterItem
 import com.lyd.absolverdatabase.bridge.data.bean.UseTheme
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.bridge.state.SettingState
 import com.lyd.absolverdatabase.bridge.state.SettingViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentSettingConfigBinding
+import com.lyd.absolverdatabase.ui.adapter.MovesFilterAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
+import com.lyd.absolverdatabase.utils.GsonUtils
 import com.lyd.absolverdatabase.utils.isNightMode
 import com.lyd.absolverdatabase.utils.restartApp
 import kotlinx.coroutines.delay
@@ -37,6 +45,55 @@ class SettingConfigFragment :BaseFragment() {
 
     private val restartSnackBar by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         Snackbar.make(configBinding!!.settingConfigChipGroupTheme,R.string.restart_app_in_time,Snackbar.LENGTH_SHORT)
+    }
+
+    private val filterList :MutableList<FilterItem> by lazy {
+        mutableListOf(
+            FilterItem(FilterItem.STRENGTH, isChecked = true, name = getString(R.string.movesFilter_strength)),
+            FilterItem(FilterItem.RANGE, isChecked = true, name = getString(R.string.movesFilter_range)),
+            FilterItem(FilterItem.EFFECT, isChecked = true, name = getString(R.string.movesFilter_effect)),
+            FilterItem(FilterItem.START_FRAME, isChecked = true, name = getString(R.string.movesFilter_startFrame)),
+            FilterItem(FilterItem.PHYSICAL_WEAKNESS, isChecked = true, name = getString(R.string.movesFilter_phyWeakness)),
+            FilterItem(FilterItem.PHYSICAL_OUTPUT, isChecked = true, name = getString(R.string.movesFilter_phyOutput)),
+            FilterItem(FilterItem.HIT_ADVANTAGE_FRAME, isChecked = true, name = getString(R.string.movesFilter_hitAdvantage)),
+            FilterItem(FilterItem.DEF_ADVANTAGE_FRAME, isChecked = true, name = getString(R.string.movesFilter_defAdvantage))
+        )
+    }
+    private val filterAdapter :MovesFilterAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        MovesFilterAdapter().apply {
+            addOnItemChildClickListener(R.id.item_movesFilter_checkbox){ adapter, view, position->
+                val tempCheckBox :MaterialCheckBox= view as MaterialCheckBox
+                adapter.getItem(position)?.isChecked = tempCheckBox.isChecked
+                settingState.changeMovesFilterJson(filterList)
+                llog.d(TAG,"点击了第${position}个item check状态->${tempCheckBox.isChecked} ${adapter.getItem(position)}")
+            }
+        }
+    }
+    private val quickDrag :QuickDragAndSwipe by lazy {
+        QuickDragAndSwipe().setDragMoveFlags(ItemTouchHelper.UP or
+                ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+    }
+    private val dragListener :OnItemDragListener by lazy {
+        object :OnItemDragListener{
+            override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
+
+            }
+            override fun onItemDragMoving(
+                source: RecyclerView.ViewHolder,
+                from: Int,
+                target: RecyclerView.ViewHolder,
+                to: Int
+            ) {
+
+            }
+            override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+                filterList.forEachIndexed { index, filterItem ->
+                    llog.d(TAG,"No.$index origin->$filterItem adapter->${filterAdapter.getItem(index)}")
+                }
+                settingState.changeMovesFilterJson(filterList)
+                llog.d(TAG,"---------------拖拽结束----------------------------")
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +142,18 @@ class SettingConfigFragment :BaseFragment() {
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeShowMovesMsgInDeckEdit(isChecked)
             }
+            settingConfigChipGroupWhatMsgInDeckEdit.setOnCheckedStateChangeListener{ group, checkedIds ->
+                if (checkedIds.isEmpty())
+                    return@setOnCheckedStateChangeListener
+                val tempBtn = group.findViewById<Chip>(checkedIds[0])
+                if (!tempBtn.isPressed) {
+                    return@setOnCheckedStateChangeListener
+                }
+                when(checkedIds[0]){
+                    R.id.settingConfig_chip_frameMsg -> settingState.changeShowWhatMsgInDeck(0)
+                    R.id.settingConfig_chip_trendMsg -> settingState.changeShowWhatMsgInDeck(1)
+                }
+            }
             settingConfigSwitchUseCNEditionMod.setOnCheckedChangeListener { btn, isChecked ->
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeUseCNEditionMod(isChecked)
@@ -97,6 +166,34 @@ class SettingConfigFragment :BaseFragment() {
                 if (!btn.isPressed) return@setOnCheckedChangeListener
                 settingState.changeUseNightMode(isChecked)
             }
+
+            val gridLayoutManager :GridLayoutManager = GridLayoutManager(context,4)
+            settingConfigRecycleFilter.layoutManager = gridLayoutManager
+            settingConfigRecycleFilter.adapter = filterAdapter
+
+            filterList.apply {
+                clear()
+                addAll(GsonUtils.fromJson(SettingRepository.movesFilterListJson,GsonUtils.getListType(FilterItem::class.java)))
+                forEach {
+                    when(it.tag){
+                        FilterItem.STRENGTH -> it.name = getString(R.string.movesFilter_strength)
+                        FilterItem.RANGE -> it.name = getString(R.string.movesFilter_range)
+                        FilterItem.EFFECT -> it.name = getString(R.string.movesFilter_effect)
+                        FilterItem.START_FRAME -> it.name = getString(R.string.movesFilter_startFrame)
+                        FilterItem.PHYSICAL_WEAKNESS -> it.name = getString(R.string.movesFilter_phyWeakness)
+                        FilterItem.PHYSICAL_OUTPUT -> it.name = getString(R.string.movesFilter_phyOutput)
+                        FilterItem.HIT_ADVANTAGE_FRAME -> it.name = getString(R.string.movesFilter_hitAdvantage)
+                        FilterItem.DEF_ADVANTAGE_FRAME -> it.name = getString(R.string.movesFilter_defAdvantage)
+                    }
+                }
+            }
+
+            filterAdapter.submitList(filterList)
+
+            quickDrag.attachToRecyclerView(settingConfigRecycleFilter)
+                .setDataCallback(filterAdapter)
+                .setItemDragListener(dragListener)
+
 
             if (requireContext().isNightMode()){
                 settingConfigChipDefault.setTextColor(requireContext().getColor(com.google.android.material.R.color.design_dark_default_color_primary))
@@ -199,6 +296,20 @@ class SettingConfigFragment :BaseFragment() {
                 settingState.showMovesMsgInDeckEditFlow.collectLatest {
                     llog.i(TAG,"showMovesMsgInDeckEditFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchShowMovesMsgInDeckEdit?.isChecked = it
+                    configBinding?.settingConfigChipGroupWhatMsgInDeckEdit?.visibility = if (it) View.VISIBLE else View.GONE
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.showWhatMsgInDeckEditFlow.collectLatest {
+                    llog.i(TAG,"showWhatMsgInDeckEditFlow: 接收到数据 $it")
+                    configBinding?.apply {
+                        when(it){
+                            0 -> settingConfigChipFrameMsg.isChecked = true
+                            1 -> settingConfigChipTrendMsg.isChecked = true
+                        }
+                    }
                 }
             }
         }

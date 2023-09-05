@@ -1,5 +1,7 @@
 package com.lyd.absolverdatabase.bridge.data.repository
 
+import com.lyd.absolverdatabase.bridge.data.bean.FilterItem
+import com.lyd.absolverdatabase.utils.GsonUtils
 import com.lyd.absolverdatabase.utils.dataStore.DataStoreOwner
 import com.lyd.absolverdatabase.utils.logUtils.LLog
 
@@ -25,6 +27,10 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     var isShowMovesMsgInDeckEdit :Boolean = false
     val isShowMovesMsgInDeckEditPreference by booleanPreference(default = false)
 
+    /**0 显示帧数，1 显示走向*/
+    var showWhatMsgInDeckEdit :Int = 1
+    val showWhatMsgInDeckEditPreference by intPreference(default = 1)
+
     var isUseCNEditionMod :Boolean = false
     val isUseCNEditionModPreference by booleanPreference(default = false)
     var isShowMoreMoveCEInfo :Boolean = false
@@ -33,6 +39,34 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     /**true:启用使用夜间 false:跟随系统*/
     var useNightMode :Boolean = false
     val useNightModePreference by booleanPreference(default = false)
+
+    /**用于排序筛选项的listJson文本*/
+    var movesFilterListJson: String = GsonUtils.toJson(
+        listOf(
+            FilterItem(FilterItem.STRENGTH, isChecked = true, name = "Strength"),
+            FilterItem(FilterItem.RANGE, isChecked = true, name = "Range"),
+            FilterItem(FilterItem.EFFECT, isChecked = true, name = "Effect"),
+            FilterItem(FilterItem.START_FRAME, isChecked = true, name = "StartFrame"),
+            FilterItem(FilterItem.PHYSICAL_WEAKNESS, isChecked = true, name = "PhyWeakness"),
+            FilterItem(FilterItem.PHYSICAL_OUTPUT, isChecked = true, name = "PhyOutput"),
+            FilterItem(FilterItem.HIT_ADVANTAGE_FRAME, isChecked = true, name = "HitAdvantage"),
+            FilterItem(FilterItem.DEF_ADVANTAGE_FRAME, isChecked = true, name = "DefAdvantage")
+        )
+    )
+    val movesFilterListJsonPreference by stringPreference(
+        default = GsonUtils.toJson(
+            listOf(
+                FilterItem(FilterItem.STRENGTH, isChecked = true, name = "Strength"),
+                FilterItem(FilterItem.RANGE, isChecked = true, name = "Range"),
+                FilterItem(FilterItem.EFFECT, isChecked = true, name = "Effect"),
+                FilterItem(FilterItem.START_FRAME, isChecked = true, name = "StartFrame"),
+                FilterItem(FilterItem.PHYSICAL_WEAKNESS, isChecked = true, name = "PhyWeakness"),
+                FilterItem(FilterItem.PHYSICAL_OUTPUT, isChecked = true, name = "PhyOutput"),
+                FilterItem(FilterItem.HIT_ADVANTAGE_FRAME, isChecked = true, name = "HitAdvantage"),
+                FilterItem(FilterItem.DEF_ADVANTAGE_FRAME, isChecked = true, name = "DefAdvantage")
+            )
+        )
+    )
 
     var useWhatTheme :Int = 1
     val useWhatThemePreference by intPreference(default = 1)
