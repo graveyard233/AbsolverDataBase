@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveBox
-import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.SideUtil
 import com.lyd.absolverdatabase.utils.getResourceColor
@@ -67,13 +66,8 @@ class OneMoveBar :LinearLayout{
             } else {
                 img.setBackgroundColor(if (box.moveId >= 198) ceBg else resources.getColor(R.color.transparent))
             }
-            if (SettingRepository.isUseCNEditionMod){
-                box.moveCE?.endSide?.let { SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it)) }
-                    ?.let { endSide.setImageResource(it) }
-            } else {
-                box.moveOrigin?.endSide?.let { SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it)) }
-                    ?.let { endSide.setImageResource(it) }
-            }
+            box.move?.endSide?.let { SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it)) }
+                ?.let { endSide.setImageResource(it) }
         } else {
             img.setImageResource(R.drawable.ic_add_move)
             img.setBackgroundColor(bgColor)

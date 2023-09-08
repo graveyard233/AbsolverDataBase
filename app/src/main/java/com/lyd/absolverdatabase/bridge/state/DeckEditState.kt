@@ -65,7 +65,7 @@ class DeckEditState(private val repository: DeckEditRepository,
             val opt0 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperRight)) }
             val opt1 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperLeft)) }
             val opt2 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalLowerLeft)) }
-            val opt3 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperRight)) }
+            val opt3 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalLowerRight)) }
             return "# ↗:${seq0.await()}\n" +
                     "# ↖:${seq1.await()}\n" +
                     "# ↙:${seq2.await()}\n" +
@@ -84,7 +84,7 @@ class DeckEditState(private val repository: DeckEditRepository,
             val opt0 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperRight)) }
             val opt1 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperLeft)) }
             val opt2 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalLowerLeft)) }
-            val opt3 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperRight)) }
+            val opt3 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalLowerRight)) }
             return "# ↗:${seq0.await()}\n" +
                     "# ↖:${seq1.await()}\n" +
                     "# ↙:${seq2.await()}\n" +
@@ -97,54 +97,27 @@ class DeckEditState(private val repository: DeckEditRepository,
         }
     }
     private fun getSeqDetail(seqList: List<MoveBox>) :String{
-        if (SettingRepository.isUseCNEditionMod){
-            return seqList.map {
-                if (it.moveId < 0){
-                    "_"
-                } else if (Locale.getDefault().toLanguageTag().startsWith("zh")){// 只要是中文
-                    it.moveCE?.name ?: "_"
-                } else {
-                    it.moveCE?.name_en?.ifEmpty {
-                        it.moveCE?.name ?: "_"
-                    }
+        return seqList.map {
+            if (it.moveId < 0){
+                "_"
+            } else if (Locale.getDefault().toLanguageTag().startsWith("zh")){// 只要是中文
+                it.move?.name ?: "_"
+            } else {
+                it.move?.name_en?.ifEmpty {
+                    it.move?.name ?: "_"
                 }
-            }.joinToString()
-        } else {
-            return seqList.map {
-                if (it.moveId < 0){
-                    "_"
-                } else if (Locale.getDefault().toLanguageTag().startsWith("zh")){// 只要是中文
-                    it.moveOrigin?.name ?: "_"
-                } else {
-                    it.moveOrigin?.name_en?.ifEmpty {
-                        it.moveOrigin?.name ?: "_"
-                    }
-                }
-            }.joinToString()
-        }
-
+            }
+        }.joinToString()
     }
     private fun getOptDetail(opt :MoveBox) :String{
         return opt.let {
-            if (SettingRepository.isUseCNEditionMod){
-                if (it.moveId < 0){
-                    "_"
-                } else if (Locale.getDefault().toLanguageTag().startsWith("zh")){
-                    it.moveCE!!.name
-                } else {
-                    it.moveCE!!.name_en.ifEmpty {
-                        it.moveCE!!.name
-                    }
-                }
+            if (it.moveId < 0){
+                "_"
+            } else if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+                it.move!!.name
             } else {
-                if (it.moveId < 0){
-                    "_"
-                } else if (Locale.getDefault().toLanguageTag().startsWith("zh")){
-                    it.moveOrigin!!.name
-                } else {
-                    it.moveOrigin!!.name_en.ifEmpty {
-                        it.moveOrigin!!.name
-                    }
+                it.move!!.name_en.ifEmpty {
+                    it.move!!.name
                 }
             }
         }

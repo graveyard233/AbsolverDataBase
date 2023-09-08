@@ -34,36 +34,7 @@ class OneMoveMsgBar :ConstraintLayout {
             textRight.clearText()
             return
         }
-        oneBox.moveOrigin?.apply {
-            if (SettingRepository.showWhatMsgInDeckEdit == 0){
-                textLeft.text = context.getString(R.string.move_msg_bar_advantageFrame,hitAdvantageFrame,
-                    "${if (defenseAdvantageFrame > 0) "+" else ""}$defenseAdvantageFrame")
-                textRight.text = context.getString(R.string.move_msg_bar_startFrame,startFrame)
-            } else {
-                "${
-                    when (attackToward) {
-                        AttackToward.LEFT -> context.getString(R.string.attackToward_left)
-                        AttackToward.RIGHT -> context.getString(R.string.attackToward_right)
-                    }
-                }${
-                    when (attackAltitude) {
-                        AttackAltitude.LOW -> context.getString(R.string.attackAltitude_low)
-                        AttackAltitude.MIDDLE -> context.getString(R.string.attackAltitude_middle)
-                        AttackAltitude.HEIGHT -> context.getString(R.string.attackAltitude_height)
-                    }
-                }${context.getString(R.string.altitude)}${
-                    when (attackDirection) {
-                        AttackDirection.HORIZONTAL -> context.getString(R.string.attackDirection_horizontal)
-                        AttackDirection.VERTICAL -> context.getString(R.string.attackDirection_vertical)
-                        AttackDirection.THRUST -> context.getString(R.string.attackDirection_thrust)
-                    }
-                }".let {
-                    textLeft.text = it
-                }
-                textRight.text = ""
-            }
-        }
-        oneBox.moveCE?.apply {
+        oneBox.move?.apply {
             if (SettingRepository.showWhatMsgInDeckEdit == 0){
                 textLeft.text = context.getString(R.string.move_msg_bar_advantageFrame,hitAdvantageFrame,
                     "${if (defenseAdvantageFrame > 0) "+" else ""}$defenseAdvantageFrame")

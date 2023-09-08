@@ -100,9 +100,9 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
                     if (boxes[0].isUseMirror != 0){
                         MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply {
                             this.moveOrigin = tempMove.apply { this.toMirror() }
-                        }
+                        }.apply { this.move = tempMove }
                     } else {
-                        MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply { moveOrigin = tempMove }
+                        MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply { moveOrigin = tempMove }.apply { move = tempMove }
                     }
                 } else{
                     MoveBox()
@@ -114,9 +114,9 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
                     if (boxes[1].isUseMirror != 0){
                         MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply {
                             this.moveOrigin = tempMove.apply { this.toMirror() }
-                        }
+                        }.apply { this.move = tempMove }
                     } else {
-                        MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply { moveOrigin = tempMove }
+                        MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply { moveOrigin = tempMove }.apply { move = tempMove }
                     }
                 } else{
                     MoveBox()
@@ -128,9 +128,9 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
                     if (boxes[2].isUseMirror != 0){
                         MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply {
                             this.moveOrigin = tempMove.apply { this.toMirror() }
-                        }
+                        }.apply { this.move = tempMove }
                     } else {
-                        MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply { moveOrigin = tempMove }
+                        MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply { moveOrigin = tempMove }.apply { move = tempMove }
                     }
                 } else{
                     MoveBox()
@@ -145,9 +145,9 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
             if (box.moveId != -1){
                 val tempMove = moveOriginDAO.getMoveById(box.moveId)
                 if (box.isUseMirror != 0){
-                    MoveBox(box.moveId, isUseMirror = box.isUseMirror).apply { this.moveOrigin = tempMove.apply { this.toMirror() } }
+                    MoveBox(box.moveId, isUseMirror = box.isUseMirror).apply { this.moveOrigin = tempMove.apply { this.toMirror() } }.apply { this.move = tempMove }
                 } else {
-                    MoveBox(box.moveId, 0).apply { this.moveOrigin = tempMove }
+                    MoveBox(box.moveId, 0).apply { this.moveOrigin = tempMove }.apply { this.move = tempMove }
                 }
             } else {
                 MoveBox()
@@ -164,9 +164,9 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
                     if (boxes[0].isUseMirror != 0){
                         MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply {
                             this.moveCE = tempMove.apply { this.toMirror() }
-                        }
+                        }.apply { this.move = tempMove }
                     } else {
-                        MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply { moveCE = tempMove }
+                        MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply { moveCE = tempMove }.apply { move = tempMove }
                     }
                 } else{
                     MoveBox()
@@ -178,9 +178,9 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
                     if (boxes[1].isUseMirror != 0){
                         MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply {
                             this.moveCE = tempMove.apply { this.toMirror() }
-                        }
+                        }.apply { this.move = tempMove }
                     } else {
-                        MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply { moveCE = tempMove }
+                        MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply { moveCE = tempMove }.apply { move = tempMove }
                     }
                 } else{
                     MoveBox()
@@ -192,9 +192,9 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
                     if (boxes[2].isUseMirror != 0){
                         MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply {
                             this.moveCE = tempMove.apply { this.toMirror() }
-                        }
+                        }.apply { this.move = tempMove }
                     } else {
-                        MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply { moveCE = tempMove }
+                        MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply { moveCE = tempMove }.apply { move = tempMove }
                     }
                 } else{
                     MoveBox()
@@ -209,9 +209,9 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
             if (box.moveId != -1){
                 val tempMove = moveCEDAO.getMoveById(box.moveId)
                 if (box.isUseMirror != 0){
-                    MoveBox(box.moveId, isUseMirror = box.isUseMirror).apply { this.moveCE = tempMove.apply { this.toMirror() } }
+                    MoveBox(box.moveId, isUseMirror = box.isUseMirror).apply { this.moveCE = tempMove.apply { this.toMirror() } }.apply { move = tempMove }
                 } else {
-                    MoveBox(box.moveId, 0).apply { this.moveCE = tempMove }
+                    MoveBox(box.moveId, 0).apply { this.moveCE = tempMove }.apply { this.move = tempMove }
                 }
             } else {
                 MoveBox()

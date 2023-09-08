@@ -117,62 +117,32 @@ class MovesBar : ConstraintLayout {
         when(position){
             0 ->{
                 changeMoveImg(move0,boxList[position].moveId)
-                if (SettingRepository.isUseCNEditionMod){
-                    boxList[position].moveCE?.apply {
-                        Glide.with(side1)
-                            .load(SideUtil.imgIdForMoves(endSide))
-                            .into(side1)
-                    }
-                } else {
-                    boxList[position].moveOrigin?.apply {
-                        Glide.with(side1)
-                            .load(SideUtil.imgIdForMoves(endSide))
-                            .into(side1)
-                    }
+                boxList[position].move?.apply {
+                    Glide.with(side1)
+                        .load(SideUtil.imgIdForMoves(endSide))
+                        .into(side1)
                 }
             }
             1 ->{
                 changeMoveImg(move1,boxList[position].moveId)
-                if (SettingRepository.isUseCNEditionMod){
-                    boxList[position].moveCE?.apply {
-                        Glide.with(side1)
-                            .load(SideUtil.imgIdForMoves(startSide))
-                            .into(side1)
-                        Glide.with(side2)
-                            .load(SideUtil.imgIdForMoves(endSide))
-                            .into(side2)
-                    }
-                } else {
-                    boxList[position].moveOrigin?.apply {
-                        Glide.with(side1)
-                            .load(SideUtil.imgIdForMoves(startSide))
-                            .into(side1)
-                        Glide.with(side2)
-                            .load(SideUtil.imgIdForMoves(endSide))
-                            .into(side2)
-                    }
+                boxList[position].move?.apply {
+                    Glide.with(side1)
+                        .load(SideUtil.imgIdForMoves(startSide))
+                        .into(side1)
+                    Glide.with(side2)
+                        .load(SideUtil.imgIdForMoves(endSide))
+                        .into(side2)
                 }
             }
             2 ->{
                 changeMoveImg(move2,boxList[position].moveId)
-                if (SettingRepository.isUseCNEditionMod){
-                    boxList[position].moveCE?.apply {
-                        Glide.with(side2)
-                            .load(SideUtil.imgIdForMoves(startSide))
-                            .into(side2)
-                        Glide.with(side3)
-                            .load(SideUtil.imgIdForMoves(endSide))
-                            .into(side3)
-                    }
-                } else {
-                    boxList[position].moveOrigin?.apply {
-                        Glide.with(side2)
-                            .load(SideUtil.imgIdForMoves(startSide))
-                            .into(side2)
-                        Glide.with(side3)
-                            .load(SideUtil.imgIdForMoves(endSide))
-                            .into(side3)
-                    }
+                boxList[position].move?.apply {
+                    Glide.with(side2)
+                        .load(SideUtil.imgIdForMoves(startSide))
+                        .into(side2)
+                    Glide.with(side3)
+                        .load(SideUtil.imgIdForMoves(endSide))
+                        .into(side3)
                 }
             }
         }

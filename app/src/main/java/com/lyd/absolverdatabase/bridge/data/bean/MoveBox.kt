@@ -39,4 +39,6 @@ data class MoveBox(
     var moveOrigin :MoveOrigin ?= null
     @Ignore
     var moveCE :MoveCE ?= null
+    @Ignore
+    var move :Move ?= null
 }
