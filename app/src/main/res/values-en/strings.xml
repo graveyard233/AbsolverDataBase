@@ -122,6 +122,7 @@
 
 
     <string name="config_setting">Config</string>
+    <string name="use_toolbar">Use Toolbar</string>
     <string name="dialogGaussianBlur">Gaussian Blur</string>
     <string name="ask_before_import">Show Dialog Before Import Deck</string>
     <string name="show_seq_detail_when_shared_deck">Show move name when sharing deck</string>
@@ -129,7 +130,9 @@
     <string name="show_movesMsg_in_deckEdit">Show moves message in DeckEdit</string>
     <string name="frame">Frame</string>
     <string name="trend">Trend</string>
-    <string name="use_CNEditionMod">Use China Edition Mod</string>
+    <string name="move_mod_select">Data Mod select</string>
+    <string name="origin_mod">Origin</string>
+    <string name="ce_mod">China Edition Mod</string>
     <string name="show_more_moveCE_info">Show CEMod More Information</string>
     <string name="nightMode_yes">NightMode:Enable</string>
     <string name="nightMode_follow_system">NightMode:Follow System</string>

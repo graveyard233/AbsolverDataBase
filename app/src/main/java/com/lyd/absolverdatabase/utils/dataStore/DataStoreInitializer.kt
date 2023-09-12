@@ -27,6 +27,9 @@ class DataStoreInitializer : Initializer<Unit> {
         /*CoroutineScope(Dispatchers.IO + SupervisorJob()).launch*/runBlocking {// 注意，这里的初始化时间在Application的OnCreate之后，想要更快得写在App里面
             val timeCost = measureTimeMillis {
 
+                val tempUseToolbar = async {
+                    SettingRepository.isUseToolbarPreference.getOrDefault()
+                }
                 val tempGaussianBlur = async {
                     if (Build.VERSION.SDK_INT < /*31*/Build.VERSION_CODES.S){// 低于Android12不能使用高斯模糊
                         false
@@ -49,8 +52,8 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempShowWhatMsgInDeckEdit = async {
                     SettingRepository.showWhatMsgInDeckEditPreference.getOrDefault()
                 }
-                val tempUseCNEditionMod = async {
-                    SettingRepository.isUseCNEditionModPreference.getOrDefault()
+                val tempUseWhatDataMod = async {
+                    SettingRepository.useWhatDataModPreference.getOrDefault()
                 }
                 val tempShowMoreMoveCEInfo = async {
                     SettingRepository.isShowMoreMoveCEInfoPreference.getOrDefault()
@@ -82,13 +85,14 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempHadShowTipHowToEditDeckMsg = async {
                     SettingRepository.hadShowTipHowToEditDeckMsgPreference.getOrDefault()
                 }
+                SettingRepository.isUseToolbar = tempUseToolbar.await()
                 SettingRepository.isDialogGaussianBlur = tempGaussianBlur.await()
                 SettingRepository.isNeedAskBeforeImport = tempAskBeforeImport.await()
                 SettingRepository.isShowSeqDetailWhenSharedDeck = tempShowSeqDetailWhenShared.await()
                 SettingRepository.isUseShareSheetWhenSharedDeck = tempUseShareSheetWhenShared.await()
                 SettingRepository.isShowMovesMsgInDeckEdit = tempShowMovesMsgInDeckEdit.await()
                 SettingRepository.showWhatMsgInDeckEdit = tempShowWhatMsgInDeckEdit.await()
-                SettingRepository.isUseCNEditionMod = tempUseCNEditionMod.await()
+                SettingRepository.useWhatDataMod = tempUseWhatDataMod.await()
                 SettingRepository.isShowMoreMoveCEInfo = tempShowMoreMoveCEInfo.await()
                 SettingRepository.useNightMode = tempUseNightMode.await()
                 SettingRepository.movesFilterListJson = tempMovesFilterListJson.await()

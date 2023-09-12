@@ -118,6 +118,7 @@
     <string name="movesFilter_defAdvantage">防御优势帧</string>
 
     <string name="config_setting">可配置项</string>
+    <string name="use_toolbar">使用工具栏</string>
     <string name="dialogGaussianBlur">高斯模糊</string>
     <string name="ask_before_import">在导入卡组前弹窗</string>
     <string name="show_seq_detail_when_shared_deck">分享卡组时附带招式名称</string>
@@ -125,7 +126,9 @@
     <string name="show_movesMsg_in_deckEdit">卡组编辑界面显示简单招式属性</string>
     <string name="frame">帧数</string>
     <string name="trend">走向</string>
-    <string name="use_CNEditionMod">启用China Edition Mod</string>
+    <string name="move_mod_select">招式数据模式选择</string>
+    <string name="origin_mod">原版</string>
+    <string name="ce_mod">China Edition Mod</string>
     <string name="show_more_moveCE_info">显示CEMod招式更多数据</string>
     <string name="nightMode_yes">夜间模式:启用</string>
     <string name="nightMode_follow_system">夜间模式:跟随系统</string>

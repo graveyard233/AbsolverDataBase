@@ -8,8 +8,6 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.lyd.absolverdatabase.bridge.data.bean.MoveForSelect
 import com.lyd.absolverdatabase.bridge.data.bean.RepoResult
 import com.lyd.absolverdatabase.bridge.data.repository.MoveRepository
-import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
-
 
 class MoveRecycleState(private val repository: MoveRepository,
                        private val state :SavedStateHandle) :ViewModel()
@@ -21,17 +19,9 @@ class MoveRecycleState(private val repository: MoveRepository,
     suspend fun moveListWithMirror(startInt: Int?, endInt: Int, canHand: Boolean = false) :List<MoveForSelect>
     {
         val result = if (canHand){
-            if (SettingRepository.isUseCNEditionMod){
-                repository.getHandCEWithMirror(startInt,endInt)
-            } else {
-                repository.getHandOriginWithMirror(startInt,endInt)
-            }
+            repository.getHandWithMirror(startInt, endInt)
         } else {
-            if (SettingRepository.isUseCNEditionMod){
-                repository.getSwordCEWithMirror(startInt,endInt)
-            } else {
-                repository.getSwordOriginWithMirror(startInt,endInt)
-            }
+            repository.getSwordWithMirror(startInt, endInt)
         }
         return when(result){
             is RepoResult.RpEmpty -> emptyList()
@@ -43,17 +33,9 @@ class MoveRecycleState(private val repository: MoveRepository,
     suspend fun optListWithMirror(startInt: Int, endInt: Int, canHand: Boolean = false) :List<MoveForSelect>
     {
         val result = if (canHand){
-            if (SettingRepository.isUseCNEditionMod){
-                repository.getHandCEOptWithMirror(startInt,endInt)
-            } else {
-                repository.getHandOriginOptWithMirror(startInt,endInt)
-            }
+            repository.getHandOptWithMirror(startInt, endInt)
         } else {
-            if (SettingRepository.isUseCNEditionMod){
-                repository.getSwordCEOptWithMirror(startInt,endInt)
-            } else {
-                repository.getSwordOriginOptWithMirror(startInt,endInt)
-            }
+            repository.getSwordOptWithMirror(startInt, endInt)
         }
         return when(result){
             is RepoResult.RpEmpty -> emptyList()

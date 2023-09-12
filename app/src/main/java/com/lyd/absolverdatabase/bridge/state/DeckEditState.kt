@@ -56,45 +56,23 @@ class DeckEditState(private val repository: DeckEditRepository,
     }
 
     suspend fun getSeqDetailFromDeck(deck: Deck) :String{
-        if (SettingRepository.isUseCNEditionMod){
-            val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-            val seq0 = scope.async { getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceUpperRight)) }
-            val seq1 = scope.async { getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceUpperLeft)) }
-            val seq2 = scope.async { getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceLowerLeft)) }
-            val seq3 = scope.async { getSeqDetail(seqList = repository.getCEsWithMirrorByBoxes(deck.sequenceLowerRight)) }
-            val opt0 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperRight)) }
-            val opt1 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalUpperLeft)) }
-            val opt2 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalLowerLeft)) }
-            val opt3 = scope.async { getOptDetail(opt = repository.getCEWithMirrorByBox(deck.optionalLowerRight)) }
-            return "# ↗:${seq0.await()}\n" +
-                    "# ↖:${seq1.await()}\n" +
-                    "# ↙:${seq2.await()}\n" +
-                    "# ↘:${seq3.await()}\n" +
-                    "# ↗:${opt0.await()}\n" +
-                    "# ↖:${opt1.await()}\n" +
-                    "# ↙:${opt2.await()}\n" +
-                    "# ↘:${opt3.await()}\n"
-
-        } else {
-            val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-            val seq0 = scope.async { getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperRight)) }
-            val seq1 = scope.async { getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperLeft)) }
-            val seq2 = scope.async { getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerLeft)) }
-            val seq3 = scope.async { getSeqDetail(seqList = repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerRight)) }
-            val opt0 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperRight)) }
-            val opt1 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalUpperLeft)) }
-            val opt2 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalLowerLeft)) }
-            val opt3 = scope.async { getOptDetail(opt = repository.getOriginWithMirrorByBox(deck.optionalLowerRight)) }
-            return "# ↗:${seq0.await()}\n" +
-                    "# ↖:${seq1.await()}\n" +
-                    "# ↙:${seq2.await()}\n" +
-                    "# ↘:${seq3.await()}\n" +
-                    "# ↗:${opt0.await()}\n" +
-                    "# ↖:${opt1.await()}\n" +
-                    "# ↙:${opt2.await()}\n" +
-                    "# ↘:${opt3.await()}\n"
-
-        }
+        val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+        val seq0 = scope.async { getSeqDetail(seqList = repository.getBoxesWithMirrorByBoxes(deck.sequenceUpperRight)) }
+        val seq1 = scope.async { getSeqDetail(seqList = repository.getBoxesWithMirrorByBoxes(deck.sequenceUpperLeft)) }
+        val seq2 = scope.async { getSeqDetail(seqList = repository.getBoxesWithMirrorByBoxes(deck.sequenceLowerLeft)) }
+        val seq3 = scope.async { getSeqDetail(seqList = repository.getBoxesWithMirrorByBoxes(deck.sequenceLowerRight)) }
+        val opt0 = scope.async { getOptDetail(opt = repository.getBoxWithMirrorByBox(deck.optionalUpperRight)) }
+        val opt1 = scope.async { getOptDetail(opt = repository.getBoxWithMirrorByBox(deck.optionalUpperLeft)) }
+        val opt2 = scope.async { getOptDetail(opt = repository.getBoxWithMirrorByBox(deck.optionalLowerLeft)) }
+        val opt3 = scope.async { getOptDetail(opt = repository.getBoxWithMirrorByBox(deck.optionalLowerRight)) }
+        return "# ↗:${seq0.await()}\n" +
+                "# ↖:${seq1.await()}\n" +
+                "# ↙:${seq2.await()}\n" +
+                "# ↘:${seq3.await()}\n" +
+                "# ↗:${opt0.await()}\n" +
+                "# ↖:${opt1.await()}\n" +
+                "# ↙:${opt2.await()}\n" +
+                "# ↘:${opt3.await()}\n"
     }
     private fun getSeqDetail(seqList: List<MoveBox>) :String{
         return seqList.map {
@@ -173,33 +151,16 @@ class DeckEditState(private val repository: DeckEditRepository,
     fun updateAllOption(deck: Deck){
         viewModelScope.launch(Dispatchers.IO){
             launch {
-                if (SettingRepository.isUseCNEditionMod){
-                    optUpperRight.emit(repository.getCEWithMirrorByBox(deck.optionalUpperRight))
-                } else {
-                    optUpperRight.emit(repository.getOriginWithMirrorByBox(deck.optionalUpperRight))
-                }
+                optUpperRight.emit(repository.getBoxWithMirrorByBox(deck.optionalUpperRight))
             }
             launch {
-                if (SettingRepository.isUseCNEditionMod){
-                    optUpperLeft.emit(repository.getCEWithMirrorByBox(deck.optionalUpperLeft))
-                } else {
-                    optUpperLeft.emit(repository.getOriginWithMirrorByBox(deck.optionalUpperLeft))
-                }
+                optUpperLeft.emit(repository.getBoxWithMirrorByBox(deck.optionalUpperLeft))
             }
             launch {
-                if (SettingRepository.isUseCNEditionMod){
-                    optLowerLift.emit(repository.getCEWithMirrorByBox(deck.optionalLowerLeft))
-                } else {
-                    optLowerLift.emit(repository.getOriginWithMirrorByBox(deck.optionalLowerLeft))
-                }
-
+                optLowerLift.emit(repository.getBoxWithMirrorByBox(deck.optionalLowerLeft))
             }
             launch {
-                if (SettingRepository.isUseCNEditionMod){
-                    optLowerRight.emit(repository.getCEWithMirrorByBox(deck.optionalLowerRight))
-                } else {
-                    optLowerRight.emit(repository.getOriginWithMirrorByBox(deck.optionalLowerRight))
-                }
+                optLowerRight.emit(repository.getBoxWithMirrorByBox(deck.optionalLowerRight))
             }
         }
     }
@@ -207,32 +168,16 @@ class DeckEditState(private val repository: DeckEditRepository,
     fun updateAllSequence(deck: Deck){// 千万不要修改这个deck的属性
         viewModelScope.launch/*(Dispatchers.IO)*/{
             launch {
-                if (SettingRepository.isUseCNEditionMod){
-                    updateSeqUpperRight(repository.getCEsWithMirrorByBoxes(deck.sequenceUpperRight))
-                } else {
-                    updateSeqUpperRight(repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperRight))
-                }
+                updateSeqUpperRight(repository.getBoxesWithMirrorByBoxes(deck.sequenceUpperRight))
             }
             launch {
-                if (SettingRepository.isUseCNEditionMod){
-                    updateSeqUpperLeft(repository.getCEsWithMirrorByBoxes(deck.sequenceUpperLeft))
-                } else {
-                    updateSeqUpperLeft(repository.getOriginsWithMirrorByBoxes(deck.sequenceUpperLeft))
-                }
+                updateSeqUpperLeft(repository.getBoxesWithMirrorByBoxes(deck.sequenceUpperLeft))
             }
             launch {
-                if (SettingRepository.isUseCNEditionMod){
-                    updateSeqLowerLeft(repository.getCEsWithMirrorByBoxes(deck.sequenceLowerLeft))
-                } else {
-                    updateSeqLowerLeft(repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerLeft))
-                }
+                updateSeqLowerLeft(repository.getBoxesWithMirrorByBoxes(deck.sequenceLowerLeft))
             }
             launch {
-                if (SettingRepository.isUseCNEditionMod){
-                    updateSeqLowerRight(repository.getCEsWithMirrorByBoxes(deck.sequenceLowerRight))
-                } else {
-                    updateSeqLowerRight(repository.getOriginsWithMirrorByBoxes(deck.sequenceLowerRight))
-                }
+                updateSeqLowerRight(repository.getBoxesWithMirrorByBoxes(deck.sequenceLowerRight))
             }
         }
     }
@@ -315,17 +260,11 @@ class DeckEditState(private val repository: DeckEditRepository,
     }
 
     /**直接按id查招式，没镜像处理*/
-    suspend fun getSeqMovesByIds(seq :List<Int>) :List<MoveOrigin?> {
-        return repository.getOriginListByIds(seq)
+    suspend fun getSeqMovesByIds(seq :List<Int>) :List<Move?> {
+        return repository.getMoveListByIds(seq)
     }
-    suspend fun getOptMoveById(optId :Int) :MoveOrigin?{
-        return repository.getOriginMoveById(optId)
-    }
-    suspend fun getSeqCEMovesByIds(seq :List<Int>) :List<MoveCE?> {
-        return repository.getCEListByIds(seq)
-    }
-    suspend fun getOptCEMoveById(optId :Int) :MoveCE?{
-        return repository.getCEMoveById(optId)
+    suspend fun getOptMoveById(optId :Int) :Move?{
+        return repository.getMoveById(optId)
     }
 
     private val _sideLimitFlow :MutableStateFlow<SideLimit> = MutableStateFlow(value = SideLimit.noLimit())

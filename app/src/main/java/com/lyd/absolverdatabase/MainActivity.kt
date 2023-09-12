@@ -1,14 +1,16 @@
 package com.lyd.absolverdatabase
 
 import android.os.Bundle
-import android.util.Log
-
+import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.WindowCompat
-
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.appbar.AppBarLayout.ScrollingViewBehavior
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.bridge.state.MainActivityViewModel
 import com.lyd.absolverdatabase.databinding.ActivityMainBinding
 import com.lyd.absolverdatabase.ui.base.BaseActivity
@@ -48,6 +50,9 @@ class MainActivity : BaseActivity() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_fragment_nav_host) as NavHostFragment
         navController = navHostFragment.navController
+
+        changeToolbar()
+
         mainBinding?.mainBottomNav?.setupWithNavController(navController!!)
         mainBinding?.mainRailNav?.setupWithNavController(navController!!)// 横向布局
 
@@ -120,6 +125,27 @@ class MainActivity : BaseActivity() {
         mainBinding?.mainBottomNav?.apply {
             clearAnimation()
             animate().translationY(0f).duration = 200
+        }
+    }
+
+    fun changeToolbar(){
+        if (SettingRepository.isUseToolbar){
+            val appBarConfiguration = AppBarConfiguration(setOf(R.id.learnFragment,R.id.dataFragment,R.id.deckFragment,R.id.settingFragment))
+            mainBinding?.apply {
+                mainToolbar?.apply {
+                    visibility = View.VISIBLE
+                    setupWithNavController(navController!!,appBarConfiguration)
+                }
+
+                val tempLp :CoordinatorLayout.LayoutParams = constraintLayout?.layoutParams as CoordinatorLayout.LayoutParams
+                tempLp.behavior = ScrollingViewBehavior()
+            }
+        } else {
+            mainBinding?.apply {
+                mainToolbar?.visibility = View.GONE
+                val tempLp :CoordinatorLayout.LayoutParams = constraintLayout?.layoutParams as CoordinatorLayout.LayoutParams
+                tempLp.behavior = null
+            }
         }
     }
 

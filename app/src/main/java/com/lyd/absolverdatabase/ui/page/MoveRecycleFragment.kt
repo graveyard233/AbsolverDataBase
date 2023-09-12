@@ -278,17 +278,9 @@ class MoveRecycleFragment :BaseFragment()
                     }
                 }
                 val idsBeSelect = tempMoveListBeSelect.await()
-                if (SettingRepository.isUseCNEditionMod){
-                    tempForSelect.forEach { tempMoveForSelect->
-                        if (tempMoveForSelect.moveCE.id in idsBeSelect){
-                            tempMoveForSelect.isSelected = true// 标记已选择的招式
-                        }
-                    }
-                } else {
-                    tempForSelect.forEach { tempMoveForSelect->
-                        if (tempMoveForSelect.moveOrigin.id in idsBeSelect){
-                            tempMoveForSelect.isSelected = true// 标记已选择的招式
-                        }
+                tempForSelect.forEach { tempMoveForSelect->
+                    if (tempMoveForSelect.move.id in idsBeSelect){
+                        tempMoveForSelect.isSelected = true
                     }
                 }
 
@@ -315,174 +307,89 @@ class MoveRecycleFragment :BaseFragment()
             llog.d(TAG,"HitAdvList->$tempHitAdvRangeList")
             val tempDefAdvRangeList = FilterOption.range2ListForDefAdv(option.defAdvRange)
             llog.d(TAG,"DefAdvRangeList->$tempDefAdvRangeList")
-            if (SettingRepository.isUseCNEditionMod){
-                sideList.asSequence().filter {
-                    when(option.attackToward){
-                        is AttackTowardOption.left -> { it.moveCE.attackToward == AttackToward.LEFT }
-                        is AttackTowardOption.right -> { it.moveCE.attackToward == AttackToward.RIGHT }
-                        is AttackTowardOption.all -> true
-                    }
-                }.filter {
-                    when(option.attackAltitude){
-                        is AttackAltitudeOption.height -> { it.moveCE.attackAltitude == AttackAltitude.HEIGHT }
-                        is AttackAltitudeOption.middle -> { it.moveCE.attackAltitude == AttackAltitude.MIDDLE }
-                        is AttackAltitudeOption.low -> { it.moveCE.attackAltitude == AttackAltitude.LOW }
-                        is AttackAltitudeOption.all -> true
-                    }
-                }.filter {
-                    when(option.attackDirection){
-                        is AttackDirectionOption.horizontal -> { it.moveCE.attackDirection == AttackDirection.HORIZONTAL }
-                        is AttackDirectionOption.vertical -> { it.moveCE.attackDirection == AttackDirection.VERTICAL }
-                        is AttackDirectionOption.thrust -> { it.moveCE.attackDirection == AttackDirection.THRUST }
-                        is AttackDirectionOption.all -> true
-                    }
-                }.filter {
-                    if (option.strengthList[0] && option.strengthList[1] && option.strengthList[2]){// 只有全部都为真才不需要筛选力度
-                        true
-                    } else {
-                        tempStrengthSet.contains(it.moveCE.strength)
-                    }
-                }.filter {
-                    if (option.rangeRange == FilterOption.defRange){
-                        true
-                    } else {
-                        when(((it.moveCE.attackRange * 100).toInt() / 100.00)){
-                            in (tempRangeRangeList[0]..tempRangeRangeList[1]) ->{
-                                true
-                            }
+            sideList.asSequence().filter {
+                when(option.attackToward){
+                    is AttackTowardOption.left -> { it.move.attackToward == AttackToward.LEFT }
+                    is AttackTowardOption.right -> { it.move.attackToward == AttackToward.RIGHT }
+                    is AttackTowardOption.all -> true
+                }
+            }.filter {
+                when(option.attackAltitude){
+                    is AttackAltitudeOption.height -> { it.move.attackAltitude == AttackAltitude.HEIGHT }
+                    is AttackAltitudeOption.middle -> { it.move.attackAltitude == AttackAltitude.MIDDLE }
+                    is AttackAltitudeOption.low -> { it.move.attackAltitude == AttackAltitude.LOW }
+                    is AttackAltitudeOption.all -> true
+                }
+            }.filter {
+                when(option.attackDirection){
+                    is AttackDirectionOption.horizontal -> { it.move.attackDirection == AttackDirection.HORIZONTAL }
+                    is AttackDirectionOption.vertical -> { it.move.attackDirection == AttackDirection.VERTICAL }
+                    is AttackDirectionOption.thrust -> { it.move.attackDirection == AttackDirection.THRUST }
+                    is AttackDirectionOption.all -> true
+                }
+            }.filter {
+                if (option.strengthList[0] && option.strengthList[1] && option.strengthList[2]){// 只有全部都为真才不需要筛选力度
+                    true
+                } else {
+                    tempStrengthSet.contains(it.move.strength)
+                }
+            }.filter {
+                if (option.rangeRange == FilterOption.defRange){
+                    true
+                } else {
+                    when(((it.move.attackRange * 100).toInt() / 100.00)){
+                        in (tempRangeRangeList[0]..tempRangeRangeList[1]) ->{
+                            true
+                        }
 
-                            else -> false
+                        else -> false
+                    }
+                }
+            }.filter {
+                if (option.effectSet.size == 12){
+                    true
+                } else {
+                    val tempEffectList = it.move.effect.split(",")
+                    var tempEffectFlag = 0
+                    for (index in tempEffectList.indices){
+                        if (option.effectSet.contains(tempEffectList[index])){
+                            tempEffectFlag++
+                            break
                         }
                     }
-                }.filter {
-                    if (option.effectSet.size == 12){
-                        true
-                    } else {
-                        val tempEffectList = it.moveCE.effect.split(",")
-                        var tempEffectFlag = 0
-                        for (index in tempEffectList.indices){
-                            if (option.effectSet.contains(tempEffectList[index])){
-                                tempEffectFlag++
-                                break
-                            }
-                        }
-                        tempEffectFlag != 0
-                    }
-                }.filter {
-                    if (option.startFrameRange == FilterOption.defStartF){
-                        true
-                    } else {
-                        tempStartFRangeList[0] <= it.moveCE.startFrame && it.moveCE.startFrame <= tempStartFRangeList[1]
-                    }
-                }.filter {
-                    if (option.phyWeaknessRange == FilterOption.defPhyWeakness){
-                        true
-                    } else {
-                        tempPhyWeaknessRangeList[0] <= it.moveCE.physicalWeakness && it.moveCE.physicalWeakness <= tempPhyWeaknessRangeList[1]
-                    }
-                }.filter {
-                    if (option.phyOutputRange == FilterOption.defPhyOutput){
-                        true
-                    } else {
-                        tempPhyOutputRangeList[0] <= it.moveCE.physicalOutput && it.moveCE.physicalOutput <= tempPhyOutputRangeList[1]
-                    }
-                }.filter {
-                    if (option.hitAdvRange == FilterOption.defHitAdv){
-                        true
-                    } else {
-                        tempHitAdvRangeList[0] <= it.moveCE.hitAdvantageFrame && it.moveCE.hitAdvantageFrame <= tempHitAdvRangeList[1]
-                    }
-                }.filter {
-                    if (option.defAdvRange == FilterOption.defDefAdv){
-                        true
-                    } else {
-                        tempDefAdvRangeList[0] <= it.moveCE.defenseAdvantageFrame && it.moveCE.defenseAdvantageFrame <= tempDefAdvRangeList[1]
-                    }
-                }.toList()
-            } else {
-                sideList.asSequence().filter {
-                    when(option.attackToward){
-                        is AttackTowardOption.left -> { it.moveOrigin.attackToward == AttackToward.LEFT }
-                        is AttackTowardOption.right -> { it.moveOrigin.attackToward == AttackToward.RIGHT }
-                        is AttackTowardOption.all -> true
-                    }
-                }.filter {
-                    when(option.attackAltitude){
-                        is AttackAltitudeOption.height -> { it.moveOrigin.attackAltitude == AttackAltitude.HEIGHT }
-                        is AttackAltitudeOption.middle -> { it.moveOrigin.attackAltitude == AttackAltitude.MIDDLE }
-                        is AttackAltitudeOption.low -> { it.moveOrigin.attackAltitude == AttackAltitude.LOW }
-                        is AttackAltitudeOption.all -> true
-                    }
-                }.filter {
-                    when(option.attackDirection){
-                        is AttackDirectionOption.horizontal -> { it.moveOrigin.attackDirection == AttackDirection.HORIZONTAL }
-                        is AttackDirectionOption.vertical -> { it.moveOrigin.attackDirection == AttackDirection.VERTICAL }
-                        is AttackDirectionOption.thrust -> { it.moveOrigin.attackDirection == AttackDirection.THRUST }
-                        is AttackDirectionOption.all -> true
-                    }
-                }.filter {
-                    if (option.strengthList[0] && option.strengthList[1] && option.strengthList[2]){// 只有全部都为真才不需要筛选力度
-                        true
-                    } else {
-                        tempStrengthSet.contains(it.moveOrigin.strength)
-                    }
-                }.filter {
-                    if (option.rangeRange == FilterOption.defRange){
-                        true
-                    } else {
-                        when(((it.moveOrigin.attackRange * 100).toInt() / 100.00)){
-                            in (tempRangeRangeList[0]..tempRangeRangeList[1]) ->{
-                                true
-                            }
-                            else -> false
-                        }
-                    }
-                }.filter {
-                    if (option.effectSet.size == 12){
-                        true
-                    } else {
-                        val tempEffectList = it.moveOrigin.effect.split(",")
-                        var tempEffectFlag = 0
-                        for (index in tempEffectList.indices){
-                            if (option.effectSet.contains(tempEffectList[index])){
-                                tempEffectFlag++
-                                break
-                            }
-                        }
-                        tempEffectFlag != 0
-                    }
-                }.filter {
-                    if (option.startFrameRange == FilterOption.defStartF){
-                        true
-                    } else {
-                        tempStartFRangeList[0] <= it.moveOrigin.startFrame && it.moveOrigin.startFrame <= tempStartFRangeList[1]
-                    }
-                }.filter {
-                    if (option.phyWeaknessRange == FilterOption.defPhyWeakness){
-                        true
-                    } else {
-                        tempPhyWeaknessRangeList[0] <= it.moveOrigin.physicalWeakness && it.moveOrigin.physicalWeakness <= tempPhyWeaknessRangeList[1]
-                    }
-                }.filter {
-                    if (option.phyOutputRange == FilterOption.defPhyOutput){
-                        true
-                    } else {
-                        tempPhyOutputRangeList[0] <= it.moveOrigin.physicalOutput && it.moveOrigin.physicalOutput <= tempPhyOutputRangeList[1]
-                    }
-                }.filter {
-                    if (option.hitAdvRange == FilterOption.defHitAdv){
-                        true
-                    } else {
-                        tempHitAdvRangeList[0] <= it.moveOrigin.hitAdvantageFrame && it.moveOrigin.hitAdvantageFrame <= tempHitAdvRangeList[1]
-                    }
-                }.filter {
-                    if (option.defAdvRange == FilterOption.defDefAdv){
-                        true
-                    } else {
-                        tempDefAdvRangeList[0] <= it.moveOrigin.defenseAdvantageFrame && it.moveOrigin.defenseAdvantageFrame <= tempDefAdvRangeList[1]
-                    }
-                }.toList()
-            }
+                    tempEffectFlag != 0
+                }
+            }.filter {
+                if (option.startFrameRange == FilterOption.defStartF){
+                    true
+                } else {
+                    tempStartFRangeList[0] <= it.move.startFrame && it.move.startFrame <= tempStartFRangeList[1]
+                }
+            }.filter {
+                if (option.phyWeaknessRange == FilterOption.defPhyWeakness){
+                    true
+                } else {
+                    tempPhyWeaknessRangeList[0] <= it.move.physicalWeakness && it.move.physicalWeakness <= tempPhyWeaknessRangeList[1]
+                }
+            }.filter {
+                if (option.phyOutputRange == FilterOption.defPhyOutput){
+                    true
+                } else {
+                    tempPhyOutputRangeList[0] <= it.move.physicalOutput && it.move.physicalOutput <= tempPhyOutputRangeList[1]
+                }
+            }.filter {
+                if (option.hitAdvRange == FilterOption.defHitAdv){
+                    true
+                } else {
+                    tempHitAdvRangeList[0] <= it.move.hitAdvantageFrame && it.move.hitAdvantageFrame <= tempHitAdvRangeList[1]
+                }
+            }.filter {
+                if (option.defAdvRange == FilterOption.defDefAdv){
+                    true
+                } else {
+                    tempDefAdvRangeList[0] <= it.move.defenseAdvantageFrame && it.move.defenseAdvantageFrame <= tempDefAdvRangeList[1]
+                }
+            }.toList()
         }
     }
 

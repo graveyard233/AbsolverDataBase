@@ -297,7 +297,7 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
                 mFilterOption?.effectSet?.remove(MoveEffect.DOUBLE_ATTACK.name)
             }
         }
-        effectTripleAttack.visibility = if (SettingRepository.isUseCNEditionMod) View.VISIBLE else View.GONE
+        effectTripleAttack.visibility = if (SettingRepository.useWhatDataMod == SettingRepository.CEMOD) View.VISIBLE else View.GONE
         effectTripleAttack.setOnCheckedChangeListener { btn, isChecked ->
             if (!btn.isPressed) return@setOnCheckedChangeListener
             if (isChecked){

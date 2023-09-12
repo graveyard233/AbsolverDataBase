@@ -6,14 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.Guideline
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveForSelect
-import com.lyd.absolverdatabase.bridge.data.bean.MoveOrigin
-import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import java.util.*
 
@@ -22,24 +19,15 @@ class MoveItemAdapter :BaseQuickAdapter<MoveForSelect,MoveItemAdapter.VH>() {
     override fun onBindViewHolder(holder: VH, position: Int, item: MoveForSelect?) {
         item?.run {
             Glide.with(holder.img)
-                .load(AssetsUtil.getBitmapByMoveId(context, moveId = if (SettingRepository.isUseCNEditionMod) item.moveCE.id else item.moveOrigin.id))
+                .load(AssetsUtil.getBitmapByMoveId(context, move.id))
                 .error(R.drawable.ic_video_load_error)
                 .into(holder.img)
-            val tempId = if (SettingRepository.isUseCNEditionMod) item.moveCE.id else item.moveOrigin.id
-            holder.img.setBackgroundColor(context.resources.getColor(if (tempId >= 198) R.color.img_add_move_bg else R.color.transparent))
+            holder.img.setBackgroundColor(context.resources.getColor(if (move.id >= 198) R.color.img_add_move_bg else R.color.transparent))
             holder.moveName.text =
-                if (SettingRepository.isUseCNEditionMod) {
-                    if (Locale.getDefault().toLanguageTag().startsWith("zh")){
-                        moveCE.name
-                    } else {
-                        moveCE.name_en.ifEmpty { moveCE.name }
-                    }
+                if (Locale.getDefault().toLanguageTag().startsWith("zh")){
+                    move.name
                 } else {
-                    if (Locale.getDefault().toLanguageTag().startsWith("zh")){
-                        moveOrigin.name
-                    } else {
-                        moveOrigin.name_en
-                    }
+                    move.name_en.ifEmpty { move.name }
                 }
             holder.imgSelect.visibility = if (item.isSelected) View.VISIBLE else View.GONE
         }

@@ -200,10 +200,10 @@ class SettingDatabaseFragment :BaseFragment() {
 
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                settingState.useCNEditionModFlow.collectLatest {
-                    llog.i(TAG, "useCNEditionModFlow: 接收到数据 $it")
-                    setDbBinding?.settingDatabaseDatabaseLinear?.visibility = if (it) View.VISIBLE else View.GONE
-                 }
+                settingState.useWhatDataModFlow.collectLatest {
+                    llog.i(TAG, "useWhatDataModFlow: 使用数据模式为 $it")
+                    setDbBinding?.settingDatabaseDatabaseLinear?.visibility = if (it == SettingRepository.CEMOD) View.VISIBLE else View.GONE
+                }
             }
         }
 

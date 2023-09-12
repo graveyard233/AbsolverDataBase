@@ -23,7 +23,7 @@ class TipFragment :BaseFragment(){
         view.apply {
             styleCard = findViewById(R.id.tip_card_styleDetail)
 
-            if (SettingRepository.isUseCNEditionMod){
+            if (SettingRepository.useWhatDataMod == SettingRepository.CEMOD){
                 styleCard.visibility = View.VISIBLE
             }
         }

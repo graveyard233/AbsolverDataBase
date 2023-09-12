@@ -149,7 +149,7 @@ class MovesBar : ConstraintLayout {
     }
 
     private fun changeMoveImg(imageView: ImageView,moveId :Int){
-        if (moveId > 0){
+        if (moveId >= 0){
             Glide.with(imageView)
                 .load(AssetsUtil.getBitmapByMoveId(context, moveId = moveId))
                 .into(imageView)

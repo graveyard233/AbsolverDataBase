@@ -7,8 +7,13 @@ import com.lyd.absolverdatabase.utils.logUtils.LLog
 
 object SettingRepository :DataStoreOwner(name = "setting") {
     private const val TAG = "SettingRepository"
+    const val ORIGIN = 0
+    const val CEMOD = 1
 
     /*---------------------------可配置项页面部分，按序排列----------------------------------*/
+
+    var isUseToolbar :Boolean = true
+    val isUseToolbarPreference by booleanPreference(default = true)
 
     var isDialogGaussianBlur :Boolean = true
     val isDialogGaussianBlurPreference by booleanPreference(default = true)
@@ -31,8 +36,9 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     var showWhatMsgInDeckEdit :Int = 1
     val showWhatMsgInDeckEditPreference by intPreference(default = 1)
 
-    var isUseCNEditionMod :Boolean = false
-    val isUseCNEditionModPreference by booleanPreference(default = false)
+    /**[ORIGIN] 是使用原版数据，[CEMOD] 是使用CEMod数据*/
+    var useWhatDataMod :Int = ORIGIN
+    val useWhatDataModPreference by intPreference(default = ORIGIN)
     var isShowMoreMoveCEInfo :Boolean = false
     val isShowMoreMoveCEInfoPreference by booleanPreference(default = false)
 

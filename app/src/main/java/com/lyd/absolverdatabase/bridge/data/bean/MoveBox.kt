@@ -24,7 +24,7 @@ data class MoveBox(
 //            return tempList
         }
         fun getMirrorList(moveList: List<MoveBox>) :MutableList<Int>{
-            return  moveList.slice(0..2).map {
+            return moveList.slice(0..2).map {
                 it.isUseMirror
             }.toMutableList()
 //            val tempList = mutableListOf<Int>(0,0,0)
@@ -34,11 +34,7 @@ data class MoveBox(
 //            return tempList
         }
     }
-    /**招式，内部的数据和是否启用镜像是同步的，即假如[isUseMirror]是1，则[moveOrigin]内部已经做出了镜像转换了，不需要再变更*/
-    @Ignore
-    var moveOrigin :MoveOrigin ?= null
-    @Ignore
-    var moveCE :MoveCE ?= null
+    /**招式，内部的数据和是否启用镜像是同步的，即假如[isUseMirror]是1，则[move]内部已经做出了镜像转换了，不需要再变更*/
     @Ignore
     var move :Move ?= null
 }

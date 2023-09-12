@@ -17,62 +17,37 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
 
     private val TAG = javaClass.simpleName
 
-     suspend fun getOriginListByIds(idList: List<Int>):List<MoveOrigin?>{
-         return withContext(Dispatchers.IO){
-             val move0 = async{
-                 if (idList[0] != -1){
-                     moveOriginDAO.getMoveById(idList[0])
-                 } else{
-                     null
-                 }
-             }
-             val move1 = async{
-                 if (idList[1] != -1){
-                     moveOriginDAO.getMoveById(idList[1])
-                 } else{
-                     null
-                 }
-             }
-             val move2 = async{
-                 if (idList[2] != -1){
-                     moveOriginDAO.getMoveById(idList[2])
-                 } else{
-                     null
-                 }
-             }
-             listOf(move0.await(),move1.await(),move2.await())
-         }
-    }
-
-    suspend fun getOriginMoveById(id :Int):MoveOrigin?{
-        return withContext(Dispatchers.IO){
-            if (id >= 0){
-                moveOriginDAO.getMoveById(id)
-            } else{
-                null
-            }
-        }
-    }
-
-    suspend fun getCEListByIds(idList: List<Int>):List<MoveCE?>{
+    suspend fun getMoveListByIds(idList: List<Int>) :List<Move?>{
         return withContext(Dispatchers.IO){
             val move0 = async{
                 if (idList[0] != -1){
-                    moveCEDAO.getMoveById(idList[0])
+                    when(SettingRepository.useWhatDataMod){
+                        SettingRepository.ORIGIN -> moveOriginDAO.getMoveById(idList[0])
+                        SettingRepository.CEMOD -> moveCEDAO.getMoveById(idList[0])
+                        else -> moveOriginDAO.getMoveById(idList[0])
+                    }
                 } else{
                     null
                 }
             }
             val move1 = async{
                 if (idList[1] != -1){
-                    moveCEDAO.getMoveById(idList[1])
+                    when(SettingRepository.useWhatDataMod){
+                        SettingRepository.ORIGIN -> moveOriginDAO.getMoveById(idList[1])
+                        SettingRepository.CEMOD -> moveCEDAO.getMoveById(idList[1])
+                        else -> moveOriginDAO.getMoveById(idList[1])
+                    }
                 } else{
                     null
                 }
             }
             val move2 = async{
                 if (idList[2] != -1){
-                    moveCEDAO.getMoveById(idList[2])
+                    when(SettingRepository.useWhatDataMod){
+                        SettingRepository.ORIGIN -> moveOriginDAO.getMoveById(idList[2])
+                        SettingRepository.CEMOD -> moveCEDAO.getMoveById(idList[2])
+                        else -> moveOriginDAO.getMoveById(idList[2])
+                    }
                 } else{
                     null
                 }
@@ -80,29 +55,38 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
             listOf(move0.await(),move1.await(),move2.await())
         }
     }
-
-    suspend fun getCEMoveById(id :Int):MoveCE?{
+    suspend fun getMoveById(id :Int):Move?{
         return withContext(Dispatchers.IO){
             if (id >= 0){
-                moveCEDAO.getMoveById(id)
+                when(SettingRepository.useWhatDataMod){
+                    SettingRepository.ORIGIN -> moveOriginDAO.getMoveById(id)
+                    SettingRepository.CEMOD -> moveCEDAO.getMoveById(id)
+                    else -> moveOriginDAO.getMoveById(id)
+                }
             } else{
                 null
             }
         }
     }
 
+
+
     // 不论是徒手招式还是剑卡招式，都不需要关心它的镜像是否能用，全部依赖传入的MoveBox的isMirror来判断这个招式要不要转成镜像
-    suspend fun getOriginsWithMirrorByBoxes(boxes :MutableList<MoveBox>) :MutableList<MoveBox>{
+    suspend fun getBoxesWithMirrorByBoxes(boxes :MutableList<MoveBox>) :MutableList<MoveBox>{
         return withContext(Dispatchers.IO){
             val box0 = async {
                 if (boxes[0].moveId != -1){
-                    val tempMove = moveOriginDAO.getMoveById(boxes[0].moveId)
+                    val tempMove = when(SettingRepository.useWhatDataMod){
+                        SettingRepository.ORIGIN -> moveOriginDAO.getMoveById(boxes[0].moveId)
+                        SettingRepository.CEMOD -> moveCEDAO.getMoveById(boxes[0].moveId)
+                        else -> moveOriginDAO.getMoveById(boxes[0].moveId)
+                    }
                     if (boxes[0].isUseMirror != 0){
                         MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply {
-                            this.moveOrigin = tempMove.apply { this.toMirror() }
-                        }.apply { this.move = tempMove }
+                            this.move = tempMove.apply { this.toMirror() }
+                        }
                     } else {
-                        MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply { moveOrigin = tempMove }.apply { move = tempMove }
+                        MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply { move = tempMove }
                     }
                 } else{
                     MoveBox()
@@ -110,13 +94,17 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
             }
             val box1 = async {
                 if (boxes[1].moveId != -1){
-                    val tempMove = moveOriginDAO.getMoveById(boxes[1].moveId)
+                    val tempMove = when(SettingRepository.useWhatDataMod){
+                        SettingRepository.ORIGIN -> moveOriginDAO.getMoveById(boxes[1].moveId)
+                        SettingRepository.CEMOD -> moveCEDAO.getMoveById(boxes[1].moveId)
+                        else -> moveOriginDAO.getMoveById(boxes[1].moveId)
+                    }
                     if (boxes[1].isUseMirror != 0){
                         MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply {
-                            this.moveOrigin = tempMove.apply { this.toMirror() }
-                        }.apply { this.move = tempMove }
+                            this.move = tempMove.apply { this.toMirror() }
+                        }
                     } else {
-                        MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply { moveOrigin = tempMove }.apply { move = tempMove }
+                        MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply { move = tempMove }
                     }
                 } else{
                     MoveBox()
@@ -124,13 +112,17 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
             }
             val box2 = async {
                 if (boxes[2].moveId != -1){
-                    val tempMove = moveOriginDAO.getMoveById(boxes[2].moveId)
+                    val tempMove = when(SettingRepository.useWhatDataMod){
+                        SettingRepository.ORIGIN -> moveOriginDAO.getMoveById(boxes[2].moveId)
+                        SettingRepository.CEMOD -> moveCEDAO.getMoveById(boxes[2].moveId)
+                        else -> moveOriginDAO.getMoveById(boxes[2].moveId)
+                    }
                     if (boxes[2].isUseMirror != 0){
                         MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply {
-                            this.moveOrigin = tempMove.apply { this.toMirror() }
-                        }.apply { this.move = tempMove }
+                            this.move = tempMove.apply { this.toMirror() }
+                        }
                     } else {
-                        MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply { moveOrigin = tempMove }.apply { move = tempMove }
+                        MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply { move = tempMove }
                     }
                 } else{
                     MoveBox()
@@ -139,79 +131,18 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
             mutableListOf(box0.await(),box1.await(),box2.await())
         }
     }
-
-    suspend fun getOriginWithMirrorByBox(box :MoveBox) :MoveBox{
+    suspend fun getBoxWithMirrorByBox(box :MoveBox) :MoveBox{
         return withContext(Dispatchers.IO){
             if (box.moveId != -1){
-                val tempMove = moveOriginDAO.getMoveById(box.moveId)
+                val tempMove = when(SettingRepository.useWhatDataMod){
+                    SettingRepository.ORIGIN -> moveOriginDAO.getMoveById(box.moveId)
+                    SettingRepository.CEMOD -> moveCEDAO.getMoveById(box.moveId)
+                    else -> moveOriginDAO.getMoveById(box.moveId)
+                }
                 if (box.isUseMirror != 0){
-                    MoveBox(box.moveId, isUseMirror = box.isUseMirror).apply { this.moveOrigin = tempMove.apply { this.toMirror() } }.apply { this.move = tempMove }
+                    MoveBox(box.moveId, isUseMirror = box.isUseMirror).apply { this.move = tempMove.apply { this.toMirror() } }
                 } else {
-                    MoveBox(box.moveId, 0).apply { this.moveOrigin = tempMove }.apply { this.move = tempMove }
-                }
-            } else {
-                MoveBox()
-            }
-        }
-    }
-
-    // 不论是徒手招式还是剑卡招式，都不需要关心它的镜像是否能用，全部依赖传入的MoveBox的isMirror来判断这个招式要不要转成镜像
-    suspend fun getCEsWithMirrorByBoxes(boxes :MutableList<MoveBox>) :MutableList<MoveBox>{
-        return withContext(Dispatchers.IO){
-            val box0 = async {
-                if (boxes[0].moveId != -1){
-                    val tempMove = moveCEDAO.getMoveById(boxes[0].moveId)
-                    if (boxes[0].isUseMirror != 0){
-                        MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply {
-                            this.moveCE = tempMove.apply { this.toMirror() }
-                        }.apply { this.move = tempMove }
-                    } else {
-                        MoveBox(boxes[0].moveId, isUseMirror = boxes[0].isUseMirror).apply { moveCE = tempMove }.apply { move = tempMove }
-                    }
-                } else{
-                    MoveBox()
-                }
-            }
-            val box1 = async {
-                if (boxes[1].moveId != -1){
-                    val tempMove = moveCEDAO.getMoveById(boxes[1].moveId)
-                    if (boxes[1].isUseMirror != 0){
-                        MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply {
-                            this.moveCE = tempMove.apply { this.toMirror() }
-                        }.apply { this.move = tempMove }
-                    } else {
-                        MoveBox(boxes[1].moveId, isUseMirror = boxes[1].isUseMirror).apply { moveCE = tempMove }.apply { move = tempMove }
-                    }
-                } else{
-                    MoveBox()
-                }
-            }
-            val box2 = async {
-                if (boxes[2].moveId != -1){
-                    val tempMove = moveCEDAO.getMoveById(boxes[2].moveId)
-                    if (boxes[2].isUseMirror != 0){
-                        MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply {
-                            this.moveCE = tempMove.apply { this.toMirror() }
-                        }.apply { this.move = tempMove }
-                    } else {
-                        MoveBox(boxes[2].moveId, isUseMirror = boxes[2].isUseMirror).apply { moveCE = tempMove }.apply { move = tempMove }
-                    }
-                } else{
-                    MoveBox()
-                }
-            }
-            mutableListOf(box0.await(),box1.await(),box2.await())
-        }
-    }
-
-    suspend fun getCEWithMirrorByBox(box :MoveBox) :MoveBox{
-        return withContext(Dispatchers.IO){
-            if (box.moveId != -1){
-                val tempMove = moveCEDAO.getMoveById(box.moveId)
-                if (box.isUseMirror != 0){
-                    MoveBox(box.moveId, isUseMirror = box.isUseMirror).apply { this.moveCE = tempMove.apply { this.toMirror() } }.apply { move = tempMove }
-                } else {
-                    MoveBox(box.moveId, 0).apply { this.moveCE = tempMove }.apply { this.move = tempMove }
+                    MoveBox(box.moveId, 0).apply { this.move = tempMove }
                 }
             } else {
                 MoveBox()

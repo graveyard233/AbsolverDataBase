@@ -6,13 +6,21 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import com.lyd.absolverdatabase.bridge.data.bean.FilterItem
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.GsonUtils
-import com.lyd.absolverdatabase.utils.logUtils.LLog
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class SettingState(private val repository :SettingRepository, private val state : SavedStateHandle) : ViewModel() {
     private val TAG = javaClass.simpleName
 
+    val useToolbarFlow :StateFlow<Boolean> = repository.isUseToolbarPreference.asFlow().map {
+        it ?: true
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),true)
+    fun changeUseToolbar(boolean: Boolean){
+        repository.isUseToolbar = boolean
+        viewModelScope.launch {
+            repository.isUseToolbarPreference.set { boolean }
+        }
+    }
     val dialogGaussianBlurFlow :StateFlow<Boolean> = repository.isDialogGaussianBlurPreference.asFlow().map {
         it ?: false
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),true)
@@ -67,13 +75,13 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.showWhatMsgInDeckEditPreference.set { whatMsg }
         }
     }
-    val useCNEditionModFlow :StateFlow<Boolean> = repository.isUseCNEditionModPreference.asFlow().map {
-        it ?: false
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),false)
-    fun changeUseCNEditionMod(enable: Boolean){
-        repository.isUseCNEditionMod = enable
+    val useWhatDataModFlow :StateFlow<Int> = repository.useWhatDataModPreference.asFlow().map {
+        it ?: repository.ORIGIN
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),repository.ORIGIN)
+    fun changeUseWhatDataMod(whatMod :Int){
+        repository.useWhatDataMod = whatMod
         viewModelScope.launch {
-            repository.isUseCNEditionModPreference.set { enable }
+            repository.useWhatDataModPreference.set { whatMod }
         }
     }
     val showMoreMoveCEInfoFlow :StateFlow<Boolean> = repository.isShowMoreMoveCEInfoPreference.asFlow().map {

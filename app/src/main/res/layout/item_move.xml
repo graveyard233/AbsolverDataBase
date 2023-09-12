@@ -54,6 +54,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textAppearance="?textAppearanceTitleMedium"
+            android:maxLines="1"
+            android:ellipsize="end"
             tools:text="回旋吸顶"/>
 
     </LinearLayout>

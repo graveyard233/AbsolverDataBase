@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
@@ -20,6 +21,7 @@ import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
+import com.lyd.absolverdatabase.MainActivity
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.FilterItem
 import com.lyd.absolverdatabase.bridge.data.bean.UseTheme
@@ -115,6 +117,11 @@ class SettingConfigFragment :BaseFragment() {
         configBinding?.apply {
             ViewCompat.setTransitionName(settingConfigTitle,"ConfigTitle")
 
+            settingConfigSwitchIsUseToolbar.setOnCheckedChangeListener{ btn, isChecked ->
+                if (!btn.isPressed) return@setOnCheckedChangeListener
+                settingState.changeUseToolbar(isChecked)
+                (mActivity as MainActivity).changeToolbar()
+            }
             settingConfigSwitchGaussianBlur.apply {
                 setOnCheckedChangeListener { btn, isChecked ->
                     if (!btn.isPressed) return@setOnCheckedChangeListener
@@ -154,9 +161,19 @@ class SettingConfigFragment :BaseFragment() {
                     R.id.settingConfig_chip_trendMsg -> settingState.changeShowWhatMsgInDeck(1)
                 }
             }
-            settingConfigSwitchUseCNEditionMod.setOnCheckedChangeListener { btn, isChecked ->
-                if (!btn.isPressed) return@setOnCheckedChangeListener
-                settingState.changeUseCNEditionMod(isChecked)
+            settingConfigRadioGroupModSelect.setOnCheckedChangeListener { group, checkedId ->
+                val tempBtn = group.findViewById<RadioButton>(checkedId)
+                if (!tempBtn.isPressed){
+                    return@setOnCheckedChangeListener
+                }
+                when(checkedId){
+                    R.id.settingConfig_radioBtn_origin ->{
+                        settingState.changeUseWhatDataMod(SettingRepository.ORIGIN)
+                    }
+                    R.id.settingConfig_radioBtn_ce ->{
+                        settingState.changeUseWhatDataMod(SettingRepository.CEMOD)
+                    }
+                }
             }
             settingConfigSwitchShowMoreMoveCEInfo.setOnCheckedChangeListener { btn, isChecked ->
                 if (!btn.isPressed) return@setOnCheckedChangeListener
@@ -261,6 +278,14 @@ class SettingConfigFragment :BaseFragment() {
         // 在这里进行flow的监听
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.useToolbarFlow.collectLatest {
+                    llog.i(TAG, "是否使用Toolbar -> $it")
+                    configBinding?.settingConfigSwitchIsUseToolbar?.isChecked = it
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.dialogGaussianBlurFlow.collectLatest {
                     llog.i(TAG, "dialogGaussianBlurFlow: 接收到数据 $it")
                     configBinding?.settingConfigSwitchGaussianBlur?.isChecked = it
@@ -315,14 +340,16 @@ class SettingConfigFragment :BaseFragment() {
         }
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                settingState.useCNEditionModFlow.collectLatest {
-                    llog.i(TAG, "useCNEditionModFlow: 接收到数据 $it")
+                settingState.useWhatDataModFlow.collectLatest {
+                    llog.i(TAG,"使用数据模式 -> $it")
                     configBinding?.apply {
-                        settingConfigSwitchUseCNEditionMod.isChecked = it
-                        settingConfigSwitchShowMoreMoveCEInfo.visibility = if (it) View.VISIBLE else View.GONE
-                        if (!it) settingState.changeShowMoreMoveCEInfo(false)
+                        when(it){
+                            SettingRepository.ORIGIN ->settingConfigRadioGroupModSelect.check(R.id.settingConfig_radioBtn_origin)
+                            SettingRepository.CEMOD ->settingConfigRadioGroupModSelect.check(R.id.settingConfig_radioBtn_ce)
+                        }
+                        settingConfigSwitchShowMoreMoveCEInfo.visibility = if (it == SettingRepository.CEMOD) View.VISIBLE else View.GONE
+                        if (it != SettingRepository.CEMOD) settingState.changeShowMoreMoveCEInfo(false)
                     }
-
                 }
             }
         }
