@@ -3,18 +3,18 @@
 
     <item android:id="@+id/nav_learn"
         android:title="@string/learn"
-        android:icon="@drawable/ic_learn"/>
+        android:icon="@drawable/ic_learn_for_nav"/>
 
     <item android:id="@+id/nav_data"
         android:title="@string/data"
-        android:icon="@drawable/ic_data"/>
+        android:icon="@drawable/ic_data_for_nav"/>
 
     <item android:id="@+id/nav_deck"
         android:title="@string/deck"
-        android:icon="@drawable/ic_dashboard"/>
+        android:icon="@drawable/ic_dashboard_for_nav"/>
 
     <item android:id="@+id/nav_setting"
         android:title="@string/setting"
-        android:icon="@drawable/ic_setting"/>
+        android:icon="@drawable/ic_setting_for_nav"/>
 
 </menu>

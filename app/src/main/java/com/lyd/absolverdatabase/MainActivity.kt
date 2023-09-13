@@ -137,14 +137,18 @@ class MainActivity : BaseActivity() {
                     setupWithNavController(navController!!,appBarConfiguration)
                 }
 
-                val tempLp :CoordinatorLayout.LayoutParams = constraintLayout?.layoutParams as CoordinatorLayout.LayoutParams
-                tempLp.behavior = ScrollingViewBehavior()
+                constraintLayout?.apply {
+                    val tempLp :CoordinatorLayout.LayoutParams? = layoutParams as CoordinatorLayout.LayoutParams?
+                    tempLp?.behavior = ScrollingViewBehavior()
+                }
             }
         } else {
             mainBinding?.apply {
                 mainToolbar?.visibility = View.GONE
-                val tempLp :CoordinatorLayout.LayoutParams = constraintLayout?.layoutParams as CoordinatorLayout.LayoutParams
-                tempLp.behavior = null
+                constraintLayout?.apply {
+                    val tempLp :CoordinatorLayout.LayoutParams? = constraintLayout.layoutParams as CoordinatorLayout.LayoutParams?
+                    tempLp?.behavior = null
+                }
             }
         }
     }

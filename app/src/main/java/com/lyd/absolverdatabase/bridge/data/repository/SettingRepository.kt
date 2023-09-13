@@ -3,6 +3,7 @@ package com.lyd.absolverdatabase.bridge.data.repository
 import com.lyd.absolverdatabase.bridge.data.bean.FilterItem
 import com.lyd.absolverdatabase.utils.GsonUtils
 import com.lyd.absolverdatabase.utils.dataStore.DataStoreOwner
+import com.lyd.absolverdatabase.ui.page.MoveRecycleFragment
 import com.lyd.absolverdatabase.utils.logUtils.LLog
 
 object SettingRepository :DataStoreOwner(name = "setting") {
@@ -73,6 +74,10 @@ object SettingRepository :DataStoreOwner(name = "setting") {
             )
         )
     )
+
+    /**用于控制[MoveRecycleFragment.gridLayoutManager]的列数*/
+    var moveItemsInOneRow :Int = 4
+    val moveItemsInOneRowPreference by intPreference(default = 4)
 
     var useWhatTheme :Int = 1
     val useWhatThemePreference by intPreference(default = 1)

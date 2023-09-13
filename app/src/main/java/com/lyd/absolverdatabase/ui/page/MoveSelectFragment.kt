@@ -145,7 +145,7 @@ class MoveSelectFragment :BaseFragment(){
             in 0..3 ->{// 应该加载带3个按钮的MovesBar
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_moves
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.35F)
-                lifecycleScope.launch(Dispatchers.IO){
+                lifecycleScope.launch(Dispatchers.Default){
                     // TODO: 这里获取的招式序列应该按镜像list来处理
                     seqPack = when(argMsg.toSelectMsg.whatBarToEdit){
                         0 ->{
@@ -181,7 +181,7 @@ class MoveSelectFragment :BaseFragment(){
             in 4..7 ->{// 应该加载oneMoveBar
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_one_move
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.4F)
-                lifecycleScope.launch(Dispatchers.IO){
+                lifecycleScope.launch(Dispatchers.Default){
                     optionPack = OptPack(startSide = when(argMsg.toSelectMsg.whatBarToEdit){
                         4 -> StandSide.UPPER_RIGHT
                         5 -> StandSide.UPPER_LEFT
@@ -440,7 +440,7 @@ class MoveSelectFragment :BaseFragment(){
         }
 
         lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){
                 editState.moveForSelectFlow.collectLatest {// 接收到数据，首先更新数据部分的文本，然后更新站架信息，最后更新pack的数据，最后找机会变更viewModel
                     when(it){
                         is MoveMsgState.SelectNull -> {
@@ -652,15 +652,12 @@ class MoveSelectFragment :BaseFragment(){
         }
     }
     private fun whenClickMoveInOneBar(){
-        CoroutineScope(Dispatchers.Main).launch {
-            if (optionPack != null){
-                // 起始站架总是会被限制，结束站架被限制成不能和起始站架一样的数据
-                // TODO: 应该设置tab不能跳到和起始站架一样的viewPage
-                // 不需要限制了因为经过筛选后和起始站架一样的pager的数据直接为空，选不了就不会出事
-                editState.updateSideLimit(SideLimit.optLimit(startSide = optionPack!!.startSide))
-            }
+        if (optionPack != null){
+            // 起始站架总是会被限制，结束站架被限制成不能和起始站架一样的数据
+            // TODO: 应该设置tab不能跳到和起始站架一样的viewPage
+            // 不需要限制了因为经过筛选后和起始站架一样的pager的数据直接为空，选不了就不会出事
+            editState.updateSideLimit(SideLimit.optLimit(startSide = optionPack!!.startSide))
         }
-
     }
     // 长按招式框，可以把这个框和对应的seqPack还有editState里面的deck的数据也一起变更了
     private fun whenLongClickMove(moveIndex: Int = 0){

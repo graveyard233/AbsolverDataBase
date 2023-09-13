@@ -64,6 +64,9 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempMovesFilterListJson = async {
                     SettingRepository.movesFilterListJsonPreference.getOrDefault()
                 }
+                val tempMoveItemsInOneRow = async {
+                    SettingRepository.moveItemsInOneRowPreference.getOrDefault()
+                }
                 val tempUseWhatTheme = async {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S){// 低于Android12不能使用动态主题，只能使用默认主题
                         UseTheme.DefaultId
@@ -96,6 +99,7 @@ class DataStoreInitializer : Initializer<Unit> {
                 SettingRepository.isShowMoreMoveCEInfo = tempShowMoreMoveCEInfo.await()
                 SettingRepository.useNightMode = tempUseNightMode.await()
                 SettingRepository.movesFilterListJson = tempMovesFilterListJson.await()
+                SettingRepository.moveItemsInOneRow = tempMoveItemsInOneRow.await()
                 SettingRepository.useWhatTheme = tempUseWhatTheme.await()
 
                 SettingRepository.isRecordCrashMsg = tempRecordCrashMsg.await()

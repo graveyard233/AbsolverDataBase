@@ -187,6 +187,30 @@
                         android:layout_height="1dp"
                         android:background="@color/grey_split_line" />
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/moveItems_in_row"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:gravity="center_vertical"
+                        android:paddingStart="20dp"
+                        android:textAppearance="?textAppearanceBodyLarge"/>
+
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/settingConfig_slider_movesItems_in_oneRow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:stepSize="1"
+                        android:valueFrom="1"
+                        android:valueTo="5"/>
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:background="@color/grey_split_line" />
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

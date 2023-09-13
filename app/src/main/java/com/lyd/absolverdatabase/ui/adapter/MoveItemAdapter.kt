@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.MoveForSelect
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import java.util.*
 
@@ -18,6 +19,11 @@ class MoveItemAdapter :BaseQuickAdapter<MoveForSelect,MoveItemAdapter.VH>() {
 
     override fun onBindViewHolder(holder: VH, position: Int, item: MoveForSelect?) {
         item?.run {
+            holder.img.scaleType = if (SettingRepository.moveItemsInOneRow <= 2){
+                ImageView.ScaleType.FIT_CENTER
+            } else {
+                ImageView.ScaleType.CENTER_CROP
+            }
             Glide.with(holder.img)
                 .load(AssetsUtil.getBitmapByMoveId(context, move.id))
                 .error(R.drawable.ic_video_load_error)

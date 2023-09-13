@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.lyd.absolverdatabase.ui.page.SettingFragment"
-        android:label="SettingFragment"
+        android:label="@string/label_settingFragment"
         tools:layout="@layout/fragment_setting">
         <action
             android:id="@+id/action_settingFragment_to_settingConfigFragment"
@@ -30,21 +30,21 @@
     <fragment
         android:id="@+id/settingConfigFragment"
         android:name="com.lyd.absolverdatabase.ui.page.SettingConfigFragment"
-        android:label="SettingConfigFragment"
+        android:label="@string/label_settingConfigFragment"
         tools:layout="@layout/fragment_setting_config"/>
     <fragment
         android:id="@+id/settingDatabaseFragment"
         android:name="com.lyd.absolverdatabase.ui.page.SettingDatabaseFragment"
-        android:label="SettingDatabaseFragment"
+        android:label="@string/label_settingDatabaseFragment"
         tools:layout="@layout/fragment_setting_database"/>
     <fragment
         android:id="@+id/settingLicenseFragment"
         android:name="com.lyd.absolverdatabase.ui.page.SettingLicenseFragment"
-        android:label="SettingLicenseFragment"
+        android:label="@string/label_settingLicenseFragment"
         tools:layout="@layout/fragment_setting_license"/>
     <fragment
         android:id="@+id/settingDevFragment"
         android:name="com.lyd.absolverdatabase.ui.page.SettingDevFragment"
-        android:label="SettingDevFragment"
+        android:label="@string/label_settingDevFragment"
         tools:layout="@layout/fragment_dev" />
 </navigation>

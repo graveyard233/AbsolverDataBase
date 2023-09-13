@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/dataFragment"
         android:name="com.lyd.absolverdatabase.ui.page.DataFragment"
-        android:label="DataFragment"
+        android:label="@string/label_dataFragment"
         tools:layout="@layout/fragment_data"/>
 </navigation>

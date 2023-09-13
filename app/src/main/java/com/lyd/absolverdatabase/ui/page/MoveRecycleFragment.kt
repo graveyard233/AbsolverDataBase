@@ -43,6 +43,8 @@ class MoveRecycleFragment :BaseFragment()
 
     private var whatEndSide :Int = 0
 
+    private lateinit var sideTag :String
+
     // 由于创建了很多个Fragment，所以这个也不是唯一的
     private val moveRecycleState by viewModels<MoveRecycleState> {
         MoveRecycleViewModelFactory((mActivity?.application as App).moveRepository)
@@ -76,7 +78,7 @@ class MoveRecycleFragment :BaseFragment()
                     view: View,
                     position: Int
                 ) {
-//                    Log.i(TAG, "onClick: 我点击的招式是 ${adapter.getItem(position)!!.moveOrigin}")
+//                    Log.i(sideTag, "onClick: 我点击的招式是 ${adapter.getItem(position)!!.moveOrigin}")
                     adapter.getItem(position)?.run {
                         editState.selectMove(this)
                     }
@@ -86,7 +88,7 @@ class MoveRecycleFragment :BaseFragment()
     }
 
     private val gridLayoutManager :GridLayoutManager by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        GridLayoutManager(requireContext(),4)
+        GridLayoutManager(requireContext(),SettingRepository.moveItemsInOneRow)
     }
 
     private val _sideList = mutableListOf<MoveForSelect>()
@@ -108,6 +110,7 @@ class MoveRecycleFragment :BaseFragment()
         arguments?.getInt("whatEndSide")?.let {
             whatEndSide = it
         }
+        sideTag = "MoveRecycle-${SideUtil.getSideByInt(whatEndSide)}"
 
         recycle = view.findViewById(R.id.moveRecycle_recycle)
 
@@ -117,7 +120,7 @@ class MoveRecycleFragment :BaseFragment()
             adapter = moveAdapter
         }
 
-        llog.i(TAG, "onCreateView: side ${SideUtil.getSideByInt(whatEndSide)}")
+        llog.i(sideTag, "onCreateView: side ${SideUtil.getSideByInt(whatEndSide)}")
 
         return view
     }
@@ -129,7 +132,7 @@ class MoveRecycleFragment :BaseFragment()
         lifecycleScope.launch{
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.sideLimitFlow.collectLatest { it ->// 在这里要改变_limit和_sideList
-                    llog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)}: 接受到招式限制 $it")
+                    llog.i(sideTag, "side->${SideUtil.getSideByInt(whatEndSide)}: 接受到招式限制 $it")
                     // 变化玩limit之后，需要实现实时筛选对应起始站架的招式
                     synchronized(_limit){
                         _limit = it
@@ -158,20 +161,20 @@ class MoveRecycleFragment :BaseFragment()
                 // TODO: 如果是徒手卡组，则判断起始站架，寻找所有和原本站架和镜像站架相关的招式，找到之后将不和原本站架相同的招式的结束站架和左右全部转成镜像的数据
                 // TODO: 最后再根据结束站架分发list
                 editState.filterOptionFlow.collectLatest {// 在这里要改变_filter，按照_sideList来筛选输出
-                    llog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} 接受到筛选数据: Toward->${it.attackToward.name}" +
+                    llog.i(sideTag, "side->${SideUtil.getSideByInt(whatEndSide)} 接受到筛选数据: Toward->${it.attackToward.name}" +
                             " Altitude->${it.attackAltitude.name} Direction->${it.attackDirection.name}")
                     if (_filter.isFilterSame(it)){
                         // 一样的数据，不用变动
-                        llog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 数据和内部的一样，不需要动_filter")
+                        llog.i(sideTag, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 数据和内部的一样，不需要动_filter")
                         if (isFirstEnter){
-                            llog.i(TAG, "filterOptionFlow: isFirst->$isFirstEnter 第一次进来，还是要获取数据")
+                            llog.i(sideTag, "filterOptionFlow: isFirst->$isFirstEnter 第一次进来，还是要获取数据")
                             isFirstEnter = false
                             val resultList = filterByOpt(_sideList,_filter)
                             moveAdapter.submitList(resultList)
                         }
                     } else {
                         // 不一样，要重新筛选
-                        llog.i(TAG, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 不一样，_filter要重新设置")
+                        llog.i(sideTag, "side->${SideUtil.getSideByInt(whatEndSide)} editState.filterOptionFlow: 不一样，_filter要重新设置")
                         synchronized(_filter){
                             _filter.changeAll(it)
                         }
@@ -180,7 +183,7 @@ class MoveRecycleFragment :BaseFragment()
                         resultList.filter { select ->
                             select.isMirror == 1
                         }.forEach {temp->
-                            llog.i(TAG, "list中镜像的招式有: $temp")
+                            llog.i(sideTag, "list中镜像的招式有: $temp")
                         }
                         moveAdapter.submitList(resultList)
 //                    filterList(_sideList,_filter)
@@ -193,7 +196,7 @@ class MoveRecycleFragment :BaseFragment()
 
     override fun onDestroyView() {
         super.onDestroyView()
-        llog.i(TAG, "onDestroyView:  side ${SideUtil.getSideByInt(whatEndSide)}")
+        llog.i(sideTag, "onDestroyView:  side ${SideUtil.getSideByInt(whatEndSide)}")
     }
 
 
@@ -206,7 +209,7 @@ class MoveRecycleFragment :BaseFragment()
                 DeckType.SWORD -> false
                 null -> true
             }
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 val tempMoveListBeSelect = async {
                     val tempList = mutableListOf<Int>()
                     val tempDeck = editState.getDeckInSaved()
@@ -254,24 +257,24 @@ class MoveRecycleFragment :BaseFragment()
                 }
                 val tempForSelect = when(it){
                     is SideLimit.noLimit -> {
-                        llog.i(TAG, "noLimit: ${it.msg}")
+                        llog.i(sideTag, "noLimit: ${it.msg}")
                         moveRecycleState.moveListWithMirror(null,whatEndSide,tempCanHand)
                     }
                     is SideLimit.limitAll -> {
-                        llog.i(TAG, "limitAll: start:${it.startSide} end:${it.endSide}")
+                        llog.i(sideTag, "limitAll: start:${it.startSide} end:${it.endSide}")
                         moveRecycleState.moveListWithMirror(SideUtil.getIntBySide(it.startSide),SideUtil.getIntBySide(it.endSide),tempCanHand)
                     }
                     is SideLimit.limitStart -> {
-                        llog.i(TAG, "limitStart: start:${it.startSide}")
+                        llog.i(sideTag, "limitStart: start:${it.startSide}")
                         moveRecycleState.moveListWithMirror(SideUtil.getIntBySide(it.startSide),whatEndSide,tempCanHand)
                     }
                     is SideLimit.limitEnd -> {
-                        llog.i(TAG, "limitEnd: end:${it.endSide}")
+                        llog.i(sideTag, "limitEnd: end:${it.endSide}")
                         moveRecycleState.moveListWithMirror(null, endInt = whatEndSide,tempCanHand)
 
                     }
                     is SideLimit.optLimit -> {
-                        llog.w(TAG, "optLimit: ${it.startSide}")
+                        llog.w(sideTag, "optLimit: ${it.startSide}")
                         // TODO: 2023/6/4 这里要做一个专门给自选序列一个专门的筛选方法
                         // TODO: 2023/6/9 这个数据还有点问题
                         moveRecycleState.optListWithMirror(SideUtil.getIntBySide(it.startSide),whatEndSide,tempCanHand)
@@ -296,17 +299,17 @@ class MoveRecycleFragment :BaseFragment()
                 if (!b){ tempStrengthSet.remove(index + 1) }
             }
             val tempRangeRangeList = FilterOption.range2ListForRange(option.rangeRange)
-            llog.i(TAG,"side ${SideUtil.getSideByInt(whatEndSide)} strengthSet :$tempStrengthSet")
+            llog.i(sideTag,"strengthSet :$tempStrengthSet")
             val tempStartFRangeList = FilterOption.range2ListForStartF(option.startFrameRange)
-            llog.d(TAG,"StartFRangeList->$tempStartFRangeList")
+            llog.d(sideTag,"StartFRangeList->$tempStartFRangeList")
             val tempPhyWeaknessRangeList = FilterOption.range2ListForWeakness(option.phyWeaknessRange)
-            llog.d(TAG,"PhyWeaknessList->$tempPhyWeaknessRangeList")
+            llog.d(sideTag,"PhyWeaknessList->$tempPhyWeaknessRangeList")
             val tempPhyOutputRangeList = FilterOption.range2ListForOutput(option.phyOutputRange)
-            llog.d(TAG,"PhyOutputList->$tempPhyOutputRangeList")
+            llog.d(sideTag,"PhyOutputList->$tempPhyOutputRangeList")
             val tempHitAdvRangeList = FilterOption.range2ListForHitAdv(option.hitAdvRange)
-            llog.d(TAG,"HitAdvList->$tempHitAdvRangeList")
+            llog.d(sideTag,"HitAdvList->$tempHitAdvRangeList")
             val tempDefAdvRangeList = FilterOption.range2ListForDefAdv(option.defAdvRange)
-            llog.d(TAG,"DefAdvRangeList->$tempDefAdvRangeList")
+            llog.d(sideTag,"DefAdvRangeList->$tempDefAdvRangeList")
             sideList.asSequence().filter {
                 when(option.attackToward){
                     is AttackTowardOption.left -> { it.move.attackToward == AttackToward.LEFT }

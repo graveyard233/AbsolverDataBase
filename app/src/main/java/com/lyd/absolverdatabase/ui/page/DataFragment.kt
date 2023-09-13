@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.lyd.absolverdatabase.MainActivity
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.state.DataState
 import com.lyd.absolverdatabase.databinding.FragmentDataBinding
@@ -64,7 +63,7 @@ class DataFragment : BaseFragment() {
         viewPagerAdapter = DataPagerAdapter(this)
         viewPager.adapter = viewPagerAdapter
         val tabList = listOf(getString(R.string.tab_map),getString(R.string.tab_palette),getString(R.string.tab_tip),getString(R.string.tab_other))
-        val iconList = listOf<Int>(R.drawable.ic_map,R.drawable.ic_color_broard,
+        val iconList = listOf<Int>(R.drawable.ic_map,R.drawable.ic_color_len,
             R.drawable.ic_tag,R.drawable.ic_about)
         TabLayoutMediator(tabLayout,viewPager){tab, position ->
             tab.setIcon(iconList[position])

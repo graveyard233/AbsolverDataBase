@@ -206,10 +206,14 @@ class SettingConfigFragment :BaseFragment() {
             }
 
             filterAdapter.submitList(filterList)
-
             quickDrag.attachToRecyclerView(settingConfigRecycleFilter)
                 .setDataCallback(filterAdapter)
                 .setItemDragListener(dragListener)
+
+            settingConfigSliderMovesItemsInOneRow.addOnChangeListener { _, value, fromUser ->
+                if (!fromUser) return@addOnChangeListener
+                settingState.changeMoveItemsInOneRow(value.toInt())
+            }
 
 
             if (requireContext().isNightMode()){
@@ -379,6 +383,14 @@ class SettingConfigFragment :BaseFragment() {
                             }
                         }
                     }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.moveItemsInOneRowFlow.collectLatest {
+                    llog.i(TAG,"一行内显示招式数量 -> $it")
+                    configBinding?.settingConfigSliderMovesItemsInOneRow?.value = it.toFloat()
                 }
             }
         }

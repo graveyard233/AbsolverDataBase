@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/deckFragment"
         android:name="com.lyd.absolverdatabase.ui.page.DeckFragment"
-        android:label="DeckFragment"
+        android:label="@string/label_deckFragment"
         tools:layout="@layout/fragment_deck">
         <action
             android:id="@+id/action_deckFragment_to_deckEditFragment"
@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/deckEditFragment"
         android:name="com.lyd.absolverdatabase.ui.page.DeckEditFragment"
-        android:label="DeckEditFragment"
+        android:label="@string/label_deckEditFragment"
         tools:layout="@layout/fragment_deck_edit">
         <argument
             android:name="deckForEdit"
@@ -37,7 +37,7 @@
     <fragment
         android:id="@+id/moveSelectFragment"
         android:name="com.lyd.absolverdatabase.ui.page.MoveSelectFragment"
-        android:label="MoveSelectFragment"
+        android:label="@string/label_moveSelectFragment"
         tools:layout="@layout/fragment_move_select">
         <argument
             android:name="toSelectMsg"

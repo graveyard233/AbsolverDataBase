@@ -9,6 +9,17 @@
     <string name="deck">卡组</string>
     <string name="setting">设置</string>
 
+    <string name="label_learnFragment">教学</string>
+    <string name="label_dataFragment">数据</string>
+    <string name="label_deckFragment">卡组</string>
+    <string name="label_deckEditFragment">卡组编辑</string>
+    <string name="label_moveSelectFragment">招式选择</string>
+    <string name="label_settingFragment">设置</string>
+    <string name="label_settingConfigFragment">可配置项</string>
+    <string name="label_settingDatabaseFragment">数据库相关</string>
+    <string name="label_settingDevFragment">开发工具</string>
+    <string name="label_settingLicenseFragment">开源库</string>
+
     <string name="press_one_more_time_for_finish">再按一次退出</string>
     
     <string name="item_learn_author">up: %1$s</string>
@@ -26,7 +37,7 @@
     <string name="tab_tip">Tip</string>
     <string name="tab_other">其他</string>
 
-    <string name="todo_text">我还不知道在这放什么。\n如果你有好的想法，可联系我</string>
+    <string name="todo_text">我还不知道在这放什么；\n如果你有好的想法，可联系我</string>
 
     <string name="attack_detail">攻击细节</string>
     <string name="style_in_CE_detail">流派技</string>
@@ -46,7 +57,7 @@
     <string name="item_deck_aboutTime">更新时间:%1$s</string>
 
     <string name="how_to_edit_deckMsg_title">如何编辑卡组信息</string>
-    <string name="how_To_edit_deckMsg_msg">长按空白区域可打开编辑界面弹窗(招式选择界面也一样);长按招式框格可以删除对应招式</string>
+    <string name="how_To_edit_deckMsg_msg">长按空白区域可打开编辑界面弹窗;长按招式框格可以删除对应招式(招式选择界面也一样)</string>
     <string name="save_deck_success">成功保存ID为%1$s的卡组</string>
     <string name="move_msg_bar_advantageFrame">+%1$d/%2$s&#160;</string>
     <string name="move_msg_bar_startFrame">%1$d帧</string>
@@ -118,7 +129,7 @@
     <string name="movesFilter_defAdvantage">防御优势帧</string>
 
     <string name="config_setting">可配置项</string>
-    <string name="use_toolbar">使用工具栏</string>
+    <string name="use_toolbar">显示工具栏</string>
     <string name="dialogGaussianBlur">高斯模糊</string>
     <string name="ask_before_import">在导入卡组前弹窗</string>
     <string name="show_seq_detail_when_shared_deck">分享卡组时附带招式名称</string>
@@ -133,6 +144,7 @@
     <string name="nightMode_yes">夜间模式:启用</string>
     <string name="nightMode_follow_system">夜间模式:跟随系统</string>
     <string name="advance_filter">高级筛选</string>
+    <string name="moveItems_in_row">招式数量(一行)</string>
     <string name="choose_theme">主题选择</string>
     <string name="theme_default">默认</string>
     <string name="theme_wallpaper">壁纸动态</string>
@@ -218,7 +230,7 @@
         ### 可配置项界面\n
         - 设置应用各种配置，其中高斯模糊和动态主题色仅在Android12及以上可用\n
         - 高级筛选可开启或停用高级筛选项，长按可拖动顺序，按从左到右，从上到下排序\n
-        - 不推荐打开CEMod的更多数据展示开关，因为打开后会计算并调整UI，会造成明显的卡顿现象\n
+        - 不推荐打开CEMod的更多数据展示开关，因为打开后会计算并调整UI，会造成更加明显的卡顿现象\n
         ### 数据库相关界面\n
         - 除云端同步CEMod方法外，都是本地代码更新招式数据\n
         - 云端同步CE数据是通过webView分析网页的方式获取数据，有失败的风险\n

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/learnFragment"
         android:name="com.lyd.absolverdatabase.ui.page.LearnFragment"
-        android:label="LearnFragment"
+        android:label="@string/label_learnFragment"
         tools:layout="@layout/fragment_learn"/>
     <fragment
         android:id="@+id/test1Fragment"

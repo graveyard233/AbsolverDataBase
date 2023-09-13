@@ -11,6 +11,17 @@
     <string name="deck">Deck</string>
     <string name="setting">Setting</string>
 
+    <string name="label_learnFragment">Learn</string>
+    <string name="label_dataFragment">Data</string>
+    <string name="label_deckFragment">Deck</string>
+    <string name="label_deckEditFragment">DeckEdit</string>
+    <string name="label_moveSelectFragment">MoveSelect</string>
+    <string name="label_settingFragment">Setting</string>
+    <string name="label_settingConfigFragment">ConfigSetting</string>
+    <string name="label_settingDatabaseFragment">Database</string>
+    <string name="label_settingDevFragment">Develop</string>
+    <string name="label_settingLicenseFragment">License</string>
+
     <string name="press_one_more_time_for_finish">Press one more time to exit</string>
 
     <string name="item_learn_author">up: %1$s</string>
@@ -122,7 +133,7 @@
 
 
     <string name="config_setting">Config</string>
-    <string name="use_toolbar">Use Toolbar</string>
+    <string name="use_toolbar">Show Toolbar</string>
     <string name="dialogGaussianBlur">Gaussian Blur</string>
     <string name="ask_before_import">Show Dialog Before Import Deck</string>
     <string name="show_seq_detail_when_shared_deck">Show move name when sharing deck</string>
@@ -137,6 +148,7 @@
     <string name="nightMode_yes">NightMode:Enable</string>
     <string name="nightMode_follow_system">NightMode:Follow System</string>
     <string name="advance_filter">Advance Filter</string>
+    <string name="moveItems_in_row">Number Of Moves (One Row)</string>
     <string name="choose_theme">Theme</string>
     <string name="theme_default">Default</string>
     <string name="theme_wallpaper">Wallpaper</string>
@@ -223,7 +235,7 @@
         ### Config Interface\n
         - Set various configurations for the application, with Gaussian blur and dynamic theme colors only available on Android 12 and above\n
         - Advanced filtering can be enabled or disabled, long press to drag in order, sorted from left to right and from top to bottom\n
-        - It is not recommended to turn on more data display switches in CEMod, as it will calculate and adjust the UI after opening, which can cause obvious lag phenomenon\n
+        - It is not recommended to turn on more data display switches in CEMod, as it will calculate and adjust the UI after opening, which can cause more noticeable lagging\n
         ### Database interface\n
         - Except for cloud synchronous CEMod method, all method will use local code to update moves data\n
         - Cloud synchronous CE data is obtained through webView analysis of web pages, which carries the risk of failure\n

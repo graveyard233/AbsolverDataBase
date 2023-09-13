@@ -110,6 +110,15 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.movesFilterListJsonPreference.set { tempJson }
         }
     }
+    val moveItemsInOneRowFlow :StateFlow<Int> = repository.moveItemsInOneRowPreference.asFlow().map {
+        it ?: 4
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),4)
+    fun changeMoveItemsInOneRow(number :Int){
+        repository.moveItemsInOneRow = number
+        viewModelScope.launch {
+            repository.moveItemsInOneRowPreference.set { number }
+        }
+    }
     val useWhatThemeFlow :StateFlow<Int> = repository.useWhatThemePreference.asFlow().map {
         it ?: 1
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),1)
