@@ -11,27 +11,27 @@
 
 <div align="center">
     <h3>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#描述">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/tree/dev#描述">
     描述
     </a>
     <span> | </span>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#下载">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/tree/dev#下载">
     下载
     </a>
     <span> | </span>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#使用">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/tree/dev#使用">
     使用
     </a>
     <span> | </span>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#截图">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/tree/dev#截图">
     截图
     </a>
     <span> | </span>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#感谢">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/tree/dev#感谢">
     感谢
     </a>
     <span> | </span>
-    <a href="https://github.com/graveyard233/AbsolverDatabase#许可证">
+    <a href="https://github.com/graveyard233/AbsolverDatabase/tree/dev#许可证">
     许可证
     </a>
     </h3>
