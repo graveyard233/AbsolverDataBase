@@ -519,7 +519,7 @@ class MoveSelectFragment :BaseFragment(){
                                             it.moveForSelect.move.startSide
                                         ))
                                         side2?.setImageResource(SideUtil.imgIdForMoves(
-                                            it.moveForSelect.move.startSide
+                                            it.moveForSelect.move.endSide
                                         ))
                                     }
                                     2 ->{

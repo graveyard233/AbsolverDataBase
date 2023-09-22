@@ -17,7 +17,8 @@
     <string name="label_deckEditFragment">DeckEdit</string>
     <string name="label_moveSelectFragment">MoveSelect</string>
     <string name="label_settingFragment">Setting</string>
-    <string name="label_settingConfigFragment">ConfigSetting</string>
+    <string name="label_baseSettingFragment">BaseSetting</string>
+    <string name="label_advanceSettingFragment">AdvancedSetting</string>
     <string name="label_settingDatabaseFragment">Database</string>
     <string name="label_settingDevFragment">Develop</string>
     <string name="label_settingLicenseFragment">License</string>
@@ -132,7 +133,8 @@
     <string name="movesFilter_defAdvantage">GuardAdvantage</string>
 
 
-    <string name="config_setting">Config</string>
+    <string name="config_setting">Setting</string>
+    <string name="base_setting">Base Setting</string>
     <string name="use_toolbar">Show Toolbar</string>
     <string name="dialogGaussianBlur">Gaussian Blur</string>
     <string name="ask_before_import">Show Dialog Before Import Deck</string>
@@ -162,6 +164,8 @@
 
 
     <string name="restart_app_in_time">Restart App after one second.</string>
+
+    <string name="advance_setting">Advanced Setting</string>
 
 
     <string name="about_database">Database</string>
@@ -232,10 +236,14 @@
         - The bottom is lists of moves, distinguished by the end of the stand side, if it is used in other place, there is an icon in the upper left corner of the picture (App does not handle the case of repeated selection)\n
         ## Setting Module\n
         - Can be used to learn about project repositories, application versions and ways to submit suggestions\n
-        ### Config Interface\n
-        - Set various configurations for the application, with Gaussian blur and dynamic theme colors only available on Android 12 and above\n
-        - Advanced filtering can be enabled or disabled, long press to drag in order, sorted from left to right and from top to bottom\n
+        ### Base Setting Interface\n
+        - Set various configurations for the application, Dynamic theme colors only available on Android 12 and above\n
+        - If you find the top toolbar unsightly, you can turn off [Show Toolbar], which only provides navigation functions\n
+        - Click advanced setting to enter the advanced setting interface\n
         - It is not recommended to turn on more data display switches in CEMod, as it will calculate and adjust the UI after opening, which can cause more noticeable lagging\n
+        ### Advanced Setting Interface\n
+        - Gaussian blur only available on Android 12 and above\n
+        - Advanced filtering can be enabled or disabled, long press to drag in order, sorted from left to right and from top to bottom\n
         ### Database interface\n
         - Except for cloud synchronous CEMod method, all method will use local code to update moves data\n
         - Cloud synchronous CE data is obtained through webView analysis of web pages, which carries the risk of failure\n

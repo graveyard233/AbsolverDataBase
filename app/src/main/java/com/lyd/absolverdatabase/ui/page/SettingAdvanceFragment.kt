@@ -1,0 +1,232 @@
+package com.lyd.absolverdatabase.ui.page
+
+import android.os.Build
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.CompoundButton
+import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionInflater
+import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
+import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
+import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.materialswitch.MaterialSwitch
+import com.google.android.material.slider.Slider
+import com.lyd.absolverdatabase.MainActivity
+import com.lyd.absolverdatabase.R
+import com.lyd.absolverdatabase.bridge.data.bean.FilterItem
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
+import com.lyd.absolverdatabase.bridge.state.SettingState
+import com.lyd.absolverdatabase.bridge.state.SettingViewModelFactory
+import com.lyd.absolverdatabase.ui.adapter.MovesFilterAdapter
+import com.lyd.absolverdatabase.ui.base.BaseFragment
+import com.lyd.absolverdatabase.utils.GsonUtils
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+
+class SettingAdvanceFragment :BaseFragment() {
+
+    private val settingState : SettingState by navGraphViewModels(navGraphId = R.id.nav_setting, factoryProducer = {
+        SettingViewModelFactory(SettingRepository)
+    })
+
+    private var textTitle :TextView ?= null
+    private var switchGaussian :MaterialSwitch ?= null
+    private var switchAskBeforeImport :MaterialSwitch ?= null
+    private var switchUseShareSheet :MaterialSwitch ?= null
+    private var switchShowSeqDetail :MaterialSwitch ?= null
+
+
+    private lateinit var recycleFilter :RecyclerView
+
+    private var sliderMoveItems :Slider ?= null
+
+    private val onCheckedChange : CompoundButton.OnCheckedChangeListener by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        CompoundButton.OnCheckedChangeListener { btn, isChecked ->
+            if (!btn.isPressed) return@OnCheckedChangeListener
+            when(btn.id){
+                R.id.settingAdvance_switch_gaussianBlur ->{ settingState.changeGaussianBlurFlow(isChecked) }
+                R.id.settingAdvance_switch_askBeforeImport ->{ settingState.changeAskBeforeImportDeck(isChecked) }
+                R.id.settingAdvance_switch_showSeqDetail ->{ settingState.changeShowSeqDetailWhenSharedDeck(isChecked) }
+                R.id.settingAdvance_switch_useShareSheet ->{ settingState.changeUseShareSheetWhenSharedDeck(isChecked) }
+            }
+        }
+    }
+
+    private val filterList :MutableList<FilterItem> by lazy {
+        mutableListOf(
+            FilterItem(FilterItem.STRENGTH, isChecked = true, name = getString(R.string.movesFilter_strength)),
+            FilterItem(FilterItem.RANGE, isChecked = true, name = getString(R.string.movesFilter_range)),
+            FilterItem(FilterItem.EFFECT, isChecked = true, name = getString(R.string.movesFilter_effect)),
+            FilterItem(FilterItem.START_FRAME, isChecked = true, name = getString(R.string.movesFilter_startFrame)),
+            FilterItem(FilterItem.PHYSICAL_WEAKNESS, isChecked = true, name = getString(R.string.movesFilter_phyWeakness)),
+            FilterItem(FilterItem.PHYSICAL_OUTPUT, isChecked = true, name = getString(R.string.movesFilter_phyOutput)),
+            FilterItem(FilterItem.HIT_ADVANTAGE_FRAME, isChecked = true, name = getString(R.string.movesFilter_hitAdvantage)),
+            FilterItem(FilterItem.DEF_ADVANTAGE_FRAME, isChecked = true, name = getString(R.string.movesFilter_defAdvantage))
+        )
+    }
+    private val filterAdapter : MovesFilterAdapter by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        MovesFilterAdapter().apply {
+            addOnItemChildClickListener(R.id.item_movesFilter_checkbox){ adapter, view, position->
+                val tempCheckBox : MaterialCheckBox = view as MaterialCheckBox
+                adapter.getItem(position)?.isChecked = tempCheckBox.isChecked
+                settingState.changeMovesFilterJson(filterList)
+                llog.d(TAG,"点击了第${position}个item check状态->${tempCheckBox.isChecked} ${adapter.getItem(position)}")
+            }
+        }
+    }
+    private val quickDrag : QuickDragAndSwipe by lazy {
+        QuickDragAndSwipe().setDragMoveFlags(
+            ItemTouchHelper.UP or
+                ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+    }
+    private val dragListener : OnItemDragListener by lazy {
+        object : OnItemDragListener {
+            override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
+
+            }
+            override fun onItemDragMoving(
+                source: RecyclerView.ViewHolder,
+                from: Int,
+                target: RecyclerView.ViewHolder,
+                to: Int
+            ) {
+
+            }
+            override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder, pos: Int) {
+                filterList.forEachIndexed { index, filterItem ->
+                    llog.d(TAG,"No.$index origin->$filterItem adapter->${filterAdapter.getItem(index)}")
+                }
+                settingState.changeMovesFilterJson(filterList)
+                llog.d(TAG,"---------------拖拽结束----------------------------")
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(requireContext())
+            .inflateTransition(R.transition.setting_shared)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view :View = inflater.inflate(R.layout.fragment_setting_advance,container,false)
+
+        view.apply {
+            textTitle = findViewById(R.id.settingAdvance_title)
+            switchGaussian = findViewById(R.id.settingAdvance_switch_gaussianBlur)
+            switchAskBeforeImport = findViewById(R.id.settingAdvance_switch_askBeforeImport)
+            switchUseShareSheet = findViewById(R.id.settingAdvance_switch_useShareSheet)
+            switchShowSeqDetail = findViewById(R.id.settingAdvance_switch_showSeqDetail)
+
+            recycleFilter = findViewById(R.id.settingAdvance_recycle_filter)
+
+            sliderMoveItems = findViewById(R.id.settingAdvance_slider_movesItems_in_oneRow)
+
+            ViewCompat.setTransitionName(textTitle!!,"AdvanceTitle")
+
+            switchGaussian?.apply {
+                setOnCheckedChangeListener(onCheckedChange)
+                if (Build.VERSION.SDK_INT < 31){// 如果低于31，高斯模糊不生效，所以只能这样
+                    isChecked = false
+                    isEnabled = false
+                    settingState.changeGaussianBlurFlow(false)
+                }
+            }
+            switchAskBeforeImport?.setOnCheckedChangeListener(onCheckedChange)
+            switchUseShareSheet?.setOnCheckedChangeListener(onCheckedChange)
+            switchShowSeqDetail?.setOnCheckedChangeListener(onCheckedChange)
+
+            val gridLayoutManager : GridLayoutManager = GridLayoutManager(context,4)
+            recycleFilter.layoutManager = gridLayoutManager
+            recycleFilter.adapter = filterAdapter
+            filterList.apply {
+                clear()
+                addAll(GsonUtils.fromJson(SettingRepository.movesFilterListJson, GsonUtils.getListType(FilterItem::class.java)))
+                forEach {
+                    when(it.tag){
+                        FilterItem.STRENGTH -> it.name = getString(R.string.movesFilter_strength)
+                        FilterItem.RANGE -> it.name = getString(R.string.movesFilter_range)
+                        FilterItem.EFFECT -> it.name = getString(R.string.movesFilter_effect)
+                        FilterItem.START_FRAME -> it.name = getString(R.string.movesFilter_startFrame)
+                        FilterItem.PHYSICAL_WEAKNESS -> it.name = getString(R.string.movesFilter_phyWeakness)
+                        FilterItem.PHYSICAL_OUTPUT -> it.name = getString(R.string.movesFilter_phyOutput)
+                        FilterItem.HIT_ADVANTAGE_FRAME -> it.name = getString(R.string.movesFilter_hitAdvantage)
+                        FilterItem.DEF_ADVANTAGE_FRAME -> it.name = getString(R.string.movesFilter_defAdvantage)
+                    }
+                }
+            }
+            filterAdapter.submitList(filterList)
+            quickDrag.attachToRecyclerView(recycleFilter)
+                .setDataCallback(filterAdapter)
+                .setItemDragListener(dragListener)
+
+            sliderMoveItems?.addOnChangeListener { _, value, fromUser ->
+                if (!fromUser) return@addOnChangeListener
+                settingState.changeMoveItemsInOneRow(value.toInt())
+            }
+        }
+
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.dialogGaussianBlurFlow.collectLatest {
+                    llog.i(TAG, "dialogGaussianBlurFlow: 接收到数据 $it")
+                    switchGaussian?.isChecked = it
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.askBeforeImportDeckFlow.collectLatest {
+                    llog.i(TAG, "askBeforeImportDeckFlow: flow->$it")
+                    switchAskBeforeImport?.isChecked = it
+                }
+            }
+        }
+        lifecycleScope.launch{
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.useShareSheetWhenSharedDeckFlow.collectLatest {
+                    llog.i(TAG,"useShareSheetWhenSharedDeckFlow: 接收到数据 $it")
+                    switchUseShareSheet?.isChecked = it
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.showSeqDetailWhenSharedDeckFlow.collectLatest {
+                    llog.i(TAG, "showSeqDetailWhenSharedDeckFlow: 接收到数据 $it")
+                    switchShowSeqDetail?.isChecked = it
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.moveItemsInOneRowFlow.collectLatest {
+                    llog.i(TAG,"一行内显示招式数量 -> $it")
+                    sliderMoveItems?.value = it.toFloat()
+                }
+            }
+        }
+    }
+}

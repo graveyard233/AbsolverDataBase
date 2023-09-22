@@ -15,7 +15,8 @@
     <string name="label_deckEditFragment">卡组编辑</string>
     <string name="label_moveSelectFragment">招式选择</string>
     <string name="label_settingFragment">设置</string>
-    <string name="label_settingConfigFragment">可配置项</string>
+    <string name="label_baseSettingFragment">基础设置</string>
+    <string name="label_advanceSettingFragment">高级设置</string>
     <string name="label_settingDatabaseFragment">数据库相关</string>
     <string name="label_settingDevFragment">开发工具</string>
     <string name="label_settingLicenseFragment">开源库</string>
@@ -129,6 +130,7 @@
     <string name="movesFilter_defAdvantage">防御优势帧</string>
 
     <string name="config_setting">可配置项</string>
+    <string name="base_setting">基础设置</string>
     <string name="use_toolbar">显示工具栏</string>
     <string name="dialogGaussianBlur">高斯模糊</string>
     <string name="ask_before_import">在导入卡组前弹窗</string>
@@ -157,6 +159,8 @@
     <string name="language_en">English</string>
 
     <string name="restart_app_in_time">一秒后重启应用</string>
+
+    <string name="advance_setting">高级设置</string>
 
     <string name="develop_util">开发工具</string>
     <string name="save_file_when_crash">收集崩溃日志</string>
@@ -227,10 +231,14 @@
         - 底部为招式列表，按结束站架区分，若已使用则在图片左上角有图标提示(应用不处理重复选中的情况)\n
         ## 设置模块\n
         - 可用于了解项目仓库，应用版本和提交建议的方式\n
-        ### 可配置项界面\n
-        - 设置应用各种配置，其中高斯模糊和动态主题色仅在Android12及以上可用\n
-        - 高级筛选可开启或停用高级筛选项，长按可拖动顺序，按从左到右，从上到下排序\n
+        ### 基础设置界面\n
+        - 设置应用各种基础配置，动态主题色仅在Android12及以上可用\n
+        - 如果觉得顶部的工具栏很难看，可以关闭[显示工具栏]，其仅提供导航功能\n
+        - 点击高级设置可进入高级设置界面\n
         - 不推荐打开CEMod的更多数据展示开关，因为打开后会计算并调整UI，会造成更加明显的卡顿现象\n
+        ### 高级设置界面\n
+        - 高斯模糊功能仅在Android12及以上可用\n
+        - 高级筛选可开启或停用高级筛选项，长按可拖动顺序，按从左到右，从上到下排序\n
         ### 数据库相关界面\n
         - 除云端同步CEMod方法外，都是本地代码更新招式数据\n
         - 云端同步CE数据是通过webView分析网页的方式获取数据，有失败的风险\n

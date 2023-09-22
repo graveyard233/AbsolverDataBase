@@ -330,67 +330,82 @@ class MoveRecycleFragment :BaseFragment()
                     is AttackDirectionOption.thrust -> { it.move.attackDirection == AttackDirection.THRUST }
                     is AttackDirectionOption.all -> true
                 }
-            }.filter {
-                if (option.strengthList[0] && option.strengthList[1] && option.strengthList[2]){// 只有全部都为真才不需要筛选力度
-                    true
+            }.let { seq->
+                if (option.strengthList[0] && option.strengthList[1] && option.strengthList[2]){
+                    seq
                 } else {
-                    tempStrengthSet.contains(it.move.strength)
+                    seq.filter{
+                        tempStrengthSet.contains(it.move.strength)
+                    }
                 }
-            }.filter {
+            }.let { seq->
                 if (option.rangeRange == FilterOption.defRange){
-                    true
+                    seq
                 } else {
-                    when(((it.move.attackRange * 100).toInt() / 100.00)){
-                        in (tempRangeRangeList[0]..tempRangeRangeList[1]) ->{
-                            true
+                    seq.filter {
+                        when(((it.move.attackRange * 100).toInt() / 100.00)){
+                            in (tempRangeRangeList[0]..tempRangeRangeList[1]) ->{
+                                true
+                            }
+                            else -> false
                         }
-
-                        else -> false
                     }
                 }
-            }.filter {
+            }.let { seq->
                 if (option.effectSet.size == 12){
-                    true
+                    seq
                 } else {
-                    val tempEffectList = it.move.effect.split(",")
-                    var tempEffectFlag = 0
-                    for (index in tempEffectList.indices){
-                        if (option.effectSet.contains(tempEffectList[index])){
-                            tempEffectFlag++
-                            break
+                    seq.filter {
+                        val tempEffectList = it.move.effect.split(",")
+                        var tempEffectFlag = 0
+                        for (index in tempEffectList.indices){
+                            if (option.effectSet.contains(tempEffectList[index])){
+                                tempEffectFlag++
+                                break
+                            }
                         }
+                        tempEffectFlag != 0
                     }
-                    tempEffectFlag != 0
                 }
-            }.filter {
+            }.let { seq->
                 if (option.startFrameRange == FilterOption.defStartF){
-                    true
+                    seq
                 } else {
-                    tempStartFRangeList[0] <= it.move.startFrame && it.move.startFrame <= tempStartFRangeList[1]
+                    seq.filter {
+                        tempStartFRangeList[0] <= it.move.startFrame && it.move.startFrame <= tempStartFRangeList[1]
+                    }
                 }
-            }.filter {
+            }.let { seq->
                 if (option.phyWeaknessRange == FilterOption.defPhyWeakness){
-                    true
+                    seq
                 } else {
-                    tempPhyWeaknessRangeList[0] <= it.move.physicalWeakness && it.move.physicalWeakness <= tempPhyWeaknessRangeList[1]
+                    seq.filter {
+                        tempPhyWeaknessRangeList[0] <= it.move.physicalWeakness && it.move.physicalWeakness <= tempPhyWeaknessRangeList[1]
+                    }
                 }
-            }.filter {
+            }.let { seq->
                 if (option.phyOutputRange == FilterOption.defPhyOutput){
-                    true
+                    seq
                 } else {
-                    tempPhyOutputRangeList[0] <= it.move.physicalOutput && it.move.physicalOutput <= tempPhyOutputRangeList[1]
+                    seq.filter {
+                        tempPhyOutputRangeList[0] <= it.move.physicalOutput && it.move.physicalOutput <= tempPhyOutputRangeList[1]
+                    }
                 }
-            }.filter {
+            }.let { seq->
                 if (option.hitAdvRange == FilterOption.defHitAdv){
-                    true
+                    seq
                 } else {
-                    tempHitAdvRangeList[0] <= it.move.hitAdvantageFrame && it.move.hitAdvantageFrame <= tempHitAdvRangeList[1]
+                    seq.filter {
+                        tempHitAdvRangeList[0] <= it.move.hitAdvantageFrame && it.move.hitAdvantageFrame <= tempHitAdvRangeList[1]
+                    }
                 }
-            }.filter {
+            }.let { seq->
                 if (option.defAdvRange == FilterOption.defDefAdv){
-                    true
+                    seq
                 } else {
-                    tempDefAdvRangeList[0] <= it.move.defenseAdvantageFrame && it.move.defenseAdvantageFrame <= tempDefAdvRangeList[1]
+                    seq.filter {
+                        tempDefAdvRangeList[0] <= it.move.defenseAdvantageFrame && it.move.defenseAdvantageFrame <= tempDefAdvRangeList[1]
+                    }
                 }
             }.toList()
         }

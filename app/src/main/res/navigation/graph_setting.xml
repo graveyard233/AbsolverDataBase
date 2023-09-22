@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_setting">
         <action
             android:id="@+id/action_settingFragment_to_settingConfigFragment"
-            app:destination="@id/settingConfigFragment" />
+            app:destination="@id/settingBaseFragment" />
         <action
             android:id="@+id/action_settingFragment_to_settingDatabaseFragment"
             app:destination="@id/settingDatabaseFragment" />
@@ -28,10 +28,19 @@
             app:destination="@id/settingDevFragment" />
     </fragment>
     <fragment
-        android:id="@+id/settingConfigFragment"
-        android:name="com.lyd.absolverdatabase.ui.page.SettingConfigFragment"
-        android:label="@string/label_settingConfigFragment"
-        tools:layout="@layout/fragment_setting_config"/>
+        android:id="@+id/settingBaseFragment"
+        android:name="com.lyd.absolverdatabase.ui.page.SettingBaseFragment"
+        android:label="@string/label_baseSettingFragment"
+        tools:layout="@layout/fragment_setting_base">
+        <action
+            android:id="@+id/action_settingBaseFragment_to_settingAdvanceFragment"
+            app:destination="@id/settingAdvanceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingAdvanceFragment"
+        android:name="com.lyd.absolverdatabase.ui.page.SettingAdvanceFragment"
+        android:label="@string/advance_setting"
+        tools:layout="@layout/fragment_setting_advance"/>
     <fragment
         android:id="@+id/settingDatabaseFragment"
         android:name="com.lyd.absolverdatabase.ui.page.SettingDatabaseFragment"
@@ -47,4 +56,5 @@
         android:name="com.lyd.absolverdatabase.ui.page.SettingDevFragment"
         android:label="@string/label_settingDevFragment"
         tools:layout="@layout/fragment_dev" />
+
 </navigation>

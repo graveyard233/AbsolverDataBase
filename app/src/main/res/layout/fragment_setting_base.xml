@@ -30,11 +30,11 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/settingConfig_title"
+                        android:id="@+id/settingBase_title"
                         style="@style/SettingFragmentTitleText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/config_setting"
+                        android:text="@string/base_setting"
                         app:drawableStartCompat="@drawable/ic_config" />
 
                     <View
@@ -44,39 +44,13 @@
 
 
                     <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/settingConfig_switch_isUseToolbar"
+                        android:id="@+id/settingBase_switch_isUseToolbar"
                         style="@style/SettingFragmentSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/use_toolbar" />
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/settingConfig_switch_gaussianBlur"
-                        style="@style/SettingFragmentSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/dialogGaussianBlur" />
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/settingConfig_switch_askBeforeImport"
-                        style="@style/SettingFragmentSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/ask_before_import" />
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/settingConfig_switch_showSeqDetail"
-                        style="@style/SettingFragmentSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/show_seq_detail_when_shared_deck"/>
-
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/settingConfig_switch_useShareSheet"
-                        style="@style/SettingFragmentSwitch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/use_shareSheet_when_shared_deck"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -84,7 +58,7 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.materialswitch.MaterialSwitch
-                            android:id="@+id/settingConfig_switch_showMovesMsgInDeckEdit"
+                            android:id="@+id/settingBase_switch_showMovesMsgInDeckEdit"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -93,7 +67,7 @@
                             tools:checked="true"/>
 
                         <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/settingConfig_chipGroup_whatMsgInDeckEdit"
+                            android:id="@+id/settingBase_chipGroup_whatMsgInDeckEdit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
@@ -104,7 +78,7 @@
                             tools:visibility="visible">
 
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/settingConfig_chip_frameMsg"
+                                android:id="@+id/settingBase_chip_frameMsg"
                                 style="@style/Widget.Material3.Chip.Filter.Elevated"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -112,7 +86,7 @@
                                 tools:checked="true"/>
 
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/settingConfig_chip_trendMsg"
+                                android:id="@+id/settingBase_chip_trendMsg"
                                 style="@style/Widget.Material3.Chip.Filter.Elevated"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -122,12 +96,16 @@
 
                     </LinearLayout>
 
-                    <RadioGroup
-                        android:id="@+id/settingConfig_radioGroup_modSelect"
+                    <LinearLayout
+                        android:id="@+id/settingBase_linear_modSelect"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:paddingStart="20dp">
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:clickable="true"
+                        android:background="?selectableItemBackground">
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -136,27 +114,24 @@
                             android:gravity="center_vertical"
                             android:text="@string/move_mod_select"/>
 
-                        <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:id="@+id/settingConfig_radioBtn_origin"
+                        <TextView
+                            android:id="@+id/settingBase_text_mod"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/origin_mod"/>
-                        <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:id="@+id/settingConfig_radioBtn_ce"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/ce_mod"/>
-                    </RadioGroup>
+                            android:textAppearance="?textAppearanceBodyLarge"
+                            android:gravity="center_vertical"
+                            tools:text="@string/ce_mod"/>
+                    </LinearLayout>
 
                     <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/settingConfig_switch_showMoreMoveCEInfo"
+                        android:id="@+id/settingBase_switch_showMoreMoveCEInfo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         style="@style/SettingFragmentSwitch"
                         android:text="@string/show_more_moveCE_info"/>
 
                     <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/settingConfig_switch_useNightMode"
+                        android:id="@+id/settingBase_switch_useNightMode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         style="@style/SettingFragmentSwitch"
@@ -168,47 +143,20 @@
                         android:background="@color/grey_split_line" />
 
                     <TextView
+                        android:id="@+id/settingBase_advance"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/advance_filter"
-                        android:paddingTop="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20dp"
-                        android:textAppearance="?textAppearanceBodyLarge"/>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/settingConfig_recycle_filter"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false"/>
+                        android:text="@string/advance_setting"
+                        style="@style/SettingFragmentTitleText"
+                        app:drawableStartCompat="@drawable/ic_setting_advance"
+                        android:clickable="true"
+                        android:background="?selectableItemBackground"/>
 
                     <View
                         android:layout_width="wrap_content"
                         android:layout_height="1dp"
                         android:background="@color/grey_split_line" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/moveItems_in_row"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        android:gravity="center_vertical"
-                        android:paddingStart="20dp"
-                        android:textAppearance="?textAppearanceBodyLarge"/>
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/settingConfig_slider_movesItems_in_oneRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:stepSize="1"
-                        android:valueFrom="1"
-                        android:valueTo="5"/>
-
-                    <View
-                        android:layout_width="wrap_content"
-                        android:layout_height="1dp"
-                        android:background="@color/grey_split_line" />
 
 
                     <LinearLayout
@@ -226,7 +174,7 @@
                             android:textAppearance="?textAppearanceBodyLarge"/>
 
                         <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/settingConfig_chipGroup_theme"
+                            android:id="@+id/settingBase_chipGroup_theme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:chipSpacingVertical="0dp"
@@ -234,42 +182,42 @@
                             >
                             
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/settingConfig_chip_default"
+                                android:id="@+id/settingBase_chip_default"
                                 style="@style/Widget.Material3.Chip.Filter.Elevated"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/design_default_color_primary"
                                 android:text="@string/theme_default"/>
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/settingConfig_chip_wallpaper"
+                                android:id="@+id/settingBase_chip_wallpaper"
                                 style="@style/Widget.Material3.Chip.Filter.Elevated"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="?colorPrimary"
                                 android:text="@string/theme_wallpaper"/>
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/settingConfig_chip_red"
+                                android:id="@+id/settingBase_chip_red"
                                 style="@style/Widget.Material3.Chip.Filter.Elevated"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/red_md_theme_light_primary"
                                 android:text="@string/theme_red"/>
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/settingConfig_chip_gold"
+                                android:id="@+id/settingBase_chip_gold"
                                 style="@style/Widget.Material3.Chip.Filter.Elevated"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/gold_md_theme_light_primary"
                                 android:text="@string/theme_gold"/>
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/settingConfig_chip_blue"
+                                android:id="@+id/settingBase_chip_blue"
                                 style="@style/Widget.Material3.Chip.Filter.Elevated"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/blue_md_theme_light_primary"
                                 android:text="@string/theme_blue"/>
                             <com.google.android.material.chip.Chip
-                                android:id="@+id/settingConfig_chip_green"
+                                android:id="@+id/settingBase_chip_green"
                                 style="@style/Widget.Material3.Chip.Filter.Elevated"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"

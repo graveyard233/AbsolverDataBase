@@ -3,6 +3,7 @@ package com.lyd.absolverdatabase.ui.widgets
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.CompoundButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.forEach
@@ -26,8 +27,150 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
     private var mFilterOption :FilterOption ?= null
 
     private var filterCopy :FilterOption ?= null
-    private var hasChanged = false
 
+    private val onCheckBoxChange :CompoundButton.OnCheckedChangeListener by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        CompoundButton.OnCheckedChangeListener { btn, isChecked ->
+            if (!btn.isPressed) return@OnCheckedChangeListener
+            when(btn.id){
+                R.id.dialog_movesFilter_strength_checkBox_light->mFilterOption?.strengthList?.set(0, isChecked)
+                R.id.dialog_movesFilter_strength_checkBox_mid->mFilterOption?.strengthList?.set(1, isChecked)
+                R.id.dialog_movesFilter_strength_checkBox_heavy->mFilterOption?.strengthList?.set(2, isChecked)
+            }
+        }
+    }
+    private val onRangeSliderChange :RangeSlider.OnChangeListener by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        RangeSlider.OnChangeListener { slider, _, fromUser ->
+            when(slider.id){
+                R.id.dialog_movesFilter_range_rangeSlider->{
+                    rangeMin.text = twoDecimalFormat.format(slider.values[0])
+                    rangeMax.text = twoDecimalFormat.format(slider.values[1])
+                    if (!fromUser) return@OnChangeListener
+                    mFilterOption?.rangeRange = FilterOption.list2RangeForRange(slider.values)
+                }
+                R.id.dialog_movesFilter_startFrame_rangeSlider->{
+                    startFrameMin.text = slider.values[0].toInt().toString()
+                    startFrameMax.text = slider.values[1].toInt().toString()
+                    if (!fromUser) return@OnChangeListener
+                    mFilterOption?.startFrameRange = FilterOption.list2RangeForStartF(slider.values)
+                }
+                R.id.dialog_movesFilter_phyWeakness_rangeSlider->{
+                    phyWeaknessMin.text = oneDecimalFormat.format(slider.values[0])
+                    phyWeaknessMax.text = oneDecimalFormat.format(slider.values[1])
+                    if (!fromUser) return@OnChangeListener
+                    mFilterOption?.phyWeaknessRange = FilterOption.list2RangeForWeakness(slider.values)
+                }
+                R.id.dialog_movesFilter_phyOutput_rangeSlider->{
+                    phyOutputMin.text = oneDecimalFormat.format(slider.values[0])
+                    phyOutputMax.text = oneDecimalFormat.format(slider.values[1])
+                    if (!fromUser) return@OnChangeListener
+                    mFilterOption?.phyOutputRange = FilterOption.list2RangeForOutput(slider.values)
+                }
+                R.id.dialog_movesFilter_hitAdvantage_rangeSlider->{
+                    hitAdvMin.text = slider.values[0].toInt().toString()
+                    hitAdvMax.text = slider.values[1].toInt().toString()
+                    if (!fromUser) return@OnChangeListener
+                    mFilterOption?.hitAdvRange = FilterOption.list2RangeForHitAdv(slider.values)
+                }
+                R.id.dialog_movesFilter_defAdvantage_rangeSlider->{
+                    defAdvMin.text = slider.values[0].toInt().toString()
+                    defAdvMax.text = slider.values[1].toInt().toString()
+                    if (!fromUser) return@OnChangeListener
+                    mFilterOption?.defAdvRange = FilterOption.list2RangeForDefAdv(slider.values)
+                }
+            }
+        }
+    }
+    private val onEffectChipCheckedChanged :CompoundButton.OnCheckedChangeListener by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        CompoundButton.OnCheckedChangeListener { btn, isChecked ->
+            if (!btn.isPressed) return@OnCheckedChangeListener
+            when(btn.id){
+                R.id.dialog_movesFilter_effect_chip_stop->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.STOP.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.STOP.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_dodge_up->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.DODGE_UP.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.DODGE_UP.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_dodge_low->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.DODGE_LOW.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.DODGE_LOW.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_dodge_side->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.DODGE_SIDE.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.DODGE_SIDE.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_break_defences->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.BREAK_DEFENCES.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.BREAK_DEFENCES.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_super_armor->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.SUPER_ARMOR.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.SUPER_ARMOR.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_block_counter->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.BLOCK_COUNTER.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.BLOCK_COUNTER.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_double_attack->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.DOUBLE_ATTACK.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.DOUBLE_ATTACK.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_triple_attack->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.TRIPLE_ATTACK.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.TRIPLE_ATTACK.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_mid_line->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.MID_LINE.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.MID_LINE.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_mental_blow->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.MENTAL_BLOW.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.MENTAL_BLOW.name)
+                    }
+                }
+                R.id.dialog_movesFilter_effect_chip_null->{
+                    if (isChecked){
+                        mFilterOption?.effectSet?.add(MoveEffect.NULL.name)
+                    } else {
+                        mFilterOption?.effectSet?.remove(MoveEffect.NULL.name)
+                    }
+                }
+            }
+        }
+    }
 
     private val twoDecimalFormat :DecimalFormat by lazy {
         DecimalFormat("#.00").apply {// 始终保留两位小数
@@ -98,8 +241,6 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
     override fun createView(inflater: LayoutInflater): View {
         val view :View = inflater.inflate(R.layout.dialog_moves_filter,null,false)
 
-        hasChanged = false
-
         view.apply {
             rootLinear = findViewById(R.id.dialog_movesFilter_rootLinear)
 
@@ -150,21 +291,9 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
             strengthHeavy = findViewById(R.id.dialog_movesFilter_strength_checkBox_heavy)
         }
 
-        strengthLight.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            mFilterOption?.strengthList?.set(0, isChecked)
-            doAfterChange()
-        }
-        strengthMid.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            mFilterOption?.strengthList?.set(1, isChecked)
-            doAfterChange()
-        }
-        strengthHeavy.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            mFilterOption?.strengthList?.set(2, isChecked)
-            doAfterChange()
-        }
+        strengthLight.setOnCheckedChangeListener(onCheckBoxChange)
+        strengthMid.setOnCheckedChangeListener(onCheckBoxChange)
+        strengthHeavy.setOnCheckedChangeListener(onCheckBoxChange)
 
         mFilterOption?.apply {
             strengthList.forEachIndexed { index, boolean ->
@@ -186,12 +315,7 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
         }
         rangeRSlider.apply {
             setLabelFormatter(rangeLabelFormat)
-            addOnChangeListener { slider, _, fromUser ->
-                rangeMin.text = twoDecimalFormat.format(slider.values[0])
-                rangeMax.text = twoDecimalFormat.format(slider.values[1])
-                if (!fromUser) return@addOnChangeListener
-                mFilterOption?.rangeRange = FilterOption.list2RangeForRange(slider.values)
-            }
+            addOnChangeListener(onRangeSliderChange)
         }
 
         mFilterOption?.apply {
@@ -233,103 +357,19 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
             mFilterOption?.effectSet?.clear()
         }
 
-        effectStop.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.STOP.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.STOP.name)
-            }
-        }
-        effectDodgeUp.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.DODGE_UP.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.DODGE_UP.name)
-            }
-        }
-        effectDodgeLow.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.DODGE_LOW.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.DODGE_LOW.name)
-            }
-        }
-        effectDodgeSide.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.DODGE_SIDE.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.DODGE_SIDE.name)
-            }
-        }
-        effectBreakDefences.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.BREAK_DEFENCES.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.BREAK_DEFENCES.name)
-            }
-        }
-        effectSuperArmor.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.SUPER_ARMOR.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.SUPER_ARMOR.name)
-            }
-        }
-        effectBlockCounter.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.BLOCK_COUNTER.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.BLOCK_COUNTER.name)
-            }
-        }
-        effectDoubleAttack.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.DOUBLE_ATTACK.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.DOUBLE_ATTACK.name)
-            }
-        }
+        effectStop.setOnCheckedChangeListener(onEffectChipCheckedChanged)
+        effectDodgeUp.setOnCheckedChangeListener(onEffectChipCheckedChanged)
+        effectDodgeLow.setOnCheckedChangeListener(onEffectChipCheckedChanged)
+        effectDodgeSide.setOnCheckedChangeListener(onEffectChipCheckedChanged)
+        effectBreakDefences.setOnCheckedChangeListener(onEffectChipCheckedChanged)
+        effectSuperArmor.setOnCheckedChangeListener(onEffectChipCheckedChanged)
+        effectBlockCounter.setOnCheckedChangeListener(onEffectChipCheckedChanged)
+        effectDoubleAttack.setOnCheckedChangeListener(onEffectChipCheckedChanged)
         effectTripleAttack.visibility = if (SettingRepository.useWhatDataMod == SettingRepository.CEMOD) View.VISIBLE else View.GONE
-        effectTripleAttack.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.TRIPLE_ATTACK.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.TRIPLE_ATTACK.name)
-            }
-        }
-        effectMidLine.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.MID_LINE.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.MID_LINE.name)
-            }
-        }
-        effectMentalBlow.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.MENTAL_BLOW.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.MENTAL_BLOW.name)
-            }
-        }
-        effectNull.setOnCheckedChangeListener { btn, isChecked ->
-            if (!btn.isPressed) return@setOnCheckedChangeListener
-            if (isChecked){
-                mFilterOption?.effectSet?.add(MoveEffect.NULL.name)
-            } else {
-                mFilterOption?.effectSet?.remove(MoveEffect.NULL.name)
-            }
-        }
+        effectTripleAttack.setOnCheckedChangeListener(onEffectChipCheckedChanged)
+        effectMidLine.setOnCheckedChangeListener(onEffectChipCheckedChanged)
+        effectMentalBlow.setOnCheckedChangeListener(onEffectChipCheckedChanged)
+        effectNull.setOnCheckedChangeListener(onEffectChipCheckedChanged)
 
         mFilterOption?.apply {
             effectStop.isChecked = mFilterOption?.effectSet?.contains(MoveEffect.STOP.name) == true
@@ -355,12 +395,7 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
             startFrameMax = findViewById(R.id.dialog_movesFilter_startFrame_textMax)
         }
 
-        startFrameRSlider.addOnChangeListener { slider, _, fromUser ->
-            startFrameMin.text = slider.values[0].toInt().toString()
-            startFrameMax.text = slider.values[1].toInt().toString()
-            if (!fromUser) return@addOnChangeListener
-            mFilterOption?.startFrameRange = FilterOption.list2RangeForStartF(slider.values)
-        }
+        startFrameRSlider.addOnChangeListener(onRangeSliderChange)
 
         mFilterOption?.apply {
             startFrameRSlider.values = FilterOption.range2ListForStartF(startFrameRange)
@@ -377,12 +412,7 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
 
         phyWeaknessRSlider.apply {
             setLabelFormatter(rangeLabelForOneDecimal)
-            addOnChangeListener { slider, _, fromUser ->
-                phyWeaknessMin.text = oneDecimalFormat.format(slider.values[0])
-                phyWeaknessMax.text = oneDecimalFormat.format(slider.values[1])
-                if (!fromUser) return@addOnChangeListener
-                mFilterOption?.phyWeaknessRange = FilterOption.list2RangeForWeakness(slider.values)
-            }
+            addOnChangeListener(onRangeSliderChange)
         }
 
         mFilterOption?.apply {
@@ -401,12 +431,7 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
 
         phyOutputRSlider.apply {
             setLabelFormatter(rangeLabelForOneDecimal)
-            addOnChangeListener { slider, _, fromUser ->
-                phyOutputMin.text = oneDecimalFormat.format(slider.values[0])
-                phyOutputMax.text = oneDecimalFormat.format(slider.values[1])
-                if (!fromUser) return@addOnChangeListener
-                mFilterOption?.phyOutputRange = FilterOption.list2RangeForOutput(slider.values)
-            }
+            addOnChangeListener(onRangeSliderChange)
         }
 
         mFilterOption?.apply {
@@ -423,12 +448,7 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
             hitAdvMax = findViewById(R.id.dialog_movesFilter_hitAdvantage_textMax)
         }
 
-        hitAdvRSlider.addOnChangeListener { slider, _, fromUser ->
-            hitAdvMin.text = slider.values[0].toInt().toString()
-            hitAdvMax.text = slider.values[1].toInt().toString()
-            if (!fromUser) return@addOnChangeListener
-            mFilterOption?.hitAdvRange = FilterOption.list2RangeForHitAdv(slider.values)
-        }
+        hitAdvRSlider.addOnChangeListener(onRangeSliderChange)
 
         mFilterOption?.apply {
             hitAdvRSlider.values = FilterOption.range2ListForHitAdv(hitAdvRange)
@@ -444,20 +464,11 @@ class MovesFilterDialog(activity: Activity) :BaseBottomSheetDialog(activity) {
             defAdvMax = findViewById(R.id.dialog_movesFilter_defAdvantage_textMax)
         }
 
-        defAdvRSlider.addOnChangeListener { slider, _, fromUser ->
-            defAdvMin.text = slider.values[0].toInt().toString()
-            defAdvMax.text = slider.values[1].toInt().toString()
-            if (!fromUser) return@addOnChangeListener
-            mFilterOption?.defAdvRange = FilterOption.list2RangeForDefAdv(slider.values)
-        }
+        defAdvRSlider.addOnChangeListener(onRangeSliderChange)
 
         mFilterOption?.apply {
             defAdvRSlider.values = FilterOption.range2ListForDefAdv(defAdvRange)
         }
-    }
-
-    private fun doAfterChange(){
-        hasChanged = true
     }
 
     fun hasReallyChanged() :Boolean{

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/SettingFragmentRootLinearLayout"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/settingAdvance_title"
+                    style="@style/SettingFragmentTitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/advance_setting"
+                    app:drawableStartCompat="@drawable/ic_setting_advance" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_split_line" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingAdvance_switch_gaussianBlur"
+                    style="@style/SettingFragmentSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dialogGaussianBlur" />
+
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingAdvance_switch_askBeforeImport"
+                    style="@style/SettingFragmentSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ask_before_import" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingAdvance_switch_useShareSheet"
+                    style="@style/SettingFragmentSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/use_shareSheet_when_shared_deck"/>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingAdvance_switch_showSeqDetail"
+                    style="@style/SettingFragmentSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_seq_detail_when_shared_deck"/>
+
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_split_line" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/advance_filter"
+                    android:paddingTop="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:textAppearance="?textAppearanceBodyLarge"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/settingAdvance_recycle_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"/>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_split_line" />
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/moveItems_in_row"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:textAppearance="?textAppearanceBodyLarge"/>
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/settingAdvance_slider_movesItems_in_oneRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stepSize="1"
+                    android:valueFrom="1"
+                    android:valueTo="5"/>
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:background="@color/grey_split_line" />
+
+
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
