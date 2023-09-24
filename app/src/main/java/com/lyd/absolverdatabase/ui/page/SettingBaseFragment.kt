@@ -55,6 +55,19 @@ class SettingBaseFragment :BaseFragment() {
             }
         }
     }
+    private val nightModSelectPopup :PopupMenu by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        PopupMenu(requireContext(),baseBinding!!.settingBaseTextNightMod).apply {
+            menuInflater.inflate(R.menu.menu_night_mod,menu)
+            setOnMenuItemClickListener {
+                settingState.changeUseNightMode(when(it.itemId){
+                    R.id.night_mode_follow_system -> false
+                    R.id.night_mode_yes -> true
+                    else -> false
+                })
+                return@setOnMenuItemClickListener true
+            }
+        }
+    }
 
     private val restartSnackBar by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         Snackbar.make(baseBinding!!.settingBaseChipGroupTheme,R.string.restart_app_in_time,Snackbar.LENGTH_SHORT)
@@ -74,7 +87,7 @@ class SettingBaseFragment :BaseFragment() {
 //                R.id.settingConfig_switch_useShareSheet ->{ settingState.changeUseShareSheetWhenSharedDeck(isChecked) }
                 R.id.settingBase_switch_showMovesMsgInDeckEdit ->{ settingState.changeShowMovesMsgInDeckEdit(isChecked) }
                 R.id.settingBase_switch_showMoreMoveCEInfo ->{ settingState.changeShowMoreMoveCEInfo(isChecked) }
-                R.id.settingBase_switch_useNightMode ->{ settingState.changeUseNightMode(isChecked) }
+//                R.id.settingBase_switch_useNightMode ->{ settingState.changeUseNightMode(isChecked) }
             }
         }
     }
@@ -116,7 +129,10 @@ class SettingBaseFragment :BaseFragment() {
                 modSelectPopup.show()
             }
             settingBaseSwitchShowMoreMoveCEInfo.setOnCheckedChangeListener(onSwitchCheckedChange)
-            settingBaseSwitchUseNightMode.setOnCheckedChangeListener(onSwitchCheckedChange)
+
+            settingBaseLinearNightModSelect.setOnClickListener {
+                nightModSelectPopup.show()
+            }
 
             ViewCompat.setTransitionName(settingBaseAdvance,"AdvanceTitle")
             settingBaseAdvance.setOnClickListener {
@@ -250,8 +266,7 @@ class SettingBaseFragment :BaseFragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 settingState.useNightModeFlow.collectLatest {
                     llog.i(TAG, "useNightModeFlow: 接收到数据 $it")
-                    baseBinding?.settingBaseSwitchUseNightMode?.apply {
-                        isChecked = it
+                    baseBinding?.settingBaseTextNightMod?.apply {
                         text = if (it) getString(R.string.nightMode_yes) else getString(R.string.nightMode_follow_system)
                         when(it){
                             true -> {

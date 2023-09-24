@@ -143,8 +143,9 @@
     <string name="origin_mod">原版</string>
     <string name="ce_mod">China Edition Mod</string>
     <string name="show_more_moveCE_info">显示CEMod招式更多数据</string>
-    <string name="nightMode_yes">夜间模式:启用</string>
-    <string name="nightMode_follow_system">夜间模式:跟随系统</string>
+    <string name="night_mod">夜间模式</string>
+    <string name="nightMode_yes">启用</string>
+    <string name="nightMode_follow_system">跟随系统</string>
     <string name="advance_filter">高级筛选</string>
     <string name="moveItems_in_row">招式数量(一行)</string>
     <string name="choose_theme">主题选择</string>

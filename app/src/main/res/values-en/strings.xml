@@ -147,8 +147,9 @@
     <string name="origin_mod">Origin</string>
     <string name="ce_mod">China Edition Mod</string>
     <string name="show_more_moveCE_info">Show CEMod More Information</string>
-    <string name="nightMode_yes">NightMode:Enable</string>
-    <string name="nightMode_follow_system">NightMode:Follow System</string>
+    <string name="night_mod">Night Mode</string>
+    <string name="nightMode_yes">Enable</string>
+    <string name="nightMode_follow_system">Follow System</string>
     <string name="advance_filter">Advance Filter</string>
     <string name="moveItems_in_row">Number Of Moves (One Row)</string>
     <string name="choose_theme">Theme</string>

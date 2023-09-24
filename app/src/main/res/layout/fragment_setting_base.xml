@@ -130,12 +130,33 @@
                         style="@style/SettingFragmentSwitch"
                         android:text="@string/show_more_moveCE_info"/>
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/settingBase_switch_useNightMode"
+                    <LinearLayout
+                        android:id="@+id/settingBase_linear_nightModSelect"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        style="@style/SettingFragmentSwitch"
-                        android:text="@string/nightMode_follow_system"/>
+                        android:orientation="horizontal"
+                        android:paddingStart="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:clickable="true"
+                        android:background="?selectableItemBackground">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?textAppearanceBodyLarge"
+                            android:gravity="center_vertical"
+                            android:text="@string/night_mod"/>
+
+                        <TextView
+                            android:id="@+id/settingBase_text_nightMod"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?textAppearanceBodyLarge"
+                            android:gravity="center_vertical"
+                            tools:text="@string/nightMode_follow_system"/>
+                    </LinearLayout>
+
 
                     <View
                         android:layout_width="wrap_content"
