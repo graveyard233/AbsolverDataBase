@@ -3,9 +3,13 @@ package com.lyd.absolverdatabase.ui.page
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.CompoundButton
+import android.widget.ListPopupWindow
+import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
@@ -37,6 +41,20 @@ class SettingBaseFragment :BaseFragment() {
     private val settingState :SettingState by navGraphViewModels(navGraphId = R.id.nav_setting, factoryProducer = {
         SettingViewModelFactory(SettingRepository)
     })
+
+    private val modSelectPopup :PopupMenu by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        PopupMenu(requireContext(),baseBinding!!.settingBaseTextMod).apply{
+            menuInflater.inflate(R.menu.menu_mods,menu)
+            setOnMenuItemClickListener {
+                settingState.changeUseWhatDataMod(when(it.itemId){
+                    R.id.mod_origin -> SettingRepository.ORIGIN
+                    R.id.mod_ce -> SettingRepository.CEMOD
+                    else -> SettingRepository.ORIGIN
+                })
+                return@setOnMenuItemClickListener true
+            }
+        }
+    }
 
     private val restartSnackBar by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         Snackbar.make(baseBinding!!.settingBaseChipGroupTheme,R.string.restart_app_in_time,Snackbar.LENGTH_SHORT)
@@ -95,13 +113,7 @@ class SettingBaseFragment :BaseFragment() {
                 }
             }
             settingBaseLinearModSelect.setOnClickListener {
-                BaseDialogBuilder(requireActivity())
-                    .setTitle(getString(R.string.move_mod_select))
-                    .setSingleChoiceItems(arrayOf(getString(R.string.origin_mod),getString(R.string.ce_mod)),
-                        SettingRepository.useWhatDataMod){ dialog, which ->
-                        settingState.changeUseWhatDataMod(which)
-                        dialog.dismiss()
-                    }.create().show()
+                modSelectPopup.show()
             }
             settingBaseSwitchShowMoreMoveCEInfo.setOnCheckedChangeListener(onSwitchCheckedChange)
             settingBaseSwitchUseNightMode.setOnCheckedChangeListener(onSwitchCheckedChange)

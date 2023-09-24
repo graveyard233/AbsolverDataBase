@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/mod_origin"
+        android:title="@string/origin_mod"/>
+
+    <item android:id="@+id/mod_ce"
+        android:title="@string/ce_mod"/>
+
+</menu>
