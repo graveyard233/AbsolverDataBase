@@ -101,7 +101,6 @@ data class FilterOption(
     }
 //    var effect :String = MoveEffect.NULL.toString()
 //    var startFrame :Int ?= 0
-    var changeBy :AtomicInteger = AtomicInteger(0)
 
     fun changeAll(tempFilter :FilterOption){
         attackToward = tempFilter.attackToward

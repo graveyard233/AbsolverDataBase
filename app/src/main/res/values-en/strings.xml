@@ -286,4 +286,13 @@ Thank iconfont website vector icon support; Thanks to online format conversion s
     <string name="colors.item_tertiary.description">Tertiary</string>
     <string name="colors.item_tertiary_container.description">Tertiary Container</string>
 
+    <string name="colors.item_surface_dim.description">Surface Dim</string>
+    <string name="colors.item_surface_bright.description">Surface Bright</string>
+    <string name="colors.item_surface_container_lowest.description">Surface Container Lowest</string>
+    <string name="colors.item_surface_container_low.description">Surface Container Low</string>
+    <string name="colors.item_surface_container.description">Surface Container</string>
+    <string name="colors.item_surface_container_high.description">Surface Container High</string>
+    <string name="colors.item_surface_container_highest.description">Surface Container Highest</string>
+    <string name="colors.item_outline_variant.description">Outline Variant</string>
+
 </resources>

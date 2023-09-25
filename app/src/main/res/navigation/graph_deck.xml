@@ -39,8 +39,5 @@
         android:name="com.lyd.absolverdatabase.ui.page.MoveSelectFragment"
         android:label="@string/label_moveSelectFragment"
         tools:layout="@layout/fragment_move_select">
-        <argument
-            android:name="toSelectMsg"
-            app:argType="com.lyd.absolverdatabase.bridge.data.bean.EditToSelectMsg" />
     </fragment>
 </navigation>

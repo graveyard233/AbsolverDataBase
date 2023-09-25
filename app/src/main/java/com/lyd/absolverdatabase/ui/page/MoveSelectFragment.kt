@@ -5,10 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -30,7 +29,6 @@ import com.lyd.absolverdatabase.ui.adapter.MovePagerAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.widgets.MovesFilterDialog
 import com.lyd.absolverdatabase.utils.AssetsUtil
-import com.lyd.absolverdatabase.utils.MoveGenerate
 import com.lyd.absolverdatabase.utils.SideUtil
 import com.lyd.absolverdatabase.utils.getResourceColor
 import com.lyd.absolverdatabase.utils.isNightMode
@@ -46,31 +44,67 @@ import java.util.concurrent.TimeUnit
 class MoveSelectFragment :BaseFragment(){
 
     sealed class MoveMsgState{
-        data class SelectOne(val moveForSelect: MoveForSelect) :MoveMsgState()
-        class SelectNull(val isEnterFromEdit:Boolean = false) : MoveMsgState()// 这里不要用data class 因为
+        class SelectOne(val moveForSelect: MoveForSelect) :MoveMsgState()
+        class SelectNull() : MoveMsgState()// 这里不要用data class 因为
     }
 
     private val editState :DeckEditState by navGraphViewModels(navGraphId = R.id.nav_deck, factoryProducer = {
         DeckEditViewModelFactory((mActivity?.application as App).deckEditRepository)
     })
 
-    private val argMsg :MoveSelectFragmentArgs by navArgs()
-
     private var dataBinding : FragmentMoveSelectBinding ?= null
 
     private var barLazy :View ?=null
 
-    private val spinnerTowardAdapter :ArrayAdapter<String> by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        ArrayAdapter<String>(requireContext(), com.google.android.material.R.layout.support_simple_spinner_dropdown_item,listOf(getString(R.string.attackToward_left),getString(R.string.attackToward_right),getString(R.string.attackToward_all))
-        )
+    private val popupToward :PopupMenu by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        PopupMenu(requireContext(),dataBinding!!.moveSelectTextToward).apply {
+            menuInflater.inflate(R.menu.menu_attack_toward,menu)
+            setOnMenuItemClickListener {
+                llog.i(TAG,"on attackToward Selected: ${it.title}")
+                filterOption.attackToward = AttackTowardOption.getOptions()[when(it.itemId){
+                    R.id.menu_toward_left -> 0
+                    R.id.menu_toward_right -> 1
+                    R.id.menu_toward_all -> 2
+                    else -> 2
+                }]
+                doAfterChangeFilterManual()
+                return@setOnMenuItemClickListener true
+            }
+        }
     }
-    private val spinnerAltitudeAdapter :ArrayAdapter<String> by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        ArrayAdapter<String>(requireContext(), com.google.android.material.R.layout.support_simple_spinner_dropdown_item,listOf(getString(R.string.attackAltitude_height),getString(R.string.attackAltitude_middle),getString(R.string.attackAltitude_low),getString(R.string.attackAltitude_all))
-        )
+    private val popupAltitude :PopupMenu by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        PopupMenu(requireContext(),dataBinding!!.moveSelectTextAltitude).apply {
+            menuInflater.inflate(R.menu.menu_attack_altitude,menu)
+            setOnMenuItemClickListener {
+                llog.i(TAG,"on attackAltitude Selected: ${it.title}")
+                filterOption.attackAltitude = AttackAltitudeOption.getOptions()[when(it.itemId){
+                    R.id.menu_altitude_height -> 0
+                    R.id.menu_altitude_mid -> 1
+                    R.id.menu_altitude_low -> 2
+                    R.id.menu_altitude_all -> 3
+                    else -> 3
+                }]
+                doAfterChangeFilterManual()
+                return@setOnMenuItemClickListener true
+            }
+        }
     }
-    private val spinnerDirectionAdapter :ArrayAdapter<String> by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        ArrayAdapter<String>(requireContext(),com.google.android.material.R.layout.support_simple_spinner_dropdown_item,listOf(getString(R.string.attackDirection_horizontal),getString(R.string.attackDirection_vertical),getString(R.string.attackDirection_thrust),getString(R.string.attackDirection_all))
-        )
+    private val popupDirection :PopupMenu by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        PopupMenu(requireContext(),dataBinding!!.moveSelectTextDirection).apply {
+            menuInflater.inflate(R.menu.menu_attack_direction,menu)
+            setOnMenuItemClickListener {
+                llog.i(TAG,"on attackDirection Selected: ${it.title}")
+                filterOption.attackDirection = AttackDirectionOption.getOptions()[when(it.itemId){
+                    R.id.menu_direction_hori -> 0
+                    R.id.menu_direction_vert -> 1
+                    R.id.menu_direction_thrust -> 2
+                    R.id.menu_direction_all -> 3
+                    else -> 3
+                }]
+                doAfterChangeFilterManual()
+                return@setOnMenuItemClickListener true
+            }
+        }
     }
 
     private val filterOption :FilterOption by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
@@ -141,13 +175,13 @@ class MoveSelectFragment :BaseFragment(){
         bgColor = requireActivity().getResourceColor(com.google.android.material.R.attr.colorSecondaryContainer)
         ceBg = requireActivity().getResourceColor(com.google.android.material.R.attr.colorSecondary)
 
-        when (argMsg.toSelectMsg.whatBarToEdit){
+        when (editState.getWhatBarToEdit()){
             in 0..3 ->{// 应该加载带3个按钮的MovesBar
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_moves
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.35F)
                 lifecycleScope.launch(Dispatchers.Default){
                     // TODO: 这里获取的招式序列应该按镜像list来处理
-                    seqPack = when(argMsg.toSelectMsg.whatBarToEdit){
+                    seqPack = when(editState.getWhatBarToEdit()){
                         0 ->{
                             SeqPack(startSide = StandSide.UPPER_RIGHT, isMirrorList = MoveBox.getMirrorList(editState.getDeckInSaved()!!.sequenceUpperRight)).apply {
                                 replaceList(editState.getSeqMovesByIds(MoveBox.getIdList(editState.getDeckInSaved()!!.sequenceUpperRight)))
@@ -182,7 +216,7 @@ class MoveSelectFragment :BaseFragment(){
                 dataBinding?.moveSelectViewStub?.viewStub?.layoutResource = R.layout.bar_one_move
 //                dataBinding?.guidelineBarBottom?.setGuidelinePercent(0.4F)
                 lifecycleScope.launch(Dispatchers.Default){
-                    optionPack = OptPack(startSide = when(argMsg.toSelectMsg.whatBarToEdit){
+                    optionPack = OptPack(startSide = when(editState.getWhatBarToEdit()){
                         4 -> StandSide.UPPER_RIGHT
                         5 -> StandSide.UPPER_LEFT
                         6 -> StandSide.LOWER_LEFT
@@ -191,7 +225,7 @@ class MoveSelectFragment :BaseFragment(){
                     }).apply {
                         updateOpt(
                             move = editState.getOptMoveById(
-                                when (argMsg.toSelectMsg.whatBarToEdit) {
+                                when (editState.getWhatBarToEdit()) {
                                     4 -> editState.getDeckInSaved()!!.optionalUpperRight.moveId
                                     5 -> editState.getDeckInSaved()!!.optionalUpperLeft.moveId
                                     6 -> editState.getDeckInSaved()!!.optionalLowerLeft.moveId
@@ -199,7 +233,7 @@ class MoveSelectFragment :BaseFragment(){
                                     else -> -1
                                 }
                             ),
-                            isUseMirror = when (argMsg.toSelectMsg.whatBarToEdit) {
+                            isUseMirror = when (editState.getWhatBarToEdit()) {
                                 4 -> editState.getDeckInSaved()!!.optionalUpperRight.isUseMirror
                                 5 -> editState.getDeckInSaved()!!.optionalUpperLeft.isUseMirror
                                 6 -> editState.getDeckInSaved()!!.optionalLowerLeft.isUseMirror
@@ -267,46 +301,17 @@ class MoveSelectFragment :BaseFragment(){
                     }.attach()
                 }
             }
-            // 设置筛选spinner
-            moveSelectSpinnerToward?.apply{
-                adapter = spinnerTowardAdapter
-                onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
-                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {// 当选择和上次选的一样就不会触发这个回调
-                        llog.i(TAG, "on attackToward Selected: ${spinnerTowardAdapter.getItem(p2)}")
-                        filterOption.attackToward = AttackTowardOption.getOptions()[p2]
-                        doAfterChangeFilterManual()
-                    }
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-//                        TODO("Not yet implemented")
-                    }
+            // TODO: 这里还有些bug，不准备使用spinner了，使用popupMenu
+            val filterTextClickListener = View.OnClickListener {
+                when(it.id){
+                    R.id.moveSelect_textToward -> popupToward.show()
+                    R.id.moveSelect_textAltitude -> popupAltitude.show()
+                    R.id.moveSelect_textDirection -> popupDirection.show()
                 }
             }
-            moveSelectSpinnerAltitude?.apply {
-                adapter = spinnerAltitudeAdapter
-                onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
-                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        llog.i(TAG, "on attackAltitude Selected: ${spinnerAltitudeAdapter.getItem(p2)}")
-                        filterOption.attackAltitude = AttackAltitudeOption.getOptions()[p2]
-                        doAfterChangeFilterManual()
-                    }
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-//                        TODO("Not yet implemented")
-                    }
-                }
-            }
-            moveSelectSpinnerDirection?.apply {
-                adapter = spinnerDirectionAdapter
-                onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
-                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        llog.i(TAG, "on attackDirection Selected: ${spinnerDirectionAdapter.getItem(p2)}")
-                        filterOption.attackDirection = AttackDirectionOption.getOptions()[p2]
-                        doAfterChangeFilterManual()
-                    }
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-//                        TODO("Not yet implemented")
-                    }
-                }
-            }
+            moveSelectTextToward.setOnClickListener(filterTextClickListener)
+            moveSelectTextAltitude.setOnClickListener(filterTextClickListener)
+            moveSelectTextDirection.setOnClickListener(filterTextClickListener)
         }
 
 
@@ -373,15 +378,30 @@ class MoveSelectFragment :BaseFragment(){
         }
 
         lifecycleScope.launch {
+            // 在这里设置选中了哪个招式框框，然后根据index显示招式数据
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.moveBeClickFlow.collectLatest {
                     if (seqPack != null){// 只有序列攻击才要设置选择边框
                         llog.i(TAG, "onViewCreated: 接受到选择边框变化->$it")
                         setMoveInBarBeSelect(it)
-                        editState.watchWhatMsgInBar(it)// 点击moveBar里面的数据也能看到数据
+                        if (seqPack!!.idList[it] != -1){// 说明选中的框有招式
+                            val tempForSelect = MoveForSelect(
+                                move = seqPack!!.moveList[it]!!,
+                                isSelected = false,
+                                isMirror = seqPack!!.isMirrorList[it]
+                            )
+                            editState.selectMove(tempForSelect)
+                        }
                     }
                     if (optionPack != null){
-                        editState.watchWhatMsgInBar(0)
+                        if (optionPack!!.optionA != -1){
+                            val tempForSelect = MoveForSelect(
+                                move = optionPack!!.move!!,
+                                isSelected = false,
+                                isMirror = optionPack!!.isMirror
+                            )
+                            editState.selectMove(tempForSelect)
+                        }
                     }
                 }
             }
@@ -390,51 +410,8 @@ class MoveSelectFragment :BaseFragment(){
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 editState.filterOptionFlow.collectLatest {
-                    if (filterOption.changeBy.get() == 0){
-                        llog.i(TAG, "filterOptionFlow: 非手动，从其他界面进来的，应该变更spinner布局")
-                        filterOption.changeAll(it)
-                        tryChangeSpinner(it)
-                    } else if (filterOption.changeBy.get() == 1) {
-                        llog.i(TAG, "filterOptionFlow : 是手动改变的，不是其他界面切回来的，不用变更布局")
-                        filterOption.changeBy.set(0)
-                    }
-
-                }
-            }
-        }
-
-        lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
-                editState.watchMsgInBarFlow.collectLatest {
-                    when(it){
-                        in 0..2 ->{
-                            llog.i(TAG, "watchMsgInBarFlow: 消息的第一次消费")
-                            if (seqPack != null){//
-                                if (seqPack!!.idList[it] != -1){// 说明选中的框有招式
-                                    val tempForSelect = MoveForSelect(
-                                        move = seqPack!!.moveList[it]!!,
-                                        isSelected = false,
-                                        isMirror = seqPack!!.isMirrorList[it]
-                                    )
-                                    editState.selectMove(tempForSelect)
-                                }
-                            }
-                            if (optionPack != null){
-                                if (optionPack!!.optionA != -1){
-                                    val tempForSelect = MoveForSelect(
-                                        move = optionPack!!.move!!,
-                                        isSelected = false,
-                                        isMirror = optionPack!!.isMirror
-                                    )
-                                    editState.selectMove(tempForSelect)
-                                }
-                            }
-                            editState.watchWhatMsgInBar(-1)// 重新设置成其他数据,确保这个消息是一次性的
-                        }
-                        else->{
-                            llog.i(TAG, "watchMsgInBarFlow: 消息已经消费过了，就别设置了")
-                        }
-                    }
+                    filterOption.changeAll(it)
+                    tryChangeBaseFilterText(it)
                 }
             }
         }
@@ -445,10 +422,6 @@ class MoveSelectFragment :BaseFragment(){
                     when(it){
                         is MoveMsgState.SelectNull -> {
                             llog.d(TAG, "moveForSelectFlow: 接收到 null 的选择")
-                            if (it.isEnterFromEdit){
-                                llog.i(TAG, "moveForSelectFlow: 从editFragment进来的")
-                                return@collectLatest
-                            }
                             if (seqPack != null){
                                 llog.i(TAG, "moveForSelectFlow->: 第${editState.moveBeClickFlow.value}个置空")
                                 seqPack!!.updateOne(editState.moveBeClickFlow.value,null)
@@ -493,6 +466,7 @@ class MoveSelectFragment :BaseFragment(){
                         is MoveMsgState.SelectOne -> {
                             setMoveMsg(it.moveForSelect)
                             // 然后还要更新bar的布局
+                            llog.d(msg = "moveForSelectFlow: 接收到 SelectOne 的选择")
                             if (seqPack != null){
                                 if (moveImgList.isEmpty()){
                                     return@collectLatest
@@ -592,7 +566,7 @@ class MoveSelectFragment :BaseFragment(){
             seqPack?.apply {
                 when(moveIndex){
                     0 ->{// 选择了序列的第一个，起始站架已经被定死，但还要判断结束站架是否被第二个招式(还可能为空)限制
-                        val tempStart = when(argMsg.toSelectMsg.whatBarToEdit){
+                        val tempStart = when(editState.getWhatBarToEdit()){
                             0 -> StandSide.UPPER_RIGHT
                             1 -> StandSide.UPPER_LEFT
                             2 -> StandSide.LOWER_LEFT
@@ -812,34 +786,39 @@ class MoveSelectFragment :BaseFragment(){
             llog.i(TAG, "doAfterChangeFilterManual: 过于频繁，放弃")
         } else {
             launchFilterTime = System.currentTimeMillis()
-            editState.changeFilter(filterOption.apply { changeBy.set(1) })
+            editState.changeFilter(filterOption)
         }
 
     }
 
-    private fun tryChangeSpinner(filter :FilterOption){
+    private fun tryChangeBaseFilterText(filter :FilterOption){
         dataBinding?.apply {
-            moveSelectSpinnerToward?.apply {
-                if (AttackTowardOption.getOptions()[selectedItemPosition] != filter.attackToward){
-                    // 不同就要更新界面
-                    llog.d(TAG, "tryChangeSpinner: attackToward 不一样，更新")
-                    setSelection(filterOption.attackToward.num)
+            moveSelectTextToward.text = getString(
+                when(filter.attackToward.num){
+                    0 -> R.string.attackToward_left
+                    1 -> R.string.attackToward_right
+                    5 -> R.string.attackToward_all
+                    else -> R.string.attackToward_all
                 }
-            }
-            moveSelectSpinnerAltitude?.apply {
-                if (AttackAltitudeOption.getOptions()[selectedItemPosition] != filter.attackAltitude){
-                    // 不同就要更新界面
-                    llog.d(TAG, "tryChangeSpinner: attackAltitude 不一样，更新")
-                    setSelection(filterOption.attackAltitude.num)
+            )
+            moveSelectTextAltitude.text = getString(
+                when(filter.attackAltitude.num){
+                    0 -> R.string.attackAltitude_height
+                    1 -> R.string.attackAltitude_middle
+                    2 -> R.string.attackAltitude_low
+                    3 -> R.string.attackAltitude_all
+                    else -> R.string.attackAltitude_all
                 }
-            }
-            moveSelectSpinnerDirection?.apply {
-                if (AttackDirectionOption.getOptions()[selectedItemPosition] != filter.attackDirection){
-                    // 不同就要更新界面
-                    llog.d(TAG, "tryChangeSpinner: attackDirection 不一样，更新")
-                    setSelection(filterOption.attackDirection.num)
+            )
+            moveSelectTextDirection.text = getString(
+                when(filter.attackDirection.num){
+                    0 -> R.string.attackDirection_horizontal
+                    1 -> R.string.attackDirection_vertical
+                    2 -> R.string.attackDirection_thrust
+                    3 -> R.string.attackDirection_all
+                    else -> R.string.attackDirection_all
                 }
-            }
+            )
         }
     }
 
@@ -931,7 +910,7 @@ class MoveSelectFragment :BaseFragment(){
 
     private fun updateDeckInSaveState(){
         if (seqPack != null){
-            when(argMsg.toSelectMsg.whatBarToEdit){
+            when(editState.getWhatBarToEdit()){
                 0->{
                     editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
                         this.sequenceUpperRight = seqPack!!.idList.zip(seqPack!!.isMirrorList).map {
@@ -962,7 +941,7 @@ class MoveSelectFragment :BaseFragment(){
                 }
             }
         } else if (optionPack != null){
-            when(argMsg.toSelectMsg.whatBarToEdit){
+            when(editState.getWhatBarToEdit()){
                 4->{
                     editState.saveDeckInSaved(editState.getDeckInSaved()!!.apply {
                         this.optionalUpperRight = MoveBox(moveId = optionPack!!.optionA, isUseMirror = optionPack!!.isMirror)

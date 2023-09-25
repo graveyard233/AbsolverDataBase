@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/night_mode_follow_system"
+    <item android:id="@+id/menu_night_mode_follow_system"
         android:title="@string/nightMode_follow_system"/>
-    <item android:id="@+id/night_mode_yes"
+    <item android:id="@+id/menu_night_mode_yes"
         android:title="@string/nightMode_yes"/>
 </menu>

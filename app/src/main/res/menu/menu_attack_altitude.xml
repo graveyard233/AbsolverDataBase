@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_altitude_height"
+        android:title="@string/attackAltitude_height"/>
+    <item android:id="@+id/menu_altitude_mid"
+        android:title="@string/attackAltitude_middle"/>
+    <item android:id="@+id/menu_altitude_low"
+        android:title="@string/attackAltitude_low"/>
+    <item android:id="@+id/menu_altitude_all"
+        android:title="@string/attackAltitude_all"/>
+
+</menu>

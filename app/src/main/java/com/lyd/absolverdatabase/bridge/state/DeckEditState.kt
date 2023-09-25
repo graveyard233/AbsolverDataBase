@@ -182,15 +182,6 @@ class DeckEditState(private val repository: DeckEditRepository,
         }
     }
 
-    /**查看MoveBar上面的招式数据的流*/
-    private val _watchMsgInBarFlow :MutableStateFlow<Int> = MutableStateFlow(-1)
-    val watchMsgInBarFlow = _watchMsgInBarFlow.asStateFlow()
-    fun watchWhatMsgInBar(whatMoveBeClicked :Int){
-        viewModelScope.launch {
-            _watchMsgInBarFlow.emit(whatMoveBeClicked)
-        }
-    }
-
     /**给moveSelectFragment用的筛选类*/
     private val _filterOptionFlow :MutableStateFlow<FilterOption> = MutableStateFlow(FilterOption(AttackTowardOption.all(),
         AttackAltitudeOption.all(), AttackDirectionOption.all(),
@@ -251,6 +242,11 @@ class DeckEditState(private val repository: DeckEditRepository,
         }
     }
 
+    fun setWhatBarToEdit(@androidx.annotation.IntRange(0,7) whatBarToEdit:Int){
+        savedState["whatBarToEdit"] = whatBarToEdit
+    }
+    fun getWhatBarToEdit() :Int = savedState.get<Int>("whatBarToEdit") ?: 0
+
     private val _moveBeClickedFlow :MutableStateFlow<Int> = MutableStateFlow(value = 0)
     val moveBeClickFlow = _moveBeClickedFlow.asStateFlow()
     fun selectWhatMoveInSeq(whatMoveInSeq :Int = 0){
@@ -286,11 +282,6 @@ class DeckEditState(private val repository: DeckEditRepository,
     fun selectNull(){
         viewModelScope.launch {
             _moveForSelectFlow.emit(MoveSelectFragment.MoveMsgState.SelectNull())
-        }
-    }
-    fun initSelectMove(){
-        viewModelScope.launch(Dispatchers.IO){
-            _moveForSelectFlow.update { MoveSelectFragment.MoveMsgState.SelectNull(true) }
         }
     }
 

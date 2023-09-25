@@ -259,11 +259,9 @@ class DeckEditFragment :BaseFragment() {
 
     private fun beforeMoveToSelect(@IntRange(0, 7) whatForEdit: Int,@IntRange(0,2) clickWhatMove: Int){
         editState.initFilterOption()
-        editState.initSelectMove()
         editState.selectWhatMoveInSeq(clickWhatMove)
-        nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment(
-            EditToSelectMsg(whatForEdit, whatMoveBeClicked = clickWhatMove/*,_deckForEdit.deckType*/)
-        ))
+        editState.setWhatBarToEdit(whatForEdit)
+        nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment())
     }
 
     private fun onLongClickBar(@IntRange(0, 3) whatForEdit: Int,@IntRange(0,2) clickWhatMove: Int){

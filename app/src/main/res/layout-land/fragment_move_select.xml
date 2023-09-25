@@ -93,26 +93,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline_spinner_top">
 
-                <Spinner
-                    android:id="@+id/moveSelect_spinnerToward"
+                <TextView
+                    android:id="@+id/moveSelect_textToward"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:dropDownWidth="wrap_content" />
+                    android:layout_weight="1" />
 
-                <Spinner
-                    android:id="@+id/moveSelect_spinnerAltitude"
+                <TextView
+                    android:id="@+id/moveSelect_textAltitude"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:dropDownWidth="wrap_content" />
+                    android:layout_weight="1" />
 
-                <Spinner
-                    android:id="@+id/moveSelect_spinnerDirection"
+                <TextView
+                    android:id="@+id/moveSelect_textDirection"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:dropDownWidth="wrap_content" />
+                    android:layout_weight="1" />
 
             </LinearLayout>
 

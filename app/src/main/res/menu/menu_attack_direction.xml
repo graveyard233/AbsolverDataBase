@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_direction_hori"
+        android:title="@string/attackDirection_horizontal"/>
+    <item android:id="@+id/menu_direction_vert"
+        android:title="@string/attackDirection_vertical"/>
+    <item android:id="@+id/menu_direction_thrust"
+        android:title="@string/attackDirection_thrust"/>
+    <item android:id="@+id/menu_direction_all"
+        android:title="@string/attackDirection_all"/>
+</menu>

@@ -97,26 +97,35 @@
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <Spinner
-                        android:id="@+id/moveSelect_spinnerToward"
+                    <TextView
+                        android:id="@+id/moveSelect_textToward"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:dropDownWidth="wrap_content" />
+                        android:text="Temp Toward"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"/>
 
-                    <Spinner
-                        android:id="@+id/moveSelect_spinnerAltitude"
+                    <TextView
+                        android:id="@+id/moveSelect_textAltitude"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:dropDownWidth="wrap_content"/>
+                        android:text="Temp Altitude"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"/>
 
-                    <Spinner
-                        android:id="@+id/moveSelect_spinnerDirection"
+                    <TextView
+                        android:id="@+id/moveSelect_textDirection"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:dropDownWidth="wrap_content"/>
+                        android:text="Temp Direction"
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"/>
 
                 </LinearLayout>
 

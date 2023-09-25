@@ -3,12 +3,9 @@ package com.lyd.absolverdatabase.ui.page
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.CompoundButton
-import android.widget.ListPopupWindow
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
@@ -28,7 +25,6 @@ import com.lyd.absolverdatabase.bridge.state.SettingState
 import com.lyd.absolverdatabase.bridge.state.SettingViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentSettingBaseBinding
 import com.lyd.absolverdatabase.ui.base.BaseFragment
-import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.utils.isNightMode
 import com.lyd.absolverdatabase.utils.restartApp
 import kotlinx.coroutines.delay
@@ -47,8 +43,8 @@ class SettingBaseFragment :BaseFragment() {
             menuInflater.inflate(R.menu.menu_mods,menu)
             setOnMenuItemClickListener {
                 settingState.changeUseWhatDataMod(when(it.itemId){
-                    R.id.mod_origin -> SettingRepository.ORIGIN
-                    R.id.mod_ce -> SettingRepository.CEMOD
+                    R.id.menu_mod_origin -> SettingRepository.ORIGIN
+                    R.id.menu_mod_ce -> SettingRepository.CEMOD
                     else -> SettingRepository.ORIGIN
                 })
                 return@setOnMenuItemClickListener true
@@ -60,8 +56,8 @@ class SettingBaseFragment :BaseFragment() {
             menuInflater.inflate(R.menu.menu_night_mod,menu)
             setOnMenuItemClickListener {
                 settingState.changeUseNightMode(when(it.itemId){
-                    R.id.night_mode_follow_system -> false
-                    R.id.night_mode_yes -> true
+                    R.id.menu_night_mode_follow_system -> false
+                    R.id.menu_night_mode_yes -> true
                     else -> false
                 })
                 return@setOnMenuItemClickListener true

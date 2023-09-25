@@ -195,6 +195,89 @@
                 android:text="@string/colors.item_on_background.description"
                 android:textColor="?android:colorBackground"
                 app:layout_flexBasisPercent="25%" />
+
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorSurfaceDim"
+                android:text="@string/colors.item_surface_dim.description"
+                android:textColor="?colorOnSurface"
+                app:layout_flexBasisPercent="33%" />
+
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorSurface"
+                android:text="@string/colors.item_surface.description"
+                android:textColor="?colorOnSurface"
+                app:layout_flexBasisPercent="33%" />
+
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorSurfaceBright"
+                android:text="@string/colors.item_surface_bright.description"
+                android:textColor="?colorOnSurface"
+                app:layout_flexBasisPercent="33%" />
+
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorSurfaceContainerLowest"
+                android:text="@string/colors.item_surface_container_lowest.description"
+                android:textColor="?colorOnSurface"
+                app:layout_flexBasisPercent="20%" />
+
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorSurfaceContainerLow"
+                android:text="@string/colors.item_surface_container_low.description"
+                android:textColor="?colorOnSurface"
+                app:layout_flexBasisPercent="20%" />
+
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorSurfaceContainer"
+                android:text="@string/colors.item_surface_container.description"
+                android:textColor="?colorOnSurface"
+                app:layout_flexBasisPercent="20%" />
+
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorSurfaceContainerHigh"
+                android:text="@string/colors.item_surface_container_high.description"
+                android:textColor="?colorOnSurface"
+                app:layout_flexBasisPercent="20%" />
+
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorSurfaceContainerHighest"
+                android:text="@string/colors.item_surface_container_highest.description"
+                android:textColor="?colorOnSurface"
+                app:layout_flexBasisPercent="20%" />
+
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorOnSurface"
+                android:text="@string/colors.item_on_surface.description"
+                android:textColor="?colorSurface"
+                app:layout_flexBasisPercent="25%" />
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorOnSurfaceVariant"
+                android:text="@string/colors.item_on_surface_variant.description"
+                android:textColor="?colorSurfaceVariant"
+                app:layout_flexBasisPercent="25%" />
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorOutline"
+                android:text="@string/colors.item_outline.description"
+                android:textColor="?colorSurface"
+                app:layout_flexBasisPercent="25%" />
+            <TextView
+                style="@style/ColorChipItem"
+                android:background="?colorOutlineVariant"
+                android:text="@string/colors.item_outline_variant.description"
+                android:textColor="?colorOnSurface"
+                app:layout_flexBasisPercent="25%" />
+
+
         </com.google.android.flexbox.FlexboxLayout>
     </androidx.core.widget.NestedScrollView>
 

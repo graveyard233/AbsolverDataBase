@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_toward_left"
+        android:title="@string/attackToward_left"/>
+    <item android:id="@+id/menu_toward_right"
+        android:title="@string/attackToward_right"/>
+    <item android:id="@+id/menu_toward_all"
+        android:title="@string/attackToward_all"/>
+</menu>
