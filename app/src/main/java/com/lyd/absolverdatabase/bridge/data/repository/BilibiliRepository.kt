@@ -55,6 +55,9 @@ class BilibiliRepository(private val videoDAO: BilibiliVideoDAO) {
                             if (it.title.contains("<em class=\"keyword\">")){// 要移除keyword的注释
                                 it.title = it.title.replace("<em class=\"keyword\">","").replace("</em>","")
                             }
+                            if (it.title.contains("&amp;")){
+                                it.title = it.title.replace("&amp;","&")
+                            }
                         }
                         videoDAO.upsertAll(data.result)
 

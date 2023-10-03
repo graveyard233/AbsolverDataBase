@@ -391,6 +391,8 @@ class MoveSelectFragment :BaseFragment(){
                                 isMirror = seqPack!!.isMirrorList[it]
                             )
                             editState.selectMove(tempForSelect)
+                        } else {
+                            editState.selectNull()
                         }
                     }
                     if (optionPack != null){
