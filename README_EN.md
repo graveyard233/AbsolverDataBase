@@ -51,7 +51,7 @@ Designed according to the Material Design 3 specification, provide background im
 
 # Download
 
-<a>coming soon</a>
+[**Release**](https://github.com/graveyard233/AbsolverDatabase/releases)
 
 # Use
 

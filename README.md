@@ -51,7 +51,7 @@
 
 # 下载
 
-<strong>coming soon</strong>
+[**Release**](https://github.com/graveyard233/AbsolverDatabase/releases)
 
 # 使用
 
