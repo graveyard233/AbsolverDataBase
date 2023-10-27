@@ -27,6 +27,7 @@ import com.lyd.absolverdatabase.bridge.state.DeckEditViewModelFactory
 import com.lyd.absolverdatabase.databinding.FragmentMoveSelectBinding
 import com.lyd.absolverdatabase.ui.adapter.MovePagerAdapter
 import com.lyd.absolverdatabase.ui.base.BaseFragment
+import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.ui.widgets.MovesFilterDialog
 import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.SideUtil
@@ -141,6 +142,11 @@ class MoveSelectFragment :BaseFragment(){
                 dataBinding?.moveSelectSwipeLayout?.closeMenu()
             }
         }
+    }
+    private val howToUseMoveSelectDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        BaseDialogBuilder(requireContext())
+            .setTitle(getString(R.string.how_to_use_moveSelect_title))
+            .setMessage(getString(R.string.how_to_use_moveSelect_msg))
     }
 
     // 采用包的形式，一起打包招式和id，用起来更加方便，使用update方法，同时更新招式和id字段，也更加便利
@@ -321,6 +327,16 @@ class MoveSelectFragment :BaseFragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (SettingRepository.hadShowTipHowToUseMoveSelect){
+            lifecycleScope.launch {
+                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){
+                    SettingRepository.hadShowTipHowToUseMoveSelect = false
+                    SettingRepository.hadShowTipHowToUseMoveSelectPreference.set { false }
+                    howToUseMoveSelectDialog.show()
+                }
+            }
+        }
 
 
         barLazy = requireView().findViewById(R.id.moveSelect_bar)

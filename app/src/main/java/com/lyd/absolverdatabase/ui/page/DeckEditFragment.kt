@@ -1,6 +1,11 @@
 package com.lyd.absolverdatabase.ui.page
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -136,10 +141,12 @@ class DeckEditFragment :BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (SettingRepository.hadShowTipHowToEditDeckMsg){
-            lifecycleScope.launchWhenStarted {
-                SettingRepository.hadShowTipHowToEditDeckMsg = false
-                SettingRepository.hadShowTipHowToEditDeckMsgPreference.set { false }
-                howToEditDeckMsg.show()
+            lifecycleScope.launch {
+                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){
+                    SettingRepository.hadShowTipHowToEditDeckMsg = false
+                    SettingRepository.hadShowTipHowToEditDeckMsgPreference.set { false }
+                    howToEditDeckMsg.show()
+                }
             }
         }
 
@@ -226,24 +233,26 @@ class DeckEditFragment :BaseFragment() {
         }
 
         // 注意，这个必须放在最后，免得发射的时间比建立监听的时间还快
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            editState.deckInSaved.collectLatest { deckInSave ->
-                // 这里能够获取到最新的编辑卡组的数据
-                // 不论怎么样，都是需要变更布局的
-                if (deckInSave == DeckGenerate.generateEmptyDeck(isFromDeckToEdit = true)){
-                    // 可以判断为是空卡组，是从deckFragment跳转进来的
-                    _deckForEdit = args.deckForEdit
-                    llog.i(TAG, "deckInSaved: 从deckFragment跳转进来的，进行数据存储，然后返回")
-                    editState.saveDeckInSaved(_deckForEdit.also { if (it.updateTime == 1L) it.updateTime = 0L})
-                    return@collectLatest
-                } else {
-                    // 不相等，是从其他界面切回来的，因为假如是从deckFragment跳转，则会将其设置为空卡组且isFromDeckToEdit = true
-                    _deckForEdit = deckInSave
-                    llog.i(TAG, "deckInSaved: 不相等，是从其他界面切回来的")
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                editState.deckInSaved.collectLatest { deckInSave ->
+                    // 这里能够获取到最新的编辑卡组的数据
+                    // 不论怎么样，都是需要变更布局的
+                    if (deckInSave == DeckGenerate.generateEmptyDeck(isFromDeckToEdit = true)){
+                        // 可以判断为是空卡组，是从deckFragment跳转进来的
+                        _deckForEdit = args.deckForEdit
+                        llog.i(TAG, "deckInSaved: 从deckFragment跳转进来的，进行数据存储，然后返回")
+                        editState.saveDeckInSaved(_deckForEdit.also { if (it.updateTime == 1L) it.updateTime = 0L})
+                        return@collectLatest
+                    } else {
+                        // 不相等，是从其他界面切回来的，因为假如是从deckFragment跳转，则会将其设置为空卡组且isFromDeckToEdit = true
+                        _deckForEdit = deckInSave
+                        llog.i(TAG, "deckInSaved: 不相等，是从其他界面切回来的")
+                    }
+                    // 这里应该触发招式序列list的变化，进行初始化，让bar自己判断需不需要变更bg
+                    editState.updateAllSequence(_deckForEdit)
+                    editState.updateAllOption(_deckForEdit)
                 }
-                // 这里应该触发招式序列list的变化，进行初始化，让bar自己判断需不需要变更bg
-                editState.updateAllSequence(_deckForEdit)
-                editState.updateAllOption(_deckForEdit)
             }
         }
 
@@ -299,6 +308,7 @@ class DeckEditFragment :BaseFragment() {
                 }
             }
         }
+        doVibrator()
     }
     private fun onLongClickOneBar(@IntRange(4,7) whatForEdit: Int){
         when(whatForEdit){
@@ -325,6 +335,21 @@ class DeckEditFragment :BaseFragment() {
                     optionalLowerRight = MoveBox()
                 })
                 lifecycleScope.launchWhenStarted { editState.optLowerRight.emit(MoveBox()) }
+            }
+        }
+        doVibrator()
+    }
+
+    private fun doVibrator(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            val v = requireContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            if (v.defaultVibrator.hasVibrator()){
+                v.defaultVibrator.vibrate(VibrationEffect.createOneShot(500L,100))
+            }
+        } else {
+            val v = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            if (v.hasVibrator()){
+                v.vibrate(VibrationEffect.createOneShot(500L,100))
             }
         }
     }

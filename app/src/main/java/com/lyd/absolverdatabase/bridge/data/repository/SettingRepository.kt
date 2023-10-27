@@ -112,4 +112,7 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     var hadShowTipHowToEditDeckMsg :Boolean = true
     val hadShowTipHowToEditDeckMsgPreference by booleanPreference(default = true)
 
+    var hadShowTipHowToUseMoveSelect :Boolean = true
+    val hadShowTipHowToUseMoveSelectPreference by booleanPreference(default = true)
+
 }

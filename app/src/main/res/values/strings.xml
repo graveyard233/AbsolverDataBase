@@ -69,6 +69,14 @@
     <string name="deckDetail_createTime">创建时间:\n%1$s</string>
     <string name="deckDetail_updateTime">更新时间:\n%1$s</string>
 
+    <string name="how_to_use_moveSelect_title">招式选择使用指南</string>
+    <string name="how_to_use_moveSelect_msg">
+        1. 顶部为招式序列，长按序列内招式可将其删除\n
+        2. 点击招式即进入选中框的编辑状态\n
+        3. 中间部分为招式数据和初级筛选项，侧滑数据那栏可以打开高级筛选弹窗\n
+        4. 底部为招式列表，按结束站架区分，若已使用则在图片左上角有图标提示(应用不处理重复选中的情况)\n
+    </string>
+
     <string name="strength_light">轻</string>
     <string name="strength_mid">中</string>
     <string name="strength_heavy">重</string>
@@ -142,7 +150,7 @@
     <string name="move_mod_select">招式数据模式选择</string>
     <string name="origin_mod">原版</string>
     <string name="ce_mod">China Edition Mod</string>
-    <string name="show_more_moveCE_info">显示CEMod招式更多数据</string>
+    <string name="show_more_moveCE_info">显示CN招式更多数据</string>
     <string name="night_mod">夜间模式</string>
     <string name="nightMode_yes">启用</string>
     <string name="nightMode_follow_system">跟随系统</string>
@@ -177,8 +185,8 @@
 
     <string name="about_database">数据库相关</string>
     <string name="sync_moveDatabase_from_local">同步原版招式数据</string>
-    <string name="sync_moveCEDatabase_from_local">本地代码同步CEMod招式数据</string>
-    <string name="sync_moveCEDatabase_from_webView">使用WebView同步CEMod招式数据</string>
+    <string name="sync_moveCEDatabase_from_local">本地代码同步CN招式数据</string>
+    <string name="sync_moveCEDatabase_from_webView">使用WebView同步CN招式数据</string>
     <string name="sync_with_webView">使用WebView同步</string>
     <string name="on_sync_ing_data">同步数据中</string>
     <string name="sync_error">同步失败</string>
@@ -194,7 +202,7 @@
     <string name="repositoryUrl">https://github.com/graveyard233/AbsolverDatabase</string>
     <string name="repositoryVersion">https://github.com/graveyard233/AbsolverDatabase/commits/dev</string>
     <string name="version">版本:%1$s</string>
-    <string name="support_author">如果觉得软件还不错，可以进Github给项目一个START</string>
+    <string name="support_author">如果觉得软件还不错，可以进Github给项目一个STAR</string>
     <string name="feedback">反馈</string>
 
     <string name="feedback_snackbar_content">Issue,Pull request或邮箱:%1$s</string>
@@ -236,20 +244,20 @@
         - 设置应用各种基础配置，动态主题色仅在Android12及以上可用\n
         - 如果觉得顶部的工具栏很难看，可以关闭[显示工具栏]，其仅提供导航功能\n
         - 点击高级设置可进入高级设置界面\n
-        - 不推荐打开CEMod的更多数据展示开关，因为打开后会计算并调整UI，会造成更加明显的卡顿现象\n
+        - 不推荐打开CN的更多数据展示开关，因为打开后会计算并调整UI，会造成更加明显的卡顿现象\n
         ### 高级设置界面\n
         - 高斯模糊功能仅在Android12及以上可用\n
         - 高级筛选可开启或停用高级筛选项，长按可拖动顺序，按从左到右，从上到下排序\n
         ### 数据库相关界面\n
-        - 除云端同步CEMod方法外，都是本地代码更新招式数据\n
-        - 云端同步CE数据是通过webView分析网页的方式获取数据，有失败的风险\n
+        - 除云端同步CN方法外，都是本地代码更新招式数据\n
+        - 云端同步CN数据是通过webView分析网页的方式获取数据，有失败的风险\n
         ### 开发工具界面\n
         - 用于调整日志打印，写入等级，控制崩溃日志的界面\n
     </string>
 
 
     <string name="thanks_title">致谢</string>
-    <string name="thanks_content">感谢Ghost对卡组筛选逻辑的讲解，原版数据表格及编辑器原型设计支持。\n感谢China Edition制作组提供CEMod的招式数据与图片，APP矢量图标文件。
+    <string name="thanks_content">感谢Ghost对卡组筛选逻辑的讲解，原版数据表格及编辑器原型设计支持。\n感谢China Edition制作组提供CNMod的招式数据与图片，APP矢量图标文件。
 感谢赦免者国服QQ群的玩家给予APP测试的反馈支持。\n感谢第三方开源库与包括但不限于github，掘金，wanandroid，stackoverflow，简书，CSDN上博客对本应用的架构与设计指导。
 感谢iconfont网站的矢量图标支持；感谢在线格式转换网站将jpg，png转svg，才得以制作流派与站架图标。</string>
 

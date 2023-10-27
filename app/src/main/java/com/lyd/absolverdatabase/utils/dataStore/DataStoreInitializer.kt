@@ -88,6 +88,9 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempHadShowTipHowToEditDeckMsg = async {
                     SettingRepository.hadShowTipHowToEditDeckMsgPreference.getOrDefault()
                 }
+                val tempHadSHowTipHowToUseMoveSelect = async {
+                    SettingRepository.hadShowTipHowToUseMoveSelectPreference.getOrDefault()
+                }
                 SettingRepository.isUseToolbar = tempUseToolbar.await()
                 SettingRepository.isDialogGaussianBlur = tempGaussianBlur.await()
                 SettingRepository.isNeedAskBeforeImport = tempAskBeforeImport.await()
@@ -107,6 +110,7 @@ class DataStoreInitializer : Initializer<Unit> {
                 SettingRepository.logWriteLevel = tempLogWriteLevel.await()
 
                 SettingRepository.hadShowTipHowToEditDeckMsg = tempHadShowTipHowToEditDeckMsg.await()
+                SettingRepository.hadShowTipHowToUseMoveSelect = tempHadSHowTipHowToUseMoveSelect.await()
 
                 when(SettingRepository.useNightMode){
                     true -> {

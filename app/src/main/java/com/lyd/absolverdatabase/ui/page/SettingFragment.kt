@@ -32,9 +32,9 @@ class SettingFragment : BaseFragment() {
     })
 
     private val snackBarWithEmail by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-        Snackbar.make(settingBinding!!.settingRoot,resources.getString(R.string.feedback_snackbar_content,"1991206268@qq.com"),Snackbar.LENGTH_LONG)
+        Snackbar.make(settingBinding!!.settingRoot,resources.getString(R.string.feedback_snackbar_content,"graveyard233@qq.com"),Snackbar.LENGTH_LONG)
             .setAction(R.string.copy) {
-                ClipUtil.copyText("1991206268@qq.com")
+                ClipUtil.copyText("graveyard233@qq.com")
             }
     }
 

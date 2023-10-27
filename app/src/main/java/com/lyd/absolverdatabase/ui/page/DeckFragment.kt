@@ -18,7 +18,9 @@ import androidx.annotation.ColorInt
 import androidx.annotation.NonNull
 import androidx.annotation.StyleRes
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.QuickAdapterHelper
@@ -44,6 +46,7 @@ import com.lyd.absolverdatabase.utils.*
 
 import com.lyd.architecture.utils.Utils
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.internal.toHexString
 import java.util.Base64
@@ -198,34 +201,38 @@ class DeckFragment :BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 在这里进行liveData的监听
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            deckState.choiceFlow.collectLatest {position ->
-                // 这里要和动画分开，因为动画在这里启动会直接崩溃
-                // 因为onViewCreated的时候还没有attach到fragment，没坐标，解决方案是post启动
-                // 因为可以防止重复，所以可以在这里进行颜色变化和数据请求与筛选
-                llog.i(TAG, "choiceFlow collect: $position -> ${getDeckTypeByPosition(position)}")
-                doColorChange(position,lastBgColor) // 暂时不要做颜色渐变，因为有时候会抽风，闪的厉害
-                deckState.queryDecksByDeckType(
-                    getDeckTypeByPosition(position),
-                    ifEmpty = {
-                        llog.w(TAG, "queryDecksByDeckType is empty")
-                    },
-                    ifError = {
-                        llog.e(TAG, "queryDecksByDeckType error: $it")
-                    }
-                )
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                deckState.choiceFlow.collectLatest {position ->
+                    // 这里要和动画分开，因为动画在这里启动会直接崩溃
+                    // 因为onViewCreated的时候还没有attach到fragment，没坐标，解决方案是post启动
+                    // 因为可以防止重复，所以可以在这里进行颜色变化和数据请求与筛选
+                    llog.i(TAG, "choiceFlow collect: $position -> ${getDeckTypeByPosition(position)}")
+                    doColorChange(position,lastBgColor) // 暂时不要做颜色渐变，因为有时候会抽风，闪的厉害
+                    deckState.queryDecksByDeckType(
+                        getDeckTypeByPosition(position),
+                        ifEmpty = {
+                            llog.w(TAG, "queryDecksByDeckType is empty")
+                        },
+                        ifError = {
+                            llog.e(TAG, "queryDecksByDeckType error: $it")
+                        }
+                    )
+                }
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            // TODO: 这里的接收方式有问题，我得换一种接收方式，因为没切换一次界面，我就会收到一次
-            // tmd居然解决了，通过把appcompat从1.5.1升级到1.6.1，然后给lifecycleScope前面加上viewLifecycleOwner就搞定了
-            deckState.deckSharedFlow.collectLatest {
-                it.forEachIndexed { index, deck ->
-                    llog.d(TAG,"deck from deckSharedFlow No.$index $deck")
-                }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                // TODO: 这里的接收方式有问题，我得换一种接收方式，因为没切换一次界面，我就会收到一次
+                // tmd居然解决了，通过把appcompat从1.5.1升级到1.6.1，然后给lifecycleScope前面加上viewLifecycleOwner就搞定了
+                deckState.deckSharedFlow.collectLatest {
+                    it.forEachIndexed { index, deck ->
+                        llog.d(TAG,"deck from deckSharedFlow No.$index $deck")
+                    }
 //                llog.i(TAG, "deckSharedFlow receive: size->${it.size}")
-                deckAdapter.submitList(it)
+                    deckAdapter.submitList(it)
+                }
             }
         }
 
