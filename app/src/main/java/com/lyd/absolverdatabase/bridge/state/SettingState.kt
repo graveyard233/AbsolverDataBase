@@ -128,6 +128,15 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.useWhatThemePreference.set { whatTheme }
         }
     }
+    val whichUsedMoveTagFlow :StateFlow<Int> = repository.whichUsedMoveTagPreference.asFlow().map {
+        it ?: 0
+    }.stateIn(viewModelScope,SharingStarted.WhileSubscribed(),0)
+    fun changeWhichSignTag(whichUsedMoveTag :Int){
+        repository.whichUsedMoveTag = whichUsedMoveTag
+        viewModelScope.launch {
+            repository.whichUsedMoveTagPreference.set { whichUsedMoveTag }
+        }
+    }
 
 
     val recordCrashMsgFlow :StateFlow<Boolean> = repository.isRecordCrashMsgPreference.asFlow().map {

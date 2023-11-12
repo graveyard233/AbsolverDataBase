@@ -2,7 +2,8 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -63,6 +64,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/show_seq_detail_when_shared_deck"/>
+
+                <LinearLayout
+                    android:id="@+id/settingAdvance_linear_whichUsedMove"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:clickable="true"
+                    android:background="?selectableItemBackground">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAppearance="?textAppearanceBodyLarge"
+                        android:gravity="center_vertical"
+                        android:text="@string/which_UsedMove_tag"/>
+
+                    <TextView
+                        android:id="@+id/settingAdvance_text_usedMoveTag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?textAppearanceBodyLarge"
+                        android:gravity="center_vertical"
+                        tools:text="@string/usedMoveTag_shape"/>
+                </LinearLayout>
+
 
 
                 <View

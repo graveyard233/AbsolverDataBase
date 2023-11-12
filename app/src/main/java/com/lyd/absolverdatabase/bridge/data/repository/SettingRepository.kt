@@ -82,6 +82,10 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     var useWhatTheme :Int = 1
     val useWhatThemePreference by intPreference(default = 1)
 
+    /**用于控制已选择的招式的标记形式 0 是使用框框，1 是使用√*/
+    var whichUsedMoveTag :Int = 1
+    val whichUsedMoveTagPreference by intPreference(default = 1)
+
 
     /*-----------------------------开发者页面部分----------------------------------*/
     /**崩溃时是否记录崩溃信息*/

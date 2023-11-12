@@ -74,7 +74,7 @@
         1. 顶部为招式序列，长按序列内招式可将其删除\n
         2. 点击招式即进入选中框的编辑状态\n
         3. 中间部分为招式数据和初级筛选项，侧滑数据那栏可以打开高级筛选弹窗\n
-        4. 底部为招式列表，按结束站架区分，若已使用则在图片左上角有图标提示(应用不处理重复选中的情况)\n
+        4. 底部为招式列表，按结束站架区分，若已使用则在图片左上角有图标或边框提示(应用不处理重复选中的情况，标记样式可在高级设置中切换)\n
     </string>
 
     <string name="strength_light">轻</string>
@@ -156,6 +156,10 @@
     <string name="nightMode_follow_system">跟随系统</string>
     <string name="advance_filter">高级筛选</string>
     <string name="moveItems_in_row">招式数量(一行)</string>
+    <string name="which_UsedMove_tag">已使用招式标记样式</string>
+    <string name="usedMoveTag_img">√号图标</string>
+    <string name="usedMoveTag_shape">边框</string>
+    <string name="useShapeTag_tip">注意：使用边框样式会使格子加载变慢，可能会导致页面切换时稍有卡顿</string>
     <string name="choose_theme">主题选择</string>
     <string name="theme_default">默认</string>
     <string name="theme_wallpaper">壁纸动态</string>

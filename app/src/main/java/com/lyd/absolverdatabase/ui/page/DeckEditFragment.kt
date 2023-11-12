@@ -141,12 +141,10 @@ class DeckEditFragment :BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (SettingRepository.hadShowTipHowToEditDeckMsg){
-            lifecycleScope.launch {
-                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){
-                    SettingRepository.hadShowTipHowToEditDeckMsg = false
-                    SettingRepository.hadShowTipHowToEditDeckMsgPreference.set { false }
-                    howToEditDeckMsg.show()
-                }
+            lifecycleScope.launchWhenResumed {
+                SettingRepository.hadShowTipHowToEditDeckMsg = false
+                SettingRepository.hadShowTipHowToEditDeckMsgPreference.set { false }
+                howToEditDeckMsg.show()
             }
         }
 
@@ -344,6 +342,7 @@ class DeckEditFragment :BaseFragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
             val v = requireContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
             if (v.defaultVibrator.hasVibrator()){
+                // 这里貌似并没有什么作用
                 v.defaultVibrator.vibrate(VibrationEffect.createOneShot(500L,100))
             }
         } else {

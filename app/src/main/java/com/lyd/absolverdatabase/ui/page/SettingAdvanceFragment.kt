@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.Lifecycle
@@ -21,7 +23,7 @@ import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.slider.Slider
-import com.lyd.absolverdatabase.MainActivity
+import com.google.android.material.snackbar.Snackbar
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.FilterItem
 import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
@@ -44,6 +46,8 @@ class SettingAdvanceFragment :BaseFragment() {
     private var switchAskBeforeImport :MaterialSwitch ?= null
     private var switchUseShareSheet :MaterialSwitch ?= null
     private var switchShowSeqDetail :MaterialSwitch ?= null
+    private lateinit var linearWhichUsedMoveTag :LinearLayout
+    private lateinit var textUsedMoveTag :TextView
 
 
     private lateinit var recycleFilter :RecyclerView
@@ -58,6 +62,26 @@ class SettingAdvanceFragment :BaseFragment() {
                 R.id.settingAdvance_switch_askBeforeImport ->{ settingState.changeAskBeforeImportDeck(isChecked) }
                 R.id.settingAdvance_switch_showSeqDetail ->{ settingState.changeShowSeqDetailWhenSharedDeck(isChecked) }
                 R.id.settingAdvance_switch_useShareSheet ->{ settingState.changeUseShareSheetWhenSharedDeck(isChecked) }
+            }
+        }
+    }
+
+    private val useFrameForTagSnackbar :Snackbar by lazy {
+        Snackbar.make(linearWhichUsedMoveTag,getString(R.string.useShapeTag_tip),Snackbar.LENGTH_SHORT)
+    }
+    private val usedMoveTagPopup :PopupMenu by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        PopupMenu(requireContext(),textUsedMoveTag).apply {
+            menuInflater.inflate(R.menu.menu_used_move_tag,menu)
+            setOnMenuItemClickListener {
+                settingState.changeWhichSignTag(when(it.itemId){
+                    R.id.menu_usedMoveTag_shape -> 0
+                    R.id.menu_usedMoveTag_img -> 1
+                    else -> 0
+                })
+                if (it.itemId == R.id.menu_usedMoveTag_shape && !useFrameForTagSnackbar.isShownOrQueued){
+                    useFrameForTagSnackbar.show()
+                }
+                return@setOnMenuItemClickListener true
             }
         }
     }
@@ -131,6 +155,8 @@ class SettingAdvanceFragment :BaseFragment() {
             switchAskBeforeImport = findViewById(R.id.settingAdvance_switch_askBeforeImport)
             switchUseShareSheet = findViewById(R.id.settingAdvance_switch_useShareSheet)
             switchShowSeqDetail = findViewById(R.id.settingAdvance_switch_showSeqDetail)
+            linearWhichUsedMoveTag = findViewById(R.id.settingAdvance_linear_whichUsedMove)
+            textUsedMoveTag = findViewById(R.id.settingAdvance_text_usedMoveTag)
 
             recycleFilter = findViewById(R.id.settingAdvance_recycle_filter)
 
@@ -149,6 +175,7 @@ class SettingAdvanceFragment :BaseFragment() {
             switchAskBeforeImport?.setOnCheckedChangeListener(onCheckedChange)
             switchUseShareSheet?.setOnCheckedChangeListener(onCheckedChange)
             switchShowSeqDetail?.setOnCheckedChangeListener(onCheckedChange)
+            linearWhichUsedMoveTag.setOnClickListener{ usedMoveTagPopup.show() }
 
             val gridLayoutManager : GridLayoutManager = GridLayoutManager(context,4)
             recycleFilter.layoutManager = gridLayoutManager
@@ -217,6 +244,18 @@ class SettingAdvanceFragment :BaseFragment() {
                 settingState.showSeqDetailWhenSharedDeckFlow.collectLatest {
                     llog.i(TAG, "showSeqDetailWhenSharedDeckFlow: 接收到数据 $it")
                     switchShowSeqDetail?.isChecked = it
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.whichUsedMoveTagFlow.collectLatest {
+                    llog.i(TAG,"whichUsedMoveTagFlow: 接收到数据 $it")
+                    textUsedMoveTag.text = getString(when(it){
+                        0 -> R.string.usedMoveTag_shape
+                        1 -> R.string.usedMoveTag_img
+                        else -> R.string.usedMoveTag_shape
+                    })
                 }
             }
         }

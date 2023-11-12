@@ -3,7 +3,6 @@ package com.lyd.absolverdatabase.utils.dataStore
 import android.app.Application
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.startup.Initializer
 import com.google.android.material.color.DynamicColors
@@ -74,6 +73,9 @@ class DataStoreInitializer : Initializer<Unit> {
                         SettingRepository.useWhatThemePreference.getOrDefault()
                     }
                 }
+                val tempWhichUsedMoveTag = async {
+                    SettingRepository.whichUsedMoveTagPreference.getOrDefault()
+                }
 
                 val tempRecordCrashMsg = async {
                     SettingRepository.isRecordCrashMsgPreference.getOrDefault()
@@ -104,6 +106,7 @@ class DataStoreInitializer : Initializer<Unit> {
                 SettingRepository.movesFilterListJson = tempMovesFilterListJson.await()
                 SettingRepository.moveItemsInOneRow = tempMoveItemsInOneRow.await()
                 SettingRepository.useWhatTheme = tempUseWhatTheme.await()
+                SettingRepository.whichUsedMoveTag = tempWhichUsedMoveTag.await()
 
                 SettingRepository.isRecordCrashMsg = tempRecordCrashMsg.await()
                 SettingRepository.logPrintLevel = tempLogPrintLevel.await()

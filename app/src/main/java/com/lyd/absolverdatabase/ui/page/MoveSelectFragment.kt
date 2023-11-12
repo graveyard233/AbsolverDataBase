@@ -329,12 +329,10 @@ class MoveSelectFragment :BaseFragment(){
         super.onViewCreated(view, savedInstanceState)
 
         if (SettingRepository.hadShowTipHowToUseMoveSelect){
-            lifecycleScope.launch {
-                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){
-                    SettingRepository.hadShowTipHowToUseMoveSelect = false
-                    SettingRepository.hadShowTipHowToUseMoveSelectPreference.set { false }
-                    howToUseMoveSelectDialog.show()
-                }
+            lifecycleScope.launchWhenResumed {
+                SettingRepository.hadShowTipHowToUseMoveSelect = false
+                SettingRepository.hadShowTipHowToUseMoveSelectPreference.set { false }
+                howToUseMoveSelectDialog.show()
             }
         }
 
