@@ -160,6 +160,9 @@
     <string name="usedMoveTag_img">√号图标</string>
     <string name="usedMoveTag_shape">边框</string>
     <string name="useShapeTag_tip">注意：使用边框样式会使格子加载变慢，可能会导致页面切换时稍有卡顿</string>
+    <string name="use_vibrate">使用震动</string>
+    <string name="vibrate_time">震动时间/毫秒</string>
+    <string name="vibrate_strength">震动强度</string>
     <string name="choose_theme">主题选择</string>
     <string name="theme_default">默认</string>
     <string name="theme_wallpaper">壁纸动态</string>

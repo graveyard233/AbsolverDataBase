@@ -137,7 +137,7 @@
                         style="@style/SettingLicense.Card.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="BaseRecyclerViewAdapterHelper V4.0.1" />
+                        android:text="BaseRecyclerViewAdapterHelper V4.0.3" />
 
                     <TextView
                         style="@style/SettingLicense.Card.Content"

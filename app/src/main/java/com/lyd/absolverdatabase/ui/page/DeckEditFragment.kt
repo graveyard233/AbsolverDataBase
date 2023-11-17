@@ -29,6 +29,7 @@ import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.ui.widgets.DeckDetailDialog
 import com.lyd.absolverdatabase.utils.DeckGenerate
 import com.lyd.absolverdatabase.utils.TimeUtils
+import com.lyd.absolverdatabase.utils.vibrate
 
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -306,7 +307,7 @@ class DeckEditFragment :BaseFragment() {
                 }
             }
         }
-        doVibrator()
+        requireContext().vibrate()
     }
     private fun onLongClickOneBar(@IntRange(4,7) whatForEdit: Int){
         when(whatForEdit){
@@ -335,21 +336,6 @@ class DeckEditFragment :BaseFragment() {
                 lifecycleScope.launchWhenStarted { editState.optLowerRight.emit(MoveBox()) }
             }
         }
-        doVibrator()
-    }
-
-    private fun doVibrator(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
-            val v = requireContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-            if (v.defaultVibrator.hasVibrator()){
-                // 这里貌似并没有什么作用
-                v.defaultVibrator.vibrate(VibrationEffect.createOneShot(500L,100))
-            }
-        } else {
-            val v = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            if (v.hasVibrator()){
-                v.vibrate(VibrationEffect.createOneShot(500L,100))
-            }
-        }
+        requireContext().vibrate()
     }
 }

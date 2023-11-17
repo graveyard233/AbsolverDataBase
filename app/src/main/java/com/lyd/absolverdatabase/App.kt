@@ -2,7 +2,6 @@ package com.lyd.absolverdatabase
 
 import android.app.Activity
 import android.app.Application
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -119,7 +118,11 @@ class App : Application(), ViewModelStoreOwner {
             ?: throw IllegalStateException("Can't create ViewModelProvider for detached fragment")
     }
 
+    override val viewModelStore: ViewModelStore
+        get() = mAppViewModelStore !!
+
     // TODO 暴露出去 给外界用
     // 此函数只给 NavHostFragment 使用
-    override fun getViewModelStore(): ViewModelStore = mAppViewModelStore !!
+//    override fun getViewModelStore(): ViewModelStore = mAppViewModelStore !!
+
 }

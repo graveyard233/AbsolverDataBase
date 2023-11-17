@@ -137,6 +137,21 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.whichUsedMoveTagPreference.set { whichUsedMoveTag }
         }
     }
+    val useVibrateFlow :StateFlow<Boolean> = repository.isUseVibratePreference.asFlow().map {
+        it ?: true
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(),true)
+    fun changeUseVibrate(useVibrate :Boolean){
+        repository.isUseVibrate = useVibrate
+        viewModelScope.launch {
+            repository.isUseVibratePreference.set { useVibrate }
+        }
+    }
+    fun changeVibrateParams(params :Int){
+        repository.vibrateParams = params
+        viewModelScope.launch {
+            repository.vibrateParamsPreference.set { params }
+        }
+    }
 
 
     val recordCrashMsgFlow :StateFlow<Boolean> = repository.isRecordCrashMsgPreference.asFlow().map {

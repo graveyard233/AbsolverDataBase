@@ -5,6 +5,9 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.Display
 import android.view.WindowManager
 import androidx.annotation.AttrRes
@@ -14,6 +17,7 @@ import androidx.core.graphics.alpha
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import kotlin.math.roundToInt
 
 /**
@@ -60,4 +64,23 @@ fun Context.restartApp(){
         startActivity(it)
     }
     android.os.Process.killProcess(android.os.Process.myPid())
+}
+
+fun Context.vibrate(){
+    if (SettingRepository.isUseVibrate){
+        val time = SettingRepository.vibrateParams / 1000
+        val strength = SettingRepository.vibrateParams % 1000
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            val v = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            if (v.defaultVibrator.hasVibrator()){
+                // 这里貌似并没有什么作用
+                v.defaultVibrator.vibrate(VibrationEffect.createOneShot(time.toLong(),strength))
+            }
+        } else {
+            val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            if (v.hasVibrator()){
+                v.vibrate(VibrationEffect.createOneShot(time.toLong(),strength))
+            }
+        }
+    }
 }

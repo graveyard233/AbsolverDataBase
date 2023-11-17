@@ -21,7 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/SettingFragmentRootLinearLayout"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:animateLayoutChanges="true">
 
                 <TextView
                     android:id="@+id/settingAdvance_title"
@@ -90,6 +91,50 @@
                         android:textAppearance="?textAppearanceBodyLarge"
                         android:gravity="center_vertical"
                         tools:text="@string/usedMoveTag_shape"/>
+                </LinearLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingAdvance_switch_isUseVibrate"
+                    style="@style/SettingFragmentSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/use_vibrate"/>
+
+                <LinearLayout
+                    android:id="@+id/settingAdvance_linear_vibrateParams"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:text="@string/vibrate_time"
+                        android:textAppearance="?textAppearanceBodyMedium"/>
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/settingAdvance_slider_vibrateTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:stepSize="1"
+                        android:valueFrom="1"
+                        android:valueTo="500"
+                        tools:value="100"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="20dp"
+                        android:text="@string/vibrate_strength"
+                        android:textAppearance="?textAppearanceBodyMedium"/>
+                    <com.google.android.material.slider.Slider
+                        android:id="@+id/settingAdvance_slider_vibrateStrength"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:stepSize="1"
+                        android:valueFrom="1"
+                        android:valueTo="100"
+                        tools:value="50"/>
                 </LinearLayout>
 
 

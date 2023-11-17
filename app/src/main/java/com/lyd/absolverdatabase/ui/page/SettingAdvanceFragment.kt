@@ -1,7 +1,11 @@
 package com.lyd.absolverdatabase.ui.page
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,6 +52,10 @@ class SettingAdvanceFragment :BaseFragment() {
     private var switchShowSeqDetail :MaterialSwitch ?= null
     private lateinit var linearWhichUsedMoveTag :LinearLayout
     private lateinit var textUsedMoveTag :TextView
+    private lateinit var switchVibrate :MaterialSwitch
+    private lateinit var linearVibrateParams :LinearLayout
+    private lateinit var sliderVibrateTime :Slider
+    private lateinit var sliderVibrateStrength :Slider
 
 
     private lateinit var recycleFilter :RecyclerView
@@ -62,6 +70,37 @@ class SettingAdvanceFragment :BaseFragment() {
                 R.id.settingAdvance_switch_askBeforeImport ->{ settingState.changeAskBeforeImportDeck(isChecked) }
                 R.id.settingAdvance_switch_showSeqDetail ->{ settingState.changeShowSeqDetailWhenSharedDeck(isChecked) }
                 R.id.settingAdvance_switch_useShareSheet ->{ settingState.changeUseShareSheetWhenSharedDeck(isChecked) }
+                R.id.settingAdvance_switch_isUseVibrate ->{ settingState.changeUseVibrate(isChecked) }
+            }
+        }
+    }
+    private val onSlideChange :Slider.OnChangeListener by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        Slider.OnChangeListener { slider, value, fromUser ->
+            if (!fromUser) return@OnChangeListener
+            when(slider.id){
+                R.id.settingAdvance_slider_movesItems_in_oneRow->{ settingState.changeMoveItemsInOneRow(value.toInt()) }
+                R.id.settingAdvance_slider_vibrateTime->{
+                    settingState.changeVibrateParams(value.toInt() * 1000 + SettingRepository.vibrateParams%1000)
+                }
+                R.id.settingAdvance_slider_vibrateStrength->{
+                    settingState.changeVibrateParams((SettingRepository.vibrateParams/1000) * 1000 + value.toInt())
+                    llog.d(msg = "onChange vibrate strength:${value.toInt()} param:${SettingRepository.vibrateParams}")
+                    val time = 10L
+                    val strength = SettingRepository.vibrateParams % 1000
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+                        val v = requireContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+                        if (v.defaultVibrator.hasVibrator()){
+                            // 这里貌似并没有什么作用
+                            VibrationEffect.startComposition()
+                            v.defaultVibrator.vibrate(VibrationEffect.createOneShot(time.toLong(),strength))
+                        }
+                    } else {
+                        val v = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                        if (v.hasVibrator()){
+                            v.vibrate(VibrationEffect.createOneShot(time.toLong(),strength))
+                        }
+                    }
+                }
             }
         }
     }
@@ -157,6 +196,10 @@ class SettingAdvanceFragment :BaseFragment() {
             switchShowSeqDetail = findViewById(R.id.settingAdvance_switch_showSeqDetail)
             linearWhichUsedMoveTag = findViewById(R.id.settingAdvance_linear_whichUsedMove)
             textUsedMoveTag = findViewById(R.id.settingAdvance_text_usedMoveTag)
+            switchVibrate = findViewById(R.id.settingAdvance_switch_isUseVibrate)
+            linearVibrateParams = findViewById(R.id.settingAdvance_linear_vibrateParams)
+            sliderVibrateTime = findViewById(R.id.settingAdvance_slider_vibrateTime)
+            sliderVibrateStrength = findViewById(R.id.settingAdvance_slider_vibrateStrength)
 
             recycleFilter = findViewById(R.id.settingAdvance_recycle_filter)
 
@@ -176,6 +219,9 @@ class SettingAdvanceFragment :BaseFragment() {
             switchUseShareSheet?.setOnCheckedChangeListener(onCheckedChange)
             switchShowSeqDetail?.setOnCheckedChangeListener(onCheckedChange)
             linearWhichUsedMoveTag.setOnClickListener{ usedMoveTagPopup.show() }
+            switchVibrate.setOnCheckedChangeListener(onCheckedChange)
+            sliderVibrateTime.addOnChangeListener(onSlideChange)
+            sliderVibrateStrength.addOnChangeListener(onSlideChange)
 
             val gridLayoutManager : GridLayoutManager = GridLayoutManager(context,4)
             recycleFilter.layoutManager = gridLayoutManager
@@ -201,10 +247,7 @@ class SettingAdvanceFragment :BaseFragment() {
                 .setDataCallback(filterAdapter)
                 .setItemDragListener(dragListener)
 
-            sliderMoveItems?.addOnChangeListener { _, value, fromUser ->
-                if (!fromUser) return@addOnChangeListener
-                settingState.changeMoveItemsInOneRow(value.toInt())
-            }
+            sliderMoveItems?.addOnChangeListener(onSlideChange)
         }
 
 
@@ -256,6 +299,20 @@ class SettingAdvanceFragment :BaseFragment() {
                         1 -> R.string.usedMoveTag_img
                         else -> R.string.usedMoveTag_shape
                     })
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.useVibrateFlow.collectLatest {
+                    llog.i(TAG,"useVibrateFlow: 接收到数据 $it")
+                    switchVibrate.isChecked = it
+                    linearVibrateParams.visibility = if (it) View.VISIBLE else View.GONE
+                    if (it){
+                        sliderVibrateTime.value = (SettingRepository.vibrateParams/1000).toFloat()
+                        sliderVibrateStrength.value = (SettingRepository.vibrateParams%1000).toFloat()
+                        llog.i(TAG,"启用震动，显示slider 时间->" + SettingRepository.vibrateParams/1000 + ",振幅->" + SettingRepository.vibrateParams%1000)
+                    }
                 }
             }
         }

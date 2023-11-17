@@ -125,8 +125,8 @@ class DeckFragment :BaseFragment() {
                         })
                 }
             }
-            isEmptyViewEnable = true
-            setEmptyViewLayout(requireContext(),R.layout.item_deck_empty)
+            isStateViewEnable = true
+            setStateViewLayout(requireContext(), R.layout.item_deck_empty)
 
             animationEnable = true
             isAnimationFirstOnly = false
@@ -147,8 +147,8 @@ class DeckFragment :BaseFragment() {
                     DeckGenerate.generateEmptyDeck(deckType = getDeckTypeByPosition(deckState.choiceFlow.value)))
                 )
             }
-            setOnItemLongClickListener(object :BaseQuickAdapter.OnItemLongClickListener<Any?>{
-                override fun onLongClick(adapter: BaseQuickAdapter<Any?, *>,
+            setOnItemLongClickListener(object :BaseQuickAdapter.OnItemLongClickListener<Any>{
+                override fun onLongClick(adapter: BaseQuickAdapter<Any, *>,
                                          view: View, position: Int): Boolean {
                     if (SettingRepository.isNeedAskBeforeImport){
                         importDeckDialog.show()
