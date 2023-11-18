@@ -73,7 +73,6 @@ fun Context.vibrate(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
             val v = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
             if (v.defaultVibrator.hasVibrator()){
-                // 这里貌似并没有什么作用
                 v.defaultVibrator.vibrate(VibrationEffect.createOneShot(time.toLong(),strength))
             }
         } else {

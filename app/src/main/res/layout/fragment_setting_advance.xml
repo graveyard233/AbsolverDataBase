@@ -133,8 +133,8 @@
                         android:layout_height="wrap_content"
                         android:stepSize="1"
                         android:valueFrom="1"
-                        android:valueTo="100"
-                        tools:value="50"/>
+                        android:valueTo="255"
+                        tools:value="50" />
                 </LinearLayout>
 
 

@@ -33,6 +33,7 @@ import com.lyd.absolverdatabase.utils.AssetsUtil
 import com.lyd.absolverdatabase.utils.SideUtil
 import com.lyd.absolverdatabase.utils.getResourceColor
 import com.lyd.absolverdatabase.utils.isNightMode
+import com.lyd.absolverdatabase.utils.vibrate
 
 import com.lyd.architecture.utils.ScreenUtils
 import kotlinx.coroutines.CoroutineScope
@@ -476,6 +477,7 @@ class MoveSelectFragment :BaseFragment(){
                                     setBackgroundColor(bgColor)
                                 }
                             }
+                            requireContext().vibrate()
                             removeMsg()
                             updateDeckInSaveState()
                         }

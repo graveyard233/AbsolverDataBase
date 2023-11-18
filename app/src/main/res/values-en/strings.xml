@@ -78,6 +78,7 @@
         2. Click on the move to enter the editing status of the selected box\n
         3. The middle section contains move data and basic filtering items, and swiping the data column can open the advanced filtering pop-up window\n
         4. The bottom is lists of moves, distinguished by the end of the stand side, if it is used in other place, there is an icon in the upper left corner of the picture or border (App does not handle the case of repeated selection,and the marking style can be switched in advanced settings)\n
+        5. If there is no move in the top sequence of the move selection interface (if there should have move Img), please re-enter this page, this BUG is still looking for.\n
     </string>
 
     <string name="strength_light">Light</string>

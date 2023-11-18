@@ -88,7 +88,7 @@ object SettingRepository :DataStoreOwner(name = "setting") {
 
     var isUseVibrate :Boolean = true
     val isUseVibratePreference by booleanPreference(default = true)
-    /** %1000 是振幅， /1000 是震动时间 eg:500100 震动500毫秒 震动强度是100 振幅在1-255之间，但目前限制在1-100*/
+    /** %1000 是振幅， /1000 是震动时间 eg:500100 震动500毫秒 震动强度是100 振幅在1-255之间*/
     var vibrateParams :Int = 100050 //
     val vibrateParamsPreference by intPreference(default = 100050)
 
