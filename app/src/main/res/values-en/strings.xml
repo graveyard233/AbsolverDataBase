@@ -152,6 +152,7 @@
     <string name="show_movesMsg_in_deckEdit">Show moves message in DeckEdit</string>
     <string name="frame">Frame</string>
     <string name="trend">Trend</string>
+    <string name="auto_save_deck">Auto save deck when exit DeckEdit</string>
     <string name="move_mod_select">Data Mod select</string>
     <string name="origin_mod">Origin</string>
     <string name="ce_mod">China Edition Mod</string>

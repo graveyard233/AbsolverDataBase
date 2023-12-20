@@ -31,7 +31,7 @@ class MainActivity : BaseActivity() {
 
     private var backTime : Long = 0
 
-    private var navController : NavController ?= null
+    public var navController : NavController ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -80,6 +80,16 @@ class MainActivity : BaseActivity() {
 
     // 接管返回键，回到栈底时第二次才退出
     override fun onBackPressed() {
+        llog.d(msg = "back msg->${navController!!.currentDestination!!.label}")
+        if (navController!!.currentDestination!!.label == getString(R.string.label_deckEditFragment)){
+            // 如果是在deckEdit中返回，则需要判断是否需要询问保存
+            if (mSharedViewModel.hashDeckBeenEdited){
+                llog.d(msg = "当前界面是 deckEdit，卡组被编辑过，需要拦截返回")
+                return
+            } else{
+                llog.d(msg = "当前界面是 deckEdit,卡组还没被编辑过，放行")
+            }
+        }
         if (rootList.contains(navController!!.currentDestination!!.displayName)){
             // 已经回退到每一个栈的根部fragment了
             if (this.backTime != 0L && TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - this.backTime) <= 1.5.toLong()){

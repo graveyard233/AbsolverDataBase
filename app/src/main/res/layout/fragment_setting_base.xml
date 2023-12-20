@@ -97,6 +97,13 @@
 
                     </LinearLayout>
 
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/settingBase_switch_autoSaveDeck"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/SettingFragmentSwitch"
+                        android:text="@string/auto_save_deck"/>
+
                     <LinearLayout
                         android:id="@+id/settingBase_linear_modSelect"
                         android:layout_width="match_parent"

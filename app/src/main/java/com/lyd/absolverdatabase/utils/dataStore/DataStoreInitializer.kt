@@ -82,6 +82,9 @@ class DataStoreInitializer : Initializer<Unit> {
                 val tempVibrateParams = async {
                     SettingRepository.vibrateParamsPreference.getOrDefault()
                 }
+                val tempAutoSaveDeckWhenExitDeckEdit = async {
+                    SettingRepository.autoSaveDeckWhenExitDeckEditPreference.getOrDefault()
+                }
 
                 val tempRecordCrashMsg = async {
                     SettingRepository.isRecordCrashMsgPreference.getOrDefault()
@@ -115,6 +118,7 @@ class DataStoreInitializer : Initializer<Unit> {
                 SettingRepository.whichUsedMoveTag = tempWhichUsedMoveTag.await()
                 SettingRepository.isUseVibrate = tempIsUseVibrate.await()
                 SettingRepository.vibrateParams = tempVibrateParams.await()
+                SettingRepository.autoSaveDeckWhenExitDeckEdit = tempAutoSaveDeckWhenExitDeckEdit.await()
 
                 SettingRepository.isRecordCrashMsg = tempRecordCrashMsg.await()
                 SettingRepository.logPrintLevel = tempLogPrintLevel.await()

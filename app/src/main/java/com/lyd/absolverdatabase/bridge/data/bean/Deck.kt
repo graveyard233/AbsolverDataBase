@@ -43,7 +43,31 @@ data class Deck(
     var optionalLowerRight :MoveBox,
     var optionalUpperLeft :MoveBox,
     var optionalLowerLeft :MoveBox
-) : Parcelable
+) : Parcelable {
+    fun formatStr() :String{
+        val seq1 = sequenceUpperRight.joinToString(separator = "-", postfix = "\n", transform = {moveBox ->
+            moveBox.moveId.toString()
+        })
+        val seq2 = sequenceLowerRight.joinToString(separator = "-", postfix = "\n", transform = {moveBox ->
+            moveBox.moveId.toString()
+        })
+        val seq3 = sequenceUpperLeft.joinToString(separator = "-", postfix = "\n", transform = {moveBox ->
+            moveBox.moveId.toString()
+        })
+        val seq4 = sequenceLowerLeft.joinToString(separator = "-", postfix = "\n", transform = {moveBox ->
+            moveBox.moveId.toString()
+        })
+        return "id:$deckId\n" +
+                "name:$name\n" +
+                "deckType:$deckType\n" +
+                "deckStyle:$deckStyle\n" +
+                "createTime:$createTime\n" +
+                "updateTime:$updateTime\n" +
+                seq1 + seq2 + seq3 + seq4 +
+                "[${optionalUpperRight.moveId}-${optionalLowerRight.moveId}" +
+                "-${optionalUpperLeft.moveId}-${optionalLowerLeft.moveId}]"
+    }
+}
 
 /**专门存数据库的招式类*/
 @Entity(tableName = "moveJs_tb")

@@ -9,6 +9,7 @@ import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.ui.page.DeckEditFragment
 import com.lyd.absolverdatabase.ui.page.MoveSelectFragment
 import com.lyd.absolverdatabase.utils.DeckGenerate
+import com.lyd.absolverdatabase.utils.StringUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -25,6 +26,7 @@ class DeckEditState(private val repository: DeckEditRepository,
 
     fun fromDeckToEdit(){
         savedState["deckInSaved"] = DeckGenerate.generateEmptyDeck(isFromDeckToEdit = true)
+        savedState["deckStr"] = ""
     }
 
     fun getDeckInSaved() : Deck? = savedState.get<Deck>("deckInSaved")
@@ -53,6 +55,11 @@ class DeckEditState(private val repository: DeckEditRepository,
         } else {
             savedState.set("deckInSaved", deck)
         }
+    }
+
+    fun getDeckStr(): String = savedState.get<String>("deckStr") ?: ""
+    fun saveDeckStr(deck: Deck){
+        savedState.set("deckStr",StringUtils.deck2MyJson(deck))
     }
 
     suspend fun getSeqDetailFromDeck(deck: Deck) :String{

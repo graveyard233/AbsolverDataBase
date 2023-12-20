@@ -152,6 +152,15 @@ class SettingState(private val repository :SettingRepository, private val state 
             repository.vibrateParamsPreference.set { params }
         }
     }
+    val autoSaveDeckWhenExitDeckEditFlow: StateFlow<Boolean> = repository.autoSaveDeckWhenExitDeckEditPreference.asFlow().map {
+        it ?: true
+    }.stateIn(viewModelScope,SharingStarted.WhileSubscribed(),true)
+    fun changeAutoSaveDeck(autoSave: Boolean){
+        repository.autoSaveDeckWhenExitDeckEdit = autoSave
+        viewModelScope.launch {
+            repository.autoSaveDeckWhenExitDeckEditPreference.set { autoSave }
+        }
+    }
 
 
     val recordCrashMsgFlow :StateFlow<Boolean> = repository.isRecordCrashMsgPreference.asFlow().map {

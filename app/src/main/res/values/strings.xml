@@ -62,6 +62,8 @@
     <string name="save_deck_success">成功保存ID为%1$s的卡组</string>
     <string name="move_msg_bar_advantageFrame">+%1$d/%2$s&#160;</string>
     <string name="move_msg_bar_startFrame">%1$d帧</string>
+    <string name="save_deck_dialog_title">提示</string>
+    <string name="save_deck_dialog_msg">卡组已经改变，退出前需要保存吗</string>
 
     <string name="deck_name">卡组名称</string>
     <string name="deck_note">卡组说明</string>
@@ -148,6 +150,7 @@
     <string name="show_movesMsg_in_deckEdit">卡组编辑界面显示简单招式属性</string>
     <string name="frame">帧数</string>
     <string name="trend">走向</string>
+    <string name="auto_save_deck">退出卡组编辑界面时自动保存卡组</string>
     <string name="move_mod_select">招式数据模式选择</string>
     <string name="origin_mod">原版</string>
     <string name="ce_mod">China Edition Mod</string>

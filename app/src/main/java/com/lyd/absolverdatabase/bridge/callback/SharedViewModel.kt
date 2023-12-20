@@ -2,6 +2,8 @@ package com.lyd.absolverdatabase.bridge.callback
 
 import androidx.lifecycle.ViewModel
 import com.lyd.architecture.bridge.callback.UnPeekLiveData
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 
 /**
@@ -23,6 +25,11 @@ class SharedViewModel : ViewModel() {
 
     // 开启和关闭 卡片相关的状态，如果发生改变 会和 allowDrawerOpen 挂钩
     val enableSwipeDrawer = UnPeekLiveData<Boolean>()
+
+    /**卡组是否已经被编辑，用于判断是否需要发射[needShowSaveDialogWhenExitDeckEdit]*/
+    val hashDeckBeenEdited: Boolean = false
+    /**是否需要在退出时弹出保存弹窗*/
+    val needShowSaveDialogWhenExitDeckEdit: MutableSharedFlow<Boolean> = MutableSharedFlow<Boolean>()
 
     companion object {
         // 存放记录，打开过“搜索界面”就会记录下来，owner.getClass().getSimpleName():SearchFragment / owner.getClass().getSimpleName():SearchFragment

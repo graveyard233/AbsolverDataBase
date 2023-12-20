@@ -92,6 +92,12 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     var vibrateParams :Int = 100050 //
     val vibrateParamsPreference by intPreference(default = 100050)
 
+    /**
+     * 当退出卡组编辑界面时自动保存卡组
+     * */
+    var autoSaveDeckWhenExitDeckEdit: Boolean = true
+    val autoSaveDeckWhenExitDeckEditPreference by booleanPreference(default = true)
+
 
     /*-----------------------------开发者页面部分----------------------------------*/
     /**崩溃时是否记录崩溃信息*/

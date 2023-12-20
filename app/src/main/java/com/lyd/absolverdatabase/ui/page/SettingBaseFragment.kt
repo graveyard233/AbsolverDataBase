@@ -82,6 +82,7 @@ class SettingBaseFragment :BaseFragment() {
 //                R.id.settingConfig_switch_showSeqDetail ->{ settingState.changeShowSeqDetailWhenSharedDeck(isChecked) }
 //                R.id.settingConfig_switch_useShareSheet ->{ settingState.changeUseShareSheetWhenSharedDeck(isChecked) }
                 R.id.settingBase_switch_showMovesMsgInDeckEdit ->{ settingState.changeShowMovesMsgInDeckEdit(isChecked) }
+                R.id.settingBase_switch_autoSaveDeck -> { settingState.changeAutoSaveDeck(isChecked) }
                 R.id.settingBase_switch_showMoreMoveCEInfo ->{ settingState.changeShowMoreMoveCEInfo(isChecked) }
 //                R.id.settingBase_switch_useNightMode ->{ settingState.changeUseNightMode(isChecked) }
             }
@@ -109,6 +110,7 @@ class SettingBaseFragment :BaseFragment() {
 
             settingBaseSwitchIsUseToolbar.setOnCheckedChangeListener(onSwitchCheckedChange)
             settingBaseSwitchShowMovesMsgInDeckEdit.setOnCheckedChangeListener(onSwitchCheckedChange)
+            settingBaseSwitchAutoSaveDeck.setOnCheckedChangeListener(onSwitchCheckedChange)
             settingBaseChipGroupWhatMsgInDeckEdit.setOnCheckedStateChangeListener{ group, checkedIds ->
                 if (checkedIds.isEmpty())
                     return@setOnCheckedStateChangeListener
@@ -231,6 +233,14 @@ class SettingBaseFragment :BaseFragment() {
                             1 -> settingBaseChipTrendMsg.isChecked = true
                         }
                     }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+                settingState.autoSaveDeckWhenExitDeckEditFlow.collectLatest {
+                    llog.i(TAG,"autoSaveDeckWhenExitDeckEditFlow: 接收到数据 $it")
+                    baseBinding?.settingBaseSwitchAutoSaveDeck?.isChecked = it
                 }
             }
         }

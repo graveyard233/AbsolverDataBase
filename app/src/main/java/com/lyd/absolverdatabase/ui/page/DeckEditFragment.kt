@@ -1,11 +1,7 @@
 package com.lyd.absolverdatabase.ui.page
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.lyd.absolverdatabase.App
+import com.lyd.absolverdatabase.MainActivity
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
 import com.lyd.absolverdatabase.bridge.data.bean.EditToSelectMsg
@@ -28,11 +25,13 @@ import com.lyd.absolverdatabase.ui.base.BaseFragment
 import com.lyd.absolverdatabase.ui.widgets.BaseDialogBuilder
 import com.lyd.absolverdatabase.ui.widgets.DeckDetailDialog
 import com.lyd.absolverdatabase.utils.DeckGenerate
+import com.lyd.absolverdatabase.utils.StringUtils
 import com.lyd.absolverdatabase.utils.TimeUtils
 import com.lyd.absolverdatabase.utils.vibrate
 
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.system.measureTimeMillis
 
 class DeckEditFragment :BaseFragment() {
 
@@ -50,6 +49,27 @@ class DeckEditFragment :BaseFragment() {
     private val deckDetailBottomSheetDialog :DeckDetailDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
         DeckDetailDialog(requireActivity())
     }
+    private val saveDeckWhenExitDialog by lazy(LazyThreadSafetyMode.SYNCHRONIZED){
+        BaseDialogBuilder(requireContext())
+            .setTitle(R.string.save_deck_dialog_title)
+            .setMessage(R.string.save_deck_dialog_msg)
+            .setPositiveButton(R.string.confirm){ dialog,_ ->
+                editState.saveDeckInSaved(_deckForEdit.copy(updateTime = TimeUtils.curTime),
+                    isForSave = true,
+                    ifError = {
+                        llog.e(TAG, "saveDeckInSavedError: $it")
+                        showShortToast(it)
+                    },
+                    ifSuccess = {
+                        llog.i(TAG, "saveDeckInSavedSuccess: $it")
+                        showShortToast(getString(R.string.save_deck_success,it))
+                    })
+            }
+            .setOnDismissListener { dialogInterface ->
+                (requireActivity() as MainActivity).navController!!.popBackStack()
+            }
+            .create()
+    }
 
     private var dataBinding :FragmentDeckEditBinding ?= null
 
@@ -66,7 +86,7 @@ class DeckEditFragment :BaseFragment() {
         dataBinding = FragmentDeckEditBinding.bind(view)
         dataBinding?.lifecycleOwner = viewLifecycleOwner
 
-        llog.d(TAG, "onCreateView: ${args.deckForEdit}")
+        llog.d(TAG, "onCreateView: ${args.deckForEdit.formatStr()}")
 
         dataBinding?.apply {
             deckEditBarUpperRight.initClick(clickProxy = { view: View,clickWhatMove :Int ->
@@ -242,12 +262,22 @@ class DeckEditFragment :BaseFragment() {
                         _deckForEdit = args.deckForEdit
                         llog.i(TAG, "deckInSaved: 从deckFragment跳转进来的，进行数据存储，然后返回")
                         editState.saveDeckInSaved(_deckForEdit.also { if (it.updateTime == 1L) it.updateTime = 0L})
+                        editState.saveDeckStr(_deckForEdit.also { if (it.updateTime == 1L) it.updateTime = 0L})
                         return@collectLatest
                     } else {
                         // 不相等，是从其他界面切回来的，因为假如是从deckFragment跳转，则会将其设置为空卡组且isFromDeckToEdit = true
                         _deckForEdit = deckInSave
                         llog.i(TAG, "deckInSaved: 不相等，是从其他界面切回来的")
                     }
+                    val tempTimeCost = measureTimeMillis {
+                        if (TextUtils.equals(editState.getDeckStr(),StringUtils.deck2MyJson(_deckForEdit))){
+                            llog.d(TAG,"当前的deckForEdit和刚进来的deck一模一样")
+                        } else {
+                            llog.d(TAG,"当前的deckForEdit和刚进来的deck不一样")
+                        }
+                    }
+                    llog.d(TAG,"计算卡组差异性耗时 ${tempTimeCost}ms")
+
                     // 这里应该触发招式序列list的变化，进行初始化，让bar自己判断需不需要变更bg
                     editState.updateAllSequence(_deckForEdit)
                     editState.updateAllOption(_deckForEdit)
