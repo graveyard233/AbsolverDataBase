@@ -14,8 +14,8 @@ object AssetsUtil {
 
     val movesPath:String = "moves/"
 
-    val jpgSuffix = ".jpg"
-    val pngSuffix = ".png"
+    const val jpgSuffix = ".jpg"
+    const val pngSuffix = ".png"
 
 
     fun getBitmapByMoveId(context: Context, moveId :Int):Bitmap?{

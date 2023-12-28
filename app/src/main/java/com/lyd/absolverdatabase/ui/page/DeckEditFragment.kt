@@ -9,6 +9,7 @@ import androidx.annotation.IntRange
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.lyd.absolverdatabase.App
@@ -31,6 +32,7 @@ import com.lyd.absolverdatabase.utils.vibrate
 
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.system.measureTimeMillis
 
 class DeckEditFragment :BaseFragment() {
@@ -54,6 +56,7 @@ class DeckEditFragment :BaseFragment() {
             .setTitle(R.string.save_deck_dialog_title)
             .setMessage(R.string.save_deck_dialog_msg)
             .setPositiveButton(R.string.confirm){ dialog,_ ->
+                requireActivity().findNavController(R.id.main_fragment_nav_host).popBackStack()
                 editState.saveDeckInSaved(_deckForEdit.copy(updateTime = TimeUtils.curTime),
                     isForSave = true,
                     ifError = {
@@ -65,8 +68,8 @@ class DeckEditFragment :BaseFragment() {
                         showShortToast(getString(R.string.save_deck_success,it))
                     })
             }
-            .setOnDismissListener { dialogInterface ->
-                (requireActivity() as MainActivity).navController!!.popBackStack()
+            .setNegativeButton(R.string.cancel){_,_->
+                requireActivity().findNavController(R.id.main_fragment_nav_host).popBackStack()
             }
             .create()
     }
@@ -86,6 +89,7 @@ class DeckEditFragment :BaseFragment() {
         dataBinding = FragmentDeckEditBinding.bind(view)
         dataBinding?.lifecycleOwner = viewLifecycleOwner
 
+        // 注意，这个args.deckForEdit是会随着卡组变化而变化的，我不知道在哪里把它(地址)赋值给了其他变量
         llog.d(TAG, "onCreateView: ${args.deckForEdit.formatStr()}")
 
         dataBinding?.apply {
@@ -133,7 +137,8 @@ class DeckEditFragment :BaseFragment() {
             })
 
             deckEditeFabSave.setOnClickListener { view ->
-                editState.saveDeckInSaved(_deckForEdit.copy(updateTime = TimeUtils.curTime),
+                editState.saveDeckInSaved(
+                    _deckForEdit.copy(updateTime = TimeUtils.curTime).apply { editState.saveDeckStr(this) },
                     isForSave = true,
                     ifError = {
                         llog.e(TAG, "saveDeckInSavedError: $it")
@@ -270,13 +275,10 @@ class DeckEditFragment :BaseFragment() {
                         llog.i(TAG, "deckInSaved: 不相等，是从其他界面切回来的")
                     }
                     val tempTimeCost = measureTimeMillis {
-                        if (TextUtils.equals(editState.getDeckStr(),StringUtils.deck2MyJson(_deckForEdit))){
-                            llog.d(TAG,"当前的deckForEdit和刚进来的deck一模一样")
-                        } else {
-                            llog.d(TAG,"当前的deckForEdit和刚进来的deck不一样")
-                        }
+                        sharedViewModel.hashDeckBeenEdited =
+                            !TextUtils.equals(editState.getDeckStr(),StringUtils.deck2MyJson(_deckForEdit))
                     }
-                    llog.d(TAG,"计算卡组差异性耗时 ${tempTimeCost}ms")
+                    llog.d(TAG,"计算卡组差异性耗时 ${tempTimeCost}ms 卡组是否被编辑:${sharedViewModel.hashDeckBeenEdited}")
 
                     // 这里应该触发招式序列list的变化，进行初始化，让bar自己判断需不需要变更bg
                     editState.updateAllSequence(_deckForEdit)
@@ -284,9 +286,36 @@ class DeckEditFragment :BaseFragment() {
                 }
             }
         }
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){
+                sharedViewModel.needShowSaveDialogWhenExitDeckEdit.collectLatest {
+                    if (it){
+                        // 说明需要弹窗提醒
+                        saveDeckWhenExitDialog.show()
+                    }
+                }
+            }
+        }
 
 
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (SettingRepository.autoSaveDeckWhenExitDeckEdit && editState.getDeckStr() != StringUtils.deck2MyJson(_deckForEdit)){
+            runBlocking {
+                val tempTime = measureTimeMillis{
+                    editState.saveDeckInSavedInBlock(
+                        _deckForEdit.copy(updateTime = TimeUtils.curTime)
+                            .apply { llog.d(TAG, "onPause 自动保存的卡组:\n${this.deckId}") }
+                    )
+                }
+                llog.d(TAG, "保存操作耗时 $tempTime")
+            }
+        } else {
+            llog.d(msg = "目前暂时不需要保存，卡组还没变")
+        }
     }
 
     override fun onDestroyView() {
@@ -302,6 +331,10 @@ class DeckEditFragment :BaseFragment() {
         nav().navigate(DeckEditFragmentDirections.actionDeckEditFragmentToMoveSelectFragment())
     }
 
+    /**
+     * @param whatForEdit 点击的是哪一个序列
+     * @param clickWhatMove 点击的是序列中的第几个招式
+     * */
     private fun onLongClickBar(@IntRange(0, 3) whatForEdit: Int,@IntRange(0,2) clickWhatMove: Int){
         when(whatForEdit){
             0 ->{
@@ -337,6 +370,9 @@ class DeckEditFragment :BaseFragment() {
                 }
             }
         }
+        if (editState.getDeckStr() != StringUtils.deck2MyJson(editState.getDeckInSaved()!!)){
+            sharedViewModel.hashDeckBeenEdited = true
+        }
         requireContext().vibrate()
     }
     private fun onLongClickOneBar(@IntRange(4,7) whatForEdit: Int){
@@ -365,6 +401,10 @@ class DeckEditFragment :BaseFragment() {
                 })
                 lifecycleScope.launchWhenStarted { editState.optLowerRight.emit(MoveBox()) }
             }
+        }
+        // 这里应该直接检查目前状态和deckStr是否相同
+        if (editState.getDeckStr() != StringUtils.deck2MyJson(editState.getDeckInSaved()!!)){
+            sharedViewModel.hashDeckBeenEdited = true
         }
         requireContext().vibrate()
     }

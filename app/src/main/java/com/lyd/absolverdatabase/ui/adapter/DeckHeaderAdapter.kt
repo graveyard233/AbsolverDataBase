@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.BaseSingleItemAdapter
+import com.chad.library.adapter4.BaseSingleItemAdapter
 import com.lyd.absolverdatabase.R
 
 class DeckHeaderAdapter :BaseSingleItemAdapter<Any,DeckHeaderAdapter.VH>() {

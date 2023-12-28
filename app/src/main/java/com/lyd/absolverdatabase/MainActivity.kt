@@ -14,6 +14,7 @@ import com.lyd.absolverdatabase.bridge.data.repository.SettingRepository
 import com.lyd.absolverdatabase.bridge.state.MainActivityViewModel
 import com.lyd.absolverdatabase.databinding.ActivityMainBinding
 import com.lyd.absolverdatabase.ui.base.BaseActivity
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 
 class MainActivity : BaseActivity() {
@@ -31,7 +32,7 @@ class MainActivity : BaseActivity() {
 
     private var backTime : Long = 0
 
-    public var navController : NavController ?= null
+    private var navController : NavController ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -80,11 +81,14 @@ class MainActivity : BaseActivity() {
 
     // 接管返回键，回到栈底时第二次才退出
     override fun onBackPressed() {
-        llog.d(msg = "back msg->${navController!!.currentDestination!!.label}")
-        if (navController!!.currentDestination!!.label == getString(R.string.label_deckEditFragment)){
+        if (!SettingRepository.autoSaveDeckWhenExitDeckEdit // 自动保存就话就不用拦截了
+            && navController!!.currentDestination!!.label == getString(R.string.label_deckEditFragment)){
             // 如果是在deckEdit中返回，则需要判断是否需要询问保存
             if (mSharedViewModel.hashDeckBeenEdited){
                 llog.d(msg = "当前界面是 deckEdit，卡组被编辑过，需要拦截返回")
+                runBlocking {
+                    mSharedViewModel.needShowSaveDialogWhenExitDeckEdit.emit(true)
+                }
                 return
             } else{
                 llog.d(msg = "当前界面是 deckEdit,卡组还没被编辑过，放行")

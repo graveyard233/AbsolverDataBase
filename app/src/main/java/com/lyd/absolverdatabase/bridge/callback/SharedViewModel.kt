@@ -27,7 +27,7 @@ class SharedViewModel : ViewModel() {
     val enableSwipeDrawer = UnPeekLiveData<Boolean>()
 
     /**卡组是否已经被编辑，用于判断是否需要发射[needShowSaveDialogWhenExitDeckEdit]*/
-    val hashDeckBeenEdited: Boolean = false
+    var hashDeckBeenEdited: Boolean = false
     /**是否需要在退出时弹出保存弹窗*/
     val needShowSaveDialogWhenExitDeckEdit: MutableSharedFlow<Boolean> = MutableSharedFlow<Boolean>()
 

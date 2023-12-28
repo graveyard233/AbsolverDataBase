@@ -165,4 +165,13 @@ class DeckEditRepository(private val deckDao: DeckDAO, // 用于保存编辑完�
         }.flowOn(Dispatchers.IO)
     }
 
+    suspend fun saveDeckIntoDatabaseBlock(deck: Deck) {
+        val result = deckDao.upsertDeck(deck)
+        if (result >= 0){
+            Log.d(TAG, "saveDeckIntoDatabase Block: 触发了更新或插入操作 $result")
+        } else {
+            Log.e(TAG, "saveDeckIntoDatabase Block: 操作失败:$result")
+        }
+    }
+
 }

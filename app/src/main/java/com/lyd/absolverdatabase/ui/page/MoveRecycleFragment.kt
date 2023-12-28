@@ -12,7 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter4.BaseQuickAdapter
 import com.lyd.absolverdatabase.App
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.*

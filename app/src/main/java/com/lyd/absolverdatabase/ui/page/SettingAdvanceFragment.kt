@@ -22,8 +22,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
-import com.chad.library.adapter.base.dragswipe.QuickDragAndSwipe
-import com.chad.library.adapter.base.dragswipe.listener.OnItemDragListener
+import com.chad.library.adapter4.dragswipe.QuickDragAndSwipe
+import com.chad.library.adapter4.dragswipe.listener.OnItemDragListener
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.slider.Slider

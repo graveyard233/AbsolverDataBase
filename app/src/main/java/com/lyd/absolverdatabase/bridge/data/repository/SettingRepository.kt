@@ -95,8 +95,8 @@ object SettingRepository :DataStoreOwner(name = "setting") {
     /**
      * 当退出卡组编辑界面时自动保存卡组
      * */
-    var autoSaveDeckWhenExitDeckEdit: Boolean = true
-    val autoSaveDeckWhenExitDeckEditPreference by booleanPreference(default = true)
+    var autoSaveDeckWhenExitDeckEdit: Boolean = false
+    val autoSaveDeckWhenExitDeckEditPreference by booleanPreference(default = false)
 
 
     /*-----------------------------开发者页面部分----------------------------------*/

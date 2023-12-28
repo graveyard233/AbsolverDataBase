@@ -16,6 +16,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Locale
 
 /**用于[DeckEditFragment]和[MoveSelectFragment]，在这里写的函数要标注好给哪个fragment用*/
@@ -55,6 +56,10 @@ class DeckEditState(private val repository: DeckEditRepository,
         } else {
             savedState.set("deckInSaved", deck)
         }
+    }
+    /**需要在[runBlocking]中运行*/
+    suspend fun saveDeckInSavedInBlock(deck: Deck){
+        repository.saveDeckIntoDatabaseBlock(deck)
     }
 
     fun getDeckStr(): String = savedState.get<String>("deckStr") ?: ""
@@ -282,6 +287,7 @@ class DeckEditState(private val repository: DeckEditRepository,
     private val _moveForSelectFlow :MutableStateFlow<MoveSelectFragment.MoveMsgState> = MutableStateFlow(value = MoveSelectFragment.MoveMsgState.SelectNull())
     val moveForSelectFlow = _moveForSelectFlow.asStateFlow()
     fun selectMove(moveForSelect: MoveForSelect){
+        Log.i(TAG, "selectMove: 被触发")
         viewModelScope.launch(Dispatchers.IO){
             _moveForSelectFlow.emit(MoveSelectFragment.MoveMsgState.SelectOne(moveForSelect = moveForSelect))
         }

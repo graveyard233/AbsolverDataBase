@@ -25,42 +25,20 @@ object StringUtils {
         (0..size).onEach { append(azList.random()) }
     }.toString()
 
-    fun zipByDeflator(str :String) :String{
-        val def = Deflater(Deflater.BEST_COMPRESSION)
-        def.setInput(str.toByteArray())
-        def.finish()
-
-        val btyes = ByteArray(256)
-        val bos = ByteArrayOutputStream(256)
-        while (!def.finished()){
-            val length = def.deflate(btyes)
-            bos.write(btyes,0,length)
-        }
-        def.end()
-        return Base64.encodeToString(bos.toByteArray(),Base64.NO_PADDING)
-    }
-
-    fun unzipByDefator(zipStr :String) :String{
-        val os = ByteArrayOutputStream()
-        val ops = InflaterOutputStream(os)
-        ops.write(Base64.decode(zipStr,Base64.NO_PADDING))
-        return String(os.toByteArray())
-    }
-
 //    private val idTagS = "<id>"
 //    private val idTagE = "<_id>"
-    private val naTagS = "<na>"
-    private val naTagE = "<_na>"
-    private val tyTagS = "<ty>"
-    private val tyTagE = "<_ty>"
-    private val stTagS = "<st>"
-    private val stTagE = "<_st>"
-    private val ctTagS = "<ct>"
-    private val ctTagE = "<_ct>"
-    private val utTagS = "<ut>"
-    private val utTagE = "<_ut>"
-    private val noTagS = "<no>"
-    private val noTagE = "<_no>"
+    private const val naTagS = "<na>"
+    private const val naTagE = "<_na>"
+    private const val tyTagS = "<ty>"
+    private const val tyTagE = "<_ty>"
+    private const val stTagS = "<st>"
+    private const val stTagE = "<_st>"
+    private const val ctTagS = "<ct>"
+    private const val ctTagE = "<_ct>"
+    private const val utTagS = "<ut>"
+    private const val utTagE = "<_ut>"
+    private const val noTagS = "<no>"
+    private const val noTagE = "<_no>"
 
     /**将卡组按照我的方法压缩成文本*/
     fun deck2MyJson(deck :Deck,moreDetail :String = "") :String{

@@ -11,10 +11,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.QuickAdapterHelper
-import com.chad.library.adapter.base.loadState.trailing.TrailingLoadStateAdapter
+import com.chad.library.adapter4.QuickAdapterHelper
+import com.chad.library.adapter4.loadState.trailing.TrailingLoadStateAdapter
 import com.lyd.absolverdatabase.App
-import com.lyd.absolverdatabase.MainActivity
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.state.LearnState
 import com.lyd.absolverdatabase.bridge.state.LearnViewModelFactory

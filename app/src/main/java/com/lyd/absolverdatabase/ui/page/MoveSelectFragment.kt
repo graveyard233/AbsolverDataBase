@@ -418,6 +418,8 @@ class MoveSelectFragment :BaseFragment(){
                                 isMirror = optionPack!!.isMirror
                             )
                             editState.selectMove(tempForSelect)
+                        } else {
+                            editState.selectNull()
                         }
                     }
                 }

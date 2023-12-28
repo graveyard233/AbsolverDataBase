@@ -43,7 +43,8 @@ data class Deck(
     var optionalLowerRight :MoveBox,
     var optionalUpperLeft :MoveBox,
     var optionalLowerLeft :MoveBox
-) : Parcelable {
+) : Parcelable
+{
     fun formatStr() :String{
         val seq1 = sequenceUpperRight.joinToString(separator = "-", postfix = "\n", transform = {moveBox ->
             moveBox.moveId.toString()

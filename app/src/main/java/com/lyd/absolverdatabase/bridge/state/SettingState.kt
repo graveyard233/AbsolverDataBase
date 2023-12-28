@@ -153,8 +153,8 @@ class SettingState(private val repository :SettingRepository, private val state 
         }
     }
     val autoSaveDeckWhenExitDeckEditFlow: StateFlow<Boolean> = repository.autoSaveDeckWhenExitDeckEditPreference.asFlow().map {
-        it ?: true
-    }.stateIn(viewModelScope,SharingStarted.WhileSubscribed(),true)
+        it ?: false
+    }.stateIn(viewModelScope,SharingStarted.WhileSubscribed(),false)
     fun changeAutoSaveDeck(autoSave: Boolean){
         repository.autoSaveDeckWhenExitDeckEdit = autoSave
         viewModelScope.launch {

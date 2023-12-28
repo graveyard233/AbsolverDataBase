@@ -8,10 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter4.BaseQuickAdapter
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.Deck
-import com.lyd.absolverdatabase.bridge.data.bean.Style
+
 import com.lyd.absolverdatabase.utils.StyleUtil
 import com.lyd.absolverdatabase.utils.TimeUtils.getDateYear
 import com.lyd.absolverdatabase.utils.TimeUtils.toDateStr

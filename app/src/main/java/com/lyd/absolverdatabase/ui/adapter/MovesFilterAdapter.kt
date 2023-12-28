@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.dragswipe.listener.DragAndSwipeDataCallback
+import com.chad.library.adapter4.BaseQuickAdapter
+import com.chad.library.adapter4.dragswipe.listener.DragAndSwipeDataCallback
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.lyd.absolverdatabase.R
 import com.lyd.absolverdatabase.bridge.data.bean.FilterItem

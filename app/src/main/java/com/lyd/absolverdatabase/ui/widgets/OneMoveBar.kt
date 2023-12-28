@@ -69,8 +69,10 @@ class OneMoveBar :LinearLayout{
             box.move?.endSide?.let { SideUtil.imgIdForOneMove(SideUtil.getIntBySide(it)) }
                 ?.let { endSide.setImageResource(it) }
         } else {
-            img.setImageResource(R.drawable.ic_add_move)
-            img.setBackgroundColor(bgColor)
+            img.apply {
+                setImageResource(R.drawable.ic_add_move)
+                setBackgroundColor(bgColor)
+            }
             endSide.setImageDrawable(startSide.drawable)
         }
     }

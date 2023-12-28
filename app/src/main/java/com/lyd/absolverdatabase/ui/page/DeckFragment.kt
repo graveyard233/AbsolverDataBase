@@ -22,8 +22,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.navGraphViewModels
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.QuickAdapterHelper
+import com.chad.library.adapter4.BaseQuickAdapter
+import com.chad.library.adapter4.QuickAdapterHelper
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.MaterialColors
 import com.lyd.absolverdatabase.App
@@ -202,7 +202,7 @@ class DeckFragment :BaseFragment() {
 
         // 在这里进行liveData的监听
         lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){
                 deckState.choiceFlow.collectLatest {position ->
                     // 这里要和动画分开，因为动画在这里启动会直接崩溃
                     // 因为onViewCreated的时候还没有attach到fragment，没坐标，解决方案是post启动
@@ -223,7 +223,7 @@ class DeckFragment :BaseFragment() {
         }
 
         lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){
                 // TODO: 这里的接收方式有问题，我得换一种接收方式，因为没切换一次界面，我就会收到一次
                 // tmd居然解决了，通过把appcompat从1.5.1升级到1.6.1，然后给lifecycleScope前面加上viewLifecycleOwner就搞定了
                 deckState.deckSharedFlow.collectLatest {
